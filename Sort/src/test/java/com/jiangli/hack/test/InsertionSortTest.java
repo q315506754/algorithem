@@ -1,6 +1,6 @@
-package com.jiangli.common.test;
+package com.jiangli.hack.test;
 
-import com.jiangli.sort.InsertionSort;
+import com.jiangli.hack.InsertionSort;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

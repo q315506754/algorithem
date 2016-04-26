@@ -1,4 +1,4 @@
-package com.jiangli.sort;
+package com.jiangli.hack;
 
 import com.jiangli.common.core.Sorter;
 import org.springframework.stereotype.Component;
