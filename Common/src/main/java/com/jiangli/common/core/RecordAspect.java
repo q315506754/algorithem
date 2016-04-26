@@ -30,7 +30,11 @@ import org.springframework.util.StringUtils;
 public class RecordAspect {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	/**
+    public RecordAspect() {
+        logger.debug("construct..AOP");
+    }
+
+    /**
      * 必须为final String类型的,注解里要使用的变量只能是静态常量类型的 
      */  
     public static final String PointCutStr = "execution(* com.jiangli.*.*(..))";
