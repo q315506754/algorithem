@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jiangli.AlgorithemProject</groupId>
+    <artifactId>AlgorithemProject-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>${com.provider-version}</version>
+
+    <name>AlgorithemProject-parent</name>
+    <url>http://www.bingdian.com</url>
+
+    <modules>
+        <module>Common</module>
+        <module>Sort</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>OSChina Central</id>
+            <name>OSChina Central</name>
+            <url>http://maven.oschina.net/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+
+    <properties>
+        <com.provider-version>1.0-SNAPSHOT</com.provider-version>
+        <proPath>${project.basedir}</proPath>
+
+        <org.springframework-version>3.2.4.RELEASE</org.springframework-version>
+        <junit-version>4.8</junit-version>
+        <log4j-version>1.2.17</log4j-version>
+        <org.codehaus.jackson-version>1.9.12</org.codehaus.jackson-version>
+        <net.sf.json-lib-version>2.4</net.sf.json-lib-version>
+        <quartz-version>2.2.1</quartz-version>
+        <org.apache.camel-version>2.12.2</org.apache.camel-version>
+        <com.bluelock-version>1.6.2</com.bluelock-version>
+        <org.aspectj-version>1.6.11</org.aspectj-version>
+        <org.slf4j-version>1.6.2</org.slf4j-version>
+        <dom4j-version>1.6.1</dom4j-version>
+        <jofc2-version>1.0.1</jofc2-version>
+        <org.mongodb-version>2.7.3</org.mongodb-version>
+        <mysql-version>5.1.22</mysql-version>
+
+        <jstl-version>1.2</jstl-version>
+        <standard-version>1.1.2</standard-version>
+        <servlet-api-version>2.5</servlet-api-version>
+        <commons-fileupload-version>1.2</commons-fileupload-version>
+        <commons-io-version>1.2</commons-io-version>
+        <httpcore-version>4.2.3</httpcore-version>
+        <httpmime-vesion>4.1.3</httpmime-vesion>
+        <httpclient-version>4.2.1-atlassian-2</httpclient-version>
+        <commons-httpclient-version>3.0</commons-httpclient-version>
+    </properties>
+
+    <dependencyManagement>
+
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>4.1.5.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.bingdian.AlgorithemProject</groupId>
+                <artifactId>NewPushCommon</artifactId>
+                <version>${com.provider-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fakepath</groupId>
+                <artifactId>javapns-jdk16</artifactId>
+                <version>163</version>
+            </dependency>
+
+            <!-- xml -->
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javax.wsdl</artifactId>
+                <version>1.6.2</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml</groupId>
+                <artifactId>jaxrpc</artifactId>
+                <version>1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>axis</groupId>
+                <artifactId>axis</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <!-- json -->
+            <dependency>
+                <groupId>net.sf.json-lib</groupId>
+                <artifactId>json-lib</artifactId>
+                <version>2.3</version>
+                <classifier>jdk15</classifier>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.ezmorph</groupId>
+                <artifactId>ezmorph</artifactId>
+                <version>1.0.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+                <classifier>javadoc</classifier>
+            </dependency>
+            <!-- httpclient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.2.1-atlassian-2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+
+
+            <!-- dom4j -->
+            <dependency>
+                <groupId>org.dom4j</groupId>
+                <artifactId>com.springsource.org.dom4j</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>20041127.091804</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.8.3</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-pool</groupId>
+                <artifactId>commons-pool</artifactId>
+                <version>1.6</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-email</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <!-- 定时任务所依赖包 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>3.2.4.RELEASE</version>
+            </dependency>
+
+
+            <!-- 定时任务所需包 -->
+            <dependency>
+                <groupId>quartz</groupId>
+                <artifactId>quartz</artifactId>
+                <version>1.5.2</version>
+            </dependency>
+
+
+            <!-- spring -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>1.3.1.RELEASE</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>3.1.1.RELEASE</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- logger -->
+            <!-- junit -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.10</version>
+                <scope>test</scope>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.7.3</version>
+            </dependency>
+            <dependency>
+                <groupId>aopalliance</groupId>
+                <artifactId>aopalliance</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib-nodep</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+
+            <!--<dependency>-->
+                <!--<groupId>org.slf4j</groupId>-->
+                <!--<artifactId>slf4j-nop</artifactId>-->
+                <!--<version>1.7.5</version>-->
+            <!--</dependency>-->
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.5.8</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.5.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>2.4.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-email</groupId>
+                <artifactId>commons-email</artifactId>
+                <version>1.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.16</version>
+            </dependency>
+
+            <!-- http request -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.2.1-atlassian-2</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <!-- solrj -->
+            <dependency>
+                <artifactId>solr-solrj</artifactId>
+                <groupId>org.apache.solr</groupId>
+                <version>4.7.2</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>quartz</groupId>
+                <artifactId>quartz</artifactId>
+                <version>1.5.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <!--  -Pdev package  -->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <filterFile>filter_dev.properties</filterFile>
+                <mavenEnv>dev</mavenEnv>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!--  -Ptest package  -->
+        <profile>
+            <id>test</id>
+            <properties>
+                <filterFile>filter_test.properties</filterFile>
+                <mavenEnv>test</mavenEnv>
+            </properties>
+        </profile>
+        <!--  -Ppro package  -->
+        <profile>
+            <id>pro</id>
+            <properties>
+                <filterFile>filter_product.properties</filterFile>
+                <mavenEnv>pro</mavenEnv>
+            </properties>
+        </profile>
+        <!--  -Pjar clean compile jar:jar  -->
+        <profile>
+            <id>jar</id>
+            <properties>
+                <filterFile>filter_dev.properties</filterFile>
+                <mavenEnv>dev</mavenEnv>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/java</directory>
+                        <includes>
+                            <include>**/*.java</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <filters>
+            <!--<filter>${proPath}/src/main/resources/filter/${filterFile}</filter>-->
+            <filter>${proPath}/../src/main/resources/filter/${filterFile}</filter>
+            <!--<filter>${proPath}/src/main/resources/filter/${filterFile}</filter>-->
+            <!--<filter>C:\src\main\resources\filter\${filterFile}</filter>-->
+        </filters>
+
+        <resources>
+            <!-- 控制资源文件的拷贝 -->
+            <resource>
+                <directory>src/main/resources/</directory>
+                <excludes>
+                    <exclude>filter/**</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </resource>
+
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <skipTests>true</skipTests>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                        <encoding>UTF-8</encoding>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+
+                <!-- 解决资源文件的编码问题 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.4.3</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
