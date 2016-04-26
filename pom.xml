@@ -10,7 +10,6 @@
     <version>${com.provider-version}</version>
 
     <name>AlgorithemProject-parent</name>
-    <url>http://www.bingdian.com</url>
 
     <modules>
         <module>Common</module>
@@ -68,9 +67,10 @@
                 <scope>import</scope>
             </dependency>
 
+
             <dependency>
-                <groupId>com.bingdian.AlgorithemProject</groupId>
-                <artifactId>NewPushCommon</artifactId>
+                <groupId>com.jiangli.AlgorithemProject</groupId>
+                <artifactId>Common</artifactId>
                 <version>${com.provider-version}</version>
             </dependency>
 
