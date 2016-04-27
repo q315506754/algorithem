@@ -1,4 +1,4 @@
-package com.jiangli.hack;
+package com.jiangli.sort;
 
 import com.jiangli.common.core.Sorter;
 import org.springframework.stereotype.Component;
@@ -11,8 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class InsertionSort extends Sorter<Integer> {
 
+    public InsertionSort() {
+        logger.debug("construct");
+    }
+
     @Override
     public Integer[] sort(Integer[] arr) {
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         return new Integer[0];
     }
 }

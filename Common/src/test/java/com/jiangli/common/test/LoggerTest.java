@@ -1,4 +1,4 @@
-package com.jiangli.hack.test;
+package com.jiangli.common.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
