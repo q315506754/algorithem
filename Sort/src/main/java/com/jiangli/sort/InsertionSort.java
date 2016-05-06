@@ -3,6 +3,8 @@ package com.jiangli.sort;
 import com.jiangli.common.core.Sorter;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Array;
+
 /**
  * @author Jiangli
  *
@@ -16,13 +18,19 @@ public class InsertionSort extends Sorter<Integer> {
     }
 
     @Override
-    public Integer[] sort(Integer[] arr) {
-//        try {
-//            Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+    public Integer[] sort(final Integer[] arr) {
+        Integer[] dest = getClonedArray(arr);
 
-        return new Integer[0];
+        for (int i = 1; i < dest.length ; i++) {
+            int card = dest[i];
+            int j = i-1;
+            while (j>=0 && card < dest[j]) {
+                dest[j + 1] = dest[j];
+                j--;
+            }
+            dest[j + 1] = card;
+        }
+        return dest;
     }
+
 }
