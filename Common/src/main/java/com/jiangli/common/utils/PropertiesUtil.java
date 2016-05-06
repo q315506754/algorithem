@@ -23,13 +23,10 @@ import java.util.jar.JarFile;
  */
 
 public final class PropertiesUtil {
-
-    private static final Log logger = LogFactory.getLog("Runner");
     private static String[] propsList = new String[]{"classpath*:application.properties", "classpath*:props/*.properties", "classpath*:db/*.properties"};
-
     public static final List<Props> props = new ArrayList<Props>();
+    private static final Log logger = LogFactory.getLog("Runner");
     private static final PathMatcher pathMatcher = new AntPathMatcher();
-
     static {
         for (String s : propsList) {
             logger.debug("loading:" + s);
@@ -66,6 +63,7 @@ public final class PropertiesUtil {
         }
 
     }
+
 
     private static void addFile(InputStream in, String fileName) throws IOException {
         Props one = new Props();

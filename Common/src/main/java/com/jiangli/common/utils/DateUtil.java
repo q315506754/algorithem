@@ -7,6 +7,10 @@ import java.util.*;
 
 public class DateUtil {
 
+    public static final String Format_Date = "yyyy-MM-dd";
+    public static final String Format_Time = "HH:mm:ss";
+    public static final String Format_DateTime = "yyyy-MM-dd HH:mm:ss";
+
     public DateUtil() {
     }
 
@@ -14,9 +18,10 @@ public class DateUtil {
         return new Date(date.getTime() - 0x5265c00L * (long) count);
     }
 
-    public  static String getDate_YYYYMMDD2(long timeStamp){
+    public static String getDate_YYYYMMDD2(long timeStamp) {
         return (new SimpleDateFormat("MM月dd日")).format(timeStamp);
     }
+
     public static Long getDate_yyyyMMdd(String date) throws ParseException {
         long timeStamp = 0;
         Date formatDate;
@@ -36,26 +41,32 @@ public class DateUtil {
         return timeStamp;
     }
 
-    public  static String getDate_YYYY_MM_DD(long timeStamp){
+    public static String getDate_YYYY_MM_DD(long timeStamp) {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(timeStamp);
     }
-    public  static String getDate_yyyyMMddHHmm(long timeStamp){
+
+    public static String getDate_yyyyMMddHHmm(long timeStamp) {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm")).format(timeStamp);
     }
-    public  static String getDate_yyyyMMddHHmmss(long timeStamp){
+
+    public static String getDate_yyyyMMddHHmmss(long timeStamp) {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(timeStamp);
     }
-    public  static String getDate_YYYYMMDD(long timeStamp){
+
+    public static String getDate_YYYYMMDD(long timeStamp) {
 
         return (new SimpleDateFormat("yyyy-MM-dd")).format(timeStamp);
     }
-    public  static String getDate_HHmmss(long timeStamp){
+
+    public static String getDate_HHmmss(long timeStamp) {
         return (new SimpleDateFormat("HH:mm:ss")).format(timeStamp);
     }
-    public static String getDate_YYYYMMDD_Chinese(long timeStamp){
+
+    public static String getDate_YYYYMMDD_Chinese(long timeStamp) {
 
         return (new SimpleDateFormat("yyyy年MM月dd日")).format(timeStamp);
     }
+
     public static String getCurrentDate() {
         return (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
     }
@@ -63,6 +74,7 @@ public class DateUtil {
     public static String getCurrentDate_YMDHms() {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
     }
+
     public static String getCurrentYearMonth() {
         return (new SimpleDateFormat("yyyyMM")).format(new Date());
     }
@@ -84,6 +96,7 @@ public class DateUtil {
         SimpleDateFormat t = new SimpleDateFormat(format);
         return t.format(new Date());
     }
+
     public static int getDayOfWeek() {
         Calendar cal = Calendar.getInstance();
         return cal.get(7);
@@ -106,22 +119,25 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(date);
         int t = cal.get(7);
-        if(t == 1){
+        if (t == 1) {
             t = 7;
-        }else{
+        } else {
             t--;
         }
         return t;
     }
+
     public static int getDayOfMonth() {
         Calendar cal = Calendar.getInstance();
         return cal.get(5);
     }
+
     public static int getDayOfMonth(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(5);
     }
+
     public static int getMaxDayOfMonth(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -132,56 +148,55 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         return cal.get(6);
     }
+
     public static int getDayOfYear(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(6);
     }
 
-    public static String getDayOfWeekCN(long date){
+    public static String getDayOfWeekCN(long date) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(date);
         int n = cal.get(7);
-        if(n == 1){
+        if (n == 1) {
             return "星期天";
-        }else if(n == 2){
+        } else if (n == 2) {
             return "星期一";
-        }else if(n == 3){
+        } else if (n == 3) {
             return "星期二";
-        }else if(n == 4){
+        } else if (n == 4) {
             return "星期三";
-        }else if(n == 5){
+        } else if (n == 5) {
             return "星期四";
-        }else if(n == 6){
+        } else if (n == 6) {
             return "星期五";
-        }else{
+        } else {
             return "星期六";
         }
     }
 
-    
-    public static String getDayOfAppWeekCN(long date){
+    public static String getDayOfAppWeekCN(long date) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(date);
         int n = cal.get(7);
-        if(n == 1){
+        if (n == 1) {
             return "周日";
-        }else if(n == 2){
+        } else if (n == 2) {
             return "周一";
-        }else if(n == 3){
+        } else if (n == 3) {
             return "周二";
-        }else if(n == 4){
+        } else if (n == 4) {
             return "周三";
-        }else if(n == 5){
+        } else if (n == 5) {
             return "周四";
-        }else if(n == 6){
+        } else if (n == 6) {
             return "周五";
-        }else{
+        } else {
             return "周六";
         }
     }
-    
-    
+
     public static boolean isTime(String time) {
         try {
             String arr[];
@@ -231,6 +246,7 @@ public class DateUtil {
     public static Date addMinute(Date date, int count) {
         return new Date(date.getTime() + 60000L * (long) count);
     }
+
     public static Date addHour(Date date, int count) {
         return new Date(date.getTime() + 0x36ee80L * (long) count);
     }
@@ -260,10 +276,6 @@ public class DateUtil {
         return c.getTime();
     }
 
-    public static final String Format_Date = "yyyy-MM-dd";
-    public static final String Format_Time = "HH:mm:ss";
-    public static final String Format_DateTime = "yyyy-MM-dd HH:mm:ss";
-
     // 获取N个月后的日期
     public static String getMonthAfter(int month) {
         Calendar cal = Calendar.getInstance();
@@ -278,6 +290,7 @@ public class DateUtil {
         cal.set(6, cal.get(6) + day);
         return (new SimpleDateFormat("yyyy-MM-dd")).format(cal.getTime());
     }
+
     //
     public static long getTimeStamp(String date) throws ParseException {
         long timeStamp = 0;
@@ -295,6 +308,7 @@ public class DateUtil {
         formatDate = t.parse(date);
         return formatDate;
     }
+
     //String(yyyy-MM-dd) date --> Date
     public static Date getDate_yyyy_MM_dd(String date) throws ParseException {
 
@@ -331,17 +345,17 @@ public class DateUtil {
         return getDateYYMMDD(getDate_YYYYMMDD(cal.getTimeInMillis()));
     }
 
-    public static int getDay(long startDate,long endDate){
+    public static int getDay(long startDate, long endDate) {
 
         long time = endDate - startDate;
         ////System.out.println("date=====" + time);
-        if(time < 0){
+        if (time < 0) {
             return 0;
-        }else{
-            if(time % 86400000 == 0){
-                return (int) (time / 86400000) ;
-            }else{
-                return (int) (time / 86400000 + 1) ;
+        } else {
+            if (time % 86400000 == 0) {
+                return (int) (time / 86400000);
+            } else {
+                return (int) (time / 86400000 + 1);
             }
         }
 
@@ -349,25 +363,27 @@ public class DateUtil {
 
     public static int getDay(String endDate) throws ParseException {
         long time = getDateYYMMDD(endDate);
-        return getDay(System.currentTimeMillis(),time);
+        return getDay(System.currentTimeMillis(), time);
     }
 
 
     /**
      * 根据传过来的间隔时间生成表达式
+     *
      * @param stepTime
+     *
      * @return 返回表达式
      */
     public static String getCronExpression(Long stepTime) {
         String cronExpression = "";
-        if(stepTime<60){
-            cronExpression = "0/"+stepTime+" * * * * ?";
-        }else if(stepTime>=60&&stepTime<60*60){
-            cronExpression = "* 0/"+((double)stepTime/60)+" * * * ?";
-        }else if(stepTime>=60*60&&stepTime<60*60*24){
-            cronExpression = "* * 0/"+((double)stepTime/(60*60))+" * * ?";
-        }else if(stepTime>=60*60*24&&stepTime<60*60*24*31){
-            cronExpression = "* * * 0/"+((double)stepTime/(60*60*24*31))+" * ?";
+        if (stepTime < 60) {
+            cronExpression = "0/" + stepTime + " * * * * ?";
+        } else if (stepTime >= 60 && stepTime < 60 * 60) {
+            cronExpression = "* 0/" + ((double) stepTime / 60) + " * * * ?";
+        } else if (stepTime >= 60 * 60 && stepTime < 60 * 60 * 24) {
+            cronExpression = "* * 0/" + ((double) stepTime / (60 * 60)) + " * * ?";
+        } else if (stepTime >= 60 * 60 * 24 && stepTime < 60 * 60 * 24 * 31) {
+            cronExpression = "* * * 0/" + ((double) stepTime / (60 * 60 * 24 * 31)) + " * ?";
         }
         return cronExpression;
     }
@@ -375,8 +391,11 @@ public class DateUtil {
 
     /**
      * 获取当前日期的月份
+     *
      * @param date
+     *
      * @return
+     *
      * @throws java.text.ParseException
      */
     public static int getMonth(long date) throws ParseException {
@@ -387,8 +406,11 @@ public class DateUtil {
 
     /**
      * 获取当前日期的年份
+     *
      * @param date
+     *
      * @return
+     *
      * @throws java.text.ParseException
      */
     public static int getYear(long date) throws ParseException {
@@ -399,8 +421,11 @@ public class DateUtil {
 
     /**
      * 获取当前日期的天
+     *
      * @param date
+     *
      * @return
+     *
      * @throws java.text.ParseException
      */
     public static int getDay(long date) throws ParseException {
@@ -411,13 +436,16 @@ public class DateUtil {
 
     /**
      * 在指定时间段中获取指定周几的日期
+     *
      * @param startTime
      * @param endTime
      * @param week
+     *
      * @return
+     *
      * @throws Exception
      */
-    public static List<Long> getWeekWithInTimes(Long startTime,Long endTime,int week) throws Exception {
+    public static List<Long> getWeekWithInTimes(Long startTime, Long endTime, int week) throws Exception {
         Calendar c_begin = new GregorianCalendar();
         Calendar c_end = new GregorianCalendar();
 
@@ -428,14 +456,14 @@ public class DateUtil {
         int month2 = getMonth(endTime);
         int day2 = getDay(endTime);
 
-        c_begin.set(year1, month1-1, day1); //Calendar的月从0-11，所以4月是3.
-        c_end.set(year2, month2-1, day2); //Calendar的月从0-11，所以5月是4.
+        c_begin.set(year1, month1 - 1, day1); //Calendar的月从0-11，所以4月是3.
+        c_end.set(year2, month2 - 1, day2); //Calendar的月从0-11，所以5月是4.
 
         c_end.add(Calendar.DAY_OF_YEAR, 1);  //结束日期下滚一天是为了包含最后一天
         List<Long> list = new ArrayList<Long>();
 
-        while(c_begin.before(c_end)){
-            if(c_begin.get(Calendar.DAY_OF_WEEK)==week){
+        while (c_begin.before(c_end)) {
+            if (c_begin.get(Calendar.DAY_OF_WEEK) == week) {
                 Long datetime = getDate_yyyyMMdd(getDate_YYYYMMDD(c_begin.getTime().getTime()));
                 list.add(datetime);
             }
@@ -445,14 +473,15 @@ public class DateUtil {
     }
 
     /**
-     * @Title: getWeekDates
-     * @Description: 在指定时间段中获取指定周几的日期
      * @param start
      * @param end
      * @param calWeeks
-     * @return
+     *
      * @return List<Long>
+     *
      * @throws
+     * @Title: getWeekDates
+     * @Description: 在指定时间段中获取指定周几的日期
      */
     public static List<Long> getWeekDates(Long start, Long end, Integer calWeeks) {
         Calendar cal = Calendar.getInstance();

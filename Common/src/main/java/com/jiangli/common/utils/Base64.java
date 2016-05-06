@@ -129,6 +129,7 @@ public final class Base64 {
 
         return sb.toString();
     }
+
     static {
         int i;
         for (i = 0; i < 255; ++i) {

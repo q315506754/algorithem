@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
  *
  *         CreatedTime  2016/4/26 0026 17:30
  */
-public abstract class Sorter<T> implements Sort<T>{
-    protected   Logger logger = LoggerFactory.getLogger(this.getClass());
+public abstract class Sorter<T> implements Sort<T> {
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    
+
 }

@@ -8,27 +8,13 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.mongodb.core.MongoOperations;
 
 public class MongoDB implements ApplicationContextAware {
+    static ApplicationContext a;
     @Autowired
     @Qualifier("mongoTemplate")
     MongoOperations mongoOperation;
 
-    static ApplicationContext a;
-
-    @Override
-    public void setApplicationContext(ApplicationContext arg0) throws BeansException {
-        a = arg0;
-    }
-
     public static MongoDB getInstance() throws BeansException {
         return (MongoDB) a.getBean("mongoDB");
-    }
-
-    public MongoOperations getMongoOperation() {
-        return mongoOperation;
-    }
-
-    public void setMongoOperation(MongoOperations mongoOperation) {
-        this.mongoOperation = mongoOperation;
     }
 
     /**
@@ -38,6 +24,19 @@ public class MongoDB implements ApplicationContextAware {
      */
     public static MongoOperations getMongoDB() {
         return getInstance().getMongoOperation();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext arg0) throws BeansException {
+        a = arg0;
+    }
+
+    public MongoOperations getMongoOperation() {
+        return mongoOperation;
+    }
+
+    public void setMongoOperation(MongoOperations mongoOperation) {
+        this.mongoOperation = mongoOperation;
     }
 
 }

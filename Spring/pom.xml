@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jiangli.AlgorithemProject</groupId>
-    <artifactId>Hack</artifactId>
+    <artifactId>Spring</artifactId>
     <packaging>jar</packaging>
     <version>${com.provider-version}</version>
 

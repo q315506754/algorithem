@@ -73,6 +73,35 @@ public class BeanCopyUtil {
         return null;
     }
 
+    /**
+     * 获取复制属性后的对象
+     *
+     * @param sourceBean
+     * @param targetBean
+     *
+     * @return targetBean
+     */
+    public static Object getCopyBean(Object sourceBean, Object targetBean) {
+        BeanCopier bc = BeanCopier.create(sourceBean.getClass(), targetBean.getClass(), true);
+        StringConverter stringConverter = new StringConverter();
+        bc.copy(sourceBean, targetBean, stringConverter);
+        return targetBean;
+    }
+
+    /**
+     * id<String>domain实体复制到id<ObjectId> model实体
+     *
+     * @param sourceBean
+     * @param targetBean
+     *
+     * @return targetBean
+     */
+    public static Object getCopyBeanForConvertObjectId(Object sourceBean, Object targetBean) {
+        BeanCopier bc = BeanCopier.create(sourceBean.getClass(), targetBean.getClass(), true);
+        ObjectIdConverter c = new ObjectIdConverter();
+        bc.copy(sourceBean, targetBean, c);
+        return targetBean;
+    }
 
     private static class ObjectIdConverter implements Converter {
         @Override
@@ -104,35 +133,6 @@ public class BeanCopyUtil {
             }
             return value;
         }
-    }
-
-
-    /**
-     * 获取复制属性后的对象
-     *
-     * @param sourceBean
-     * @param targetBean
-     * @return targetBean
-     */
-    public static Object getCopyBean(Object sourceBean, Object targetBean) {
-        BeanCopier bc = BeanCopier.create(sourceBean.getClass(), targetBean.getClass(), true);
-        StringConverter stringConverter = new StringConverter();
-        bc.copy(sourceBean, targetBean, stringConverter);
-        return targetBean;
-    }
-
-    /**
-     * id<String>domain实体复制到id<ObjectId> model实体
-     *
-     * @param sourceBean
-     * @param targetBean
-     * @return targetBean
-     */
-    public static Object getCopyBeanForConvertObjectId(Object sourceBean, Object targetBean) {
-        BeanCopier bc = BeanCopier.create(sourceBean.getClass(), targetBean.getClass(), true);
-        ObjectIdConverter c = new ObjectIdConverter();
-        bc.copy(sourceBean, targetBean, c);
-        return targetBean;
     }
 
 

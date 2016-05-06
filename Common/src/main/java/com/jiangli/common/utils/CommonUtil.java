@@ -132,19 +132,21 @@ public class CommonUtil {
         return obj.length() == 24;
     }
 
-    public static <T> T throwExceptionIfDataInMongoIsNull(Class<T> cls, String key,Object val, String exceptionStr) throws ServiceException {
+    public static <T> T throwExceptionIfDataInMongoIsNull(Class<T> cls, String key, Object val, String exceptionStr) throws ServiceException {
         if (isStringNotNull(key) && val != null) {
             T one = findOne(cls, key, val);
-            throwExceptionIfNull(one,exceptionStr);
+            throwExceptionIfNull(one, exceptionStr);
             return one;
         }
         return null;
     }
+
     public static void throwExceptionIfNull(Object str, String... strs) throws ServiceException {
         if (str == null) {
             throwException(strs);
         }
     }
+
     public static void throwExceptionIfNotNull(Object str, String... strs) throws ServiceException {
         if (str != null) {
             throwException(strs);

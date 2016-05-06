@@ -33,6 +33,10 @@ public class Msg<T> implements Serializable {
         this.data = data;
     }
 
+    public static <T> T findOne(Class<T> cls, String prop, Object value) {
+        return MongoDB.getMongoDB().findOne(Query.query(Criteria.where(prop).is(value)), cls);
+    }
+
     public boolean isStringNull(String obj) {
         return StringUtils.isEmpty(obj);
     }
@@ -42,10 +46,6 @@ public class Msg<T> implements Serializable {
             return false;
         }
         return obj.length() == 24;
-    }
-
-    public static <T> T findOne(Class<T> cls, String prop, Object value) {
-        return MongoDB.getMongoDB().findOne(Query.query(Criteria.where(prop).is(value)), cls);
     }
 
     public <T> T findOneByObjectId(Class<T> cls, Object value) {

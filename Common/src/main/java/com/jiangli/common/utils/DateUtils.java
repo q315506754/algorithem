@@ -8,6 +8,10 @@ import java.util.*;
 
 @Component
 public class DateUtils {
+    public final String Format_Date = "yyyy-MM-dd";
+    public final String Format_Time = "HH:mm:ss";
+    public final String Format_DateTime = "yyyy-MM-dd HH:mm:ss";
+
     public Date minusDay(Date date, int count) {
         return new Date(date.getTime() - 0x5265c00L * (long) count);
     }
@@ -240,10 +244,6 @@ public class DateUtils {
         c.add(1, count);
         return c.getTime();
     }
-
-    public final String Format_Date = "yyyy-MM-dd";
-    public final String Format_Time = "HH:mm:ss";
-    public final String Format_DateTime = "yyyy-MM-dd HH:mm:ss";
 
     // 获取N个月后的日期
     public String getMonthAfter(int month) {

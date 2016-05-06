@@ -3,13 +3,12 @@ package com.jiangli.hack;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.zip.CRC32;
+
 public class Intellij14_KeyGen {
-    public static short getCRC(String s, int i, byte bytes[]){
+    public static short getCRC(String s, int i, byte bytes[]) {
         CRC32 crc32 = new CRC32();
-        if (s != null)
-        {
-            for (int j = 0; j < s.length(); j++)
-            {
+        if (s != null) {
+            for (int j = 0; j < s.length(); j++) {
                 char c = s.charAt(j);
                 crc32.update(c);
             }
@@ -18,23 +17,20 @@ public class Intellij14_KeyGen {
         crc32.update(i >> 8);
         crc32.update(i >> 16);
         crc32.update(i >> 24);
-        for (int k = 0; k < bytes.length - 2; k++)
-        {
+        for (int k = 0; k < bytes.length - 2; k++) {
             byte byte0 = bytes[k];
             crc32.update(byte0);
         }
         return (short) (int) crc32.getValue();
     }
 
-    public static String encodeGroups(BigInteger biginteger){
+    public static String encodeGroups(BigInteger biginteger) {
         BigInteger beginner1 = BigInteger.valueOf(0x39aa400L);
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; biginteger.compareTo(BigInteger.ZERO) != 0; i++)
-        {
+        for (int i = 0; biginteger.compareTo(BigInteger.ZERO) != 0; i++) {
             int j = biginteger.mod(beginner1).intValue();
             String s1 = encodeGroup(j);
-            if (i > 0)
-            {
+            if (i > 0) {
                 sb.append("-");
             }
             sb.append(s1);
@@ -43,18 +39,14 @@ public class Intellij14_KeyGen {
         return sb.toString();
     }
 
-    public static String encodeGroup(int i){
+    public static String encodeGroup(int i) {
         StringBuilder sb = new StringBuilder();
-        for (int j = 0; j < 5; j++)
-        {
+        for (int j = 0; j < 5; j++) {
             int k = i % 36;
             char c;
-            if (k < 10)
-            {
+            if (k < 10) {
                 c = (char) (48 + k);
-            }
-            else
-            {
+            } else {
                 c = (char) ((65 + k) - 10);
             }
             sb.append(c);
@@ -63,7 +55,7 @@ public class Intellij14_KeyGen {
         return sb.toString();
     }
 
-    public static String MakeKey(String name, int days, int id){
+    public static String MakeKey(String name, int days, int id) {
         id %= 100000;
         byte bkey[] = new byte[12];
         bkey[0] = (byte) 1; // Product type: IntelliJ IDEA is 1
@@ -90,8 +82,7 @@ public class Intellij14_KeyGen {
         BigInteger k1 = k0.modPow(pow, mod);
         String s0 = Integer.toString(id);
         String sz = "0";
-        while (s0.length() != 5)
-        {
+        while (s0.length() != 5) {
             s0 = sz.concat(s0);
         }
         s0 = s0.concat("-");
