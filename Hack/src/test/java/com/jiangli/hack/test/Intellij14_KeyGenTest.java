@@ -36,9 +36,14 @@ public class Intellij14_KeyGenTest {
 
         System.out.println("用户名:" + username);
 
+
+        System.out.println("");
         Random r = new Random();
         System.out.println(MakeKey(username, 0, r.nextInt(100000)));
     }
 
+    @Test
+    public void func2() throws IOException {
 
+    }
 }
