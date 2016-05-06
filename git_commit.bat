@@ -1,5 +1,5 @@
 git add --all .
-git commit -m "脚本提交"
+git commit -m "shell commit..."
 git push
 pause
 
