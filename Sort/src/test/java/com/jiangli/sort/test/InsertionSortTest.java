@@ -1,9 +1,7 @@
 package com.jiangli.sort.test;
 
 import com.jiangli.common.core.Sorter;
-import com.jiangli.sort.BubbleSort;
-import com.jiangli.sort.InsertionSort;
-import com.jiangli.sort.SelectionSort;
+import com.jiangli.sort.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +39,15 @@ public class InsertionSortTest implements ApplicationContextAware {
 
     @Autowired
     private SelectionSort selectionSort;
+
+    @Autowired
+    private QuickSort quickSort;
+
+    @Autowired
+    private MergeSort mergeSort;
+
+    @Autowired
+    private ShellSort shellSort;
 
     private static final int REPEAT_TIMES = 1;
     private static final int FUNC_TIMES = 100;
@@ -101,6 +108,24 @@ public class InsertionSortTest implements ApplicationContextAware {
     @Repeat(REPEAT_TIMES)
     public void test_selectionSort() {
         expect(selectionSort);
+    }
+
+    @Test
+    @Repeat(REPEAT_TIMES)
+    public void test_quickSort() {
+        expect(quickSort);
+    }
+
+    @Test
+    @Repeat(REPEAT_TIMES)
+    public void test_mergeSort() {
+        expect(mergeSort);
+    }
+
+    @Test
+    @Repeat(REPEAT_TIMES)
+    public void test_shellSort() {
+        expect(shellSort);
     }
 
 }
