@@ -49,6 +49,12 @@ public class InsertionSortTest implements ApplicationContextAware {
     @Autowired
     private ShellSort shellSort;
 
+    @Autowired
+    private BucketSort bucketSort;
+
+    @Autowired
+    private RadixSort radixSort;
+
     private static final int REPEAT_TIMES = 1;
     private static final int FUNC_TIMES = 100;
     private static final List<ParamAndExpect> cases = new LinkedList<ParamAndExpect>();
@@ -56,6 +62,7 @@ public class InsertionSortTest implements ApplicationContextAware {
     static {
         cases.add(createPAEObject(new Integer[]{5, 2, 1, 3, 4}, new Integer[]{1, 2, 3, 4, 5}));
         cases.add(createPAEObject(new Integer[]{4, 3, 1, 2, 5}, new Integer[]{1, 2, 3, 4, 5}));
+        cases.add(createPAEObject(new Integer[]{9999981, 44668, 1456455, 29, 5658}, new Integer[]{29, 5658, 44668, 1456455, 9999981}));
     }
 
     private static ParamAndExpect createPAEObject(Integer[] params, Integer[] expectedArrays1) {
@@ -126,6 +133,19 @@ public class InsertionSortTest implements ApplicationContextAware {
     @Repeat(REPEAT_TIMES)
     public void test_shellSort() {
         expect(shellSort);
+    }
+
+
+    @Test
+    @Repeat(REPEAT_TIMES)
+    public void test_bucketSort() {
+        expect(bucketSort);
+    }
+
+    @Test
+    @Repeat(REPEAT_TIMES)
+    public void test_radixSort() {
+        expect(radixSort);
     }
 
 }
