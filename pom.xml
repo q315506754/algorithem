@@ -13,7 +13,12 @@
 
     <modules>
         <module>Common</module>
+        <module>Hack</module>
+        <module>Maven</module>
+        <module>Memory</module>
+        <module>RPC</module>
         <module>Sort</module>
+        <module>Spring</module>
     </modules>
 
     <repositories>
