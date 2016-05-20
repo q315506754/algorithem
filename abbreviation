@@ -7,3 +7,13 @@ CORBA（Common Object Request Broker Architecture）公共对象请求代理体�
 WebService-WSDL(Web Services Description Language),网络服务描述语言,XML
 WebService-SOAP(Simple Object Access Protocol),简单对象访问协议,一种轻量的、简单的、基于XML（标准通用标记语言下的一个子集）的协议，它被设计成在WEB上交换结构化的和固化的信息
 WebService-UDDI(Universal Description Discovery and Integration),管理，分发，查询webService
+JAX-WS(Java API for XML-based WebService)
+JAX-RPC(Java API for XML-based RPC)
+JAX-RS(Java API for RESTful Web Services),JAVA EE6 引入的一个新技术
+
+JSON(JavaScript Object Notation)，轻量级的数据交换格式，它基于ECMAScript的一个子集
+ECMAScript（European Computer Manufacturers Association）,欧洲计算机制造商协会通过ECMA-262标准化的脚本程序设计语言
+CMS(Content Management System),网站内容管理系统
+LRU(Least Recently Used),最近最久未使用过
+FIFO
+LFU
