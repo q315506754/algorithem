@@ -15,5 +15,5 @@ JSON(JavaScript Object Notation)，轻量级的数据交换格式，它基于ECM
 ECMAScript（European Computer Manufacturers Association）,欧洲计算机制造商协会通过ECMA-262标准化的脚本程序设计语言
 CMS(Content Management System),网站内容管理系统
 LRU(Least Recently Used),最近最久未使用过
-FIFO
-LFU
+FIFO(First Input First Output),先入先出队列
+LFU(least frequently used ),最不经常使用页置换算法

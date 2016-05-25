@@ -19,13 +19,21 @@ public class ShellSort extends Sorter<Integer> {
         int group, i, j, temp;
         for (group = len / 2; group > 0; group /= 2) {
             for (i = group; i < len; i++) {
-                for (j = i - group; j >= 0; j -= group) {
-                    if (unsorted[j] > unsorted[j + group]) {
-                        temp = unsorted[j];
-                        unsorted[j] = unsorted[j + group];
-                        unsorted[j + group] = temp;
-                    }
+                int card = unsorted[i];
+
+                j = i - group;
+                while (j>=0 && card < unsorted[j] ) {
+                    unsorted[j + group] = unsorted[j] ;
+                    j -= group;
                 }
+
+//                    if (unsorted[j] > unsorted[j + group]) {
+//                        temp = unsorted[j];
+//                        unsorted[j] = unsorted[j + group];
+//                        unsorted[j + group] = temp;
+//                    }
+
+                unsorted[j + group] = card;
             }
         }
     }

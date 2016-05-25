@@ -1,0 +1,40 @@
+创建型x5
+工厂方法-曹操献刀-java.util.Iterator
+抽象工厂-肯德基-java.sql.DriverManager
+建造者-手机套餐-java.lang.StringBuilder
+原型-Daylife-java.lang.Object.clone
+单例--java.lang.Runtime
+
+结构型x7
+适配器-220v-java.io.InputStreamReader
+桥接-电灯开关-java.util.logging.Handler Formatter
+组合-雇员-java.awt.Container Component
+装饰者-染色馒头-java.io.FilterInputStream
+外观-糖醋排骨-java.util.logging.Logger
+享元-五子棋-java.lang.Interger.valueOf
+代理-红酒厂商-java.lang.reflect.Proxy.newProxyInstance(ClassLoader,Class[],InvocationHandler)
+
+行为型x11
+责任链-学生请假-java.lang.ClassLoader,org.apache.commons.Chain
+命令-邮局发邮件-javax.swing.Action
+解释器-语言解释器-java.text.Format
+迭代器-循环人员信息列表-java.util.Iterator
+中介者-多人聊天室-javax.swing.ButtonGroup
+备忘录-英雄状态备份-java.util.Date snaptime
+观察者-高温预警-java.util.Observable Observer,JMS
+状态-编辑器-x
+策略-商场打折-java.util.concurrent.ThreadPoolExecutor RejecctedExecutionHandler.rejectedExecution
+模板方法-员工一天-java.util.Arrays Comparable
+访问者-雇员-javax.lang.model.element.Element
+
+
+OCP-Open Closed Principle-开闭原则
+SRP-Single Responsibility Principle-单一职责原则
+DIP-Dependency Inversion Principle-依赖倒置原则
+ISP-Interface Segregation Principle-接口隔离原则
+LSP-Liskov Substitution Principle-里氏替换原则
+LoD,LKP-Law of Demeter,Least Knowledgement Principle-迪米特法则，最少知识原则
+
+
+
+

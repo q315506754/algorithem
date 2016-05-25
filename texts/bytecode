@@ -1,0 +1,218 @@
+.class: a table
+base:8bit=u1  0x??
+order:high(8bit) low(8bit)
+data type:unsigned number(u1,u2,u4,u8-number,index,amount), table(endWith "_info")
+
+u4 magic 1 //0xCAFEBABE  fixed
+u2 minor_version 1 //
+u2 major_version 1 //  1.6-50.0 1.7->51.0 1.8-52.0
+u2 constant_pool_count 1 //
+cp_info constant_pool constant_pool_count-1 //
+u2 access_flags 1 //see  access_flags for class
+u2 this_class 1 //指向CONSTANT_Class_info的索引
+u2 super_class 1 //指向CONSTANT_Class_info的索引
+u2 interfaces_count 1
+u2 interfaces interfaces_count //包含实现顺序
+u2 fields_count 1
+field_info fields fields_count
+u2 methods_count 1
+method_info methods methods_count
+u2 attributes_count 1
+attribute_info attributes attributes_count
+
+
+
+----------------------
+ cp_info
+
+ ---- common ----
+    u1 tag 1
+ ---- end of common ----
+
+ tag:1----CONSTANT_Utf8_info---//UTF-8编码的字符串
+     u2 length 1 //  max length=65535=64kb
+     u1 bytes length //
+ tag:1----end of---
+
+ tag:3----CONSTANT_Integer_info---//整形字面量
+     u4 bytes 1 //高位在前的int
+ tag:3----end of---
+
+
+ tag:4----CONSTANT_Float_info---//浮点型字面量
+    u4 bytes 1 //高位在前的float
+ tag:4----end of---
+
+
+ tag:5----CONSTANT_Long_info---//长整形字面量
+    u8 bytes 1 //高位在前的long
+ tag:5----end of---
+
+
+ tag:6----CONSTANT_Double_info---//双精度浮点型字面量
+    u8 bytes 1 //高位在前的double
+ tag:6----end of---
+
+ tag:7----CONSTANT_Class_info---//类或接口的符号引用
+    u2 name_index 1 //指向CONSTANT_Utf8_info的索引值 e.g. org/afenixsoft/clazz/Test.class
+ tag:7----end of---
+
+
+ tag:8----CONSTANT_String_info---//字符串类型字面量
+    u2 name_index 1 //指向CONSTANT_Utf8_info的索引值 e.g. helloworld
+ tag:8----end of---
+
+
+ tag:9----CONSTANT_Fieldref_info---//字段的符号引用
+    u2 class_index 1 //指向CONSTANT_Class_info的索引值
+    u2 nameandtype_index 1 //指向CONSTANT_NameAndType_info的索引值
+ tag:9----end of---
+
+
+ tag:10----CONSTANT_Methodref_info---//类中方法的符号引用
+    u2 class_index 1 //指向CONSTANT_Class_info的索引值
+    u2 nameandtype_index 1 //指向CONSTANT_NameAndType_info的索引值
+ tag:10----end of---
+
+
+ tag:11----CONSTANT_InterfaceMethodref_info---//接口中方法的符号引用
+    u2 class_index 1 //指向CONSTANT_Class_info的索引值
+    u2 nameandtype_index 1 //指向CONSTANT_NameAndType_info的索引值
+ tag:11----end of---
+
+
+ tag:12----CONSTANT_NameAndType_info---//字段或方法的部分符号引用
+    u2 index 1 //指向该字段方法或方法名称常量项的索引值  如字段变量名m 方法变量名<init>
+    u2 index 1 //指向该字段方法或方法描述符常量项的索引值  如字段变量类型I 方法描述符()V ([CII[CII)I
+ tag:12----end of---
+
+----------------------
+
+----------------------
+ access_flags for class
+ ACC_PUBLIC 0x0001 是否为public
+ ACC_FINAL 0x0010 是否被声明为final
+ ACC_SUPER 0x0020 是否允许使用invokespecial字节码指令 JDK1.2之后编译出来的类这个标志为真
+ ACC_INTERFACE 0x0200 是否为接口
+ ACC_ABSTRACT 0x0400 是否抽象  接口的这个标志也为真
+ ACC_SYNTHETIC 0x1000 是否由非用户代码产生
+ ACC_ANNOTATION 0x2000 是否为注解
+ ACC_ENUM 0x4000 是否为枚举
+----------------------
+
+----------------------
+ access_flags for field
+ ACC_PUBLIC 0x0001 是否为public
+ ACC_PRIVATE 0x0002 是否为private
+ ACC_PROTECTED 0x0004 是否为protected
+ ACC_STATIC 0x0008 是否为static
+ ACC_FINAL 0x0010 是否被声明为final
+ ACC_VOLATILE 0x0040 是否volatile
+ ACC_TRANSIENT 0x0080 是否transient
+ ACC_SYNTHETIC 0x1000 是否由非用户代码产生
+ ACC_ENUM 0x4000 字段是否为枚举
+----------------------
+
+----------------------
+ access_flags for method
+ ACC_PUBLIC 0x0001 是否为public
+ ACC_PRIVATE 0x0002 是否为private
+ ACC_PROTECTED 0x0004 是否为protected
+ ACC_STATIC 0x0008 是否为static
+ ACC_FINAL 0x0010 是否被声明为final
+ ACC_SYNCHRONIZED 0x0020 方法是否synchronized
+ ACC_BRIDGE 0x0040 方法是否由编译器产生的桥接方法
+ ACC_VARARGS 0x0080 方法是否接受不定参数
+ ACC_NATIVE 0x0100 方法是否为native
+ ACC_ABSTRACT 0x0400 方法是否为abstract
+ ACC_STRICT 0x0800 方法是否为strictfp
+ ACC_ENUM 0x4000 字段是否为枚举
+----------------------
+
+
+----------------------
+ field_info,method_info
+ u2 access_flags 1 //see access_flags for field,method
+ u2 name_index 1 //指向常量池索引 简单名称 如m
+ u2 descriptor_index 11 //指向常量池索引 描述符 如I
+ u2 attribute_count 1
+ attribute_info attributes attribute_count
+----------------------
+
+
+----------------------
+ attribute_info
+ 预定义x9
+ Code 方法表 Java代码编译成的字节码指令
+ ConstantValue 字段表 final关键字定义的常量值
+ Deprecated 类、方法表、字段表 被声明为Deprecated的类、方法表、字段
+ Exceptions 方法表 方法抛出的异常
+ InnerClasses 类文件 内部类列表
+ LineNumberTable Code属性 Java源码的行号与字节码指令的对应关系
+ LocalVariableTable Code属性 方法的局部变量描述
+ SourceFile 类文件 源文件名称
+ Synthetic 类、方法表、字段表 标识方法或字段为编译器自动产生的
+
+ ---------common--------
+    u2 attribute_name_index 1
+    u2 attribute_length 1
+    u1 info attribute_length
+ -------end of common-------
+
+ ---------Code--------
+    u2 attribute_name_index 1
+    u4 attribute_length 1
+    u2 max_stack 1
+    u2 min_stack 1
+    u4 code_length 1
+    u1 code code_length
+    u2 exception_table_length 1
+    exception_info exception_table exception_table_length
+    u2 attribute_count 1
+    attribute_info attributes attribute_count
+ -------Code end-------
+
+     ---------Code.exception_table--------
+        u2 start_pc 1
+        u2 end_pc 1
+        u2 handler 1 //发生异常后跳转的字节码位置
+        u2 catch_type 1 //若为0表示捕获任何异常
+     -------Code.exception_table end-------
+
+ ---------LineNumberTable--------
+    u2 attribute_name_index 1
+    u4 attribute_length 1
+    u2 line_number_table_length 1
+    line_number_info line_number_table line_number_table_length
+ -------LineNumberTable end-------
+
+     ---------LineNumberTable.line_number_table--------
+        u2 start_pc 1
+        u2 line_number 1
+     -------LineNumberTable.line_number_table end-------
+
+ ---------LineVariableTable--------
+   u2 attribute_name_index 1
+   u4 attribute_length 1
+   u2 local_variable_table_length 1
+   local_variable_info local_variable_table local_variable_table_length
+ -------LineNumberTable end-------
+
+     ---------LineVariableTable.local_variable_table--------
+        u2 start_pc 1
+        u2 length 1
+        u2 name_index 1
+        u2 descriptor_index 1
+        u2 index 1 //栈帧局部变量表中slot位置 如果是64位 占用slot和slot+1位置
+     -------LineVariableTable.local_variable_table end-------
+
+ ---------Exceptions--------
+   u2 attribute_name_index 1
+   u4 attribute_length 1
+   u2 number_of_exceptions 1
+   u2 exceptions_index_table number_of_exceptions //指向CONSTANT_Class_info索引
+ -------Exceptions end-------
+
+
+----------------------
+
