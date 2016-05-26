@@ -1,4 +1,4 @@
-package com.jiangli.common.test;
+package com.jiangli.security.test;
 
 import com.jiangli.common.core.Sorter;
 import org.apache.commons.beanutils.BeanUtils;

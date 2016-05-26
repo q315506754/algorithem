@@ -1,16 +1,9 @@
-package com.jiangli.common.test;
+package com.jiangli.security.test;
 
-import com.jiangli.common.core.Sort;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.ServiceLoader;
 
 /**
  * @author Jiangli
