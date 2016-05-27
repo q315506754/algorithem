@@ -18,10 +18,13 @@ public class JavassistMain {
 
             };
             ClassPool pool = ClassPool.getDefault();
-            System.out.println("before change:"+JavassisA.class+" 's super is :"+JavassisA.class.getSuperclass());
+            System.out.println("before change:" + JavassisA.class + " 's super is :" + JavassisA.class.getSuperclass());
 
 //额外的class路径需要注册到ClassPool中。
 //            pool.insertClassPath(new ClassClassPath(this.getClass()));
+
+//            CtClass unknowncc = pool.get("com.unkown.Cls"); //Excpetion
+//            System.out.println(unknowncc);
 
             CtClass cc = pool.get("com.jiangli.bytecode.javassist.JavassisA");
             cc.setSuperclass(pool.get("com.jiangli.bytecode.javassist.JavassisB"));
@@ -39,13 +42,13 @@ public class JavassistMain {
 //            Class clazz = cc.toClass(bean.getClass().getClassLoader());
 
             System.out.println(clazz);
-            System.out.println("after change:"+clazz+" 's super is :"+clazz.getSuperclass());
-            System.out.println("after change in org classloader:"+JavassisA.class+" 's super is :"+JavassisA.class.getSuperclass());
+            System.out.println("after change:" + clazz + " 's super is :" + clazz.getSuperclass());
+            System.out.println("after change in org classloader:" + JavassisA.class + " 's super is :" + JavassisA.class.getSuperclass());
 
 //            JavassisA aIns = (JavassisA)clazz.newInstance();
 //            aIns.funcA(222,"Hahaha");
             Object aIns = clazz.newInstance();
-            Method afuncA = aIns.getClass().getDeclaredMethod("funcA",new Class[]{int.class,String.class});
+            Method afuncA = aIns.getClass().getDeclaredMethod("funcA", new Class[]{int.class, String.class});
             afuncA.invoke(aIns, new Object[]{222, "Ahahahahahfsds"});
 
 

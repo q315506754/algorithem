@@ -23,11 +23,11 @@ public class BookServiceFactory {
         return (BookServiceBean) en.create();
     }
 
-    public static BookServiceBean getProxyInstanceByFilter(MyCglibProxy myProxy){
+    public static BookServiceBean getProxyInstanceByFilter(MyCglibProxy myProxy) {
         Enhancer en = new Enhancer();
         en.setSuperclass(BookServiceBean.class);
         en.setCallbacks(new Callback[]{myProxy, NoOp.INSTANCE});
         en.setCallbackFilter(new MyProxyFilter());
-        return (BookServiceBean)en.create();
+        return (BookServiceBean) en.create();
     }
 }  

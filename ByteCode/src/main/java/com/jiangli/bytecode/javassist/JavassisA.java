@@ -5,7 +5,7 @@ package com.jiangli.bytecode.javassist;
  */
 public class JavassisA {
 
-    public void funcA(int x,String y) {
-        System.out.println("org in funcA:"+x+" " +y);
+    public void funcA(int x, String y) {
+        System.out.println("org in funcA:" + x + " " + y);
     }
 }

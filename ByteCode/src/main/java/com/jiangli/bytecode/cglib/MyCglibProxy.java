@@ -1,4 +1,3 @@
-
 package com.jiangli.bytecode.cglib;
 
 import net.sf.cglib.proxy.Enhancer;
