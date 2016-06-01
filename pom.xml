@@ -15,8 +15,10 @@
         <module>ByteCode</module>
         <module>Common</module>
         <module>Hack</module>
+        <module>JNI</module>
         <module>Maven</module>
         <module>Memory</module>
+        <module>OSGI</module>
         <module>RPC</module>
         <module>Security</module>
         <module>Sort</module>

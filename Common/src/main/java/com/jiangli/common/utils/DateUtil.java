@@ -74,6 +74,9 @@ public class DateUtil {
     public static String getCurrentDate_YMDHms() {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
     }
+    public static String getCurrentDate_YMDHmsSS() {
+        return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(new Date());
+    }
 
     public static String getCurrentYearMonth() {
         return (new SimpleDateFormat("yyyyMM")).format(new Date());
