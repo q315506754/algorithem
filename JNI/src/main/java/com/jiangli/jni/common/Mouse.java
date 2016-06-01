@@ -2,6 +2,9 @@ package com.jiangli.jni.common;
 
 import com.jiangli.jni.core.User32;
 
+import java.awt.*;
+import java.awt.event.InputEvent;
+
 public class Mouse {
 
     private static User32 user32 = User32.INSTANCE;
@@ -16,6 +19,28 @@ public class Mouse {
 //            e.printStackTrace();
 //        }
         user32.PostMessageA(hwnd, 514, 0, v);
+    }
+
+    public static void pressByRobot(int hWnd, Robot robot ,Point point) {
+//        Mouse.click(hWnd, point.getX(), point.getY());
+
+        java.awt.Point originpoint = null;
+        try {
+            originpoint = MouseInfo.getPointerInfo().getLocation();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        com.jiangli.jni.core.struct.Rect r = Window.getRect(hWnd);
+
+        robot.mouseMove(r.left+ point.getX(),r.top+ point.getY());
+        robot.delay(10);
+        robot.mousePress(InputEvent.BUTTON1_MASK);
+        robot.delay(100);
+        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+
+        robot.mouseMove( (int)originpoint.getX(),(int)originpoint.getY());
+
     }
 
     // 模拟鼠标左键单击

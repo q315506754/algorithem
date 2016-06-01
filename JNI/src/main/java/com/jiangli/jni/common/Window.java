@@ -14,6 +14,7 @@ public class Window {
     // 取窗口句柄
     public static int getHwnd(String title) {
         return user32.FindWindowA(null, title);
+//        return user32.FindWindowW(null, title);
     }
 
     // 取窗口矩形

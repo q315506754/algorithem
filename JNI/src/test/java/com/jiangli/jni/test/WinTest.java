@@ -1,12 +1,16 @@
 package com.jiangli.jni.test;
 
+import com.jiangli.common.utils.ClassDescribeUtil;
 import com.jiangli.jni.common.*;
+import com.jiangli.jni.common.Point;
+import com.jiangli.jni.common.Window;
 import com.jiangli.jni.core.User32;
 import com.jiangli.jni.core.struct.Rect;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,7 +21,7 @@ import java.io.IOException;
 public class WinTest {
     private static User32 user32 = User32.INSTANCE;
     private static  String short_path = "C:\\Users\\Administrator\\Desktop\\tN";
-    private static  int  test_hnd = 460564;
+    private static  int  test_hnd = 263564;
     @Before
     public void setUp() throws Exception {
     }
@@ -30,6 +34,14 @@ public class WinTest {
     @Test
     public final void testLoad() {
         System.out.println(Config.characteristic_path);
+        System.out.println(ClassDescribeUtil.describeStaticFields(Config.class));
+    }
+
+    @Test
+    public final void testLoad2() {
+        System.out.println( user32.FindWindowW(null, "QQ游戏 - 连连看角色版"));
+        System.out.println( user32.FindWindowW("32770", null));
+        System.out.println( user32.FindWindowW("#32770", null));
     }
 
     @Test
@@ -129,9 +141,19 @@ public class WinTest {
             ex.printStackTrace();
         }
 
-        int n = 10;
+        int n = 1;
         while (n-- > 0) {
-            Mouse.click(hWnd, point.getX(), point.getY());
+//            Mouse.click(hWnd, point.getX(), point.getY());
+//            Rect r = Window.getRect(hWnd);
+
+            Robot robot = new Robot();
+            Mouse.pressByRobot(hWnd,robot,point);
+//            robot.mouseMove(r.left+ point.getX(),r.top+ point.getY());
+//            robot.delay(100);
+//            robot.mousePress(InputEvent.BUTTON1_MASK);
+//            robot.delay(200);
+//            robot.mouseRelease(InputEvent.BUTTON1_MASK);
+
         }
 
 

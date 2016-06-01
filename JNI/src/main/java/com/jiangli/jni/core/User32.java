@@ -12,6 +12,8 @@ public interface User32 extends StdCallLibrary{
 
     int FindWindowA(String a,String b);
 
+    int FindWindowW(String a,String b);
+
     int GetWindowRect(int hwnd,Rect r);// 取窗口矩形
 
     int GetDesktopWindow();// 取桌面句柄

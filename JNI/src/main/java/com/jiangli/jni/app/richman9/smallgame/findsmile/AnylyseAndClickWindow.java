@@ -49,6 +49,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private int CLICK_POINT_LENGTH = 5;
     private int CLICK_INTERVAL = 200;
     private Random seed = new Random();
+    private Robot robot;
 
     public AnylyseAndClickWindow() throws HeadlessException {
         this.setVisible(true);
@@ -58,6 +59,11 @@ public class AnylyseAndClickWindow extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setDefaultLookAndFeelDecorated(false);
         jtaConsole.setEditable(false);
+        try {
+            robot = new Robot();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Container root = getContentPane();
 
@@ -68,6 +74,8 @@ public class AnylyseAndClickWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     rereshHwnd();
+                    btnFire.setEnabled(false);
+
                     BMP bmp = null;
                     if (capture) {
                         logger.debug("capture enabled");
@@ -140,12 +148,18 @@ public class AnylyseAndClickWindow extends JFrame {
                     logger.debug("start clicking..");
                     logger.debug("clickPoints:"+clickPoints.pointList.size());
                     for (Point point : clickPoints.pointList) {
-                        Mouse.click(hWnd, point.getX(), point.getY());
+//                        Mouse.click(hWnd, point.getX(), point.getY());
+                        Mouse.pressByRobot(hWnd,robot,point);
 
                         Thread.sleep(seed.nextInt(CLICK_INTERVAL));
                     }
+
+
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     JOptionPane.showMessageDialog(root, ex.getMessage());
+                } finally {
+                    btnFire.setEnabled(true);
                 }
             }
         });

@@ -153,6 +153,7 @@ public class BMP {
                 lineW = width * 3 + 1;
         }
         int i = 54 + (height - y - 1) * lineW + 3 * x;
+        i = i<0?0:i;
         ret. r = data[i + 2] & 0xff;
         ret. g = data[i + 1] & 0xff;
         ret. b = data[i] & 0xff;

@@ -43,7 +43,7 @@ public class Lianlk {
     public static void ms() throws FileNotFoundException, IOException {
         // 取游戏窗口句柄
         int hwnd = getHwnd("QQ游戏 - 连连看角色版");
-        // int hwnd = 1234; //手动
+//         int hwnd = 199438; //手动
 
         // 窗口截图
         File shortCut = shortCut(hwnd);
