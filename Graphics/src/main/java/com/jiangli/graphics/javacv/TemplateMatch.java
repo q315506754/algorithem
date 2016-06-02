@@ -2,19 +2,11 @@ package com.jiangli.graphics.javacv;
 
 
 import org.bytedeco.javacpp.opencv_core;
-import org.bytedeco.javacv.*;
-import org.bytedeco.javacpp.*;
-import org.bytedeco.javacpp.indexer.*;
-
-import java.util.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_imgproc.*;
-import static org.bytedeco.javacpp.opencv_calib3d.*;
-import static org.bytedeco.javacpp.opencv_objdetect.*;
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_imgproc.*;
-import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_TM_CCORR_NORMED;
+import static org.bytedeco.javacpp.opencv_imgproc.cvMatchTemplate;
 
 public class TemplateMatch {
 
@@ -42,6 +34,7 @@ public class TemplateMatch {
 
         cvMinMaxLoc(result, minVal, maxVal, minLoc, maxLoc, null);
         matchRes = maxVal[0] > 0.99f ? true : false;
+        System.out.println(maxVal[0]);
         System.out.println(java.util.Arrays.toString(maxLoc));
         System.out.println(java.util.Arrays.toString(minLoc));
         cvReleaseImage(result);

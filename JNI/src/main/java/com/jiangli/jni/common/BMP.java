@@ -198,9 +198,13 @@ public class BMP {
                 lineW = width * 3 + 1;
         }
         int i = 54 + (height - y - 1) * lineW + 3 * x;
-        data[i + 2] = (byte) (r & 0xff);
-        data[i + 1] = (byte) (g & 0xff);
-        data[i] = (byte) (b & 0xff);
+        try {
+            data[i + 2] = (byte) (r & 0xff);
+            data[i + 1] = (byte) (g & 0xff);
+            data[i] = (byte) (b & 0xff);
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
     }
 
     public void setColorObj(int x, int y,Color color) {

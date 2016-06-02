@@ -26,7 +26,7 @@ public class DrawUtil {
         }
         File file = writeFile(bmp);
 
-        openPicture(file);
+//        openPicture(file);
 
         return file;
     }
@@ -42,7 +42,7 @@ public class DrawUtil {
         }
         File file = writeFile(bmp);
 
-        openPicture(file);
+//        openPicture(file);
 
         return file;
     }
@@ -75,7 +75,7 @@ public class DrawUtil {
         try {
             BufferedImage repainted = ImageIO.read(new ByteArrayInputStream(bmp.getData()));
             if (!file.exists()) {
-                file.mkdirs();
+//                file.mkdirs();
                 file.createNewFile();
             }
 

@@ -1,22 +1,18 @@
 package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
+import com.jiangli.graphics.common.Point;
 import com.jiangli.graphics.common.Rect;
 import com.jiangli.jni.common.*;
-import com.jiangli.graphics.common.Point;
 import com.jiangli.jni.core.User32;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +24,7 @@ import java.util.Random;
 public class AnylyseAndClickWindow extends JFrame {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private JTextField jtfHwnd = new JTextField("460564");
+    private JTextField jtfHwnd = new JTextField(Config.test_hWnd+"");
     private JLabel jlbHwnd = new JLabel("句柄");
 
     private JTextField jtfTitleStr = new JTextField("大富翁9");
@@ -95,14 +91,7 @@ public class AnylyseAndClickWindow extends JFrame {
                             logger.debug("any_drawLine enabled");
                             //draw
                             for (Rect rect : rects) {
-                                for (int i = rect.getX(); i < rect.getX() + rect.getWidth(); i++) {
-                                    bmp.setColorObj(i,rect.getY(),MATCH_COLOR);
-                                    bmp.setColorObj(i, rect.getY() + rect.getLength(), MATCH_COLOR);
-                                }
-                                for (int j = rect.getY(); j < rect.getY() + rect.getLength(); j++) {
-                                    bmp.setColorObj(rect.getX(),j,MATCH_COLOR);
-                                    bmp.setColorObj(rect.getX() + rect.getWidth(), j, MATCH_COLOR);
-                                }
+                                DrawUtil.drawRect(bmp, rect, MATCH_COLOR);
                             }
                         }
 
@@ -110,36 +99,15 @@ public class AnylyseAndClickWindow extends JFrame {
                             logger.debug("any_drawPoints enabled");
                             //draw point
                             for (Point point : clickPoints.pointList) {
-                                for (int i = point.getX() - CLICK_POINT_LENGTH; i < point.getX() + CLICK_POINT_LENGTH; i++) {
-                                    bmp.setColorObj(i,point.getY(),CLICK_POINT_COLOR);
-                                }
-                                for (int i = point.getY() - CLICK_POINT_LENGTH; i < point.getY() + CLICK_POINT_LENGTH; i++) {
-                                    bmp.setColorObj(point.getX(),i,CLICK_POINT_COLOR);
-                                }
+                                DrawUtil.drawPointCross(bmp, point, CLICK_POINT_LENGTH, CLICK_POINT_COLOR);
                             }
                         }
 
 
                         //write
                         try {
-                            logger.debug("start writing anylysed file");
-                            BufferedImage repainted = ImageIO.read(new ByteArrayInputStream(bmp.getData()));
-                            File dir = new File(Config.anylyse_path);
-                            if (!dir.exists()) {
-                                dir.mkdirs();
-                            }
-                            String name = null;
-                            if (bmp.getFile() != null) {
-                                name = bmp.getFile().getName();
-                            } else {
-                                name = HwndUtil.generateName(hWnd)+".bmp";
-                            }
-                            File outFile = new File(Config.anylyse_path+"\\"+ name);
-                            outFile.createNewFile();
-                            FileOutputStream output = new FileOutputStream(outFile);
-                            ImageIO.write(repainted, "bmp", output);
-                            output.flush();
-                            output.close();
+                            File outFile = new File(Config.anylyse_path + "\\" + bmp.getFile().getName());
+                            DrawUtil.writeFile(bmp, outFile);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }

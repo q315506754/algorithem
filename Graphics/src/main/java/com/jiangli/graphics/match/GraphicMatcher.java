@@ -3,8 +3,7 @@ package com.jiangli.graphics.match;
 import com.jiangli.graphics.common.Point;
 import org.bytedeco.javacpp.opencv_core;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
@@ -17,15 +16,18 @@ import static org.bytedeco.javacpp.opencv_imgproc.cvMatchTemplate;
  *         CreatedTime  2016/6/2 0002 17:37
  */
 public class GraphicMatcher {
+
+    public static final float MIN_SIMLILARITY = 0.91f;
+
     public static Point match(String srcImgPath, String smallImgPath) {
-        return match(srcImgPath, smallImgPath, 0.99f);
+        return match(srcImgPath, smallImgPath, MIN_SIMLILARITY);
     }
 
     public static List<Point> matchMulti(String srcImgPath, String... smallImgPaths) {
         List<Point> ret = new LinkedList<>();
         opencv_core.IplImage srcImage = cvLoadImage(srcImgPath);
         for (String smallImgPath : smallImgPaths) {
-            Point point = match(srcImage, smallImgPath, 0.99f);
+            Point point = match(srcImage, smallImgPath, MIN_SIMLILARITY);
             if (point != null) {
                 ret.add(point);
             }
@@ -52,11 +54,16 @@ public class GraphicMatcher {
 
         cvMinMaxLoc(result, minVal, maxVal, minLoc, maxLoc, null);
         Point ret = null;
+
         if (maxVal[0] > minSimlilarity) {
             ret = new Point(maxLoc[0], maxLoc[1]);
+
+            System.out.println("maxVal:"+java.util.Arrays.toString(maxVal));
+            System.out.println("minVal:"+java.util.Arrays.toString(minVal));
+//            System.out.println("maxLoc"+java.util.Arrays.toString(maxLoc));
+//            System.out.println("minLoc"+java.util.Arrays.toString(minLoc));
         }
-//        System.out.println(java.util.Arrays.toString(maxLoc));
-//        System.out.println(java.util.Arrays.toString(minLoc));
+
         cvReleaseImage(result);
 
         return ret;
@@ -64,6 +71,6 @@ public class GraphicMatcher {
 
     public static Point match(String srcImgPath, String smallImgPath, float minSimlilarity) {
         opencv_core.IplImage srcImage = cvLoadImage(srcImgPath);
-        return match(srcImage, smallImgPath, 0.99f);
+        return match(srcImage, smallImgPath, MIN_SIMLILARITY);
     }
 }

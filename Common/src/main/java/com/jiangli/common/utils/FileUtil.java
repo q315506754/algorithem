@@ -17,7 +17,9 @@ public class FileUtil {
         File dir = new File(dirPath);
         File[] files = dir.listFiles();
         for (File file : files) {
-            paths.add(file.getPath());
+            if (file.isFile()) {
+                paths.add(file.getPath());
+            }
         }
         return paths;
     }

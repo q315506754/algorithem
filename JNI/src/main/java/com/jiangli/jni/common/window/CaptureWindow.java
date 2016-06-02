@@ -21,7 +21,7 @@ import java.io.File;
 public class CaptureWindow extends JFrame {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private JTextField jtfHwnd = new JTextField("460564");
+    private JTextField jtfHwnd = new JTextField(Config.test_hWnd+"");
     private JLabel jlbHwnd = new JLabel("句柄");
     private JTextField jtfTitleStr = new JTextField("大富翁9");
     private JLabel jlbTitleStr = new JLabel("标题");
