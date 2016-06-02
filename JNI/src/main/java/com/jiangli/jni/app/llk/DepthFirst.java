@@ -1,6 +1,6 @@
 package com.jiangli.jni.app.llk;
 
-import com.jiangli.jni.common.Point;
+import com.jiangli.graphics.common.Point;
 
 import java.util.Stack;
 

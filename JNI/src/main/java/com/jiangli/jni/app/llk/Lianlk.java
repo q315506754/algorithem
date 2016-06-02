@@ -2,7 +2,7 @@ package com.jiangli.jni.app.llk;
 
 import com.jiangli.jni.common.BMP;
 import com.jiangli.jni.common.Mouse;
-import com.jiangli.jni.common.Point;
+import com.jiangli.graphics.common.Point;
 import com.jiangli.jni.common.Window;
 
 import javax.imageio.ImageIO;

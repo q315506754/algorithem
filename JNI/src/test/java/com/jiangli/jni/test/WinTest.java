@@ -2,7 +2,7 @@ package com.jiangli.jni.test;
 
 import com.jiangli.common.utils.ClassDescribeUtil;
 import com.jiangli.jni.common.*;
-import com.jiangli.jni.common.Point;
+import com.jiangli.graphics.common.Point;
 import com.jiangli.jni.common.Window;
 import com.jiangli.jni.core.User32;
 import com.jiangli.jni.core.struct.Rect;

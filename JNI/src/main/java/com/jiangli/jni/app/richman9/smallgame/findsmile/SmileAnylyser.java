@@ -2,8 +2,8 @@ package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
 import com.jiangli.jni.common.BMP;
 import com.jiangli.jni.common.Color;
-import com.jiangli.jni.common.Point;
-import com.jiangli.jni.common.Rect;
+import com.jiangli.graphics.common.Point;
+import com.jiangli.graphics.common.Rect;
 
 import java.io.File;
 import java.util.ArrayList;

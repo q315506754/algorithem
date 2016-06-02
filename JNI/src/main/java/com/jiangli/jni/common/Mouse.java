@@ -21,7 +21,7 @@ public class Mouse {
         user32.PostMessageA(hwnd, 514, 0, v);
     }
 
-    public static void pressByRobot(int hWnd, Robot robot ,Point point) {
+    public static void pressByRobot(int hWnd, Robot robot , com.jiangli.graphics.common.Point point) {
 //        Mouse.click(hWnd, point.getX(), point.getY());
 
         java.awt.Point originpoint = null;
@@ -34,9 +34,9 @@ public class Mouse {
         com.jiangli.jni.core.struct.Rect r = Window.getRect(hWnd);
 
         robot.mouseMove(r.left+ point.getX(),r.top+ point.getY());
-        robot.delay(10);
+        robot.delay(5);
         robot.mousePress(InputEvent.BUTTON1_MASK);
-        robot.delay(100);
+        robot.delay(50);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
 
         robot.mouseMove( (int)originpoint.getX(),(int)originpoint.getY());

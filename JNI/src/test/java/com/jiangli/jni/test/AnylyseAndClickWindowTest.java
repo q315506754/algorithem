@@ -1,13 +1,11 @@
 package com.jiangli.jni.test;
 
+import com.jiangli.graphics.common.Point;
+import com.jiangli.graphics.common.Rect;
 import com.jiangli.jni.common.*;
 import org.junit.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +24,7 @@ public class AnylyseAndClickWindowTest {
     private int CLICK_POINT_LENGTH = 5;
 
     @Test
-    public final void testDrawRedLine() {
+        public final void testDrawRedLine() {
         List<BMP> characs = getBMPList(Config.characteristic_path);
         for (BMP bmp : characs) {
              System.out.println(bmp.getWidth()+"x"+bmp.getHeight()+" "+bmp.getData().length);
@@ -37,20 +35,21 @@ public class AnylyseAndClickWindowTest {
         int startCount = 0;
         int rectCount = 0;
         for (BMP bmp : captures) {
+            long start = System.currentTimeMillis();
             List<Rect> rects = new LinkedList<>();
             byte[] captureData = bmp.getData();
-            System.out.println(bmp.getWidth()+"x"+bmp.getHeight()+" "+ captureData.length);
+            System.out.println(bmp.getWidth() + "x" + bmp.getHeight() + " " + captureData.length);
 
             for (BMP characOne : characs) {
                 Color startColor = characOne.getColorObj(0, 0);
 
-                for(int cx=0;cx<bmp.getWidth();cx++){
-                    for(int cy=0;cy<bmp.getHeight();cy++) {
+                for (int cx = 0; cx < bmp.getWidth(); cx++) {
+                    for (int cy = 0; cy < bmp.getHeight(); cy++) {
                         Color bmpColor = bmp.getColorObj(cx, cy);
 //                        System.out.println("start cmp:"+bmpColor + " " + startColor);
-                        if (bmpColor .equals(startColor)) {
-                            startCount ++;
-                            if (compare(cx,cy,bmp,characOne)) {
+                        if (bmpColor.equals(startColor)) {
+                            startCount++;
+                            if (compare(cx, cy, bmp, characOne)) {
                                 rects.add(new Rect(cx, cy, characOne.getWidth(), characOne.getHeight()));
                                 rectCount++;
 
@@ -67,49 +66,31 @@ public class AnylyseAndClickWindowTest {
 
             //draw
             for (Rect rect : rects) {
-                for (int i = rect.getX(); i < rect.getX() + rect.getWidth(); i++) {
-                    bmp.setColorObj(i,rect.getY(),MATCH_COLOR);
-                    bmp.setColorObj(i, rect.getY() + rect.getLength(), MATCH_COLOR);
-                }
-                for (int j = rect.getY(); j < rect.getY() + rect.getLength(); j++) {
-                    bmp.setColorObj(rect.getX(),j,MATCH_COLOR);
-                    bmp.setColorObj(rect.getX() + rect.getWidth(), j, MATCH_COLOR);
-                }
+                DrawUtil.drawRect(bmp, rect, MATCH_COLOR);
             }
 
 
             //get point
             ClickPoints clickPoints = new ClickPoints();
             for (Rect rect : rects) {
-                clickPoints.add(new Point((2*rect.getX()+rect.getWidth())/2,(2*rect.getY()+rect.getLength())/2));
+                clickPoints.add(new Point((2 * rect.getX() + rect.getWidth()) / 2, (2 * rect.getY() + rect.getLength()) / 2));
             }
 
             //draw point
             for (Point point : clickPoints.pointList) {
-//                bmp.setColorObj(point.getX(), point.getY(), CLICK_POINT_COLOR);
-                for (int i = point.getX() - CLICK_POINT_LENGTH; i < point.getX() + CLICK_POINT_LENGTH; i++) {
-                    bmp.setColorObj(i,point.getY(),CLICK_POINT_COLOR);
-                }
-                for (int i = point.getY() - CLICK_POINT_LENGTH; i < point.getY() + CLICK_POINT_LENGTH; i++) {
-                    bmp.setColorObj(point.getX(),i,CLICK_POINT_COLOR);
-                }
-
+                DrawUtil.drawPointCross(bmp, point, CLICK_POINT_LENGTH, CLICK_POINT_COLOR);
             }
             System.out.println(clickPoints.pointList.size());
 
             //write
             try {
-                BufferedImage repainted = ImageIO.read(new ByteArrayInputStream(bmp.getData()));
-                File dir = new File(anylysePath);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                File outFile = new File(anylysePath+"\\"+bmp.getFile().getName());
-                outFile.createNewFile();
-                ImageIO.write(repainted, "bmp", new FileOutputStream(outFile));
+                File outFile = new File(anylysePath + "\\" + bmp.getFile().getName());
+                DrawUtil.writeFile(bmp, outFile);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            long cost = System.currentTimeMillis() - start;
+            System.out.println("cost:"+cost+" ms");
         }
 
 

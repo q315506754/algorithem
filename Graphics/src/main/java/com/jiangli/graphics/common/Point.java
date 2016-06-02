@@ -1,4 +1,4 @@
-package com.jiangli.jni.common;
+package com.jiangli.graphics.common;
 
 public class Point {
     private int x;

@@ -1,7 +1,8 @@
 package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
+import com.jiangli.graphics.common.Rect;
 import com.jiangli.jni.common.*;
-import com.jiangli.jni.common.Point;
+import com.jiangli.graphics.common.Point;
 import com.jiangli.jni.core.User32;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -108,7 +109,7 @@ public class AnylyseAndClickWindow extends JFrame {
                         if (any_drawPoints) {
                             logger.debug("any_drawPoints enabled");
                             //draw point
-                            for (com.jiangli.jni.common.Point point : clickPoints.pointList) {
+                            for (Point point : clickPoints.pointList) {
                                 for (int i = point.getX() - CLICK_POINT_LENGTH; i < point.getX() + CLICK_POINT_LENGTH; i++) {
                                     bmp.setColorObj(i,point.getY(),CLICK_POINT_COLOR);
                                 }
