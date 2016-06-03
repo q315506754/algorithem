@@ -34,9 +34,9 @@ public class Mouse {
         com.jiangli.jni.core.struct.Rect r = Window.getRect(hWnd);
 
         robot.mouseMove(r.left+ point.getX(),r.top+ point.getY());
-        robot.delay(5);
+//        robot.delay(5);
         robot.mousePress(InputEvent.BUTTON1_MASK);
-        robot.delay(50);
+//        robot.delay(50);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
 
         robot.mouseMove( (int)originpoint.getX(),(int)originpoint.getY());

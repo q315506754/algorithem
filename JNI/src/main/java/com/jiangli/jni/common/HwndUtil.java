@@ -1,5 +1,8 @@
 package com.jiangli.jni.common;
 
+import com.jiangli.graphics.common.BMP;
+import com.jiangli.graphics.common.Rect;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -15,11 +18,15 @@ public class HwndUtil {
     public static File shortCut(int hWnd) throws FileNotFoundException, IOException {
         File f = File.createTempFile(generateName(hWnd), ".bmp");
 
-        captureAndWriteToFile(hWnd, f);
+        captureAndWriteToFile(hWnd,f,null);
         return f;
     }
 
     public static File shortCut(int hWnd,String path) throws FileNotFoundException, IOException {
+        return shortCut(hWnd,path,null);
+    }
+
+    public static File shortCut(int hWnd,String path, Rect offset) throws FileNotFoundException, IOException {
 
         File f_path = new File(path);
 
@@ -28,14 +35,14 @@ public class HwndUtil {
         }
 
         File f = new File(path + "/" + generateName(hWnd) + ".bmp");
-        captureAndWriteToFile(hWnd, f);
+        captureAndWriteToFile(hWnd, f,offset);
 
         return f;
     }
 
-    private static void captureAndWriteToFile(int hWnd, File f) throws IOException {
+    private static void captureAndWriteToFile(int hWnd, File f,Rect offset) throws IOException {
         // 写出位图
-        BufferedImage buffImage = Window.getImage(hWnd);
+        BufferedImage buffImage = Window.getImage(hWnd,offset);
         if (buffImage == null) {
             throw new NullPointerException("写位图时出错");
         }
@@ -44,9 +51,9 @@ public class HwndUtil {
         output.close();
     }
 
-    public static BMP captureAndGetBMP(int hWnd) throws IOException {
+    public static BMP captureAndGetBMP(int hWnd, Rect offset) throws IOException {
         // 写出位图
-        BufferedImage buffImage = Window.getImage(hWnd);
+        BufferedImage buffImage = Window.getImage(hWnd,offset);
         if (buffImage == null) {
             throw new NullPointerException("写位图时出错");
         }

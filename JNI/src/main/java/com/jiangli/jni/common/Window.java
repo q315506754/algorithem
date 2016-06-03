@@ -26,8 +26,18 @@ public class Window {
 
     //窗口截图
     public static BufferedImage getImage(int hwnd){
+        return getImage(hwnd,null);
+    }
+
+    //窗口截图
+    public static BufferedImage getImage(int hwnd,com.jiangli.graphics.common.Rect rect){
         Rect r = Window.getRect(hwnd);
-        Rectangle rg = new Rectangle(r.left, r.top, r.right-r.left, r.bottom-r.top);
+        Rectangle rg = null;
+        if (rect != null) {
+             rg = new Rectangle(r.left+rect.getX(), r.top+rect.getY(), rect.getLength(), rect.getWidth());
+        } else {
+             rg = new Rectangle(r.left, r.top, r.right-r.left, r.bottom-r.top);
+        }
         try {
             return new Robot().createScreenCapture(rg);
         } catch (Exception e) {

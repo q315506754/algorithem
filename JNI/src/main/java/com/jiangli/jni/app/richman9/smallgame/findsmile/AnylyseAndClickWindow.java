@@ -1,7 +1,12 @@
 package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
+import com.jiangli.graphics.common.*;
+import com.jiangli.graphics.common.Color;
 import com.jiangli.graphics.common.Point;
-import com.jiangli.graphics.common.Rect;
+import com.jiangli.graphics.impl.RmoveDuplicatePointFilter;
+import com.jiangli.graphics.inf.BMPMatcher;
+import com.jiangli.graphics.inf.PointFilter;
+import com.jiangli.jni.app.impl.FindSmileJavaCVThreadMathcer;
 import com.jiangli.jni.common.*;
 import com.jiangli.jni.core.User32;
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +27,7 @@ import java.util.Random;
  *         CreatedTime  2016/6/1 0001 13:26
  */
 public class AnylyseAndClickWindow extends JFrame {
+    public static final float SIMILARITY = Config.smileSimilartity;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private JTextField jtfHwnd = new JTextField(Config.test_hWnd+"");
@@ -36,17 +42,25 @@ public class AnylyseAndClickWindow extends JFrame {
     private Integer hWnd = null;
     private User32 user32 = User32.INSTANCE;
 
-    private SmileAnylyser anylyser = new SmileAnylyser(Config.characteristic_path);
-    private boolean capture = true;
+//    private SmileAnylyser anylyser = new SmileAnylyser(Config.characteristic_path);
+    private BMPMatcher mathcer  = new FindSmileJavaCVThreadMathcer();
+
+    private boolean capture = true;//不能改为false
     private boolean anylyse = true;
     private boolean any_drawLine = true;
     private boolean any_drawPoints = true;
-    private com.jiangli.jni.common.Color MATCH_COLOR = new com.jiangli.jni.common.Color(0,0,0);
-    private com.jiangli.jni.common.Color CLICK_POINT_COLOR = new com.jiangli.jni.common.Color(0,0,0);
-    private int CLICK_POINT_LENGTH = 5;
+    private com.jiangli.graphics.common.Color MATCH_COLOR = new Color(0,0,0);
+    private Color CLICK_POINT_COLOR = new Color(255,0,0);
+    private int CLICK_POINT_LENGTH = 50;
     private int CLICK_INTERVAL = 200;
     private Random seed = new Random();
     private Robot robot;
+    private Rect offset = new Rect(580,210,400,400);
+    private PointFilter pointFilter = new RmoveDuplicatePointFilter(20);
+
+    public void log(String msg) {
+        jtaConsole.setText(jtaConsole.getText()+"\r\n"+msg);
+    }
 
     public AnylyseAndClickWindow() throws HeadlessException {
         this.setVisible(true);
@@ -76,29 +90,22 @@ public class AnylyseAndClickWindow extends JFrame {
                     BMP bmp = null;
                     if (capture) {
                         logger.debug("capture enabled");
-                        File file = HwndUtil.shortCut(hWnd, Config.capture_path);
+                        File file = HwndUtil.shortCut(hWnd, Config.capture_path,offset);
                         bmp =  new BMP(file);
                     } else {
-                        bmp =HwndUtil.captureAndGetBMP(hWnd);
+                        bmp =HwndUtil.captureAndGetBMP(hWnd,offset);
                     }
 
-                    List<Rect> rects = anylyser.searchRect(bmp);
-                    SmileAnylyser.ClickPoints clickPoints = anylyser.getClickPoints(rects);
+
+                    List<Point> points = mathcer.match(bmp, SIMILARITY);
 
                     if (anylyse) {
                         logger.debug("anylyse enabled");
-                        if (any_drawLine) {
-                            logger.debug("any_drawLine enabled");
-                            //draw
-                            for (Rect rect : rects) {
-                                DrawUtil.drawRect(bmp, rect, MATCH_COLOR);
-                            }
-                        }
 
                         if (any_drawPoints) {
                             logger.debug("any_drawPoints enabled");
                             //draw point
-                            for (Point point : clickPoints.pointList) {
+                            for (Point point : points) {
                                 DrawUtil.drawPointCross(bmp, point, CLICK_POINT_LENGTH, CLICK_POINT_COLOR);
                             }
                         }
@@ -115,12 +122,24 @@ public class AnylyseAndClickWindow extends JFrame {
                     }
 
                     logger.debug("start clicking..");
-                    logger.debug("clickPoints:"+clickPoints.pointList.size());
-                    for (Point point : clickPoints.pointList) {
+                    logger.debug("clickPoints:"+points.size());
+
+
+                    //remove duplicate
+                    pointFilter.filter(points);
+
+                    //convert offset
+                    for (Point point : points) {
+                        point.setX(point.getX() + offset.getX());
+                        point.setY(point.getY() + offset.getY());
+                    }
+
+
+                    for (Point point : points) {
 //                        Mouse.click(hWnd, point.getX(), point.getY());
                         Mouse.pressByRobot(hWnd,robot,point);
 
-                        Thread.sleep(seed.nextInt(CLICK_INTERVAL));
+//                        Thread.sleep(seed.nextInt(CLICK_INTERVAL));
                     }
 
 

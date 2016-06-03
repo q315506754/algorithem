@@ -1,5 +1,7 @@
 package com.jiangli.jni.common;
 
+import com.jiangli.graphics.common.BMP;
+import com.jiangli.graphics.common.Color;
 import com.jiangli.graphics.common.Point;
 import com.jiangli.graphics.common.Rect;
 

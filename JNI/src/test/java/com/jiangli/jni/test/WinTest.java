@@ -1,8 +1,10 @@
 package com.jiangli.jni.test;
 
 import com.jiangli.common.utils.ClassDescribeUtil;
-import com.jiangli.jni.common.*;
+import com.jiangli.graphics.common.*;
+import com.jiangli.graphics.common.Color;
 import com.jiangli.graphics.common.Point;
+import com.jiangli.jni.common.*;
 import com.jiangli.jni.common.Window;
 import com.jiangli.jni.core.User32;
 import com.jiangli.jni.core.struct.Rect;
@@ -98,7 +100,7 @@ public class WinTest {
         System.out.println(hwnd);
     }
 
-    private com.jiangli.jni.common.Color CLICK_POINT_COLOR = new com.jiangli.jni.common.Color(0,0,0);
+    private com.jiangli.graphics.common.Color CLICK_POINT_COLOR = new Color(0,0,0);
     private int CLICK_POINT_LENGTH = 5;
 
 

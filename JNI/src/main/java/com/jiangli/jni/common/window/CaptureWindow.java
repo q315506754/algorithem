@@ -49,7 +49,7 @@ public class CaptureWindow extends JFrame {
                 try {
                     rereshHwnd();
 
-                    File file = HwndUtil.shortCut(hWnd, Config.capture_path);
+                    File file = HwndUtil.shortCut(hWnd, Config.capture_path,null);
                     if (jcbShowCaps.isSelected()) {
                         Runtime.getRuntime().exec("mspaint \"" + file.getAbsolutePath() + "\"");
                     }

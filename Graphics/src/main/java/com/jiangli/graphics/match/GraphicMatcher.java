@@ -38,6 +38,11 @@ public class GraphicMatcher {
 
     public static Point match(opencv_core.IplImage srcImage, String smallImgPath, float minSimlilarity) {
         opencv_core.IplImage smallImage = cvLoadImage(smallImgPath);
+
+        return match(srcImage,smallImage,minSimlilarity);
+    }
+
+    public static Point match(opencv_core.IplImage srcImage, opencv_core.IplImage smallImage, float minSimlilarity) {
         opencv_core.IplImage result = cvCreateImage(opencv_core.cvSize(
                         srcImage.width() - smallImage.width() + 1,
                         srcImage.height() - smallImage.height() + 1),
@@ -58,8 +63,8 @@ public class GraphicMatcher {
         if (maxVal[0] > minSimlilarity) {
             ret = new Point(maxLoc[0], maxLoc[1]);
 
-            System.out.println("maxVal:"+java.util.Arrays.toString(maxVal));
-            System.out.println("minVal:"+java.util.Arrays.toString(minVal));
+//            System.out.println("maxVal:"+java.util.Arrays.toString(maxVal));
+//            System.out.println("minVal:"+java.util.Arrays.toString(minVal));
 //            System.out.println("maxLoc"+java.util.Arrays.toString(maxLoc));
 //            System.out.println("minLoc"+java.util.Arrays.toString(minLoc));
         }

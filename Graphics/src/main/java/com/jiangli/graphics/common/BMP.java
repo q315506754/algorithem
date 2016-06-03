@@ -1,4 +1,4 @@
-package com.jiangli.jni.common;
+package com.jiangli.graphics.common;
 
 import java.io.*;
 
