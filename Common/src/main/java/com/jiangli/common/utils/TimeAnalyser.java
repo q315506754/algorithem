@@ -13,6 +13,7 @@ import java.util.List;
 public class TimeAnalyser {
     private List<TimeCol> data = new LinkedList<>();
     private String title;
+    private String delimeter = "\r\n";
     private long startTs = System.currentTimeMillis();
 
     public void setTitle(String title) {
@@ -26,34 +27,69 @@ public class TimeAnalyser {
         this.title = title;
     }
 
-    public void push( String desc) {
+    public void setDelimeter(String delimeter) {
+        this.delimeter = delimeter;
+    }
+
+    public void push(String desc) {
         TimeCol one = new TimeCol();
         one.ts = System.currentTimeMillis();
         one.desc = desc;
         data.add(one);
     }
+    public void pushStringOnly(String desc) {
+        TimeCol one = new TimeCol();
+        one.ts = -1;
+        one.desc = desc;
+        data.add(one);
+    }
 
-    public void analyse( ) {
-        System.out.println("-----------------------");
+    public String analyse( ) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------");
+        sb.append(delimeter);
         if (!StringUtils.isEmpty(title)) {
-            System.out.println(title);
+            sb.append(title);
+            sb.append(delimeter);
         }
-        long lastTs=startTs;
+
         for (int i = 0; i < data.size(); i++) {
             TimeCol cur = data.get(i);
-            long prevTs=startTs;
-            if (i>0) {
-                prevTs = data.get(i - 1).ts;
-            }
-            if (i == data.size() - 1) {
-                lastTs=cur.ts;
-            }
-            long cost=cur.ts - prevTs;
 
-            System.out.println(cur.desc + " cost:" + cost+" ms");
+            sb.append(cur.desc);
+
+            if (cur.ts > 0) {
+                long prevTs=startTs;
+                int j = i;
+                while(j-->0){
+                    prevTs = data.get(j).ts;
+                    if (prevTs > 0) {
+                        break;
+                    }
+                }
+
+                long cost=cur.ts - prevTs;
+
+                sb.append(" cost:" + cost+" ms");
+            }
+            sb.append(delimeter);
         }
-        System.out.println("total cost:" + (lastTs - startTs)+" ms");
-        System.out.println("-----------------------");
+
+        long lastTs=startTs;
+        int j = data.size();
+        while (j-- >0) {
+            lastTs = data.get(j).ts;
+            if (lastTs > 0) {
+                break;
+            }
+        }
+
+        sb.append("total cost:" + (lastTs - startTs)+" ms");
+        sb.append(delimeter);
+        sb.append("-----------------------");
+
+        System.out.println(sb.toString());
+        return sb.toString();
     }
 
 

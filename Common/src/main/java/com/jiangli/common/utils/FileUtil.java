@@ -24,4 +24,43 @@ public class FileUtil {
         return paths;
     }
 
+    public static void openPicture(File file) {
+        try {
+            Runtime.getRuntime().exec("mspaint \"" + file.getAbsolutePath() + "\"");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void openPicture(String path) {
+        openPicture(new File(path));
+    }
+
+    public static void openDirectory(File file) {
+        try {
+            Runtime.getRuntime().exec("explorer.exe \"" + file.getAbsolutePath() + "\"");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openDirectory(String path) {
+        openDirectory(new File(path));
+    }
+
+    public static int deleteFilesUnderDir(String dirPath) {
+        File dir = new File(dirPath);
+        int count = 0;
+        if (dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            for (File file : files) {
+                if (file.isFile()) {
+                    file.delete();
+                    count++;
+                }
+            }
+        }
+        return count;
+
+    }
+
 }
