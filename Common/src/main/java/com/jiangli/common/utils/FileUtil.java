@@ -1,6 +1,7 @@
 package com.jiangli.common.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +42,15 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static File generateTemp(String suffix) {
+        try {
+            return File.createTempFile(System.currentTimeMillis() + "", suffix);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void openDirectory(String path) {

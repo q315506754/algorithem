@@ -4,7 +4,6 @@ import com.jiangli.graphics.common.BMP;
 import com.jiangli.graphics.common.Point;
 import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.graphics.match.GraphicMatcher;
-import com.jiangli.graphics.inf.ImgMatcher;
 import org.bytedeco.javacpp.opencv_core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +21,13 @@ import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 public abstract class JavaCVImgMatcher implements BMPMatcher {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected List<opencv_core.IplImage> charac_images = new LinkedList<>();
+    protected List<MetaIMG> charac_images = new LinkedList<>();
+
+
 
     public JavaCVImgMatcher() {
-        List<opencv_core.IplImage> iplImages = loadCharacs();
-        for (opencv_core.IplImage iplImage : iplImages) {
+        List<MetaIMG> iplImages = loadCharacs();
+        for (MetaIMG iplImage : iplImages) {
             charac_images.add(iplImage);
         }
         logger.debug("characs load over ..."+charac_images.size());
@@ -40,13 +41,14 @@ public abstract class JavaCVImgMatcher implements BMPMatcher {
         return matched;
     }
 
+
     public List<Point> match(opencv_core.IplImage bigImg, float similarity) {
         List<Point> points = new LinkedList<>();
-        for (opencv_core.IplImage charac_image : charac_images) {
-            Point match = GraphicMatcher.match(bigImg, charac_image, similarity);
+        for (MetaIMG charac_image : charac_images) {
+            Point match = GraphicMatcher.match(bigImg, charac_image.image, similarity);
 
             if (match != null) {
-                points.add(getClickablePoint(match,charac_image));
+                points.add(getClickablePoint(match,charac_image.image));
             }
         }
         logger.debug("matched points:"+points);
@@ -60,6 +62,6 @@ public abstract class JavaCVImgMatcher implements BMPMatcher {
         return point;
     }
 
-    public abstract List<opencv_core.IplImage> loadCharacs();
+    public abstract List<MetaIMG> loadCharacs();
 
 }

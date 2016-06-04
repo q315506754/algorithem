@@ -12,4 +12,5 @@ import java.util.List;
  */
 public interface BMPMatcher extends ImgMatcher<BMP>{
     public  List<Point> match(BMP bigImg, float similarity);
+//    public  List<Point> match(BMP bigImg, SimilarStrategy strategy);
 }

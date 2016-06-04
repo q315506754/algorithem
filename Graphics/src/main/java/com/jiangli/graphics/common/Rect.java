@@ -45,7 +45,19 @@ public class Rect {
         return length;
     }
 
+    @Override
+    public String toString() {
+        return "Rect{" +
+                "x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", length=" + length +
+                '}';
+    }
+
     public void setLength(int length) {
+
+
         this.length = length;
     }
 }

@@ -62,14 +62,15 @@ public class TimeAnalyser {
                 long prevTs=startTs;
                 int j = i;
                 while(j-->0){
-                    prevTs = data.get(j).ts;
-                    if (prevTs > 0) {
+                    if (data.get(j).ts > 0) {
+                        prevTs = data.get(j).ts;
                         break;
                     }
                 }
 
                 long cost=cur.ts - prevTs;
-
+//                System.out.println(" cur.ts:"+cur.ts);
+//                System.out.println(" prevTs:"+prevTs);
                 sb.append(" cost:" + cost+" ms");
             }
             sb.append(delimeter);

@@ -1,11 +1,9 @@
 package com.jiangli.jni.app.impl;
 
 import com.jiangli.common.utils.FileUtil;
-import com.jiangli.graphics.common.Point;
 import com.jiangli.graphics.impl.JavaCVImgMatcher;
-import com.jiangli.graphics.common.BMP;
+import com.jiangli.graphics.impl.MetaIMG;
 import com.jiangli.jni.common.Config;
-import org.bytedeco.javacpp.opencv_core;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,11 +18,12 @@ import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 public class FindSmileJavaCVMathcer extends JavaCVImgMatcher  {
 
     @Override
-    public List<opencv_core.IplImage> loadCharacs() {
+    public List<MetaIMG> loadCharacs() {
         List<String> charPaths = FileUtil.getFilePathFromDirPath(Config.characteristic_path);
-        List<opencv_core.IplImage> ret = new LinkedList<>();
+        List<MetaIMG> ret = new LinkedList<>();
         for (String charPath : charPaths) {
-            ret.add(cvLoadImage(charPath));
+            MetaIMG one = new MetaIMG(cvLoadImage(charPath),charPath);
+            ret.add(one);
         }
         return ret;
     }

@@ -17,8 +17,13 @@ import java.util.Date;
 public class HwndUtil {
     public static File shortCut(int hWnd) throws FileNotFoundException, IOException {
         File f = File.createTempFile(generateName(hWnd), ".bmp");
-
         captureAndWriteToFile(hWnd,f,null);
+        return f;
+    }
+
+    public static File shortCut(int hWnd, Rect offset) throws FileNotFoundException, IOException {
+        File f = File.createTempFile(generateName(hWnd), ".bmp");
+        captureAndWriteToFile(hWnd,f,offset);
         return f;
     }
 

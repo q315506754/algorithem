@@ -2,11 +2,9 @@ package com.jiangli.graphics.impl;
 
 import com.jiangli.graphics.common.BMP;
 import com.jiangli.graphics.common.Point;
-import com.jiangli.graphics.inf.BMPMatcher;
+import com.jiangli.graphics.inf.SimilarStrategy;
 import com.jiangli.graphics.match.GraphicMatcher;
 import org.bytedeco.javacpp.opencv_core;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,9 +24,16 @@ public abstract class JavaCVImgThreadMatcher extends JavaCVImgMatcher {
     private List<Point> matchedPoints;
     private opencv_core.IplImage iplImage;
     private float similar;
+    private SimilarStrategy similarStrategy;
+
 
     public JavaCVImgThreadMatcher() {
+        this(null);
+    }
+
+    public JavaCVImgThreadMatcher(SimilarStrategy similarStrategy) {
         super();
+        this.similarStrategy = similarStrategy;
         startThreads();
     }
 
@@ -49,14 +54,23 @@ public abstract class JavaCVImgThreadMatcher extends JavaCVImgMatcher {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.debug("matched points:"+matchedPoints);
+        logger.debug("matched points:" + matchedPoints);
         return matchedPoints;
     }
 
 
     private void startThreads() {
-        for (opencv_core.IplImage charac_image : charac_images) {
-            Thread thread = new Thread(new JavaCVImgInnerMatcherThread(charac_image));
+        for (MetaIMG charac_image : charac_images) {
+            Thread thread = null;
+            if (similarStrategy != null) {
+                float similarity=0f;
+                similarity = similarStrategy.getSimilar(charac_image.src);
+                thread = new Thread(new JavaCVImgInnerMatcherThread(charac_image.image,similarity));
+            } else {
+                thread = new Thread(new JavaCVImgInnerMatcherThread(charac_image.image));
+            }
+
+
             thread.start();
             threads.add(thread);
         }
@@ -65,25 +79,43 @@ public abstract class JavaCVImgThreadMatcher extends JavaCVImgMatcher {
 
     class JavaCVImgInnerMatcherThread implements Runnable {
         private opencv_core.IplImage characImage;
+        private Float fixedSimilar;
 
         public JavaCVImgInnerMatcherThread(opencv_core.IplImage characImage) {
             this.characImage = characImage;
         }
 
+        public JavaCVImgInnerMatcherThread(opencv_core.IplImage characImage, Float similar) {
+            this.characImage = characImage;
+            this.fixedSimilar = similar;
+        }
+
         @Override
         public void run() {
-            while (true) {
-                try {
+            try {
+                while (true) {
+
                     synchronized (lock) {
                         logger.debug(Thread.currentThread() + " waiting lock...");
                         lock.wait();
                     }
 
 
-                    Point match = GraphicMatcher.match(iplImage, characImage, similar);
+                    Point match = null;
+
+                    if (this.fixedSimilar != null && this.fixedSimilar > 0) {
+                        logger.debug("used fixedSimilar:"+this.fixedSimilar);
+                        //use local
+                        match = GraphicMatcher.match(iplImage, characImage,this.fixedSimilar);
+                    } else {
+                        logger.debug("used global:"+similar);
+                        //use global
+                        match = GraphicMatcher.match(iplImage, characImage, similar);
+                    }
+
 
                     if (match != null) {
-                        logger.debug(Thread.currentThread() + " find Point "+match);
+                        logger.debug(Thread.currentThread() + " find Point " + match);
                         matchedPoints.add(getClickablePoint(match, characImage));
                     }
 
@@ -93,10 +125,11 @@ public abstract class JavaCVImgThreadMatcher extends JavaCVImgMatcher {
                     latch.countDown();
 
                     logger.debug(Thread.currentThread() + " loop over...");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

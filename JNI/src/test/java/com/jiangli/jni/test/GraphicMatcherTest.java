@@ -11,7 +11,6 @@ import com.jiangli.graphics.javacv.TemplateMatch;
 import com.jiangli.graphics.match.GraphicMatcher;
 import com.jiangli.graphics.common.BMP;
 import com.jiangli.graphics.common.Color;
-import com.jiangli.jni.app.impl.FindSmileJavaCVMathcer;
 import com.jiangli.jni.app.impl.FindSmileJavaCVThreadMathcer;
 import com.jiangli.jni.common.Config;
 import com.jiangli.jni.common.DrawUtil;
@@ -61,7 +60,7 @@ public class GraphicMatcherTest {
 //        analyser.push("[x]read characs");
 
         BMP bigImg = new BMP(bigFfile);
-        List<Point> points = mathcer.match(bigImg, Config.smileSimilartity);
+        List<Point> points = mathcer.match(bigImg, Config.getSmileSimilartity());
         analyser.push("match point");
         analyser.setTitle(bigFfile);
 

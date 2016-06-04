@@ -34,7 +34,7 @@ public class Window {
         Rect r = Window.getRect(hwnd);
         Rectangle rg = null;
         if (rect != null) {
-             rg = new Rectangle(r.left+rect.getX(), r.top+rect.getY(), rect.getLength(), rect.getWidth());
+             rg = new Rectangle(r.left+rect.getX(), r.top+rect.getY(), rect.getWidth(), rect.getLength());
         } else {
              rg = new Rectangle(r.left, r.top, r.right-r.left, r.bottom-r.top);
         }
