@@ -3,17 +3,21 @@ package com.jiangli.jni.test;
 import com.jiangli.common.utils.FileUtil;
 import com.jiangli.common.utils.PathUtil;
 import com.jiangli.common.utils.TimeAnalyser;
+import com.jiangli.graphics.common.BMP;
+import com.jiangli.graphics.common.Color;
 import com.jiangli.graphics.common.Point;
 import com.jiangli.graphics.impl.RmoveDuplicatePointFilter;
 import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.graphics.inf.PointFilter;
 import com.jiangli.graphics.javacv.TemplateMatch;
 import com.jiangli.graphics.match.GraphicMatcher;
-import com.jiangli.graphics.common.BMP;
-import com.jiangli.graphics.common.Color;
 import com.jiangli.jni.app.impl.FindSmileJavaCVThreadMathcer;
 import com.jiangli.jni.common.Config;
 import com.jiangli.jni.common.DrawUtil;
+import com.jiangli.jni.common.HwndUtil;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.opencv_core;
 import org.junit.Test;
 
 import java.io.File;
@@ -43,6 +47,21 @@ public class GraphicMatcherTest {
         }
     }
 
+    @Test
+    public void testCVBytes() throws Exception {
+        Loader.load();
+        BMP bmp = HwndUtil.captureAndGetBMP(Config.test_hWnd, null);
+        opencv_core.IplImage iplImage = cvLoadImage(new BytePointer(bmp.getData()));
+        System.out.println(iplImage);
+
+    }
+    @Test
+    public void testCVBytes2() throws Exception {
+        File file = HwndUtil.shortCut(Config.test_hWnd);
+        opencv_core.IplImage iplImage = cvLoadImage(file.getAbsolutePath());
+        System.out.println(iplImage);
+
+    }
     @Test
     public void testBMPMatcher() {
         mathcer = new FindSmileJavaCVThreadMathcer();

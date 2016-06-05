@@ -1,5 +1,6 @@
 package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
+import com.jiangli.common.core.FileStringRegexProcesser;
 import com.jiangli.common.utils.FileUtil;
 import com.jiangli.common.utils.NumberUtil;
 import com.jiangli.common.utils.PathUtil;
@@ -72,6 +73,10 @@ public class AnylyseAndClickWindow extends JFrame {
 
     private JButton btnHwnd = new JButton("句柄程序");
     private JButton btnFire = new JButton("点击笑脸");
+    private JButton btnFireStart = new JButton("开启点击");
+    private Thread startedClickingThread = null;
+    private boolean startedClicking = false;
+    private JButton btnFireStop = new JButton("结束点击");
     private JButton btnDeleteCapture = new JButton("删除捕获");
     private JButton btnOpenCapture = new JButton("打开捕获");
     private JButton btnDeleteAnalyse = new JButton("删除分析");
@@ -84,7 +89,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private User32 user32 = User32.INSTANCE;
 
 //    private SmileAnylyser anylyser = new SmileAnylyser(Config.characteristic_path);
-    private FindSmileJavaCVThreadMathcer mathcer  = new FindSmileJavaCVThreadMathcer();
+
 
     private final boolean capture = true;//不能改为false
 
@@ -111,6 +116,10 @@ public class AnylyseAndClickWindow extends JFrame {
     private JTextField jtfOffSetRectTop = new JTextField();
     private JTextField jtfOffSetRectWidth = new JTextField();
     private JTextField jtfOffSetRectLength = new JTextField();
+
+    //lazy init
+    private FindSmileJavaCVThreadMathcer mathcer ;
+
 
     public void log(String msg) {
 //        jtaConsole.setText(msg+"\r\n"+jtaConsole.getText());
@@ -191,8 +200,45 @@ public class AnylyseAndClickWindow extends JFrame {
         jtfHwnd.addKeyListener(new RefreshHwndAction());
         jtfTitleStr.addKeyListener(new RefreshHwndAction());
         jtfSimilar.addKeyListener(new SimilarRefreshAction());
-        convertPercentageToAbs();
-        refreshHwnd();
+
+        btnFireStart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startedClickingThread = new Thread() {
+
+                    @Override
+                    public void run() {
+                        log("连点已开启...");
+                        startedClicking = true;
+                        try {
+                            while (startedClicking) {
+                                btnFire.doClick();
+                            }
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                        log("连点已停止...");
+                    }
+                };
+                startedClickingThread.start();
+
+            }
+        });
+        btnFireStop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                log("停止中...");
+                if (startedClicking) {
+                    log("关闭成功");
+                    startedClicking = false;
+                }else {
+                    log("关闭失败");
+                }
+
+            }
+        });
+
+
 
         //rect offset
         jtfOffSetRectLeft.setText(getDoubleString(offsetPercentage.getLeft()));
@@ -205,6 +251,11 @@ public class AnylyseAndClickWindow extends JFrame {
         jtfOffSetRectWidth.addKeyListener(new RecaculateOffSetAction());
         jtfOffSetRectLength.addKeyListener(new RecaculateOffSetAction());
 
+
+        //lazy last
+        mathcer = new FindSmileJavaCVThreadMathcer();
+        convertPercentageToAbs();
+        refreshHwnd();
     }
 
     private void paintMenu() {
@@ -249,7 +300,7 @@ public class AnylyseAndClickWindow extends JFrame {
         formPanel.add(rectOffBtns);
 
 //        final JPanel actionPanel = new JPanel(new FlowLayout());
-        final JPanel actionPanel = new JPanel(new GridLayout(2,4));
+        final JPanel actionPanel = new JPanel(new GridLayout(3,4));
         actionPanel.add(btnHwnd);
         actionPanel.add(btnOpenCapture);
         actionPanel.add(btnDeleteCapture);
@@ -258,6 +309,8 @@ public class AnylyseAndClickWindow extends JFrame {
         actionPanel.add(btnAnalyseDir);
         actionPanel.add(btnReloadThread);
         actionPanel.add(btnFire);
+        actionPanel.add(btnFireStart);
+        actionPanel.add(btnFireStop);
 
         tabbedPane.add("控制台", jspConsole);
         tabbedPane.add("记录", jspFires);
@@ -304,6 +357,9 @@ public class AnylyseAndClickWindow extends JFrame {
 
         logger.debug("已经成功获得句柄:"+hWnd);
         log("当前句柄:"+hWnd);
+        String src_java_code_path = PathUtil.getSRC_JAVA_Code_Path(Config.class);
+        File file = new File(src_java_code_path);
+        File  processedSrc = FileUtil.processAndReplace(file, new FileStringRegexProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd="+hWnd+";"));
     }
 
     public void setFrameMiddle() {
@@ -546,11 +602,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private class RefreshHwndAction implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {
-            try {
-                refreshHwnd();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+
         }
 
         @Override
@@ -560,7 +612,11 @@ public class AnylyseAndClickWindow extends JFrame {
 
         @Override
         public void keyReleased(KeyEvent e) {
-
+            try {
+                refreshHwnd();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
     }
 

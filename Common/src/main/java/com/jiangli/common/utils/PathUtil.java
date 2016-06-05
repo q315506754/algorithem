@@ -19,23 +19,32 @@ public class PathUtil {
     public static String PATH_TEST_MAIN_RESOURCES= PATH_TEST_MAIN+PATH_DELIMETER+"resources";
 
     public static String getClassPath() {
+        return getClassPath(PathUtil.class);
+    }
+
+    public static String getClassPath(Class cls) {
         try {
-            return PathUtil.class.getClassLoader().getResource("").toURI().getPath();
+            return cls.getClassLoader().getResource("").toURI().getPath();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static String getBaseProjectPath() {
-        File file = new File(getClassPath());
-        File parent = null;
-        while (true) {
-            parent = file.getParentFile();
-            if (parent.getName().equalsIgnoreCase("target")) {
-                break;
-            }
+    public static String getProjectPath(Class cls) {
+        File parent = getTargetPath(getClassPath());
+
+        try {
+            return parent.getParentFile().getPath();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public static String getBaseProjectPath() {
+        File parent = getTargetPath(getClassPath());
 
         try {
             return parent.getParentFile().getParentFile().getPath();
@@ -46,7 +55,35 @@ public class PathUtil {
         return null;
     }
 
-    public static String buildPath(String basePath,String... child) {
+    private static File getTargetPath(String classPath) {
+        File file = new File(classPath);
+        File parent = null;
+        while (true) {
+            parent = file.getParentFile();
+            if (parent.getName().equalsIgnoreCase("target")) {
+                break;
+            }
+        }
+        return parent;
+    }
+
+    public static String getSRC_JAVA_Path(Class cls) {
+        return buildPath(getProjectPath(cls),PATH_SRC_MAIN_JAVA);
+    }
+    public static String getSRC_JAVA_Code_Path(Class cls) {
+        String s = getSRC_JAVA_Path(cls);
+        String packagePath = convertClsToFilePath(cls)+".java";
+        return buildPath(s,packagePath);
+    }
+
+    public static String convertClsToFilePath(Class cls) {
+        String name = cls.getName();
+//        System.out.println(name);
+        name = name.replaceAll("\\.",PATH_DELIMETER+PATH_DELIMETER);
+        return name;
+    }
+
+    public static String buildPath(String basePath,boolean ensurePath,String... child) {
         String ret = basePath;
 
         if (child != null) {
@@ -55,8 +92,13 @@ public class PathUtil {
             }
         }
 
-        ensurePath(ret);
+        if (ensurePath) {
+            ensurePath(ret);
+        }
         return ret;
+    }
+    public static String buildPath(String basePath,String... child) {
+        return buildPath(basePath,true,child);
     }
 
     public static void ensurePath(String path){
