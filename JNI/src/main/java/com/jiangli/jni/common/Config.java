@@ -9,7 +9,7 @@ import com.jiangli.graphics.common.BMP;
  *         CreatedTime  2016/6/1 0001 13:27
  */
 public class Config {
-    public  static int test_hWnd=393922;
+    public  static int test_hWnd=132062;
     private static float smileSimilartity= 0.995f;
     public static String project_path = PathUtil.getProjectPath("JNI").getPath(PathUtil.PATH_SRC_MAIN_RESOURCES);
     public static String resource_base_path = PathUtil.buildPath(project_path, "findsmile");

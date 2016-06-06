@@ -4,8 +4,8 @@ package com.jiangli.common.core;
  * Created by Jiangli on 2016/6/5.
  */
 public class FileStringRegexProcesser  implements FileStringProcesser{
-    private String regex;
-    private String value;
+    protected String regex;
+    protected String value;
 
     public FileStringRegexProcesser(String regex, String value) {
         this.regex = regex;

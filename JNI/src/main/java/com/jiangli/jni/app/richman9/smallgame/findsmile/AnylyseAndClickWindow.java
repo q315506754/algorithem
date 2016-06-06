@@ -1,10 +1,7 @@
 package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
-import com.jiangli.common.core.FileStringRegexProcesser;
-import com.jiangli.common.utils.FileUtil;
-import com.jiangli.common.utils.NumberUtil;
-import com.jiangli.common.utils.PathUtil;
-import com.jiangli.common.utils.TimeAnalyser;
+import com.jiangli.common.core.FileStringRegexDynamicProcesser;
+import com.jiangli.common.utils.*;
 import com.jiangli.graphics.common.*;
 import com.jiangli.graphics.common.Color;
 import com.jiangli.graphics.common.Point;
@@ -16,13 +13,15 @@ import com.jiangli.jni.common.DrawUtil;
 import com.jiangli.jni.common.HwndUtil;
 import com.jiangli.jni.common.Mouse;
 import com.jiangli.jni.core.User32;
+import com.jiangli.swing.BindingCallBack;
+import com.jiangli.swing.InputJavaCodeBinding;
+import com.jiangli.swing.StartAndStopBinding;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,6 +47,9 @@ public class AnylyseAndClickWindow extends JFrame {
     private JLabel jlbTitleStr = new JLabel("标题");
 
     private JTextField jtfSimilar = new JTextField(getSimilarityString());
+    private final StartAndStopBinding binding;
+    private FileStringRegexDynamicProcesser dynamicProcesser;
+    private InputJavaCodeBinding inputJav;
 
     private String getSimilarityString() {
         return NumberUtil.getDoubleString(Config.getSmileSimilartity(),8);
@@ -156,7 +158,7 @@ public class AnylyseAndClickWindow extends JFrame {
         this.setVisible(true);
         this.setTitle("找笑脸");
         this.setSize(400, 500);
-        setFrameRight();
+        SwingUtil.setFrameRelativePos(this,90,50);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setDefaultLookAndFeelDecorated(false);
 //        convertPercentageToAbs();
@@ -166,13 +168,6 @@ public class AnylyseAndClickWindow extends JFrame {
         jtbFires.setAutoscrolls(true);
         DefaultTableModel  tableModel = new DefaultTableModel(null,columnNames);
         jtbFires.setModel(tableModel);
-
-
-
-        TableColumnModel columnModel = jtbFires.getColumnModel();
-//        columnModel.getColumn(1).set;
-
-        robot = new Robot();
 
         Container root = getContentPane();
 
@@ -201,43 +196,20 @@ public class AnylyseAndClickWindow extends JFrame {
         jtfTitleStr.addKeyListener(new RefreshHwndAction());
         jtfSimilar.addKeyListener(new SimilarRefreshAction());
 
-        btnFireStart.addActionListener(new ActionListener() {
+        //init instance
+        robot = new Robot();
+        mathcer = new FindSmileJavaCVThreadMathcer();
+        dynamicProcesser = new FileStringRegexDynamicProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd=<value>;");
+        inputJav = new InputJavaCodeBinding(Config.class, dynamicProcesser);
+
+        //binding events
+        // start&stop
+        binding = new StartAndStopBinding(btnFireStart, btnFireStop, new BindingCallBack() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                startedClickingThread = new Thread() {
-
-                    @Override
-                    public void run() {
-                        log("连点已开启...");
-                        startedClicking = true;
-                        try {
-                            while (startedClicking) {
-                                btnFire.doClick();
-                            }
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                        log("连点已停止...");
-                    }
-                };
-                startedClickingThread.start();
-
+            public void run() {
+                btnFire.doClick();
             }
         });
-        btnFireStop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                log("停止中...");
-                if (startedClicking) {
-                    log("关闭成功");
-                    startedClicking = false;
-                }else {
-                    log("关闭失败");
-                }
-
-            }
-        });
-
 
 
         //rect offset
@@ -251,9 +223,7 @@ public class AnylyseAndClickWindow extends JFrame {
         jtfOffSetRectWidth.addKeyListener(new RecaculateOffSetAction());
         jtfOffSetRectLength.addKeyListener(new RecaculateOffSetAction());
 
-
         //lazy last
-        mathcer = new FindSmileJavaCVThreadMathcer();
         convertPercentageToAbs();
         refreshHwnd();
     }
@@ -357,39 +327,17 @@ public class AnylyseAndClickWindow extends JFrame {
 
         logger.debug("已经成功获得句柄:"+hWnd);
         log("当前句柄:"+hWnd);
-        String src_java_code_path = PathUtil.getSRC_JAVA_Code_Path(Config.class);
-        File file = new File(src_java_code_path);
-        File  processedSrc = FileUtil.processAndReplace(file, new FileStringRegexProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd="+hWnd+";"));
+//        String src_java_code_path = PathUtil.getSRC_JAVA_Code_Path(Config.class);
+//        File file = new File(src_java_code_path);
+
+
+        dynamicProcesser.setPhValue(hWnd+"");
+        inputJav.refresh();
     }
 
-    public void setFrameMiddle() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        if (frameSize.height > screenSize.height) {
-            frameSize.height = screenSize.height;
-        }
 
-        if (frameSize.width > screenSize.width) {
-            frameSize.width = screenSize.width;
-        }
-        this.setLocation((screenSize.width - frameSize.width) / 2,
-                (screenSize.height - frameSize.height) / 2);
-    }
 
-    public void setFrameRight() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        if (frameSize.height > screenSize.height) {
-            frameSize.height = screenSize.height;
-        }
 
-        if (frameSize.width > screenSize.width) {
-            frameSize.width = screenSize.width;
-        }
-
-        this.setLocation((screenSize.width - frameSize.width)*9/10,
-                (screenSize.height - frameSize.height) / 2);
-    }
 
     public static void main(String[] args) {
         try {
@@ -685,4 +633,5 @@ public class AnylyseAndClickWindow extends JFrame {
             log("相似度已修改为:"+getSimilarityString());
         }
     }
+
 }
