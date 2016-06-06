@@ -22,6 +22,7 @@
         <module>OSGI</module>
         <module>RPC</module>
         <module>Security</module>
+        <module>SOA</module>
         <module>Sort</module>
         <module>Spring</module>
     </modules>
