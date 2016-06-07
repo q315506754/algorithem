@@ -171,7 +171,6 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         paintUI(root);
 
         btnFire.addActionListener(new BtnFireAction(root));
-
         btnHwnd.addActionListener(new OpenHwndAction());
         btnOpenCapture.addActionListener(new OpenCaptureAction());
         btnDeleteCapture.addActionListener(new DeleteCaptureAction());
