@@ -54,13 +54,26 @@ public class MethodUtil {
     public static String getGetterString(String property) {
         return "get" + property.substring(0, 1).toUpperCase() + property.substring(1);
     }
+    public static String getIsGetterString(String property) {
+        return "is" + property.substring(0, 1).toUpperCase() + property.substring(1);
+    }
     public static String getSetterString(String property) {
         return "set" + property.substring(0, 1).toUpperCase() + property.substring(1);
     }
 
     public static Method getGetter(Class cls,String property) throws NoSuchMethodException {
         String getterString = getGetterString(property);
-        Method method = cls.getMethod(getterString, new Class[]{});
+
+        Method method = null;
+        try {
+            method = cls.getMethod(getterString, new Class[]{});
+        } catch (Exception e) {
+//            e.printStackTrace();
+            getterString = getIsGetterString(property);
+
+            method = cls.getMethod(getterString, new Class[]{});
+        }
+
         if (!MethodUtil.isGetter(method)) {
             throw new NoSuchMethodError("is Not Getter:"+getterString);
         }

@@ -32,7 +32,6 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Jiangli
@@ -48,6 +47,10 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     protected float similartity;
     protected Analyser dirAnalyser;
     protected BMPMatcher mathcer ;
+    protected int mouse_press_duration_start=30;
+    protected int mouse_press_duration_end=100;
+    protected int mouse_press_interval_start = 10;
+    protected int mouse_press_interval_end = 300;
 
     private JTextField jtfHwnd = new JTextField(Config.test_hWnd+"");
     private JLabel jlbHwnd = new JLabel("句柄");
@@ -106,12 +109,12 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     private boolean any_drawPoints = true;
     private boolean rec_table = false;
     private boolean use_offSet = true;
+    private boolean mouse_press_duration= true;
+    private boolean mouse_press_interval= true;
 
     private com.jiangli.graphics.common.Color MATCH_COLOR = new Color(0,0,0);
     private Color CLICK_POINT_COLOR = new Color(255,0,0);
     private int CLICK_POINT_LENGTH = 50;
-    private int CLICK_INTERVAL = 200;
-    private Random seed = new Random();
 
     private Robot robot;
     private Rect offset = new Rect(580,210,400,400);
@@ -121,12 +124,18 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     private JMenuItem jmiEnableAnalyseDrawCross = new JCheckBoxMenuItem("开启分析-描线");
     private JMenuItem jmiEnableUseOffSet = new JCheckBoxMenuItem("启用截图偏移");
     private JMenuItem jmiEnableTableRec = new JCheckBoxMenuItem("记录表");
+    private JMenuItem jmiEnableMousePressing = new JCheckBoxMenuItem("鼠标按住");
+    private JMenuItem jmiEnableMouseInterval = new JCheckBoxMenuItem("鼠标点击间隔");
 
     private JTextField jtfOffSetRectLeft = new JTextField();
     private JTextField jtfOffSetRectTop = new JTextField();
     private JTextField jtfOffSetRectWidth = new JTextField();
     private JTextField jtfOffSetRectLength = new JTextField();
 
+    protected void setMousePressDuration(int start, int end){
+        this.mouse_press_duration_start = start;
+        this.mouse_press_duration_end = end;
+    }
 
     public void log(String msg) {
 //        jtaConsole.setText(msg+"\r\n"+jtaConsole.getText());
@@ -165,8 +174,8 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
         childrenInitialStart();
 
+        //paint main
         Container root = getContentPane();
-
         paintMenu();
         paintUI(root);
 
@@ -176,16 +185,19 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         btnDeleteCapture.addActionListener(new DeleteCaptureAction());
         btnOpenAnalyse.addActionListener(new OpenAnalyseAction());
         btnDeleteAnalyse.addActionListener(new DeleteAnalyseAction());
-        jmiEnableAnalyse.addActionListener(new EnableAnalyseAction());
 
-        jmiEnableAnalyse.setSelected(anylyse);
-        jmiEnableAnalyseDrawCross.addActionListener(new EnableAnaDrawCrossAction());
-        jmiEnableAnalyseDrawCross.setSelected(any_drawPoints);
-        jmiEnableUseOffSet.addActionListener(new EnableUseOffSetAction());
-        jmiEnableUseOffSet.setSelected(use_offSet);
-        jmiEnableTableRec.addActionListener(new EnableTableRecAction());
-        jmiEnableTableRec.setSelected(rec_table);
-
+        //jMenuItem -> boolean & log
+        new SelectableButtonToObjFieldBinding(jmiEnableAnalyse, this, "anylyse", new BtnObjFActionListener<Boolean>() {
+            @Override
+            public void actionPerformed(AbstractButton com, Boolean val, Object obj, String field) {
+                jmiEnableAnalyseDrawCross.setEnabled(val);
+            }
+        },new LogBooleanMenuItemAction());
+        new SelectableButtonToObjFieldBinding(jmiEnableAnalyseDrawCross, this, "any_drawPoints", new LogBooleanMenuItemAction());
+        new SelectableButtonToObjFieldBinding(jmiEnableUseOffSet, this, "use_offSet", new LogBooleanMenuItemAction());
+        new SelectableButtonToObjFieldBinding(jmiEnableTableRec, this, "rec_table", new LogBooleanMenuItemAction());
+        new SelectableButtonToObjFieldBinding(jmiEnableMousePressing, this, "mouse_press_duration", new LogBooleanMenuItemAction());
+        new SelectableButtonToObjFieldBinding(jmiEnableMouseInterval,this,"mouse_press_interval", new LogBooleanMenuItemAction());
 
         btnTestCapture.addActionListener(new TestCaptureAction());
         btnTestSample.addActionListener(new TestSampleAction());
@@ -267,6 +279,8 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         jmnConfigMenu.add(jmiEnableAnalyseDrawCross);
         jmnConfigMenu.add(jmiEnableUseOffSet);
         jmnConfigMenu.add(jmiEnableTableRec);
+        jmnConfigMenu.add(jmiEnableMousePressing);
+        jmnConfigMenu.add(jmiEnableMouseInterval);
 
 
         this.jmbMenuBar.add(jmnConfigMenu);
@@ -518,9 +532,23 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
 
                 //click
+                int pCount = points.size();
                 for (Point point : points) {
-                    Mouse.pressByRobot(hWnd,robot,point);
-//                        Thread.sleep(seed.nextInt(CLICK_INTERVAL));
+                    if (mouse_press_duration) {
+                        Mouse.pressByRobot(hWnd,robot,point,mouse_press_duration_start,mouse_press_duration_end);
+                    }else{
+                        Mouse.pressByRobot(hWnd,robot,point);
+                    }
+
+
+                    if (--pCount>0) {
+                        if (mouse_press_interval) {
+                            if(LogicUtil.checkStartEnd(mouse_press_interval_start,mouse_press_interval_end)){
+                                Thread.sleep(RandomUtil.getRandomNum(mouse_press_interval_start,mouse_press_interval_end));
+                            }
+                        }
+                    }
+
                 }
                 record[0] = points.size()+"";
 
@@ -696,6 +724,74 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         public void actionPerformed(ActionEvent e) {
             rec_table = jmiEnableTableRec.isSelected();
             log(jmiEnableTableRec.getText()+":"+ getBooleanStr(AnylyseAndClickWindow.this.rec_table));
+        }
+    }
+
+
+    public boolean isMouse_press_interval() {
+        return mouse_press_interval;
+    }
+
+    public void setMouse_press_interval(boolean mouse_press_interval) {
+        this.mouse_press_interval = mouse_press_interval;
+    }
+
+    public boolean isRec_table() {
+        return rec_table;
+    }
+
+    public void setRec_table(boolean rec_table) {
+        this.rec_table = rec_table;
+    }
+
+    public boolean isUse_offSet() {
+        return use_offSet;
+    }
+
+    public void setUse_offSet(boolean use_offSet) {
+        this.use_offSet = use_offSet;
+    }
+
+    public boolean isMouse_press_duration() {
+        return mouse_press_duration;
+    }
+
+    public void setMouse_press_duration(boolean mouse_press_duration) {
+        this.mouse_press_duration = mouse_press_duration;
+    }
+
+    public boolean isAny_drawPoints() {
+        return any_drawPoints;
+    }
+
+    public void setAny_drawPoints(boolean any_drawPoints) {
+        this.any_drawPoints = any_drawPoints;
+    }
+
+    public boolean isAny_drawLine() {
+        return any_drawLine;
+    }
+
+    public void setAny_drawLine(boolean any_drawLine) {
+        this.any_drawLine = any_drawLine;
+    }
+
+    public boolean isAnylyse() {
+        return anylyse;
+    }
+
+    public void setAnylyse(boolean anylyse) {
+        this.anylyse = anylyse;
+    }
+
+    public boolean isCapture() {
+        return capture;
+    }
+
+    private class LogBooleanMenuItemAction implements BtnObjFActionListener<Boolean> {
+        @Override
+        public void actionPerformed(AbstractButton com, Boolean val, Object obj, String field) {
+            log(com.getText()+":"+ getBooleanStr(val));
         }
     }
 }

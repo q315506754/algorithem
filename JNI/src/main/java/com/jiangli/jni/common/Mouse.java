@@ -1,5 +1,7 @@
 package com.jiangli.jni.common;
 
+import com.jiangli.common.utils.LogicUtil;
+import com.jiangli.common.utils.RandomUtil;
 import com.jiangli.jni.core.User32;
 
 import java.awt.*;
@@ -22,8 +24,11 @@ public class Mouse {
     }
 
     public static void pressByRobot(int hWnd, Robot robot , com.jiangli.graphics.common.Point point) {
-//        Mouse.click(hWnd, point.getX(), point.getY());
+        pressByRobot(hWnd,robot,point,0,0);
+    }
 
+    public static void pressByRobot(int hWnd, Robot robot , com.jiangli.graphics.common.Point point,int durationStart,int durationEnd) {
+//        /        Mouse.click(hWnd, point.getX(), point.getY());
         java.awt.Point originpoint = null;
         try {
             originpoint = MouseInfo.getPointerInfo().getLocation();
@@ -36,13 +41,15 @@ public class Mouse {
         robot.mouseMove(r.left+ point.getX(),r.top+ point.getY());
 //        robot.delay(5);
         robot.mousePress(InputEvent.BUTTON1_MASK);
-//        robot.delay(50);
+
+        if (LogicUtil.checkStartEnd(durationStart,durationEnd)) {
+            robot.delay(RandomUtil.getRandomNum(durationStart,durationEnd));
+        }
+
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
 
         robot.mouseMove( (int)originpoint.getX(),(int)originpoint.getY());
-
     }
-
     // 模拟鼠标左键单击
     public static void press(int hwnd, int x, int y) {
         int v = x + (y << 16);

@@ -1,7 +1,6 @@
 package com.jiangli.jni.common;
 
 import com.jiangli.common.utils.PathUtil;
-import com.jiangli.graphics.common.BMP;
 
 /**
  * @author Jiangli
@@ -9,7 +8,7 @@ import com.jiangli.graphics.common.BMP;
  *         CreatedTime  2016/6/1 0001 13:27
  */
 public class Config {
-    public  static int test_hWnd=132062;
+    public  static int test_hWnd=66442;
     public static float smileSimilartity= 0.995f;
     public static String project_path = PathUtil.getProjectPath("JNI").getPath(PathUtil.PATH_SRC_MAIN_RESOURCES);
 
@@ -22,5 +21,5 @@ public class Config {
     public static  String characteristic_path =  PathUtil.buildPath(findsmile_base_path,"charac_home");
 
 
-
+    public static String clickpoints_base_path = PathUtil.buildPath(project_path, "clickpoints");
 }
