@@ -1,6 +1,8 @@
 package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
+import com.jiangli.common.core.CommonObjectToObjectFieldBinding;
 import com.jiangli.common.core.FileStringRegexDynamicProcesser;
+import com.jiangli.common.core.ValueDecorator;
 import com.jiangli.common.utils.*;
 import com.jiangli.graphics.common.*;
 import com.jiangli.graphics.common.Color;
@@ -13,9 +15,8 @@ import com.jiangli.jni.common.DrawUtil;
 import com.jiangli.jni.common.HwndUtil;
 import com.jiangli.jni.common.Mouse;
 import com.jiangli.jni.core.User32;
-import com.jiangli.swing.BindingCallBack;
-import com.jiangli.swing.InputJavaCodeBinding;
-import com.jiangli.swing.StartAndStopBinding;
+import com.jiangli.swing.*;
+import com.jiangli.swing.formatter.DoubleStringFormatter;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,7 +126,7 @@ public class AnylyseAndClickWindow extends JFrame {
 
     public void log(String msg) {
 //        jtaConsole.setText(msg+"\r\n"+jtaConsole.getText());
-        jtaConsole.setText(jtaConsole.getText()+"\r\n"+msg);
+        jtaConsole.setText(jtaConsole.getText() + "\r\n" + msg);
     }
 
     private Rect getOffSet(){
@@ -142,8 +143,8 @@ public class AnylyseAndClickWindow extends JFrame {
         offset.setX((int)(offsetPercentage.getLeft() * screenSize.getWidth()/100));
         offset.setY((int)(offsetPercentage.getTop() * screenSize.getHeight()/100));
         offset.setWidth((int)(offsetPercentage.getWidth() * screenSize.getWidth()/100));
-        offset.setLength((int)(offsetPercentage.getHeight() * screenSize.getHeight()/100));
-        log("abs offset:"+offset);
+        offset.setLength((int) (offsetPercentage.getHeight() * screenSize.getHeight() / 100));
+        log("abs offset:" + offset);
     }
 
     private void syncRectOffsetFieldToRectPercentrage() {
@@ -202,6 +203,7 @@ public class AnylyseAndClickWindow extends JFrame {
         dynamicProcesser = new FileStringRegexDynamicProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd=<value>;");
         inputJav = new InputJavaCodeBinding(Config.class, dynamicProcesser);
 
+
         //binding events
         // start&stop
         binding = new StartAndStopBinding(btnFireStart, btnFireStop, new BindingCallBack() {
@@ -211,20 +213,21 @@ public class AnylyseAndClickWindow extends JFrame {
             }
         });
 
+        //perRect -> absRect
+        CommonObjectToObjectFieldBinding perToAbsLeft = new CommonObjectToObjectFieldBinding(offsetPercentage, "left", offset, "x", new ScreenPercentageBindingX());
+        CommonObjectToObjectFieldBinding perToAbsTop = new CommonObjectToObjectFieldBinding(offsetPercentage, "top", offset, "y", new ScreenPercentageBindingY());
+        CommonObjectToObjectFieldBinding perToAbsWidth = new CommonObjectToObjectFieldBinding(offsetPercentage, "width", offset, "width", new ScreenPercentageBindingX());
+        CommonObjectToObjectFieldBinding perToAbsHeight=new CommonObjectToObjectFieldBinding(offsetPercentage, "height", offset, "length", new ScreenPercentageBindingY());
 
-        //rect offset
-        jtfOffSetRectLeft.setText(getDoubleString(offsetPercentage.getLeft()));
-        jtfOffSetRectTop.setText(getDoubleString(offsetPercentage.getTop()));
-        jtfOffSetRectWidth.setText(getDoubleString(offsetPercentage.getWidth()));
-        jtfOffSetRectLength.setText(getDoubleString(offsetPercentage.getHeight()));
+        //JText -> perRect
+        DoubleStringFormatter doubleStringFormatter = new DoubleStringFormatter(2);
+        new TextFObjectFRefershBinding(jtfOffSetRectLeft,offsetPercentage,"left",doubleStringFormatter,perToAbsLeft);
+        new TextFObjectFRefershBinding(jtfOffSetRectTop,offsetPercentage,"top",doubleStringFormatter,perToAbsTop);
+        new TextFObjectFRefershBinding(jtfOffSetRectWidth,offsetPercentage,"width",doubleStringFormatter,perToAbsWidth);
+        new TextFObjectFRefershBinding(jtfOffSetRectLength,offsetPercentage,"height",doubleStringFormatter,perToAbsHeight);
 
-        jtfOffSetRectLeft.addKeyListener(new RecaculateOffSetAction());
-        jtfOffSetRectTop.addKeyListener(new RecaculateOffSetAction());
-        jtfOffSetRectWidth.addKeyListener(new RecaculateOffSetAction());
-        jtfOffSetRectLength.addKeyListener(new RecaculateOffSetAction());
 
         //lazy last
-        convertPercentageToAbs();
         refreshHwnd();
     }
 
@@ -568,23 +571,6 @@ public class AnylyseAndClickWindow extends JFrame {
         }
     }
 
-    private class RecaculateOffSetAction implements KeyListener {
-        @Override
-        public void keyTyped(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            syncRectOffsetFieldToRectPercentrage();
-            convertPercentageToAbs();
-        }
-    }
 
     private class TestSampleAction implements ActionListener {
         @Override
