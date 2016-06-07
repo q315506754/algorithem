@@ -21,7 +21,7 @@ public class TextFObjectFRefershBinding<T> extends TextFieldObjectFieldBinding{
         super(key, obj, field, objStringFormatter, actionListeners);
     }
 
-    public TextFObjectFRefershBinding(JTextComponent key, Object obj, String field, ObjStringFormatter objStringFormatter, ObjectToObjectFieldBinding refreshBinding) {
+    public TextFObjectFRefershBinding(JTextComponent key, Object obj, String field, ObjStringFormatter objStringFormatter, ObjectToObjectFieldBinding refreshBinding, KeyListener... actionListeners) {
         this(key, obj, field, objStringFormatter);
         this.refreshBinding = refreshBinding;
 
@@ -29,7 +29,20 @@ public class TextFObjectFRefershBinding<T> extends TextFieldObjectFieldBinding{
         logger.debug("first refresh");
         refreshBinding.refresh();
 
-        KeyListener[] listeners = new KeyListener[1];
+        int length = 1;
+
+        if (actionListeners != null) {
+            length = length + 1;
+        }
+
+        KeyListener[] listeners = new KeyListener[length];
+
+        if (actionListeners != null) {
+            for (int i = 0; i < actionListeners.length; i++) {
+                listeners[i+1] = actionListeners[i];
+            }
+        }
+
         listeners[0] = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {

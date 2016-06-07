@@ -1,15 +1,15 @@
-package com.jiangli.jni.app.richman9.smallgame.findsmile;
+package com.jiangli.jni.app.richman9.smallgame;
 
 import com.jiangli.common.core.CommonObjectToObjectFieldBinding;
 import com.jiangli.common.core.FileStringRegexDynamicProcesser;
-import com.jiangli.common.core.ValueDecorator;
 import com.jiangli.common.utils.*;
 import com.jiangli.graphics.common.*;
 import com.jiangli.graphics.common.Color;
 import com.jiangli.graphics.common.Point;
 import com.jiangli.graphics.impl.RmoveDuplicatePointFilter;
+import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.graphics.inf.PointFilter;
-import com.jiangli.jni.app.impl.FindSmileJavaCVThreadMathcer;
+import com.jiangli.jni.app.richman9.smallgame.findsmile.FindSmileDirAnalyser;
 import com.jiangli.jni.common.Config;
 import com.jiangli.jni.common.DrawUtil;
 import com.jiangli.jni.common.HwndUtil;
@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,8 +39,15 @@ import java.util.Random;
  *
  *         CreatedTime  2016/6/1 0001 13:26
  */
-public class AnylyseAndClickWindow extends JFrame {
+public abstract class AnylyseAndClickWindow extends JFrame {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected String project_base;
+    protected String anylyse_path;
+    protected String captured_path;
+    protected String sample_path;
+    protected float similartity;
+    protected Analyser dirAnalyser;
+    protected BMPMatcher mathcer ;
 
     private JTextField jtfHwnd = new JTextField(Config.test_hWnd+"");
     private JLabel jlbHwnd = new JLabel("句柄");
@@ -47,13 +55,13 @@ public class AnylyseAndClickWindow extends JFrame {
     private JTextField jtfTitleStr = new JTextField("大富翁9");
     private JLabel jlbTitleStr = new JLabel("标题");
 
-    private JTextField jtfSimilar = new JTextField(getSimilarityString());
-    private final StartAndStopBinding binding;
+    private JTextField jtfSimilar = new JTextField();
+    private  StartAndStopBinding binding;
     private FileStringRegexDynamicProcesser dynamicProcesser;
     private InputJavaCodeBinding inputJav;
 
     private String getSimilarityString() {
-        return NumberUtil.getDoubleString(Config.getSmileSimilartity(),8);
+        return NumberUtil.getDoubleString(similartity,8);
     }
 
     private JLabel jlbSimilar = new JLabel("相似度");
@@ -75,10 +83,8 @@ public class AnylyseAndClickWindow extends JFrame {
     private JButton btnTestSample = new JButton("测试样本");
 
     private JButton btnHwnd = new JButton("句柄程序");
-    private JButton btnFire = new JButton("点击笑脸");
+    protected JButton btnFire = new JButton("点击笑脸");
     private JButton btnFireStart = new JButton("开启点击");
-    private Thread startedClickingThread = null;
-    private boolean startedClicking = false;
     private JButton btnFireStop = new JButton("结束点击");
     private JButton btnDeleteCapture = new JButton("删除捕获");
     private JButton btnOpenCapture = new JButton("打开捕获");
@@ -87,11 +93,10 @@ public class AnylyseAndClickWindow extends JFrame {
     private JButton btnAnalyseDir = new JButton("分析目录");
 
     private JButton btnReloadThread = new JButton("刷新线程");
+    private JButton btnClearConsole = new JButton("清空消息");
 
     private Integer hWnd = null;
     private User32 user32 = User32.INSTANCE;
-
-//    private SmileAnylyser anylyser = new SmileAnylyser(Config.characteristic_path);
 
 
     private final boolean capture = true;//不能改为false
@@ -99,29 +104,28 @@ public class AnylyseAndClickWindow extends JFrame {
     private boolean anylyse = true;
     private boolean any_drawLine = true;
     private boolean any_drawPoints = true;
+    private boolean rec_table = false;
     private boolean use_offSet = true;
 
     private com.jiangli.graphics.common.Color MATCH_COLOR = new Color(0,0,0);
     private Color CLICK_POINT_COLOR = new Color(255,0,0);
     private int CLICK_POINT_LENGTH = 50;
     private int CLICK_INTERVAL = 200;
-
     private Random seed = new Random();
+
     private Robot robot;
     private Rect offset = new Rect(580,210,400,400);
-    private RectPercentage offsetPercentage = new RectPercentage(27.00,18.50,18.00,32.00);
+    protected RectPercentage offsetPercentage = new RectPercentage(27.00,18.50,18.00,32.00);
     private PointFilter pointFilter = new RmoveDuplicatePointFilter(20);
     private JMenuItem jmiEnableAnalyse = new JCheckBoxMenuItem("开启分析");
     private JMenuItem jmiEnableAnalyseDrawCross = new JCheckBoxMenuItem("开启分析-描线");
     private JMenuItem jmiEnableUseOffSet = new JCheckBoxMenuItem("启用截图偏移");
+    private JMenuItem jmiEnableTableRec = new JCheckBoxMenuItem("记录表");
 
     private JTextField jtfOffSetRectLeft = new JTextField();
     private JTextField jtfOffSetRectTop = new JTextField();
     private JTextField jtfOffSetRectWidth = new JTextField();
     private JTextField jtfOffSetRectLength = new JTextField();
-
-    //lazy init
-    private FindSmileJavaCVThreadMathcer mathcer ;
 
 
     public void log(String msg) {
@@ -136,39 +140,30 @@ public class AnylyseAndClickWindow extends JFrame {
         return null;
     }
 
-    private void convertPercentageToAbs() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double restWidth = screenSize.getWidth() - this.getWidth();
-        double restHeight = screenSize.getHeight() - this.getHeight();
-        offset.setX((int)(offsetPercentage.getLeft() * screenSize.getWidth()/100));
-        offset.setY((int)(offsetPercentage.getTop() * screenSize.getHeight()/100));
-        offset.setWidth((int)(offsetPercentage.getWidth() * screenSize.getWidth()/100));
-        offset.setLength((int) (offsetPercentage.getHeight() * screenSize.getHeight() / 100));
-        log("abs offset:" + offset);
+
+    public AnylyseAndClickWindow()  {
+        try {
+            initial();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void syncRectOffsetFieldToRectPercentrage() {
-        offsetPercentage.setLeft(Double.parseDouble(jtfOffSetRectLeft.getText()));
-        offsetPercentage.setTop(Double.parseDouble(jtfOffSetRectTop.getText()));
-        offsetPercentage.setWidth(Double.parseDouble(jtfOffSetRectWidth.getText()));
-        offsetPercentage.setHeight(Double.parseDouble(jtfOffSetRectLength.getText()));
-        log("offset percentage:"+offsetPercentage);
-    }
+    public void initial() throws Exception {
+        project_base = getProjectBasePath();
+        similartity= getSimilarity();
+        anylyse_path = PathUtil.buildPath(project_base, "anylyse");
+        captured_path= PathUtil.buildPath(project_base, "captured");
+        sample_path= PathUtil.buildPath(project_base, "sample");
+        mathcer = getBMPMatcher();
+        dirAnalyser = getDirAnalyser();
 
-    public AnylyseAndClickWindow() throws Exception {
-        this.setVisible(true);
-        this.setTitle("找笑脸");
-        this.setSize(400, 500);
-        SwingUtil.setFrameRelativePos(this,90,50);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setDefaultLookAndFeelDecorated(false);
-//        convertPercentageToAbs();
-//        setDefaultLookAndFeelDecorated(true);
-        jtaConsole.setEditable(false);
-        jtaConsole.setAutoscrolls(true);
-        jtbFires.setAutoscrolls(true);
-        DefaultTableModel  tableModel = new DefaultTableModel(null,columnNames);
-        jtbFires.setModel(tableModel);
+        log("project_base:"+project_base);
+        log("anylyse_path:"+anylyse_path);
+        log("captured_path:"+captured_path);
+        log("sample_path:"+sample_path);
+
+        childrenInitialStart();
 
         Container root = getContentPane();
 
@@ -183,23 +178,43 @@ public class AnylyseAndClickWindow extends JFrame {
         btnOpenAnalyse.addActionListener(new OpenAnalyseAction());
         btnDeleteAnalyse.addActionListener(new DeleteAnalyseAction());
         jmiEnableAnalyse.addActionListener(new EnableAnalyseAction());
+
         jmiEnableAnalyse.setSelected(anylyse);
         jmiEnableAnalyseDrawCross.addActionListener(new EnableAnaDrawCrossAction());
         jmiEnableAnalyseDrawCross.setSelected(any_drawPoints);
         jmiEnableUseOffSet.addActionListener(new EnableUseOffSetAction());
         jmiEnableUseOffSet.setSelected(use_offSet);
+        jmiEnableTableRec.addActionListener(new EnableTableRecAction());
+        jmiEnableTableRec.setSelected(rec_table);
+
+
         btnTestCapture.addActionListener(new TestCaptureAction());
         btnTestSample.addActionListener(new TestSampleAction());
         btnAnalyseDir.addActionListener(new AnalyseDirAction());
         btnReloadThread.addActionListener(new ReloadThreadAction());
+        btnClearConsole.addActionListener(new ClearConsoleAction());
 
         jtfHwnd.addKeyListener(new RefreshHwndAction());
         jtfTitleStr.addKeyListener(new RefreshHwndAction());
         jtfSimilar.addKeyListener(new SimilarRefreshAction());
 
+        //init property
+        jtaConsole.setEditable(false);
+        jtaConsole.setAutoscrolls(true);
+        jtbFires.setAutoscrolls(true);
+        jtfSimilar.setText(getSimilarityString());
+
+        //table
+        DefaultTableModel tableModel = new DefaultTableModel(null,columnNames);
+        jtbFires.setModel(tableModel);
+        TableCellRenderer cellRenderer = new ImgPathCellRenderer();
+        jtbFires.getColumnModel().getColumn(1).setCellRenderer(cellRenderer);
+        jtbFires.getColumnModel().getColumn(2).setCellRenderer(cellRenderer);
+        jtbFires.getColumnModel().getColumn(1).setCellEditor(new ImgPathButtonEditor());
+        jtbFires.getColumnModel().getColumn(2).setCellEditor(new ImgPathButtonEditor());
+
         //init instance
         robot = new Robot();
-        mathcer = new FindSmileJavaCVThreadMathcer();
         dynamicProcesser = new FileStringRegexDynamicProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd=<value>;");
         inputJav = new InputJavaCodeBinding(Config.class, dynamicProcesser);
 
@@ -221,20 +236,38 @@ public class AnylyseAndClickWindow extends JFrame {
 
         //JText -> perRect
         DoubleStringFormatter doubleStringFormatter = new DoubleStringFormatter(2);
-        new TextFObjectFRefershBinding(jtfOffSetRectLeft,offsetPercentage,"left",doubleStringFormatter,perToAbsLeft);
-        new TextFObjectFRefershBinding(jtfOffSetRectTop,offsetPercentage,"top",doubleStringFormatter,perToAbsTop);
-        new TextFObjectFRefershBinding(jtfOffSetRectWidth,offsetPercentage,"width",doubleStringFormatter,perToAbsWidth);
-        new TextFObjectFRefershBinding(jtfOffSetRectLength,offsetPercentage,"height",doubleStringFormatter,perToAbsHeight);
+        new TextFObjectFRefershBinding(jtfOffSetRectLeft, offsetPercentage, "left", doubleStringFormatter, perToAbsLeft, new LogOffsetAction());
+        new TextFObjectFRefershBinding(jtfOffSetRectTop,offsetPercentage,"top",doubleStringFormatter,perToAbsTop, new LogOffsetAction());
+        new TextFObjectFRefershBinding(jtfOffSetRectWidth,offsetPercentage,"width",doubleStringFormatter,perToAbsWidth, new LogOffsetAction());
+        new TextFObjectFRefershBinding(jtfOffSetRectLength,offsetPercentage,"height",doubleStringFormatter,perToAbsHeight, new LogOffsetAction());
 
 
         //lazy last
         refreshHwnd();
+
+        //set style
+        SwingUtil.setCommonFrameStyle(this);
+
+        childrenInitialEnd();
     }
+
+    public abstract FindSmileDirAnalyser getDirAnalyser() ;
+
+    public abstract BMPMatcher getBMPMatcher();
+
+    protected abstract float getSimilarity();
+
+    protected abstract void childrenInitialStart();
+
+    protected abstract String getProjectBasePath();
+
+    protected abstract void childrenInitialEnd();
 
     private void paintMenu() {
         jmnConfigMenu.add(jmiEnableAnalyse);
         jmnConfigMenu.add(jmiEnableAnalyseDrawCross);
         jmnConfigMenu.add(jmiEnableUseOffSet);
+        jmnConfigMenu.add(jmiEnableTableRec);
 
 
         this.jmbMenuBar.add(jmnConfigMenu);
@@ -284,6 +317,7 @@ public class AnylyseAndClickWindow extends JFrame {
         actionPanel.add(btnFire);
         actionPanel.add(btnFireStart);
         actionPanel.add(btnFireStop);
+        actionPanel.add(btnClearConsole);
 
         tabbedPane.add("控制台", jspConsole);
         tabbedPane.add("记录", jspFires);
@@ -342,11 +376,23 @@ public class AnylyseAndClickWindow extends JFrame {
 
 
 
-    public static void main(String[] args) {
-        try {
-            AnylyseAndClickWindow captureWindow = new AnylyseAndClickWindow();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+    private static class ImgPathCellRenderer implements TableCellRenderer {
+        private JPanel panel = new JPanel();
+        private JButton button = new JButton();
+
+
+        private void init() {
+            this.button.setBounds(0, 0, 50, 15);
+            this.panel.setLayout(null);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            init();
+            this.button.setText(value == null ? "" : String.valueOf(value));
+            return this.panel;
         }
     }
 
@@ -367,7 +413,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private  class DeleteCaptureAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            int i =FileUtil.deleteFilesUnderDir(Config.capture_path);
+            int i =FileUtil.deleteFilesUnderDir(captured_path);
             log("已删除捕获目录下文件:"+i+"个");
         }
     }
@@ -375,7 +421,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private  class DeleteAnalyseAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            int i = FileUtil.deleteFilesUnderDir(Config.anylyse_path);
+            int i = FileUtil.deleteFilesUnderDir(anylyse_path);
             log("已删除分析目录下文件:"+i+"个");
         }
     }
@@ -383,7 +429,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private  class OpenCaptureAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            FileUtil.openDirectory(Config.capture_path);
+            FileUtil.openDirectory(captured_path);
             log("已打开捕获目录");
         }
     }
@@ -391,7 +437,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private  class OpenAnalyseAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            FileUtil.openDirectory(Config.anylyse_path);
+            FileUtil.openDirectory(anylyse_path);
             log("已打开分析目录");
         }
     }
@@ -415,7 +461,7 @@ public class AnylyseAndClickWindow extends JFrame {
                 BMP bmp = null;
                 if (capture) {
                     logger.debug("capture enabled");
-                    File file = HwndUtil.shortCut(hWnd, Config.capture_path,getOffSet());
+                    File file = HwndUtil.shortCut(hWnd, captured_path,getOffSet());
                     timeAnalyser.setTitle(file.getAbsolutePath());
                     record[1] = file.getAbsolutePath();
                     bmp =  new BMP(file);
@@ -425,7 +471,7 @@ public class AnylyseAndClickWindow extends JFrame {
 
                 timeAnalyser.push("get BMP");
 
-                List<Point> points = mathcer.match(bmp, Config.getSmileSimilartity());
+                List<Point> points = mathcer.match(bmp, similartity);
                 timeAnalyser.push("match points================>"+points.size());
 
                 //remove duplicate
@@ -447,7 +493,7 @@ public class AnylyseAndClickWindow extends JFrame {
 
                     //write
                     try {
-                        File outFile = new File(Config.anylyse_path + "\\" + bmp.getFile().getName());
+                        File outFile = new File(anylyse_path + "\\" + bmp.getFile().getName());
                         DrawUtil.writeFile(bmp, outFile);
                         timeAnalyser.push("[√]writeFile after drawing");
                         timeAnalyser.pushStringOnly(outFile.getAbsolutePath());
@@ -474,9 +520,7 @@ public class AnylyseAndClickWindow extends JFrame {
 
                 //click
                 for (Point point : points) {
-//                        Mouse.click(hWnd, point.getX(), point.getY());
                     Mouse.pressByRobot(hWnd,robot,point);
-
 //                        Thread.sleep(seed.nextInt(CLICK_INTERVAL));
                 }
                 record[0] = points.size()+"";
@@ -488,8 +532,10 @@ public class AnylyseAndClickWindow extends JFrame {
 
 
                 //record
-                DefaultTableModel model = (DefaultTableModel) jtbFires.getModel();
-                model.addRow(record);
+                if (rec_table) {
+                    DefaultTableModel model = (DefaultTableModel) jtbFires.getModel();
+                    model.addRow(record);
+                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -575,7 +621,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private class TestSampleAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            BMP bmp = new BMP(PathUtil.buildPath(Config.sample_path,"gaming.bmp"));
+            BMP bmp = new BMP(PathUtil.buildPath(sample_path,"gaming.bmp"));
             File file = DrawUtil.drawRect(bmp, offset, new Color(255, 0, 0));
             FileUtil.openPicture(file);
         }
@@ -585,9 +631,10 @@ public class AnylyseAndClickWindow extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             TimeAnalyser analyser = new TimeAnalyser();
-            DirAnalyser dirAnalyser = new DirAnalyser();
+
+            int analysed = dirAnalyser.analyse();
 //                log("分析结束,共分析了:"+dirAnalyser.getAnalysedSize()+"个文件");
-            analyser.pushStringOnly("分析了:"+dirAnalyser.getAnalysedSize()+"个文件");
+            analyser.pushStringOnly("分析了:"+analysed+"个文件");
             analyser.push("分析结束");
             log(analyser.analyse());
         }
@@ -596,7 +643,7 @@ public class AnylyseAndClickWindow extends JFrame {
     private class ReloadThreadAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            mathcer = new FindSmileJavaCVThreadMathcer();
+            mathcer = getBMPMatcher();
             log("重新加载线程完毕");
         }
     }
@@ -615,9 +662,41 @@ public class AnylyseAndClickWindow extends JFrame {
         @Override
         public void keyReleased(KeyEvent e) {
             double v = Double.parseDouble(jtfSimilar.getText());
-            Config.setSmileSimilartity((float) v);
+            similartity = (float) v;
             log("相似度已修改为:"+getSimilarityString());
         }
     }
 
+    private class LogOffsetAction implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            log("perRect:"+offsetPercentage);
+            log("absRect:"+offset);
+        }
+    }
+
+    private class ClearConsoleAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            jtaConsole.setText("");
+        }
+    }
+
+    private class EnableTableRecAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            rec_table = jmiEnableTableRec.isSelected();
+            log(jmiEnableTableRec.getText()+":"+ getBooleanStr(AnylyseAndClickWindow.this.rec_table));
+        }
+    }
 }

@@ -10,24 +10,17 @@ import com.jiangli.graphics.common.BMP;
  */
 public class Config {
     public  static int test_hWnd=132062;
-    private static float smileSimilartity= 0.995f;
+    public static float smileSimilartity= 0.995f;
     public static String project_path = PathUtil.getProjectPath("JNI").getPath(PathUtil.PATH_SRC_MAIN_RESOURCES);
-    public static String resource_base_path = PathUtil.buildPath(project_path, "findsmile");
-    public static  String capture_path = PathUtil.buildPath(resource_base_path,"captured");
-    public static  String sample_path = PathUtil.buildPath(resource_base_path,"sample");
-    public static  String anylyse_path =  PathUtil.buildPath(resource_base_path,"anylyse");
-//    public static  String characteristic_path =  PathUtil.buildPath(resource_base_path,"charac");
-    public static  String characteristic_path =  PathUtil.buildPath(resource_base_path,"charac_home");
 
-    public static float getSmileSimilartity() {
-        return smileSimilartity;
-    }
+    //depracated
+    public static String findsmile_base_path = PathUtil.buildPath(project_path, "findsmile");
+    public static  String capture_path = PathUtil.buildPath(findsmile_base_path,"captured");
+    public static  String sample_path = PathUtil.buildPath(findsmile_base_path,"sample");
+    public static  String anylyse_path =  PathUtil.buildPath(findsmile_base_path,"anylyse");
+//    public static  String characteristic_path =  PathUtil.buildPath(findsmile_base_path,"charac");
+    public static  String characteristic_path =  PathUtil.buildPath(findsmile_base_path,"charac_home");
 
-    public static float getSmileSimilartity(BMP bmp) {
-        return smileSimilartity;
-    }
 
-    public static void setSmileSimilartity(float smileSimilartity) {
-        Config.smileSimilartity = smileSimilartity;
-    }
+
 }

@@ -1,11 +1,17 @@
 package com.jiangli.common.utils;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by Jiangli on 2016/6/6.
  */
 public class SwingUtil {
+    public static void setCommonFrameStyle(JFrame frame) {
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultLookAndFeelDecorated(false);
+    }
     public static void setFrameRelativePos(Component component, double perX, double perY) {
         Dimension frameSize = component.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

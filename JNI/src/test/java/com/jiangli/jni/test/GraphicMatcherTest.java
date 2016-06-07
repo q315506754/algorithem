@@ -79,7 +79,7 @@ public class GraphicMatcherTest {
 //        analyser.push("[x]read characs");
 
         BMP bigImg = new BMP(bigFfile);
-        List<Point> points = mathcer.match(bigImg, Config.getSmileSimilartity());
+        List<Point> points = mathcer.match(bigImg, Config.smileSimilartity);
         analyser.push("match point");
         analyser.setTitle(bigFfile);
 
