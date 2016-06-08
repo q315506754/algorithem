@@ -14,4 +14,17 @@ public class NumberUtil {
         return new BigDecimal(left).setScale(length,BigDecimal.ROUND_DOWN).toString();
     }
 
+    public static int parseInt(String intStr,int defaultInt) {
+        try {
+           return  Integer.parseInt(intStr);
+        } catch (NumberFormatException e) {
+//            e.printStackTrace();
+        }
+        return defaultInt;
+    }
+
+    public static int parseInt(String intStr) {
+        return parseInt(intStr,0);
+    }
+
 }

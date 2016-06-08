@@ -63,6 +63,9 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     private FileStringRegexDynamicProcesser dynamicProcesser;
     private InputJavaCodeBinding inputJav;
 
+    private File generatedSampleFile;
+    private String samplePicName = "gaming.bmp";
+
     private String getSimilarityString() {
         return NumberUtil.getDoubleString(similartity,8);
     }
@@ -126,11 +129,20 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     private JMenuItem jmiEnableTableRec = new JCheckBoxMenuItem("记录表");
     private JMenuItem jmiEnableMousePressing = new JCheckBoxMenuItem("鼠标按住");
     private JMenuItem jmiEnableMouseInterval = new JCheckBoxMenuItem("鼠标点击间隔");
+    private JMenuItem jmiSampleSelect = new JMenuItem("样本选择");
 
     private JTextField jtfOffSetRectLeft = new JTextField();
     private JTextField jtfOffSetRectTop = new JTextField();
     private JTextField jtfOffSetRectWidth = new JTextField();
     private JTextField jtfOffSetRectLength = new JTextField();
+
+
+    private JTextField jtfDrawPointX = new JTextField();
+    private JTextField jtfDrawPointY = new JTextField();
+    private JCheckBox jcbDrawCalcOffset = new JCheckBox("计算偏移");
+    private boolean draw_points_calc_offset= true;
+    private JButton btnDrawPoints = new JButton("描点");
+    private JButton btnDrawPointsGetColor = new JButton("取色");
 
     protected void setMousePressDuration(int start, int end){
         this.mouse_press_duration_start = start;
@@ -159,6 +171,7 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     }
 
     public void initial() throws Exception {
+        //children config
         project_base = getProjectBasePath();
         similartity= getSimilarity();
         anylyse_path = PathUtil.buildPath(project_base, "anylyse");
@@ -172,19 +185,77 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         log("captured_path:"+captured_path);
         log("sample_path:"+sample_path);
 
+        //init property
+        jtaConsole.setEditable(false);
+        jtaConsole.setAutoscrolls(true);
+        jtbFires.setAutoscrolls(true);
+        jtfSimilar.setText(getSimilarityString());
+
+        //init instance
+        robot = new Robot();
+        dynamicProcesser = new FileStringRegexDynamicProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd=<value>;");
+        inputJav = new InputJavaCodeBinding(Config.class, dynamicProcesser);
+
+        //init children
         childrenInitialStart();
 
-        //paint main
         Container root = getContentPane();
-        paintMenu();
-        paintUI(root);
 
-        btnFire.addActionListener(new BtnFireAction(root));
+        //btn events form
+        btnTestCapture.addActionListener(new TestCaptureAction());
+        btnTestSample.addActionListener(new TestSampleAction());
+        btnDrawPoints.addActionListener(new TestDrawPointsAction(root));
+        btnDrawPointsGetColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (generatedSampleFile == null) {
+                    JOptionPane.showMessageDialog(root, "请先测试样本", "错误", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    BMP bmp = new BMP(generatedSampleFile);
+
+                    Point drawed = getRealDrawPoint();
+                    Color colorObj = bmp.getColorObj(drawed.getX(), drawed.getY());
+                    JOptionPane.showInputDialog(root, "请复制下面颜色","new Color("+colorObj.getR()+","+colorObj.getG()+","+colorObj.getB()+")");
+
+
+                }
+            }
+        });
+
+        //btn events main
         btnHwnd.addActionListener(new OpenHwndAction());
         btnOpenCapture.addActionListener(new OpenCaptureAction());
         btnDeleteCapture.addActionListener(new DeleteCaptureAction());
         btnOpenAnalyse.addActionListener(new OpenAnalyseAction());
         btnDeleteAnalyse.addActionListener(new DeleteAnalyseAction());
+        btnAnalyseDir.addActionListener(new AnalyseDirAction());
+        btnReloadThread.addActionListener(new ReloadThreadAction());
+        btnFire.addActionListener(new BtnFireAction(root));
+        //binding events
+        // start&stop
+        binding = new StartAndStopBinding(btnFireStart, btnFireStop, new BindingCallBack() {
+            @Override
+            public void run() {
+                btnFire.doClick();
+            }
+        });
+        btnClearConsole.addActionListener(new ClearConsoleAction());
+
+        //keyboard listeners
+        jtfHwnd.addKeyListener(new RefreshHwndAction());
+        jtfTitleStr.addKeyListener(new RefreshHwndAction());
+        jtfSimilar.addKeyListener(new SimilarRefreshAction());
+
+
+        //table render
+        DefaultTableModel tableModel = new DefaultTableModel(null,columnNames);
+        jtbFires.setModel(tableModel);
+        TableCellRenderer cellRenderer = new ImgPathCellRenderer();
+        jtbFires.getColumnModel().getColumn(1).setCellRenderer(cellRenderer);
+        jtbFires.getColumnModel().getColumn(2).setCellRenderer(cellRenderer);
+        jtbFires.getColumnModel().getColumn(1).setCellEditor(new ImgPathButtonEditor());
+        jtbFires.getColumnModel().getColumn(2).setCellEditor(new ImgPathButtonEditor());
+
 
         //jMenuItem -> boolean & log
         new SelectableButtonToObjFieldBinding(jmiEnableAnalyse, this, "anylyse", new BtnObjFActionListener<Boolean>() {
@@ -198,46 +269,8 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         new SelectableButtonToObjFieldBinding(jmiEnableTableRec, this, "rec_table", new LogBooleanMenuItemAction());
         new SelectableButtonToObjFieldBinding(jmiEnableMousePressing, this, "mouse_press_duration", new LogBooleanMenuItemAction());
         new SelectableButtonToObjFieldBinding(jmiEnableMouseInterval,this,"mouse_press_interval", new LogBooleanMenuItemAction());
-
-        btnTestCapture.addActionListener(new TestCaptureAction());
-        btnTestSample.addActionListener(new TestSampleAction());
-        btnAnalyseDir.addActionListener(new AnalyseDirAction());
-        btnReloadThread.addActionListener(new ReloadThreadAction());
-        btnClearConsole.addActionListener(new ClearConsoleAction());
-
-        jtfHwnd.addKeyListener(new RefreshHwndAction());
-        jtfTitleStr.addKeyListener(new RefreshHwndAction());
-        jtfSimilar.addKeyListener(new SimilarRefreshAction());
-
-        //init property
-        jtaConsole.setEditable(false);
-        jtaConsole.setAutoscrolls(true);
-        jtbFires.setAutoscrolls(true);
-        jtfSimilar.setText(getSimilarityString());
-
-        //table
-        DefaultTableModel tableModel = new DefaultTableModel(null,columnNames);
-        jtbFires.setModel(tableModel);
-        TableCellRenderer cellRenderer = new ImgPathCellRenderer();
-        jtbFires.getColumnModel().getColumn(1).setCellRenderer(cellRenderer);
-        jtbFires.getColumnModel().getColumn(2).setCellRenderer(cellRenderer);
-        jtbFires.getColumnModel().getColumn(1).setCellEditor(new ImgPathButtonEditor());
-        jtbFires.getColumnModel().getColumn(2).setCellEditor(new ImgPathButtonEditor());
-
-        //init instance
-        robot = new Robot();
-        dynamicProcesser = new FileStringRegexDynamicProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd=<value>;");
-        inputJav = new InputJavaCodeBinding(Config.class, dynamicProcesser);
-
-
-        //binding events
-        // start&stop
-        binding = new StartAndStopBinding(btnFireStart, btnFireStop, new BindingCallBack() {
-            @Override
-            public void run() {
-                btnFire.doClick();
-            }
-        });
+        new SelectableButtonToObjFieldBinding(jcbDrawCalcOffset,this,"draw_points_calc_offset", new LogBooleanMenuItemAction());
+        jmiSampleSelect.addActionListener(new MenuSampleSelectAction(root));
 
         //perRect -> absRect
         CommonObjectToObjectFieldBinding perToAbsLeft = new CommonObjectToObjectFieldBinding(offsetPercentage, "left", offset, "x", new ScreenPercentageBindingX());
@@ -252,14 +285,27 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         new TextFObjectFRefershBinding(jtfOffSetRectWidth,offsetPercentage,"width",doubleStringFormatter,perToAbsWidth, new LogOffsetAction());
         new TextFObjectFRefershBinding(jtfOffSetRectLength,offsetPercentage,"height",doubleStringFormatter,perToAbsHeight, new LogOffsetAction());
 
-
         //lazy last
         refreshHwnd();
 
+        //paint main
+        paintMenu();
+        paintUI(root);
         //set style
         SwingUtil.setCommonFrameStyle(this);
 
         childrenInitialEnd();
+    }
+
+    public Point getRealDrawPoint() {
+        Point drawed = new Point();
+        drawed.setX(NumberUtil.parseInt(jtfDrawPointX.getText()));
+        drawed.setY(NumberUtil.parseInt(jtfDrawPointY.getText()));
+        if (jcbDrawCalcOffset.isSelected()) {
+            drawed.setX(drawed.getX() + offset.getX());
+            drawed.setY(drawed.getY() + offset.getY());
+        }
+        return drawed;
     }
 
     public abstract FindSmileDirAnalyser getDirAnalyser() ;
@@ -281,6 +327,7 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         jmnConfigMenu.add(jmiEnableTableRec);
         jmnConfigMenu.add(jmiEnableMousePressing);
         jmnConfigMenu.add(jmiEnableMouseInterval);
+        jmnConfigMenu.add(jmiSampleSelect);
 
 
         this.jmbMenuBar.add(jmnConfigMenu);
@@ -289,7 +336,7 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
     private void paintUI(Container root) {
         final JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(4, 2));
+        formPanel.setLayout(new GridLayout(5, 2));
         formPanel.add(jlbHwnd);
         formPanel.add(jtfHwnd);
         formPanel.add(jlbTitleStr);
@@ -317,6 +364,22 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
         formPanel.add(rectOffSet);
         formPanel.add(rectOffBtns);
+
+        //描点行
+        final JPanel drawPointsLeftRow = new JPanel(new GridLayout(1,4));
+        drawPointsLeftRow.add(new JLabel("X:"));
+        drawPointsLeftRow.add(jtfDrawPointX);
+        drawPointsLeftRow.add(new JLabel("Y:"));
+        drawPointsLeftRow.add(jtfDrawPointY);
+
+        final JPanel drawPointsRightRow = new JPanel(new GridLayout(1,3));
+        drawPointsRightRow.add(jcbDrawCalcOffset);
+        drawPointsRightRow.add(btnDrawPoints);
+        drawPointsRightRow.add(btnDrawPointsGetColor);
+
+        formPanel.add(drawPointsLeftRow);
+        formPanel.add(drawPointsRightRow);
+
 
 //        final JPanel actionPanel = new JPanel(new FlowLayout());
         final JPanel actionPanel = new JPanel(new GridLayout(3,4));
@@ -648,9 +711,9 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     private class TestSampleAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            BMP bmp = new BMP(PathUtil.buildPath(sample_path,"gaming.bmp"));
-            File file = DrawUtil.drawRect(bmp, offset, new Color(255, 0, 0));
-            FileUtil.openPicture(file);
+            BMP bmp = new BMP(PathUtil.buildPath(sample_path, samplePicName));
+            generatedSampleFile = DrawUtil.drawRect(bmp, offset, new Color(255, 0, 0));
+            FileUtil.openPicture(generatedSampleFile);
         }
     }
 
@@ -792,6 +855,61 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         @Override
         public void actionPerformed(AbstractButton com, Boolean val, Object obj, String field) {
             log(com.getText()+":"+ getBooleanStr(val));
+        }
+    }
+
+    public boolean isDraw_points_calc_offset() {
+        return draw_points_calc_offset;
+    }
+
+    public void setDraw_points_calc_offset(boolean draw_points_calc_offset) {
+        this.draw_points_calc_offset = draw_points_calc_offset;
+    }
+
+    private class TestDrawPointsAction implements ActionListener {
+        private final Container root;
+
+        public TestDrawPointsAction(Container root) {
+            this.root = root;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (generatedSampleFile == null) {
+                JOptionPane.showMessageDialog(root, "请先测试样本", "错误", JOptionPane.ERROR_MESSAGE);
+            } else {
+                BMP bmp = new BMP(generatedSampleFile);
+                Point drawed = getRealDrawPoint();
+                generatedSampleFile = DrawUtil.drawPointCross(bmp, drawed, CLICK_POINT_LENGTH, new Color(255, 0, 0));
+                FileUtil.openPicture(generatedSampleFile);
+
+            }
+
+        }
+    }
+
+    private class MenuSampleSelectAction implements ActionListener {
+        private final Container root;
+
+        public MenuSampleSelectAction(Container root) {
+            this.root = root;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String s = JOptionPane.showInputDialog(root, "样本图片名", samplePicName);
+            if (s!= null) {
+               File file = new File( PathUtil.buildPath(sample_path, s));
+                if (file.exists()&&file.isFile()) {
+                    samplePicName = s;
+                    log("使用:" + s + "作为新的样本图片");
+                } else {
+                    JOptionPane.showMessageDialog(root,"该样本图片不存在");
+                }
+            }
+//                JDialog dialog = new JDialog();
+//                dialog.setVisible(true);
+
         }
     }
 }

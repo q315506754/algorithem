@@ -20,6 +20,22 @@ public class Color {
     public Color() {
     }
 
+    public static int getOffSet() {
+        return offSet;
+    }
+
+    public int getR() {
+        return r;
+    }
+
+    public int getG() {
+        return g;
+    }
+
+    public int getB() {
+        return b;
+    }
+
     private boolean withinOffset(int x) {
         return Math.abs(x) <= offSet;
     }
