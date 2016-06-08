@@ -4,7 +4,6 @@ import com.jiangli.common.utils.SwingUtil;
 import com.jiangli.graphics.common.RectPercentage;
 import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.jni.app.richman9.smallgame.Analyser;
-import com.jiangli.jni.app.richman9.smallgame.findsmile.FindSmileJavaCVThreadMathcer;
 import com.jiangli.jni.app.richman9.smallgame.AnylyseAndClickWindow;
 import com.jiangli.jni.common.Config;
 
@@ -23,7 +22,7 @@ public class ClickPointsWindow extends AnylyseAndClickWindow {
 
     @Override
     public BMPMatcher getBMPMatcher() {
-        return new FindSmileJavaCVThreadMathcer();
+        return new ClickPointsBMPMatcher();
     }
 
     @Override
@@ -55,4 +54,5 @@ public class ClickPointsWindow extends AnylyseAndClickWindow {
     public static void main(String[] args) {
         ClickPointsWindow window = new ClickPointsWindow();
     }
+
 }

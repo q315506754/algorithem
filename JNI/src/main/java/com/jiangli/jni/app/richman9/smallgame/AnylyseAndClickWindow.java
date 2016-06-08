@@ -9,7 +9,6 @@ import com.jiangli.graphics.common.Point;
 import com.jiangli.graphics.impl.RmoveDuplicatePointFilter;
 import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.graphics.inf.PointFilter;
-import com.jiangli.jni.app.richman9.smallgame.findsmile.FindSmileDirAnalyser;
 import com.jiangli.jni.common.Config;
 import com.jiangli.jni.common.DrawUtil;
 import com.jiangli.jni.common.HwndUtil;
@@ -113,15 +112,15 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     private boolean rec_table = false;
     private boolean use_offSet = true;
     private boolean mouse_press_duration= true;
-    private boolean mouse_press_interval= true;
+    private boolean mouse_press_interval= false;
 
     private com.jiangli.graphics.common.Color MATCH_COLOR = new Color(0,0,0);
     private Color CLICK_POINT_COLOR = new Color(255,0,0);
     private int CLICK_POINT_LENGTH = 50;
 
     private Robot robot;
-    private Rect offset = new Rect(580,210,400,400);
-    protected RectPercentage offsetPercentage = new RectPercentage(27.00,18.50,18.00,32.00);
+    private Rect offset = new Rect(580,210,400,400);//截图位移
+    protected RectPercentage offsetPercentage = new RectPercentage(27.00,18.50,18.00,32.00);//截图位移 百分比
     private PointFilter pointFilter = new RmoveDuplicatePointFilter(20);
     private JMenuItem jmiEnableAnalyse = new JCheckBoxMenuItem("开启分析");
     private JMenuItem jmiEnableAnalyseDrawCross = new JCheckBoxMenuItem("开启分析-描线");
@@ -547,6 +546,8 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
                 timeAnalyser.push("get BMP");
 
+                //获得相对于位图的点击点
+                //应该产生一个可以修改的副本
                 List<Point> points = mathcer.match(bmp, similartity);
                 timeAnalyser.push("match points================>"+points.size());
 
@@ -584,11 +585,18 @@ public abstract class AnylyseAndClickWindow extends JFrame {
                 logger.debug("clickPoints:"+points.size());
 
                 //convert offset before click
+                //将 小图中的相对点 转成 相对于hwnd的点击目标
                 if (getOffSet() != null) {
                     for (Point point : points) {
-                        point.setX(point.getX() + offset.getX());
-                        point.setY(point.getY() + offset.getY());
+                        int oldX = point.getX();
+                        point.setX(oldX + offset.getX());
+                        int oldY = point.getY();
+                        point.setY(oldY + offset.getY());
+
+                        logger.debug("offset point("+oldX+","+oldY+") -> point("+point.getX()+","+point.getY()+")");
                     }
+                    logger.debug("used offsetX:"+offset.getX());
+                    logger.debug("used offsetY:"+offset.getY());
                 }
                 
                 timeAnalyser.push("convert offset================>"+points.size());

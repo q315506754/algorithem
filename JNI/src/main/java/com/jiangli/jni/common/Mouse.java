@@ -38,6 +38,7 @@ public class Mouse {
 
         com.jiangli.jni.core.struct.Rect r = Window.getRect(hWnd);
 
+        //相对于hwnd point 转成  相对于windows 的point
         robot.mouseMove(r.left+ point.getX(),r.top+ point.getY());
 //        robot.delay(5);
         robot.mousePress(InputEvent.BUTTON1_MASK);

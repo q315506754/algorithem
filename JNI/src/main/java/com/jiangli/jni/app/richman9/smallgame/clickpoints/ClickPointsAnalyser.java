@@ -8,7 +8,6 @@ import com.jiangli.graphics.impl.RmoveDuplicatePointFilter;
 import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.graphics.inf.PointFilter;
 import com.jiangli.jni.app.richman9.smallgame.AbsractAnalyser;
-import com.jiangli.jni.app.richman9.smallgame.Analyser;
 import com.jiangli.jni.common.Config;
 import com.jiangli.jni.common.DrawUtil;
 
@@ -21,8 +20,8 @@ import java.util.List;
  *         CreatedTime  2016/6/8 0008 16:15
  */
 public class ClickPointsAnalyser extends AbsractAnalyser {
-//    private BMPMatcher mathcer = new ClickPointsBMPMatcher();
-    private BMPMatcher mathcer = new ClickPointsBMPMatcher(new Point(300,200));
+    private BMPMatcher mathcer = new ClickPointsBMPMatcher();
+//    private BMPMatcher mathcer = new ClickPointsBMPMatcher(new Point(300,200));
 
     public ClickPointsAnalyser() {
         super(Config.clickpoints_base_path);

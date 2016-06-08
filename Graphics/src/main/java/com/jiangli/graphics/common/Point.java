@@ -1,6 +1,6 @@
 package com.jiangli.graphics.common;
 
-public class Point {
+public class Point implements Cloneable{
     private int x;
     private int y;
 
@@ -11,6 +11,11 @@ public class Point {
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    @Override
+    public Point clone() throws CloneNotSupportedException {
+        return (Point)super.clone();
     }
 
     public int getX() {

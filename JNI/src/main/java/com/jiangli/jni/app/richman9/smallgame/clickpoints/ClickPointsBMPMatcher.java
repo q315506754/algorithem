@@ -1,18 +1,16 @@
 package com.jiangli.jni.app.richman9.smallgame.clickpoints;
 
+import com.jiangli.common.utils.ArrayUtil;
+import com.jiangli.common.utils.RandomUtil;
 import com.jiangli.graphics.common.BMP;
 import com.jiangli.graphics.common.Color;
 import com.jiangli.graphics.common.Point;
-import com.jiangli.graphics.common.Rect;
 import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.jni.app.richman9.smallgame.PointColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Jiangli
@@ -29,7 +27,7 @@ public class ClickPointsBMPMatcher implements BMPMatcher {
     private Point[][] checkPoints  = new Point[3][] ;
     private PointLayout[] layouts;
 
-    class PointLayout{
+    public static class PointLayout{
         Point firstOffset;
         Point cellInterval;
         Point cell;
@@ -59,9 +57,7 @@ public class ClickPointsBMPMatcher implements BMPMatcher {
         int endIdx = type_4_4;
         int totalIdx = endIdx - startIdx + 1;
         features = new PointFeatures[totalIdx];
-        for (int i = startIdx; i <= endIdx; i++) {
-            features[i] = new PointFeatures();
-        }
+        ArrayUtil.init(features,PointFeatures.class);
 
         features[type_2_2].addFeature(setPointOffSet(new Point(250,220)),new Color(86,164,119));
         features[type_2_2].addFeature(setPointOffSet(new Point(240,220)),new Color(85,162,118));
@@ -72,9 +68,8 @@ public class ClickPointsBMPMatcher implements BMPMatcher {
 
         // checkPoints init
         layouts = new PointLayout[totalIdx];
-        for (int i = startIdx; i <= endIdx; i++) {
-            layouts[i] = new PointLayout();
-        }
+        ArrayUtil.init(layouts,PointLayout.class);
+
         layouts[type_2_2].firstOffset = setPointOffSet(new Point(258,85));
         layouts[type_2_2].cellInterval = new Point(8,8);
         layouts[type_2_2].cell = new Point(110,110);
@@ -89,7 +84,7 @@ public class ClickPointsBMPMatcher implements BMPMatcher {
 
         // checkPoints init
         for (int i = startIdx; i <= endIdx; i++) {
-            int grid = i+2;
+            int grid = getGrid(i);
             int cells = grid * grid;
             checkPoints[i] = new Point[cells];
 
@@ -104,11 +99,15 @@ public class ClickPointsBMPMatcher implements BMPMatcher {
                 }
             }
 
-            logger.debug(Arrays.toString(checkPoints[i]));
-
+            logger.debug("checkPoints["+i+"]:"+Arrays.toString(checkPoints[i]));
         }
 
 
+
+    }
+
+    private int getGrid(int gridType) {
+        return gridType+2;
     }
 
     public Point setPointOffSet(Point orgPoint) {
@@ -144,27 +143,71 @@ public class ClickPointsBMPMatcher implements BMPMatcher {
 
     public List<PointColor> getPointColor(BMP bigImg,int gridType) {
         Point[] checkPoint = checkPoints[gridType];
+
         List<PointColor> ret = new ArrayList<>(checkPoint.length);
 
         int colorIdx = 0;
+        for (Point eachCheckPoint : checkPoint) {
+            try {
+                //important
+                //because may be altered later...
+                Point clone = eachCheckPoint.clone();
 
-        for (Point point : checkPoint) {
-            PointColor pointColor = new PointColor(point,bigImg.getColorObj(point));
-            ret.add(pointColor);
+                PointColor pointColor = new PointColor(clone,bigImg.getColorObj(clone));
+                ret.add(pointColor);
 
-            //set type
-            for (PointColor color : ret) {
-                if (pointColor.getColor().equals(color.getColor())) {
-                    pointColor.setType(color.getType());
+                //set type
+                for (PointColor existPointColor : ret) {
+                    if (pointColor.getColor().equals(existPointColor.getColor())) {
+                        pointColor.setType(existPointColor.getType());
+                    }
                 }
-            }
 
-            if (pointColor.getType() < 0) {
-                pointColor.setType(colorIdx++);
+                if (pointColor.getType() < 0) {
+                    pointColor.setType(colorIdx++);
+                }
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
             }
         }
 
         return ret;
+    }
+
+    public void retainMaxFrequencePointColor(List<PointColor> list, int gridType) {
+        int grid = getGrid(gridType);
+        int maxTypes = grid * grid;
+        int[]  fre= new int[maxTypes];
+        ArrayUtil.init(fre,-1);
+
+        for (PointColor pointColor : list) {
+            fre[pointColor.getType()]++;
+        }
+
+
+        //calc maxTypeFre's type
+        int maxType = 0;
+        int maxTypeFre = fre[maxType];
+
+        for (int i = 0; i < fre.length; i++) {
+            int curFreq = fre[i];
+
+            if (curFreq > maxTypeFre) {
+                maxType = i;
+                maxTypeFre = curFreq;
+            }
+        }
+
+
+        //retain
+        Iterator<PointColor> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            PointColor next = iterator.next();
+            if (next.getType() != maxType) {
+                iterator.remove();
+            }
+        }
+
     }
 
     @Override
@@ -174,14 +217,28 @@ public class ClickPointsBMPMatcher implements BMPMatcher {
         logger.debug("cur file:"+bigImg.getFile());
         logger.debug("gridType:"+gridType);
 
-        Point[] checkPoint = checkPoints[gridType];
-        for (Point point : checkPoint) {
-            points.add(point);
-        }
+
 
         List<PointColor> pointColor = getPointColor(bigImg, gridType);
         logger.debug("pointColor:"+pointColor);
 
+        retainMaxFrequencePointColor(pointColor,gridType);
+        logger.debug("pointColor after retained:"+pointColor);
+
+//        Point[] checkPoint = checkPoints[gridType];
+//        for (Point point : checkPoint) {
+//            points.add(point);
+//        }
+        PointColor randomOne = RandomUtil.getRandomOne(pointColor);
+//        PointColor randomOne = pointColor.get(0);
+        logger.debug("randomOne:"+randomOne);
+
+        points.add(randomOne.getPoint());
+
+
+//        for (PointColor color : pointColor) {
+//            points.add(color.getPoint());
+//        }
 
         return points;
     }
