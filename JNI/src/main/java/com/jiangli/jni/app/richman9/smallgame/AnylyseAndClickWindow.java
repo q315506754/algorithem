@@ -308,7 +308,7 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         return drawed;
     }
 
-    public abstract FindSmileDirAnalyser getDirAnalyser() ;
+    public abstract Analyser getDirAnalyser() ;
 
     public abstract BMPMatcher getBMPMatcher();
 

@@ -1,6 +1,8 @@
 package com.jiangli.jni.app.richman9.smallgame;
 
 import com.jiangli.common.utils.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ImgPathButtonEditor extends DefaultCellEditor {
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * serialVersionUID

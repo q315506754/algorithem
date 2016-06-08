@@ -1,4 +1,4 @@
-package com.jiangli.jni.app.impl;
+package com.jiangli.jni.app.richman9.smallgame.findsmile;
 
 import com.jiangli.common.utils.FileUtil;
 import com.jiangli.graphics.impl.JavaCVImgMatcher;

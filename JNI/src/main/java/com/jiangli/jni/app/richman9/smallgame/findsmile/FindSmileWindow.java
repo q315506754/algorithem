@@ -3,7 +3,7 @@ package com.jiangli.jni.app.richman9.smallgame.findsmile;
 import com.jiangli.common.utils.SwingUtil;
 import com.jiangli.graphics.common.RectPercentage;
 import com.jiangli.graphics.inf.BMPMatcher;
-import com.jiangli.jni.app.impl.FindSmileJavaCVThreadMathcer;
+import com.jiangli.jni.app.richman9.smallgame.Analyser;
 import com.jiangli.jni.app.richman9.smallgame.AnylyseAndClickWindow;
 import com.jiangli.jni.common.Config;
 
@@ -14,7 +14,7 @@ import com.jiangli.jni.common.Config;
  */
 public class FindSmileWindow extends AnylyseAndClickWindow {
     @Override
-    public FindSmileDirAnalyser getDirAnalyser() {
+    public Analyser getDirAnalyser() {
         return new FindSmileDirAnalyser();
     }
 

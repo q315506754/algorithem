@@ -135,6 +135,9 @@ public class BMP {
         return r + (g << 8) + (b << 16);
     }
 
+    public Color getColorObj(Point point) {
+        return getColorObj(point.getX(),point.getY());
+    }
     public Color getColorObj(int x, int y) {
         Color ret = new Color();
         // BMP图要求每行字节数为4的倍数,不够则填充1-3个无用字节

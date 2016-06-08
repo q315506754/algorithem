@@ -11,7 +11,7 @@ import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.graphics.inf.PointFilter;
 import com.jiangli.graphics.javacv.TemplateMatch;
 import com.jiangli.graphics.match.GraphicMatcher;
-import com.jiangli.jni.app.impl.FindSmileJavaCVThreadMathcer;
+import com.jiangli.jni.app.richman9.smallgame.findsmile.FindSmileJavaCVThreadMathcer;
 import com.jiangli.jni.common.Config;
 import com.jiangli.jni.common.DrawUtil;
 import com.jiangli.jni.common.HwndUtil;
