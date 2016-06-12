@@ -106,12 +106,13 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
     private final boolean capture = true;//不能改为false
 
-    private boolean anylyse = true;
+    private boolean anylyse = false;
+//    private boolean anylyse = true;
     private boolean any_drawLine = true;
     private boolean any_drawPoints = true;
     private boolean rec_table = false;
     private boolean use_offSet = true;
-    private boolean mouse_press_duration= true;
+    private boolean mouse_press_duration= false;
     private boolean mouse_press_interval= false;
 
     private com.jiangli.graphics.common.Color MATCH_COLOR = new Color(0,0,0);

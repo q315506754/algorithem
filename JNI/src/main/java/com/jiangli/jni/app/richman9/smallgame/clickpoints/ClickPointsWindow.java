@@ -40,8 +40,7 @@ public class ClickPointsWindow extends AnylyseAndClickWindow {
 //        offsetPercentage = new RectPercentage(25.50,20.50,19.50,34.00); //small pic
         offsetPercentage = new RectPercentage(15.60,18.50,40.50,37.00);  //middle
         btnFire.setText("点点点");
-        setMousePressDuration(30,100);
-
+        setMousePressDuration(5,30);
     }
 
     @Override

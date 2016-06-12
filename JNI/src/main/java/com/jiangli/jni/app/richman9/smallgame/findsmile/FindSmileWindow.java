@@ -37,7 +37,7 @@ public class FindSmileWindow extends AnylyseAndClickWindow {
     protected void childrenInitialStart() {
         offsetPercentage = new RectPercentage(27.00,18.50,18.00,32.00);
         btnFire.setText("点击笑脸");
-        setMousePressDuration(30,100);
+        setMousePressDuration(5,30);
     }
 
     @Override
