@@ -13,7 +13,9 @@
 
     <modules>
         <module>ByteCode</module>
+        <module>Cache</module>
         <module>Common</module>
+        <module>DataStructure</module>
         <module>Graphics</module>
         <module>Hack</module>
         <module>JNI</module>
@@ -25,6 +27,7 @@
         <module>SOA</module>
         <module>Sort</module>
         <module>Spring</module>
+        <module>Test</module>
     </modules>
 
     <repositories>
