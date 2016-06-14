@@ -18,6 +18,7 @@
         <module>DataStructure</module>
         <module>Graphics</module>
         <module>Hack</module>
+        <module>JDK</module>
         <module>JNI</module>
         <module>Maven</module>
         <module>Memory</module>
