@@ -1,0 +1,30 @@
+memcached作为高速运行的分布式缓存服务器，具有以下的特点。
+· 协议简单
+· 基于libevent的事件处理
+· 内置内存存储方式
+· memcached不互相通信的分布式
+
+协议
+$ telnet localhost 11211
+Trying 127.0.0.1
+Connected to localhost.localdomain (127.0.0.1).
+Escape character is '^]'.
+set foo 0 0 3 （保存命令）
+bar （数据）
+STORED （结果）
+get foo （取得命令）
+VALUE foo 0 3 （数据）
+bar （数据）
+
+事件处理
+libevent
+
+存储方式
+内存存储空间
+重启操作系统会导致全部数据消失
+基于LRU(Least Recently Used)算法自动删除不使用的缓存
+
+通信分布式
+各个memcached不会互相通信以共享信息
+分布式取决于客户端的实现
+
