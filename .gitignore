@@ -7,3 +7,6 @@ target
 buildresult/*
 .idea
 out
+
+!*.exe
+!*.pdb
