@@ -80,7 +80,7 @@
         <commons-io-version>1.2</commons-io-version>
         <httpcore-version>4.2.3</httpcore-version>
         <httpmime-vesion>4.1.3</httpmime-vesion>
-        <httpclient-version>4.2.1-atlassian-2</httpclient-version>
+        <!--<httpclient-version>4.2.1-atlassian-2</httpclient-version>-->
         <commons-httpclient-version>3.0</commons-httpclient-version>
     </properties>
 
@@ -154,22 +154,7 @@
                 <version>1.1.1</version>
                 <classifier>javadoc</classifier>
             </dependency>
-            <!-- httpclient -->
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.2.1-atlassian-2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpcore</artifactId>
-                <version>4.2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>3.1</version>
-            </dependency>
+
 
 
             <dependency>
@@ -321,17 +306,36 @@
                 <version>1.2.16</version>
             </dependency>
 
-            <!-- http request -->
+            <!-- httpclient -->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.2.1-atlassian-2</version>
+                <version>4.3.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.2.1</version>
             </dependency>
             <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>3.1</version>
             </dependency>
+
+            <!-- http request -->
+            <!--<dependency>-->
+                <!--<groupId>org.apache.httpcomponents</groupId>-->
+                <!--<artifactId>httpclient</artifactId>-->
+                <!--<version>4.2.1-atlassian-2</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>commons-httpclient</groupId>-->
+                <!--<artifactId>commons-httpclient</artifactId>-->
+                <!--<version>3.1</version>-->
+            <!--</dependency>-->
+
+
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
