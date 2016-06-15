@@ -16,6 +16,7 @@
         <module>Cache</module>
         <module>Common</module>
         <module>DataStructure</module>
+        <module>Document</module>
         <module>Graphics</module>
         <module>Hack</module>
         <module>JDK</module>
