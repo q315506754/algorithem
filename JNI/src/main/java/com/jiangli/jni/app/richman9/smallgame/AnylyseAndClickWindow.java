@@ -29,7 +29,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +39,7 @@ import java.util.List;
  *
  *         CreatedTime  2016/6/1 0001 13:26
  */
-public abstract class AnylyseAndClickWindow extends JFrame {
+public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndClickWindow{
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected String project_base;
     protected String anylyse_path;
@@ -50,6 +52,7 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     protected int mouse_press_duration_end=100;
     protected int mouse_press_interval_start = 10;
     protected int mouse_press_interval_end = 300;
+    protected List<PointsListener> pointsListeners=new ArrayList<>();
 
     private JTextField jtfHwnd = new JTextField(Config.test_hWnd+"");
     private JLabel jlbHwnd = new JLabel("句柄");
@@ -64,6 +67,7 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
     private File generatedSampleFile;
     private String samplePicName = "gaming.bmp";
+
 
     private String getSimilarityString() {
         return NumberUtil.getDoubleString(similartity,8);
@@ -144,11 +148,25 @@ public abstract class AnylyseAndClickWindow extends JFrame {
     private JButton btnDrawPoints = new JButton("描点");
     private JButton btnDrawPointsGetColor = new JButton("取色");
 
+
+    //RECORD
+    private TimeAnalyser timeAnalyser;
+    private String[] record;
+    private BMP capturedBPM;
+    private int captureMode;
+
     protected void setMousePressDuration(int start, int end){
         this.mouse_press_duration_start = start;
         this.mouse_press_duration_end = end;
     }
 
+
+    @Override
+    public String getCaptureFilePath() {
+        return captured_path;
+    }
+
+    @Override
     public void log(String msg) {
 //        jtaConsole.setText(msg+"\r\n"+jtaConsole.getText());
         jtaConsole.setText(jtaConsole.getText() + "\r\n" + msg);
@@ -518,6 +536,107 @@ public abstract class AnylyseAndClickWindow extends JFrame {
         }
     }
 
+    @Override
+    public void intialProcess() {
+        timeAnalyser = new TimeAnalyser();
+        record = new String[3];
+    }
+
+    @Override
+    public void accept(List<Point> points) {
+        timeAnalyser.push("match points================>"+points.size());
+        //remove duplicate
+        pointFilter.filter(points);
+        timeAnalyser.push("remove duplicate ... rest================>"+points.size());
+
+        if (anylyse) {
+            logger.debug("anylyse enabled");
+
+            if (any_drawPoints) {
+                logger.debug("any_drawPoints enabled");
+                //draw point
+                for (Point point : points) {
+                    DrawUtil.drawPointCross(capturedBPM, point, CLICK_POINT_LENGTH, CLICK_POINT_COLOR);
+                }
+                timeAnalyser.push("[√]drawPointCross");
+            }
+
+
+            //write
+            try {
+                File outFile = new File(anylyse_path + "\\" + capturedBPM.getFile().getName());
+                DrawUtil.writeFile(capturedBPM, outFile);
+                timeAnalyser.push("[√]writeFile after drawing");
+                timeAnalyser.pushStringOnly(outFile.getAbsolutePath());
+                record[2] = outFile.getAbsolutePath();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+        logger.debug("start clicking..");
+        logger.debug("clickPoints:"+points.size());
+
+        //convert offset before click
+        //将 小图中的相对点 转成 相对于hwnd的点击目标
+        if (getCaptureRect() != null) {
+            for (Point point : points) {
+                int oldX = point.getX();
+                point.setX(oldX + offset.getX());
+                int oldY = point.getY();
+                point.setY(oldY + offset.getY());
+
+                logger.debug("offset point("+oldX+","+oldY+") -> point("+point.getX()+","+point.getY()+")");
+            }
+            logger.debug("used offsetX:"+offset.getX());
+            logger.debug("used offsetY:"+offset.getY());
+        }
+
+        timeAnalyser.push("convert offset================>"+points.size());
+
+
+        //click
+        int pCount = points.size();
+        try {
+            for (Point point : points) {
+                if (mouse_press_duration) {
+                    Mouse.pressByRobot(hWnd,robot,point,mouse_press_duration_start,mouse_press_duration_end);
+                }else{
+                    Mouse.pressByRobot(hWnd,robot,point);
+                }
+
+
+                if (--pCount>0) {
+                    if (mouse_press_interval) {
+                        if(LogicUtil.checkStartEnd(mouse_press_interval_start,mouse_press_interval_end)){
+                            Thread.sleep(RandomUtil.getRandomNum(mouse_press_interval_start,mouse_press_interval_end));
+                        }
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        record[0] = points.size()+"";
+
+        timeAnalyser.push("click points================>"+points.size() + " "+points);
+
+        //log
+        log(timeAnalyser.analyse());
+
+
+        //record
+        if (rec_table) {
+            DefaultTableModel model = (DefaultTableModel) jtbFires.getModel();
+            model.addRow(record);
+        }
+
+
+
+    }
+
     private class BtnFireAction implements ActionListener {
         private final Container root;
 
@@ -527,114 +646,23 @@ public abstract class AnylyseAndClickWindow extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            TimeAnalyser timeAnalyser = new TimeAnalyser();
+            intialProcess();
 //            List<String> record = new ArrayList<>();
-            String[] record = new String[3];
 
             try {
                 btnFire.setEnabled(false);
 
-                BMP bmp = null;
-                if (capture) {
-                    logger.debug("capture enabled");
-                    File file = HwndUtil.shortCut(hWnd, captured_path,getOffSet());
-                    timeAnalyser.setTitle(file.getAbsolutePath());
-                    record[1] = file.getAbsolutePath();
-                    bmp =  new BMP(file);
-                } else {
-                    bmp =HwndUtil.captureAndGetBMP(hWnd,getOffSet());
-                }
-
+                BMP bmp = captureBMP();
                 timeAnalyser.push("get BMP");
 
                 //获得相对于位图的点击点
                 //应该产生一个可以修改的副本
                 List<Point> points = mathcer.match(bmp, similartity);
-                timeAnalyser.push("match points================>"+points.size());
 
-                //remove duplicate
-                pointFilter.filter(points);
-                timeAnalyser.push("remove duplicate ... rest================>"+points.size());
+                accept(points);
 
-                if (anylyse) {
-                    logger.debug("anylyse enabled");
-
-                    if (any_drawPoints) {
-                        logger.debug("any_drawPoints enabled");
-                        //draw point
-                        for (Point point : points) {
-                            DrawUtil.drawPointCross(bmp, point, CLICK_POINT_LENGTH, CLICK_POINT_COLOR);
-                        }
-                        timeAnalyser.push("[√]drawPointCross");
-                    }
-
-
-                    //write
-                    try {
-                        File outFile = new File(anylyse_path + "\\" + bmp.getFile().getName());
-                        DrawUtil.writeFile(bmp, outFile);
-                        timeAnalyser.push("[√]writeFile after drawing");
-                        timeAnalyser.pushStringOnly(outFile.getAbsolutePath());
-                        record[2] = outFile.getAbsolutePath();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                }
-
-                logger.debug("start clicking..");
-                logger.debug("clickPoints:"+points.size());
-
-                //convert offset before click
-                //将 小图中的相对点 转成 相对于hwnd的点击目标
-                if (getOffSet() != null) {
-                    for (Point point : points) {
-                        int oldX = point.getX();
-                        point.setX(oldX + offset.getX());
-                        int oldY = point.getY();
-                        point.setY(oldY + offset.getY());
-
-                        logger.debug("offset point("+oldX+","+oldY+") -> point("+point.getX()+","+point.getY()+")");
-                    }
-                    logger.debug("used offsetX:"+offset.getX());
-                    logger.debug("used offsetY:"+offset.getY());
-                }
-                
-                timeAnalyser.push("convert offset================>"+points.size());
-
-
-                //click
-                int pCount = points.size();
-                for (Point point : points) {
-                    if (mouse_press_duration) {
-                        Mouse.pressByRobot(hWnd,robot,point,mouse_press_duration_start,mouse_press_duration_end);
-                    }else{
-                        Mouse.pressByRobot(hWnd,robot,point);
-                    }
-
-
-                    if (--pCount>0) {
-                        if (mouse_press_interval) {
-                            if(LogicUtil.checkStartEnd(mouse_press_interval_start,mouse_press_interval_end)){
-                                Thread.sleep(RandomUtil.getRandomNum(mouse_press_interval_start,mouse_press_interval_end));
-                            }
-                        }
-                    }
-
-                }
-                record[0] = points.size()+"";
-
-                timeAnalyser.push("click points================>"+points.size() + " "+points);
-
-                //log
-                log(timeAnalyser.analyse());
-
-
-                //record
-                if (rec_table) {
-                    DefaultTableModel model = (DefaultTableModel) jtbFires.getModel();
-                    model.addRow(record);
-                }
+                //fire event
+                pointsListeners.stream().forEach((listener)->listener.accept(points));
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -643,6 +671,41 @@ public abstract class AnylyseAndClickWindow extends JFrame {
                 btnFire.setEnabled(true);
             }
         }
+    }
+
+    @Override
+    public BMP captureBMP(int mode) throws IOException {
+        BMP bmp;
+
+        captureMode = mode;
+
+        Rect l_offSet = getCaptureRect();
+
+        if (capture) {
+            logger.debug("capture enabled");
+            File file = HwndUtil.shortCut(hWnd, captured_path, l_offSet);
+            timeAnalyser.setTitle(file.getAbsolutePath());
+            record[1] = file.getAbsolutePath();
+            bmp =  new BMP(file);
+        } else {
+            bmp =HwndUtil.captureAndGetBMP(hWnd,l_offSet);
+        }
+        capturedBPM = bmp;
+        return bmp;
+    }
+
+    private Rect getCaptureRect() {
+        Rect l_offSet = null;
+        switch (captureMode) {
+            case MODE_DEFAULT:
+            case MODE_PARTIAL:l_offSet = getOffSet();break;
+        }
+        return l_offSet;
+    }
+
+    @Override
+    public BMP captureBMP() throws IOException {
+        return captureBMP(Capturable.MODE_PARTIAL);
     }
 
     private class EnableAnalyseAction implements ActionListener {

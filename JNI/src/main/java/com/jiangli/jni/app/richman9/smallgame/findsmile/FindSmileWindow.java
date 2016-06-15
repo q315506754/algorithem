@@ -5,6 +5,7 @@ import com.jiangli.graphics.common.RectPercentage;
 import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.jni.app.richman9.smallgame.Analyser;
 import com.jiangli.jni.app.richman9.smallgame.AnylyseAndClickWindow;
+import com.jiangli.jni.app.richman9.smallgame.continueModule.ClickContinueBtnPointsListener;
 import com.jiangli.jni.common.Config;
 
 /**
@@ -38,6 +39,7 @@ public class FindSmileWindow extends AnylyseAndClickWindow {
         offsetPercentage = new RectPercentage(27.00,18.50,18.00,32.00);
         btnFire.setText("点击笑脸");
         setMousePressDuration(5,30);
+        pointsListeners.add(new ClickContinueBtnPointsListener(this));
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.jiangli.common.utils.PathUtil;
  *         CreatedTime  2016/6/1 0001 13:27
  */
 public class Config {
-    public  static int test_hWnd=329300;
+    public  static int test_hWnd=722690;
     public static float smileSimilartity= 0.995f;
     public static String project_path = PathUtil.getProjectPath("JNI").getPath(PathUtil.PATH_SRC_MAIN_RESOURCES);
 
@@ -22,4 +22,11 @@ public class Config {
 
 
     public static String clickpoints_base_path = PathUtil.buildPath(project_path, "clickpoints");
+
+    //depracated
+    public static String continueModule_base_path = PathUtil.buildPath(project_path, "continue");
+    public static String continueModule_voice= PathUtil.buildPath(continueModule_base_path, "voice");
+    public static String continueModule_voice_alarm = PathUtil.buildPath(continueModule_voice, "alarm.mp3");
+    public static String continueModule_path_charac = PathUtil.buildPath(continueModule_base_path, "charac");
+
 }
