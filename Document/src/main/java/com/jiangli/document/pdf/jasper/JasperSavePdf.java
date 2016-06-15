@@ -6,9 +6,7 @@ import net.sf.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -23,7 +21,8 @@ public class JasperSavePdf {
         String buildPath = PathUtil.buildPath(document, "src/main/java/com/jiangli/document/pdf/jasper");
         System.out.println(buildPath);
 
-        String pdfFilePath = "C:\\Users\\Administrator\\Desktop\\t\\";
+//        String pdfFilePath = "C:\\Users\\Administrator\\Desktop\\t\\";
+        String pdfFilePath = buildPath;
         String pdfName = "saved.pdf";
         String modelName = "FAX_RES_ToHotelOrder.jrxml";
         String pdfPath = pdfFilePath + pdfName;

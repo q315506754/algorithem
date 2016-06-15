@@ -26,7 +26,8 @@ public class Config {
     //depracated
     public static String continueModule_base_path = PathUtil.buildPath(project_path, "continue");
     public static String continueModule_voice= PathUtil.buildPath(continueModule_base_path, "voice");
-    public static String continueModule_voice_alarm = PathUtil.buildPath(continueModule_voice, "alarm.mp3");
+//    public static String continueModule_voice_alarm = PathUtil.buildPath(continueModule_voice, "alarm.wav");
+    public static String continueModule_voice_alarm = PathUtil.buildPath(continueModule_voice, "main.wav");
     public static String continueModule_path_charac = PathUtil.buildPath(continueModule_base_path, "charac");
 
 }
