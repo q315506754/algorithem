@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="0" isIgnorePagination="true" uuid="54fb093e-86a2-458c-b7c8-408902e744cc">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="4"/>
+	<parameter name="orderId" class="java.lang.String"/>
+	<parameter name="toName" class="java.lang.String"/>
+	<parameter name="toTel" class="java.lang.String"/>
+	<parameter name="toFax" class="java.lang.String"/>
+	<parameter name="toCompany" class="java.lang.String"/>
+	<parameter name="toCell" class="java.lang.String"/>
+	<parameter name="loginName" class="java.lang.String"/>
+	<parameter name="createTime" class="java.lang.String"/>
+	<parameter name="fromCell" class="java.lang.String"/>
+	<parameter name="hotel" class="java.lang.String"/>
+	<parameter name="checkInDate" class="java.lang.String"/>
+	<parameter name="checkOutDate" class="java.lang.String"/>
+	<parameter name="roomNum" class="java.lang.String"/>
+	<parameter name="room" class="java.lang.String"/>
+	<parameter name="liveName" class="java.lang.String"/>
+	<parameter name="breakfast" class="java.lang.String"/>
+	<parameter name="inTotal" class="java.lang.String"/>
+	<parameter name="inOnePrice" class="java.lang.String"/>
+	<parameter name="cusLike" class="java.lang.String"/>
+	<parameter name="faxImgUrl" class="java.lang.String"/>
+	<parameter name="fromTel" class="java.lang.String"/>
+	<parameter name="payWay" class="java.lang.String"/>
+	<parameter name="code" class="java.lang.String"/>
+	<parameter name="OrderType" class="java.lang.String"/>
+	<parameter name="roomRate" class="java.lang.String"/>
+	<parameter name="fromFax" class="java.lang.String"/>
+	<parameter name="fromEmail" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="802">
+			<rectangle>
+				<reportElement x="10" y="205" width="497" height="410" uuid="0f9d9d1d-ff7c-47dd-adf7-a89e0870ce0f"/>
+			</rectangle>
+			<image>
+				<reportElement x="338" y="489" width="166" height="113" uuid="eb53dfd6-9cbc-43ef-98f0-7ea0fbe053e1"/>
+				<imageExpression><![CDATA[$P{faxImgUrl}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="12" y="232" width="495" height="1" uuid="3fcecde7-6370-4f5e-a0dd-345ddee69175"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="5" width="515" height="29" uuid="7ca94958-d094-40ab-8e26-fc5f77595d19"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="18" isBold="true" isItalic="true" />
+				</textElement>
+				<text><![CDATA[上海多途国际旅行社有限公司]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="34" width="515" height="22" uuid="9517342b-455e-44b7-805c-51911fbf6d18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Shanghai Didatour Travel Service]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="56" width="18" height="29" uuid="0db0eb29-e9d3-4a6a-88de-d9c4afcca415"/>
+				<textElement>
+					<font size="12" isBold="false" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="265" y="56" width="69" height="29" uuid="e2c127d7-30e7-4f08-9d21-dd7d7fc42c3a"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{orderId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="103" width="67" height="20" uuid="95f38a5d-078a-4d12-9217-b7b317c60af0"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Tel:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="122" width="69" height="20" uuid="e195ad9e-9df2-48da-8eba-b33dc9f7d957"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Fax:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="142" width="69" height="18" uuid="e68d8d3c-42ee-409e-a1c6-6bf27229dd90"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[Company:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="180" width="68" height="20" uuid="e377e364-4836-41a2-a8af-840504aa4755"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[Attn:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="84" width="68" height="20" uuid="0cf19a9f-a5d5-4da8-a1a1-8b3c604cc01e"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[From:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="178" width="68" height="20" uuid="09cbb11e-f8b6-42f2-8363-4635ef044b79"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="141" width="68" height="20" uuid="415c3f01-4256-4220-bf26-dbf97b2991c1"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="123" width="68" height="20" uuid="58b693e3-af29-4dc8-af08-1a0f3b698fe9"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Fax:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="102" width="68" height="20" uuid="9d39e149-4a7a-4608-975a-e1ebeb8cafb4"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Tel:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="262" width="498" height="1" uuid="bc5bd63a-0a73-4a2f-90a6-f8a6e5276285"/>
+			</line>
+			<line>
+				<reportElement x="10" y="293" width="498" height="1" uuid="a4132321-0d02-44e0-a82a-81a59d5d68a7"/>
+			</line>
+			<line>
+				<reportElement x="10" y="323" width="497" height="1" uuid="c1b6843d-f9b3-45e6-a746-1c64d0ed99d9"/>
+			</line>
+			<line>
+				<reportElement x="12" y="375" width="496" height="1" uuid="3445d905-fb7d-4dac-adca-530755643948"/>
+			</line>
+			<line>
+				<reportElement x="11" y="487" width="497" height="1" uuid="a7ebe09a-1911-40c1-b574-7e57c7fd3938"/>
+			</line>
+			<rectangle>
+				<reportElement x="10" y="605" width="497" height="114" uuid="04522629-f528-4ef2-91dd-78e145078a44"/>
+			</rectangle>
+			<line>
+				<reportElement x="12" y="635" width="495" height="1" uuid="457633a3-fe6b-4858-a585-fb4d07d4a929"/>
+			</line>
+			<line>
+				<reportElement x="12" y="667" width="495" height="1" uuid="fceb6c45-7358-482f-85ab-37ba186f8561"/>
+			</line>
+			<line>
+				<reportElement x="11" y="695" width="496" height="1" uuid="e1c6b7ec-cb4b-4d2a-b133-79ce756ca883"/>
+			</line>
+			<line>
+				<reportElement x="104" y="205" width="1" height="284" uuid="07e7d188-9d55-4781-ad2d-61d45fee8873"/>
+			</line>
+			<line>
+				<reportElement x="255" y="232" width="1" height="62" uuid="61a071fa-44a0-41c2-a0d0-a51ff83b3e06"/>
+			</line>
+			<line>
+				<reportElement x="372" y="232" width="1" height="62" uuid="afb06784-f7c7-4899-85de-50cf21ae4415"/>
+			</line>
+			<staticText>
+				<reportElement x="178" y="729" width="53" height="18" uuid="bf87d02b-4adf-4389-967b-2fffc2460d03"/>
+				<textElement textAlignment="Right">
+					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[上海田林路]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="204" width="87" height="25" uuid="0c4f6abf-bdee-492f-9aa7-111e3a6ce724"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="宋体" size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[酒店：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="233" width="87" height="25" uuid="24468a2b-6fae-4338-a40f-7340c81a5552"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="宋体" size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[入住日期：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="262" width="87" height="25" uuid="d0d641af-39af-46fb-8e73-a8fff2f49876"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[房型：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="293" width="87" height="25" uuid="a785ccdb-07a0-466d-ad3a-1eb146fa63da"/>
+				<textElement>
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[入住人姓名：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="333" width="86" height="25" uuid="1023be9d-28d7-4408-af1a-cc0e2edbeba3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[房价：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="456" width="87" height="25" uuid="bd3d50fd-9ea3-4817-9b4e-23690518de39"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[特别要求：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="489" width="320" height="114" uuid="c31d179b-44d5-42a9-a35a-a3cc4b219f45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[请尽快回复此单！]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="605" width="87" height="25" uuid="5ad93881-a6a3-4c56-8e02-2fb8e0f6fc14"/>
+				<textElement>
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[酒店确认号：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="640" width="87" height="25" uuid="33345501-d318-479c-8e22-745df82d32f7"/>
+				<textElement>
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[供应商订单号：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="666" width="86" height="25" uuid="23cc02d3-3787-40dc-b55a-9286a3342187"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[确认人：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="699" width="86" height="25" uuid="68d90c36-d39b-4dd1-8eb0-2167aabb2f7f"/>
+				<textElement>
+					<font fontName="SansSerif" size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[日期：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="233" width="87" height="25" uuid="c166ebe6-e9d7-4ff0-865d-0a09e38f3ac8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="宋体" size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[离店日期：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="262" width="87" height="25" uuid="0004217a-890e-40da-8d1a-809595ad1cca"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[间数：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="207" width="397" height="25" uuid="ae9851b1-5065-4dc3-97d7-1023fc6d64f9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{hotel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="263" width="143" height="25" uuid="b68db5ee-329d-4a15-b4a2-cb44dd2831cd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="宋体" size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{room}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="262" width="100" height="25" uuid="bf95ef7b-5433-4ac6-9ca5-8960a8356e43"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{roomNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="233" width="100" height="25" uuid="4600dd7e-47d5-49c7-a5a0-6c98dfca1f4d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{checkOutDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="237" width="113" height="25" uuid="85a04a73-b891-4cca-aedd-05b3dedb9cad"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{checkInDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="293" width="393" height="30" uuid="47fb2183-c62e-4a96-b7bc-8f633b6d1000"/>
+				<textElement>
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{liveName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="110" y="448" width="397" height="39" uuid="4869bea7-b707-4889-ba6f-4c8fb8fe25c6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cusLike}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="76" y="143" width="177" height="18" uuid="d7a2365e-4447-4f2d-a43a-2c1659225b14"/>
+				<textElement textAlignment="Left">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{toCompany}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="79" y="85" width="172" height="20" uuid="f488e93f-429d-4094-8766-c45e9d85c976"/>
+				<textElement textAlignment="Left">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{toName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="84" width="184" height="20" uuid="d077cb56-59c7-40a3-bb06-0877f0b7d0e6"/>
+				<textElement textAlignment="Left">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{loginName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="319" y="179" width="168" height="21" uuid="0b6abdea-514e-42b8-9487-3bbcf8d146ff"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{createTime}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="85" width="64" height="20" uuid="9b5a87d0-4d33-490c-a792-1c808aa0e10a"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[To:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="161" width="68" height="20" uuid="81ac9070-dcd5-4cf9-8ecb-abaddbd6db24"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Cell:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="160" width="68" height="20" uuid="7377419e-4cc4-4a8e-8e5b-1619b36b4a6b"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Cell:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="420" width="87" height="25" uuid="293e02c7-5050-47b2-9ff0-195e665cc96d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[付款方式：]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="447" width="498" height="1" uuid="d58ede27-8cd1-4d8b-924a-58e4b76eb378"/>
+			</line>
+			<textField>
+				<reportElement x="76" y="122" width="175" height="20" uuid="40110b08-7ad7-4ae3-97bd-8adc2cb47665"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{toFax}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="76" y="104" width="175" height="20" uuid="d2d81e59-3e95-46a0-95b2-dfd3d6eec333"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{toTel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="160" width="166" height="19" uuid="56f3ad35-daa8-41ac-ba85-ebbf047708c8"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fromCell}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="163" width="173" height="16" uuid="95359a20-88c9-4c1b-86dc-32332735c238"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{toCell}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="230" y="729" width="24" height="17" uuid="8da8a674-4926-4eef-8bd2-66e810a0bee5"/>
+				<textElement textAlignment="Center">
+					<font size="10" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[140]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="729" width="25" height="18" uuid="0eeb54ad-bac7-4869-90c3-8c5a813c3cf4"/>
+				<textElement textAlignment="Center">
+					<font size="10" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[406]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="729" width="20" height="18" uuid="198797e6-2fd2-4e43-90b4-0cc82ecac88d"/>
+				<textElement textAlignment="Center">
+					<font size="10" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[28]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="729" width="10" height="18" uuid="2b0dc89f-5c93-4fff-bf58-94a195871099"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[幢]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="729" width="14" height="18" uuid="9770c043-05f3-4ef1-b219-a416c57482c5"/>
+				<textElement>
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="729" width="14" height="17" uuid="3c300c16-e7fb-41ba-ae76-094fe8e4f9b2"/>
+				<textElement>
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[室]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="319" y="103" width="168" height="20" uuid="06960256-982f-4b7c-92d6-0490fc41740e"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fromTel}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="103" y="605" width="1" height="114" uuid="d6cd661c-6dcc-4358-a8d0-dcd896e6e69c"/>
+			</line>
+			<textField>
+				<reportElement x="110" y="420" width="176" height="25" uuid="35f97d46-77dd-4d22-9f70-e1d6f143ed02"/>
+				<textElement>
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{payWay}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="12" y="415" width="496" height="1" uuid="d75210f8-5d76-4240-aab6-2baa246c7e3d"/>
+			</line>
+			<staticText>
+				<reportElement x="12" y="385" width="87" height="25" uuid="3177a95e-1818-4aa6-b679-baddc696d041"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[code描述：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="381" width="399" height="34" uuid="f13d58bb-d583-441d-8ab5-6f70de8b789a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="161" y="56" width="66" height="28" uuid="5ec765e0-62a5-47fa-ba9c-7b51bef9f1b8"/>
+				<textElement>
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{OrderType}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="231" y="56" width="34" height="29" uuid="b34e203c-a468-41bf-a45b-5ee5abec7596"/>
+				<textElement>
+					<font size="12" isBold="false" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[(单号:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="79" y="179" width="172" height="20" uuid="c09fa26a-782f-434c-98b7-4941669fefdd"/>
+				<textElement>
+					<font size="12" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{OrderType}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="110" y="328" width="393" height="47" uuid="48977010-b55c-4a59-9cca-caaa6e9f8e0c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{roomRate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="124" width="183" height="20" uuid="6525e368-61a5-4cce-ab6d-c6d1eaf6d772"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fromFax}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="142" width="168" height="20" uuid="71acfdcf-79c4-49c2-a90e-7ed6bdd7d389"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fromEmail}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="151" y="747" width="27" height="20" uuid="d84cf768-09ec-49e7-94a5-ded44f0eb371"/>
+				<text><![CDATA[Tel:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="178" y="747" width="73" height="20" uuid="9789fb55-eed3-4cf3-8701-6b2abf23bfaa"/>
+				<textFieldExpression><![CDATA[$P{fromTel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="267" y="747" width="30" height="20" uuid="b6465947-5159-4cc8-a156-15528b69d974"/>
+				<text><![CDATA[Fax:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="297" y="746" width="148" height="20" uuid="b552bef6-a45e-4a75-8805-e395e4ef0c4e"/>
+				<textFieldExpression><![CDATA[$P{fromFax}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

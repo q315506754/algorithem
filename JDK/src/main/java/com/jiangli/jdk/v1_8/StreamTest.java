@@ -1,10 +1,9 @@
 package com.jiangli.jdk.v1_8;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -78,8 +77,11 @@ public class StreamTest {
         reduced.ifPresent(System.out::println);
 
 
+//        Set<String> collect = stringCollection.stream().collect(Collectors.toSet());
+        Collector<Object, ?, TreeSet<Object>> objectTreeSetCollector = Collectors.toCollection(TreeSet::new);
+
         //final oper
-        //foreach, match, count,
+        //foreach, match, count,reduce
 
         //middle oper
         //filter,sorted,map,

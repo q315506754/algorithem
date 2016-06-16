@@ -18,7 +18,7 @@ public class JasperSavePdf {
 
     public static void main(String[] args) throws Exception {
         String document = PathUtil.getProjectPath("Document").getProjectBasePath();
-        String buildPath = PathUtil.buildPath(document, "src/main/java/com/jiangli/document/pdf/jasper");
+        String buildPath = PathUtil.buildPath(document, "src/main/java/com/jiangli/document/pdf/jasper/");
         System.out.println(buildPath);
 
 //        String pdfFilePath = "C:\\Users\\Administrator\\Desktop\\t\\";
