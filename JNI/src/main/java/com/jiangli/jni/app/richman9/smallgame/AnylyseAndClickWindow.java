@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Jiangli
@@ -53,6 +54,7 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
     protected int mouse_press_interval_start = 10;
     protected int mouse_press_interval_end = 300;
     protected List<PointsListener> pointsListeners=new ArrayList<>();
+    protected Optional<Musicial> piano = Optional.empty();
 
     private JTextField jtfHwnd = new JTextField(Config.test_hWnd+"");
     private JLabel jlbHwnd = new JLabel("句柄");
@@ -103,6 +105,8 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
 
     private JButton btnReloadThread = new JButton("刷新线程");
     private JButton btnClearConsole = new JButton("清空消息");
+    private JButton btnStartMusic = new JButton("开始音乐");
+    private JButton btnStopMusic = new JButton("停止音乐");
 
     private Integer hWnd = null;
     private User32 user32 = User32.INSTANCE;
@@ -162,6 +166,31 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
 
 
     @Override
+    public void turboFire() {
+        btnFireStart.doClick();
+    }
+
+    @Override
+    public void stopTurboFire() {
+        btnFireStop.doClick();
+    }
+
+    @Override
+    public void playMusic() {
+        piano.ifPresent((msc)->{
+            msc.playMusic();
+        });
+//     JOptionPane.showMessageDialog(this, "没有音乐可以播放", "错误", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void stopMusic() {
+        piano.ifPresent((msc)->{
+            msc.stopMusic();
+        });
+    }
+
+    @Override
     public String getCaptureFilePath() {
         return captured_path;
     }
@@ -208,11 +237,13 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
         jtaConsole.setAutoscrolls(true);
         jtbFires.setAutoscrolls(true);
         jtfSimilar.setText(getSimilarityString());
+        piano = Optional.of(new EmptyMusicial(this));
 
         //init instance
         robot = new Robot();
         dynamicProcesser = new FileStringRegexDynamicProcesser("int\\s*test_hWnd\\s*=\\s*\\d*;", "int test_hWnd=<value>;");
         inputJav = new InputJavaCodeBinding(Config.class, dynamicProcesser);
+
 
         //init children
         childrenInitialStart();
@@ -251,19 +282,15 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
         btnFire.addActionListener(new BtnFireAction(root));
         //binding events
         // start&stop
-        binding = new StartAndStopBinding(btnFireStart, btnFireStop, new BindingCallBack() {
-            @Override
-            public void run() {
-                btnFire.doClick();
-            }
-        });
-        btnClearConsole.addActionListener(new ClearConsoleAction());
+        binding = new StartAndStopBinding(btnFireStart, btnFireStop, btnFire::doClick);
+        btnClearConsole.addActionListener((e)->jtaConsole.setText(""));
+        btnStartMusic.addActionListener((e)-> playMusic());
+        btnStopMusic.addActionListener((e)->stopMusic());
 
         //keyboard listeners
         jtfHwnd.addKeyListener(new RefreshHwndAction());
         jtfTitleStr.addKeyListener(new RefreshHwndAction());
         jtfSimilar.addKeyListener(new SimilarRefreshAction());
-
 
         //table render
         DefaultTableModel tableModel = new DefaultTableModel(null,columnNames);
@@ -400,7 +427,7 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
 
 
 //        final JPanel actionPanel = new JPanel(new FlowLayout());
-        final JPanel actionPanel = new JPanel(new GridLayout(3,4));
+        final JPanel actionPanel = new JPanel(new GridLayout(4,4));
         actionPanel.add(btnHwnd);
         actionPanel.add(btnOpenCapture);
         actionPanel.add(btnDeleteCapture);
@@ -412,6 +439,8 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
         actionPanel.add(btnFireStart);
         actionPanel.add(btnFireStop);
         actionPanel.add(btnClearConsole);
+        actionPanel.add(btnStartMusic);
+        actionPanel.add(btnStopMusic);
 
         tabbedPane.add("控制台", jspConsole);
         tabbedPane.add("记录", jspFires);

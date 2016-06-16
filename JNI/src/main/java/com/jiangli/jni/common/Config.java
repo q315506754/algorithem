@@ -8,7 +8,7 @@ import com.jiangli.common.utils.PathUtil;
  *         CreatedTime  2016/6/1 0001 13:27
  */
 public class Config {
-    public  static int test_hWnd=722690;
+    public  static int test_hWnd=197636;
     public static float smileSimilartity= 0.995f;
     public static String project_path = PathUtil.getProjectPath("JNI").getPath(PathUtil.PATH_SRC_MAIN_RESOURCES);
 

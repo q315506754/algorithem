@@ -6,7 +6,10 @@ import com.jiangli.graphics.inf.BMPMatcher;
 import com.jiangli.jni.app.richman9.smallgame.Analyser;
 import com.jiangli.jni.app.richman9.smallgame.AnylyseAndClickWindow;
 import com.jiangli.jni.app.richman9.smallgame.continueModule.ClickContinueBtnPointsListener;
+import com.jiangli.jni.app.richman9.smallgame.continueModule.MainMusicPiano;
 import com.jiangli.jni.common.Config;
+
+import java.util.Optional;
 
 /**
  * @author Jiangli
@@ -40,6 +43,11 @@ public class FindSmileWindow extends AnylyseAndClickWindow {
         btnFire.setText("点击笑脸");
         setMousePressDuration(5,30);
         pointsListeners.add(new ClickContinueBtnPointsListener(this));
+        try {
+            piano = Optional.of(new MainMusicPiano());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
