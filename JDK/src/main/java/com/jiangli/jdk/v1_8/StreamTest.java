@@ -77,8 +77,11 @@ public class StreamTest {
         reduced.ifPresent(System.out::println);
 
 
-//        Set<String> collect = stringCollection.stream().collect(Collectors.toSet());
-        Collector<Object, ?, TreeSet<Object>> objectTreeSetCollector = Collectors.toCollection(TreeSet::new);
+        Set<String> collect = stringCollection.stream().collect(Collectors.toSet());
+
+        TreeSet<String> collect1 = stringCollection.stream().collect(Collectors.toCollection(TreeSet::new));
+
+//        Collector<Object, ?, TreeSet<Object>> objectTreeSetCollector = Collectors.toCollection(TreeSet::new);
 
         //final oper
         //foreach, match, count,reduce
