@@ -1,5 +1,7 @@
 package com.jiangli.common.model;
 
+import net.sf.json.JSONObject;
+
 public class Person {
     protected int age;
     protected String name;
@@ -27,5 +29,10 @@ public class Person {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return JSONObject.fromObject(this).toString();
     }
 }
