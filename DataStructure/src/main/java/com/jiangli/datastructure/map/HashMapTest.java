@@ -4,6 +4,7 @@ import com.jiangli.common.model.Department;
 import com.jiangli.common.model.Student;
 import com.jiangli.common.utils.ModelUtil;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +41,11 @@ public class HashMapTest {
                         Collectors.summingDouble(Student::getGrade)));
         totalByDept.forEach((a, b) -> System.out.println(a + ":" + b));
         printSplit();
+
+
+        HashSet<String> collect = students.stream().map((stu) -> stu.getName()).collect(Collectors.toCollection(HashSet::new));
+        System.out.println(collect);
+
 
     }
 
