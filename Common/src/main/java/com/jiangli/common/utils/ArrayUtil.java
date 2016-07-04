@@ -19,4 +19,16 @@ public class ArrayUtil {
             }
         }
     }
+
+    public static int maxIdx(int[] arr) {
+        int maxIdx = 0;
+        int max = arr[maxIdx];
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i]> max) {
+                maxIdx = i;
+                max = arr[i];
+            }
+        }
+        return maxIdx;
+    }
 }
