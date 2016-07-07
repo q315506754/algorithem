@@ -51,8 +51,8 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
     protected BMPMatcher mathcer ;
     protected int mouse_press_duration_start=30;
     protected int mouse_press_duration_end=100;
-    protected int mouse_press_interval_start = 10;
-    protected int mouse_press_interval_end = 300;
+    protected int mouse_press_interval_start = 100;
+    protected int mouse_press_interval_end = 800;
     protected List<PointsListener> pointsListeners=new ArrayList<>();
     protected Optional<Musicial> piano = Optional.empty();
 
@@ -121,7 +121,9 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
     private boolean rec_table = false;
     private boolean use_offSet = true;
     private boolean mouse_press_duration= false;
+//    private boolean mouse_press_duration= true;
     private boolean mouse_press_interval= false;
+//    private boolean mouse_press_interval= true;
 
     private com.jiangli.graphics.common.Color MATCH_COLOR = new Color(0,0,0);
     private Color CLICK_POINT_COLOR = new Color(255,0,0);
@@ -162,6 +164,10 @@ public abstract class AnylyseAndClickWindow extends JFrame implements CatureAndC
     protected void setMousePressDuration(int start, int end){
         this.mouse_press_duration_start = start;
         this.mouse_press_duration_end = end;
+    }
+    protected void setMousePressinterval(int start, int end){
+        this.mouse_press_interval_start = start;
+        this.mouse_press_interval_end = end;
     }
 
 

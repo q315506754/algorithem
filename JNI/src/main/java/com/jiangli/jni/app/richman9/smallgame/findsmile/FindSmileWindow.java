@@ -41,7 +41,8 @@ public class FindSmileWindow extends AnylyseAndClickWindow {
     protected void childrenInitialStart() {
         offsetPercentage = new RectPercentage(27.00,18.50,18.00,32.00);
         btnFire.setText("点击笑脸");
-        setMousePressDuration(5,30);
+        setMousePressDuration(1,30);
+        setMousePressinterval(200,600);
         pointsListeners.add(new ClickContinueBtnPointsListener(this));
         try {
             piano = Optional.of(new MainMusicPiano());
