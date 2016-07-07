@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class ListTest {
     public static void main(String[] args) {
+        String sss = "12321sdgf";
+        String sss2 = new String("12321sdgf");
         List<String> list = new ArrayList<>();
         list.add("123");
         list.add("3434");

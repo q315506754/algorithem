@@ -1,11 +1,33 @@
 
+并发包
+zookeeper
+MINA
+redis
+
+
+java.util.concurrent.atomic
 java nio
 数据结构
-redis
 memcached
 高并发-Jmeter测试
 高并发-缓存
 高并发-负载均衡
 高并发-多线程
 
+1.5年以上Java EE开发经验，学习动手能力更好
+3、熟悉Spring framework及spring衍生常用框架，jdbc，spring jdbctemplate，ibatis\mybatis使用
+4、熟练全文搜索框架 Lucene，solr以及其他
+5、熟悉Canal，Dubbo等分布式框架掌握一定程度的集中配置实用框架或者自己实现集中式配置
+6、对于轻量级架构有明确的认识....
+7、熟练velocity，Javascript、Ajax、CSS等前端开发技术；
+8、熟练javascript、Ajax、CSS等前端开发技术以及velocity等网页视图层模块框架
+9、熟练掌握Java基础技术，包括jdk中的常用api，比如并发包，多线程，线程锁等
+10、能够解决自己开发中碰到的常见的spring开发错误或orm层结合使用中的开发错误，比较注解依赖错误，程序逻辑错误以及代码中线程死锁等引起的程序问题；
+11、熟练mysql sql语法，优化尤其对于测试中mysql的优化和排查
+12.熟练myeclipse,intellij idea等开发工具的使用，对spring，mybtais，velocity插件等使用
+13.具有较强的逻辑思维能力、独立工作能力和良好团队精神，能很快适应新的环境，并能够适应给予的新技术的学习使用。
+14、会有一定的笔试，主要考一些对框架熟练程度以及个人能力方面的，涉及到解决问题的能力上。
 
+有些东西还是值得重点加强，比如分布式架构的基础与理论、抽象化问题、简化复杂架构的能力，
+比如架构文档化并说给别人听的能力，比如关于操作系统、网络的基本功保证你解决问题的能力等等。
+DMP(Data-Management Platform)数据管理平台

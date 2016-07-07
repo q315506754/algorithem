@@ -17,3 +17,26 @@ CMS(Content Management System),网站内容管理系统
 LRU(Least Recently Used),最近最久未使用过
 FIFO(First Input First Output),先入先出队列
 LFU(least frequently used ),最不经常使用页置换算法
+
+CAS(Central Authentication Service)中央认证服务
+SCP（Secure Copy）,
+ESB(Enterprise Service Bus) 全称为Enterprise Service Bus，即企业服务总线
+CDN(Content Delivery Network)，即内容分发网络
+
+MES (Manufacturing Execution System)（制造企业生产过程执行管理系统）,(Manufacturing Execution System Association，MESA)对MES所下的定义
+SCM（Supply chain management，SCM）即供应链管理
+ERP(Enterprise Resource Planning )系统是企业资源计划的简称
+MRP(Material Requirement Planning，MRP）物料需求计划
+WMS(Warehouse Management System) 是仓库管理系统
+CMS(Content Management System)，意为"内容管理系统"
+CRM(Customer Relationship Management)即客户关系管理
+SAP(System Applications and Products)是SAP公司的产品——企业管理解决方案的软件名称。
+PLM(product lifecycle management，PLM)表示产品生命周期管理
+OA(Office Automation System)办公自动化
+
+ES(Elastic-Search),基于Lucene的搜索服务器,提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。
+kibana :汇总、分析和搜索重要数据日志并提供友好的web界面。
+logstash:对你的日志进行收集、分析，并将其存储供以后使用（如，搜索）
+
+DMP(Data-Management Platform)数据管理平台
+DSP(Digital Signal Processing)数字信号处理
