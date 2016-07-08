@@ -19,6 +19,7 @@ FIFO(First Input First Output),先入先出队列
 LFU(least frequently used ),最不经常使用页置换算法
 
 CAS(Central Authentication Service)中央认证服务
+CAS (CompreAndSet)
 SCP（Secure Copy）,
 ESB(Enterprise Service Bus) 全称为Enterprise Service Bus，即企业服务总线
 CDN(Content Delivery Network)，即内容分发网络
@@ -40,3 +41,6 @@ logstash:对你的日志进行收集、分析，并将其存储供以后使用�
 
 DMP(Data-Management Platform)数据管理平台
 DSP(Digital Signal Processing)数字信号处理
+
+DMA(Direct Memory Access，直接内存存取)
+
