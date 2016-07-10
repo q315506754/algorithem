@@ -14,7 +14,7 @@ public class HelloImpl implements IHello{
     @Override
     public String sayHello(String yourName) {
         logger.debug("invoked,name:"+yourName);
-        String ret = "Hi "+yourName+"! I am JL,How are your?";
+        String ret = "Hi "+yourName+"! I am JL,How are you?";
         logger.debug("said:"+ret);
         return ret;
     }

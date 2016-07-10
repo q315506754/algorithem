@@ -12,6 +12,7 @@
     <name>AlgorithemProject-parent</name>
 
     <modules>
+        <module>AOP</module>
         <module>ByteCode</module>
         <module>Cache</module>
         <module>Cocurrent</module>
