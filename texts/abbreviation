@@ -59,3 +59,4 @@ PaaS （Platform as a Service，PaaS）平台即服务
 
 NIST（National Institute of Standards and Technology，美国国家标准与技术研究院）
 ANSI (American National Standards Institute) 美国国家标准学会
+CGI全称是“公共网关接口”(Common Gateway Interface)，HTTP服务器与你的或其它机器上的程序进行“交谈”的一种工具，其程序一般运行在网络服务器上。

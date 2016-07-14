@@ -25,6 +25,7 @@ public class JDBCMain {
      //cn
      status;
      show variables like 'character_set_%';
+     show variables like '%server%';
      alter database test  character set utf8;
 
      set names utf8;
@@ -34,10 +35,24 @@ public class JDBCMain {
      SET character_set_results='utf8';
 
 
+     set character_set_server=utf8;
+     set character_set_database=utf8;
+     set character_set_system=utf8;
+     set collation_connection='utf8';
+     set collation_database=utf8;
+     set collation_server=utf8;
+
      //
      show create database test;
      show create table stu;
+     ALTER DATABASE test DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+     ALTER TABLE stu DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+     ALTER TABLE stu  CHARACTER SET utf8 COLLATE utf8_general_ci;
+     ALTER TABLE stu CONVERT TO CHARACTER SET utf8;
 
+     show char set;
+
+    insert into stu values('诸葛孔明',18,'天才班');
      * @param args
      * @throws ClassNotFoundException
      */
@@ -50,6 +65,7 @@ public class JDBCMain {
             PreparedStatement preparedStatement = connection.prepareStatement("select * from stu;");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                System.out.println("--------------");
                 String name = resultSet.getString("name");
                 String classS = resultSet.getString("class");
                 System.out.println(name);
