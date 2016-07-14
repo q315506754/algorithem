@@ -1,5 +1,7 @@
 package com.jiangli.db.jdbc;
 
+import com.jiangli.db.JDBCExecutor;
+
 import java.sql.*;
 
 /**
@@ -52,6 +54,14 @@ public class JDBCMain {
 
      show char set;
 
+     default-character-set=utf8
+
+     CREATE TABLE stu(
+     name varchar(40) NOT NULL primary key,
+     age int ,
+     class varchar(40)
+     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
     insert into stu values('诸葛孔明',18,'天才班');
      * @param args
      * @throws ClassNotFoundException
@@ -62,16 +72,8 @@ public class JDBCMain {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?user=root&password=");
             System.out.println(connection);
 
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from stu;");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                System.out.println("--------------");
-                String name = resultSet.getString("name");
-                String classS = resultSet.getString("class");
-                System.out.println(name);
-                System.out.println(classS);
+            JDBCExecutor.execute(connection);
 
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
