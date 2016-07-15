@@ -9,6 +9,9 @@ import java.sql.ResultSet;
  */
 public class JDBCExecutor  {
     public  static void execute(Connection connection){
+        execute(connection,true);
+    }
+    public  static void execute(Connection connection,boolean close){
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("select * from stu;");
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -20,7 +23,9 @@ public class JDBCExecutor  {
                 System.out.println(classS);
 
             }
-            connection.close();
+            if (close) {
+                connection.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
