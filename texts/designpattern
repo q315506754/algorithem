@@ -1,31 +1,31 @@
 创建型x5
-工厂方法-曹操献刀-java.util.Iterator
-抽象工厂-肯德基-java.sql.DriverManager
-建造者-手机套餐-java.lang.StringBuilder
-原型-Daylife-java.lang.Object.clone
-单例--java.lang.Runtime
+工厂方法-曹操献刀-java.util.Iterator 定义一个创建产品对象的工厂接口，让子类决定实例化哪一种实例对象
+抽象工厂-肯德基-java.sql.DriverManager 提供一个接口，用来创建相关或依赖对象的家族，而不需要指定具体的实现类
+建造者-手机套餐-java.lang.StringBuilder 将复杂对象的创建和表示分离，使得同样的创建过程可以产生不同的表示。
+原型-Daylife-java.lang.Object.clone 用原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。
+单例--java.lang.Runtime 确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例
 
 结构型x7
-适配器-220v-java.io.InputStreamReader
-桥接-电灯开关-java.util.logging.Handler Formatter
-组合-雇员-java.awt.Container Component
-装饰者-染色馒头-java.io.FilterInputStream
-外观-糖醋排骨-java.util.logging.Logger
-享元-五子棋-java.lang.Interger.valueOf
-代理-红酒厂商-java.lang.reflect.Proxy.newProxyInstance(ClassLoader,Class[],InvocationHandler)
+适配器-220v-java.io.InputStreamReader 把一个类的接口变成客户端期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作，又称转换器模式、变压器模式、包装模式
+桥接-电灯开关-java.util.logging.Handler Formatter 又称桥梁模式，将抽象化和实现化解耦，使得两者可以独立地变化
+组合-雇员-java.awt.Container Component 将对象组合成树形结构以表示“部分-整体”的层次结构，组合模式使得用户对单个对象和组合对象的使用具有一致性。
+装饰者-染色馒头-java.io.FilterInputStream 是在不改变原类文件和使用继承的情况下，动态地扩展一个类的功能。它是通过创建一个包装对象，也就是装饰对象来包裹真实的对象。
+外观-糖醋排骨-java.util.logging.Logger 为子系统中的一组接口提供一个统一的高层接口。通过这个外观接口读写各接口的数据资源，而客户可以通过外观接口读取内部资源库，不与子系统产生交互
+享元-五子棋-java.lang.Integer.valueOf 以共享的方式高效地支持大量的细粒度对象，通过复用内存中已存在的对象，降低创建对象实例的性能消耗。
+代理-红酒厂商-java.lang.reflect.Proxy.newProxyInstance(ClassLoader,Class[],InvocationHandler) 代理对象将接受的请求委托给真实对象处理，代理对象控制请求的访问，它在客户端应用程序和真实目标之间起到了一个中介桥梁的作用
 
 行为型x11
-责任链-学生请假-java.lang.ClassLoader,org.apache.commons.Chain
-命令-邮局发邮件-javax.swing.Action
-解释器-语言解释器-java.text.Format
-迭代器-循环人员信息列表-java.util.Iterator
-中介者-多人聊天室-javax.swing.ButtonGroup
-备忘录-英雄状态备份-java.util.Date snaptime
-观察者-高温预警-java.util.Observable Observer,JMS
-状态-编辑器-x
-策略-商场打折-java.util.concurrent.ThreadPoolExecutor RejecctedExecutionHandler.rejectedExecution
-模板方法-员工一天-java.util.Arrays Comparable
-访问者-雇员-javax.lang.model.element.Element
+责任链-学生请假-java.lang.ClassLoader,org.apache.commons.Chain 客户端的请求在一个链上传递，直到链上的某一对象决定处理此请求。发出这个请求的客户端并不知道链上的哪一个对象最终处理此请求，这使系统可以在不影响客户端的情况下动态地重新组织和分配责任。
+命令-邮局发邮件-javax.swing.Action 将来自客户端的请求封装成一个对象，无需了解这个请求激活的动作或有关接受这个请求的处理细节
+解释器-语言解释器-java.text.Format 给定一个语言的文法表示，并且定义一个解释器，用来解释语言中的句子
+迭代器-循环人员信息列表-java.util.Iterator 提供一种顺序访问一个集合对象中各个元素的功能的模式，而又不暴露其内部的表示
+中介者-多人聊天室-javax.swing.ButtonGroup 用一个对象来封装一系列对象之间的交互，使各个对象不需要显示地引用其它对象，从而降低各个对象之间的耦合度，并且可以独立地改变对象间的交互关系
+备忘录-英雄状态备份-java.util.Date snaptime 在不破坏封闭的前提下，捕获一个对象的内部状态，并在对象之外保存这个状态。这样以后就可将对象回复到原先保存的状态。
+观察者-高温预警-java.util.Observable Observer,JMS 又称为发布订阅模式，定义了一种一对多的关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新
+状态-编辑器-x当一个对象的内在状态改变时允许改变其行为，这个对象看起来就像是改变了其类
+策略-商场打折-java.util.concurrent.ThreadPoolExecutor RejectedExecutionHandler.rejectedExecution 定义一系列的算法，将每一种算法封装起来并可以相互替换使用，策略模式让算法独立于使用它的客户应用而独立变化
+模板方法-员工一天-java.util.Arrays Comparable 定义一个操作中的算法骨架，而将一些实现步骤延迟到子类当中，模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤
+访问者-雇员-javax.lang.model.element.Element 表示一个作用于某对象结构中的各元素的操作，它使用户在不改变各元素类的前提下定义作用于这些元素的新操作
 
 
 OCP-Open Closed Principle-开闭原则
