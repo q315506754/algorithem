@@ -45,7 +45,6 @@ public class SpringTest implements ApplicationContextAware {
             System.out.println(beanDefinitionName);
         }
 
-
     }
 
 }
