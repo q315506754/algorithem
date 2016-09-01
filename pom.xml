@@ -39,25 +39,45 @@
     </modules>
 
     <repositories>
+        <!--<repository>-->
+            <!--<id>OSChina Central</id>-->
+            <!--<name>OSChina Central</name>-->
+            <!--<url>http://maven.oschina.net/content/groups/public/</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>ibiblio Central</id>-->
+            <!--<name>ibiblio Central</name>-->
+            <!--<url>http://mirrors.ibiblio.org/maven2/</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>mvnrepository</id>-->
+            <!--<name>mvnrepository</name>-->
+            <!--<url>http://mvnrepository.com/</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>sonatype</id>-->
+            <!--<name>sonatype</name>-->
+            <!--<url>http://www.sonatype.org/nexus/</url>-->
+        <!--</repository>-->
         <repository>
-            <id>OSChina Central</id>
-            <name>OSChina Central</name>
-            <url>http://maven.oschina.net/content/groups/public/</url>
+            　<id>ibiblio</id>
+        　　<name>Human Readable Name for this Mirror.</name>
+        　　<url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
         </repository>
         <repository>
-            <id>mvnrepository</id>
-            <name>mvnrepository</name>
-            <url>http://mvnrepository.com/</url>
-        </repository>
-        <repository>
-            <id>sonatype</id>
-            <name>sonatype</name>
-            <url>http://www.sonatype.org/nexus/</url>
+            <id>maven repo2</id>
+            <name>maven repo2</name>
+            <url>http://repo2.maven.org/maven2/</url>
         </repository>
         <repository>
             <id>maven central</id>
             <name>maven central</name>
             <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>springframework central</id>
+            <name>springframework central</name>
+            <url>http://maven.springframework.org/release/</url>
         </repository>
     </repositories>
 
