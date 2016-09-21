@@ -15,6 +15,14 @@ public class BucketSort extends Sorter<Integer> {
 
     }
 
+    /**
+     * 缺点是对于含元素较大的数组，不得不浪费很大的内存,
+     * 因为必须将元素尽可能地发散到数组内，不能产生碰撞
+     *
+     * 比如{@link Integer.MAX_VALUE}
+     * @param arr
+     * @return
+     */
     @Override
     public Integer[] sort(final Integer[] arr) {
         Integer[] dest = getClonedArray(arr);

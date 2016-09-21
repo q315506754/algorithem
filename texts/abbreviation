@@ -24,6 +24,20 @@ SCP（Secure Copy）,
 ESB(Enterprise Service Bus) 全称为Enterprise Service Bus，即企业服务总线
 CDN(Content Delivery Network)，即内容分发网络
 
+ISV(Independent Software Vendors)独立软件开发商
+
+XSS(Cross Site Scripting)跨站脚本攻击
+CRSF(Cross Site Request Forgery)跨站请求伪造
+DDos(Distributed Denial of Service)分布式拒绝服务攻击
+
+MD5 (Message Digest Algorithm)消息摘要算法第五版 128位=16字节=32个字符
+SHA(Secure Hash Algorithm)安全散列算法 基于MD4 160位=20字节=40个字符
+DES(Data  Encryption Standard)数据加密标准
+AES(Advanced Encryption Standard)高级加密标准
+RSA 人名缩写
+CA(Certificate Authority)数字证书认证机构
+CSR(Certificate Signing Request)数字证书签发申请
+
 MES (Manufacturing Execution System)（制造企业生产过程执行管理系统）,(Manufacturing Execution System Association，MESA)对MES所下的定义
 SCM（Supply chain management，SCM）即供应链管理
 ERP(Enterprise Resource Planning )系统是企业资源计划的简称
@@ -35,6 +49,10 @@ SAP(System Applications and Products)是SAP公司的产品——企业管理解�
 PLM(product lifecycle management，PLM)表示产品生命周期管理
 OA(Office Automation System)办公自动化
 
+BPM(Business Process Management) 业务流程管理
+
+CBD(Central Business District) 中央商务区
+
 ES(Elastic-Search),基于Lucene的搜索服务器,提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。
 kibana :汇总、分析和搜索重要数据日志并提供友好的web界面。
 logstash:对你的日志进行收集、分析，并将其存储供以后使用（如，搜索）
@@ -43,6 +61,16 @@ DMP(Data-Management Platform)数据管理平台
 DSP(Digital Signal Processing)数字信号处理
 
 DMA(Direct Memory Access，直接内存存取)
+RAM（random access memory，RAM）又称作“随机存储器”，
+DRAM (Dynamic RAM)动态随机存储器
+SRAM (Static  RAM)静态随机存储器
+ROM (Read Only Memory image)Read Only Memory image
+ROM (Read-Only Memory)只读存储器
+PROM (Programmable Read-Only Memory)可编程只读存储器
+EPROM (Erasable Programmable Read-Only Memory)可擦可编程只读存储器
+EEPROM (Electrically Erasable Programmable Read-Only Memory)电可擦可编程只读存储器
+
+
 
 ICMP是（Internet Control Message Protocol）Internet控制报文协议
 UDP 是User Datagram Protocol的简称， 中文名是用户数据报协议
@@ -60,3 +88,11 @@ PaaS （Platform as a Service，PaaS）平台即服务
 NIST（National Institute of Standards and Technology，美国国家标准与技术研究院）
 ANSI (American National Standards Institute) 美国国家标准学会
 CGI全称是“公共网关接口”(Common Gateway Interface)，HTTP服务器与你的或其它机器上的程序进行“交谈”的一种工具，其程序一般运行在网络服务器上。
+
+sql组成：
+DDL：数据库模式定义语言，关键字：create
+DML：数据操纵语言，关键字：Insert、delete、update
+DCL：数据库控制语言 ，关键字：grant、remove
+DQL：数据库查询语言，关键字：select
+
+
