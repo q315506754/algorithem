@@ -1,0 +1,21 @@
+
+var div = document.getElementById("div-w");
+div.scrollTop=0;
+
+var div = document.getElementById("div-m-26");
+div.scrollTop=0
+
+
+window.scrollTo(0,0);
+
+$(document).on("click","#div-m-list .ec-tree a:visible:contains('¡¾')",function(){
+	var div = document.getElementById("div-m-26");
+	div.scrollTop=0
+});
+
+
+function totop(){
+	var div = document.getElementById("div-m-26");
+	div.scrollTop=0
+}
+totop();
