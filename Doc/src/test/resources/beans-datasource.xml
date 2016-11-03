@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- DataSource -->
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://192.168.9.223:3306" />
+        <property name="username" value="root" />
+        <property name="password" value="ablejava" />
+    </bean>
+
+<!-- 
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.zhihuishu.treenity.model" />
+		<property name="mapperLocations" value="classpath:mapper/*.xml" /> 
+		<property name="configLocation" value="classpath:mybatis.xml" />
+	</bean>
+
+	<bean id="sessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sessionFactory" />
+	</bean>
+-->
+	<!-- 自动扫描mapper包(dao)，此配置自动生成Mapper对象 -->
+	<!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionTemplateBeanName" value="sessionTemplate" />
+		<property name="basePackage" value="com.zhihuishu.treenity.mapper" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean> -->
+	
+</beans>

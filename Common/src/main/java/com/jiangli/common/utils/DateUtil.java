@@ -14,6 +14,10 @@ public class DateUtil {
     public DateUtil() {
     }
 
+    public  static String getDate_HMS(long timeStamp){
+        return (new SimpleDateFormat("HH:mm:ss")).format(timeStamp);
+    }
+
     public static Date minusDay(Date date, int count) {
         return new Date(date.getTime() - 0x5265c00L * (long) count);
     }

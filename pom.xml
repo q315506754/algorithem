@@ -19,6 +19,7 @@
         <module>Common</module>
         <module>DataStructure</module>
         <module>DB</module>
+        <module>Doc</module>
         <module>Document</module>
         <module>Graphics</module>
         <module>Hack</module>
