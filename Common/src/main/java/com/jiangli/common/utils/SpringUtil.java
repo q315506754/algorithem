@@ -13,7 +13,6 @@ import org.springframework.context.ApplicationContextAware;
 //@Component
 public class SpringUtil implements ApplicationContextAware{
 	private  static ApplicationContext applicationContext;
-	
 	@Override
 	public final void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		SpringUtil.applicationContext = applicationContext;
