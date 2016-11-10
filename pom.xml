@@ -27,6 +27,7 @@
         <module>JDK</module>
         <module>JNI</module>
         <module>JVMLanguage</module>
+        <module>Log</module>
         <module>Maven</module>
         <module>Memory</module>
         <module>OSGI</module>

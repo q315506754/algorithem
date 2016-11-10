@@ -10,7 +10,10 @@
   <head>
     <title>$Title$</title>
   </head>
+  <script>
+      
+  </script>
   <body>
-  $END$
+  $END$ sdsdsd
   </body>
 </html>

@@ -1,0 +1,36 @@
+基于“对称密钥”的加密算法主要有DES、3DES（TripleDES）、AES、RC2、RC4、RC5和Blowfish等。
+
+本文只介绍最常用的对称加密算法DES、3DES（TripleDES）和AES。
+
+DES算法全称为Data Encryption Standard，即数据加密算法
+DES算法的入口参数有三个：Key、Data、Mode。其中Key为8个字节共64位，是DES算法的工作密钥；
+Data也为8个字节64位，是要被加密或被解密的数据；
+Mode为DES的工作方式,有两种：加密或解密。
+
+五种分组模式
+2.3.1 EBC模式
+2.3.2 CBC模式
+2.3.3 CFB模式
+2.3.4 OFB模式
+2.3.5 CTR模式
+
+
+在Java进行DES、3DES和AES三种对称加密算法时，
+常采用的是NoPadding（不填充）、Zeros填充（0填充）、PKCS5Padding填充。
+2.4.1 ZerosPadding
+全部填充为0的字节，结果如下：
+F1 F2 F3 F4 F5 F6 F7 F8   //第一块
+F9 00 00 00 00 00 00 00 //第二块
+
+2.4.2 PKCS5Padding
+每个填充的字节都记录了填充的总字节数，结果如下：
+ F1 F2 F3 F4 F5 F6 F7 F8   //第一块
+ F9 07 07 07 07 07 07 07 //第二块
+
+ 3DES（或称为Triple DES）是三重数据加密算法（TDEA，Triple Data Encryption Algorithm）
+ 块密码的通称。
+ 它相当于是对每个数据块应用三次DES加密算法。
+ 由于计算机运算能力的增强，原版DES密码的密钥长度变得容易被暴力破解；
+ 3DES即是设计用来提供一种相对简单的方法，
+ 即通过增加DES的密钥长度来避免类似的攻击，
+ 而不是设计一种全新的块密码算法。

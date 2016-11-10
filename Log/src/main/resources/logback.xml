@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<configuration scan="true" scanPeriod="120 seconds" >-->
+<configuration>
+
+    <!-- 输出到文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>D:\argorithemLog\jiangli.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>D:\argorithemLog\jiangli.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder" charset="UTF-8">
+            <!-- 设置非立即刷新，内部使用BufferedOutputStream实现，默认缓冲区：8192bytes -->
+            <immediateFlush>true</immediateFlush>
+            <providers>
+                <timestamp>
+                    <fieldName>timestamp</fieldName>
+                    <pattern>yyyy-MM-dd HH:mm:ss.sss</pattern>
+                </timestamp>
+                <mdc/>
+                <!--<stackTrace>-->
+                <!--<throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">-->
+                <!--<maxDepthPerThrowable>30</maxDepthPerThrowable>-->
+                <!--<maxLength>2048</maxLength>-->
+                <!--<shortenedClassNameLength>20</shortenedClassNameLength>-->
+                <!--<exclude>sun\.reflect\..*\.invoke.*</exclude>-->
+                <!--<exclude>net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>-->
+                <!--<rootCauseFirst>true</rootCauseFirst>-->
+                <!--</throwableConverter>-->
+                <!--</stackTrace>-->
+                <pattern>
+                    <pattern>
+                        {
+                        "project": "zhihuishu-treenity",
+                        "thread": "%thread",
+                        "logger": "%logger",
+                        "level": "%level",
+                        "line": "%L",
+                        "method": "%F",
+                        "mmmm": "%msg",
+                        "message": "%message"
+                        <!--"aaa": "%aaa",-->
+                        <!--"ttt": "%ttt"-->
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- 输出到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <includeCallerData>true</includeCallerData>
+        <!--<encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
+        <encoder charset="UTF-8" >
+            <providers>
+                <timestamp>
+                    <fieldName>timestamp</fieldName>
+                    <pattern>yyyy-MM-dd HH:mm:ss.sss</pattern>
+                </timestamp>
+                <mdc/>
+                <pattern>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.sss} [%F:%L] - %msg %ttt %timestamp %n</pattern>
+                </pattern>
+            </providers>
+            <!--<pattern>[zhihuishu-treenity] [%level] %d{yyyy-MM-dd HH:mm:ss.sss} %thread %logger %msg%n</pattern>-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.sss} [%F:%L] - %msg%n</pattern>-->
+        </encoder>
+    </appender>
+
+    <!-- 异步输出到文件 -->
+    <!-- 异步日志Appender，内部使用FileAppender实现 -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>1048576</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>false</includeCallerData>
+        <maxFlushTime>3000</maxFlushTime>
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <!-- 默认输出到控制台 -->
+    <root level="ERROR">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <!-- 业务日志输出到文件 -->
+    <logger name="com.jiangli" level="ALL" additivity="false">
+        <!--<appender-ref ref="ASYNC_FILE" />-->
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="dubbo.provider" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+    <logger name="dubbo.consumer" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+
+    <!-- 部分日志需要关闭 -->
+    <logger name="com.alibaba.dubbo" level="ERROR"/>
+    <logger name="com.alibaba.dubbo.monitor.dubbo.DubboMonitor" level="OFF"/>
+    <logger name="org.apache.zookeeper.ClientCnxn" level="OFF"/>
+    <logger name="org.apache.commons" level="OFF"/>
+    <logger name="ch.qos.logback.classic" level="OFF"/>
+
+</configuration>

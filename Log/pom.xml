@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.jiangli.AlgorithemProject</groupId>
+        <artifactId>AlgorithemProject-parent</artifactId>
+        <version>${com.provider-version}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.jiangli.AlgorithemProject</groupId>
+    <artifactId>Log</artifactId>
+    <packaging>jar</packaging>
+    <version>${com.provider-version}</version>
+
+
+    <properties>
+        <resources.dir>src\main\resources\props</resources.dir>
+    </properties>
+    <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>com.jiangli.AlgorithemProject</groupId>-->
+            <!--<artifactId>Common</artifactId>-->
+        <!--</dependency>-->
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.18</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <!--logback-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>4.7</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+</project>
