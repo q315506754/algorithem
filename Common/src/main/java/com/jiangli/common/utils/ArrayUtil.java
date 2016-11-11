@@ -31,4 +31,36 @@ public class ArrayUtil {
         }
         return maxIdx;
     }
+
+    public static byte[] getRange(byte[] unicodes, int startIdx, int length) {
+        byte[] record = new byte[length];
+        int n = 0;
+        if (unicodes !=null ) {
+            for (int i = startIdx; i < unicodes.length &&  i < startIdx + length; i++) {
+                record[n++]=unicodes[i];
+            }
+        }
+        byte[] ret = new byte[n];
+        System.arraycopy(record,0,ret,0,n);
+        return ret;
+    }
+    public static void print(byte[] unicodes) {
+        print(unicodes,0,unicodes.length);
+    }
+    public static void print(byte[] unicodes, int startIdx, int length) {
+        byte[] range = getRange(unicodes, startIdx, length);
+
+        StringBuilder sb = new StringBuilder();
+        if (unicodes !=null ) {
+            sb.append("[");
+            for (int i = startIdx; i < range.length ; i++) {
+                sb.append(range[i]);
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("]");
+        }
+
+        System.out.println(sb.toString());
+    }
 }

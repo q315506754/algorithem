@@ -9,7 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -25,6 +28,9 @@ public class CommonController {
 
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private ServletContext servletContext;
 
 //    @Autowired
 //    private ICCAuto iccAuto;
@@ -51,7 +57,19 @@ public class CommonController {
     @RequestMapping(value = "/rmi", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=utf-8")
     public
     @ResponseBody
-    String rmi(String id) {
+    String rmi(String id, HttpServletRequest request) {
+        Object guguday = WebUtils.getSessionAttribute(request, "guguday");
+        logger.debug("guguday is:{}",guguday);
+
+        try {
+            logger.debug("servletContext {}", servletContext);
+            logger.debug("web getSessionId {}", WebUtils.getSessionId(request));
+            logger.debug("web getSessionAttribute-aaa {}",request.getAttribute("aaa"));
+            logger.debug("web getSessionAttribute-bbb {}", request.getAttribute("bbb"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "execute..." + String.valueOf("ddd");
     }
 

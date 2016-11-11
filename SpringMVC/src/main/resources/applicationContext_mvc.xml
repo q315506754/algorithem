@@ -30,4 +30,12 @@
         <property name="prefix" value="/WEB-INF/jsp/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
+    
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <bean class="com.jiangli.springMVC.InterceptorBean"></bean>
+        </mvc:interceptor>
+        <bean class="com.jiangli.springMVC.GlobalInterceptorBean"></bean>
+    </mvc:interceptors>
 </beans>

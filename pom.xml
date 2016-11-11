@@ -16,6 +16,7 @@
         <module>ByteCode</module>
         <module>Cache</module>
         <module>Cocurrent</module>
+        <module>Code</module>
         <module>Common</module>
         <module>DataStructure</module>
         <module>DB</module>
