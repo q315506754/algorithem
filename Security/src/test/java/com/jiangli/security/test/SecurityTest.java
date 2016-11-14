@@ -32,7 +32,7 @@ public class SecurityTest {
         ProtectionDomain protectionDomain = cls.getProtectionDomain();
         System.out.println(protectionDomain);
         CodeSource codeSource = protectionDomain.getCodeSource();
-        System.out.println(codeSource);
+        System.out.println("codeSource:"+codeSource);
         String file = codeSource.getLocation().getFile();
         System.out.println(file);
 
@@ -41,8 +41,19 @@ public class SecurityTest {
         Package aPackage = Package.getPackage("java.io");
 //        Package aPackage = Package.getPackage("sun");
         System.out.println(aPackage);
+
+
+
         try {
             System.out.println(BeanUtils.describe(aPackage));
+
+            Class<?> aClass = Class.forName("org.springframework.beans.factory.FactoryBean");
+
+            System.out.println(aClass);
+
+            ProtectionDomain domain = aClass.getProtectionDomain();
+            CodeSource source = domain.getCodeSource();
+            System.out.println(source);
         } catch (Exception e) {
             e.printStackTrace();
         }
