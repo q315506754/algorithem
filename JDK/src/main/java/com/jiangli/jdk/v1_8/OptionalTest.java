@@ -1,8 +1,6 @@
 package com.jiangli.jdk.v1_8;
 
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * @author Jiangli
@@ -23,6 +21,9 @@ public class OptionalTest {
 
         Optional<Object> o = Optional.ofNullable(null);
         System.out.println(o.orElse("sdfsdf"));
+
+        Optional<Person> o2 = Optional.ofNullable(null);
+        System.out.println(o2.orElse(new Person()));
 
 //        o.ifPresent(o1 -> {
         person.ifPresent(o1 -> {

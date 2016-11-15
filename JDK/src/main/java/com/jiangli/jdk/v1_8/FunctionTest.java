@@ -17,7 +17,7 @@ public class FunctionTest {
         Function<String, Integer> compose = toInteger.compose(backToString);
         System.out.println(compose.apply("123"));
 
-        Function<String, String> identity = Function.<String>identity();
+        Function<String, String> identity = Function.identity();
         System.out.println(identity.apply("dsdsgfdgf"));
 
         Function<Person, String> func = Person::toString;

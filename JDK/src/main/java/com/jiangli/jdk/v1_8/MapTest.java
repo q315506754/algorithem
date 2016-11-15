@@ -40,6 +40,7 @@ public class MapTest {
         map.merge(9, "val9", (value, newValue) -> null);
         System.out.println(map.get(9));             // val9
         map.merge(9, "concat", (value, newValue) -> value.concat(newValue));
+//        map.merge(9, null, (value, newValue) -> value.concat(newValue));
 //        map.merge(9, "concat", (value, newValue) -> null);
         System.out.println(map.get(9));                // val9concat
     }
