@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+sdfsd
+		<mvc:annotation-driven/>
+		<mvc:annotation-driven> 
+		    <mvc:message-converters register-defaults="true">        
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="objectMapper"> 
+						<bean class="com.fasterxml.jackson.databind.ObjectMapper"> 
+							<property name="dateFormat"> 
+								<bean class="java.text.SimpleDateFormat">
+									<constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/> 
+								</bean>
+							</property> 
+						</bean>
+					</property>
+				    <property name="supportedMediaTypes">
+				        <list>
+				            <value>application/json;charset=UTF-8</value>
+				        </list>
+				    </property>  
+				</bean> 	
+		    </mvc:message-converters> 
+		</mvc:annotation-driven>
+
+
+
+
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.zhihuishu.treenity.controller" />
+ 	<!-- 静态资源映射 -->
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+	<!-- <mvc:resources mapping="/favicon.ico" location="http://assets.zhihuishu.com/icon/favicon.ico" />-->
+	<!-- 首页 -->
+	<mvc:view-controller path="/" view-name="redirect:course/home"/>
+	<!-- <mvc:view-controller path="/logout" view-name="login/logout"/> -->
+
+	<!-- jsp -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 全局异常处理 -->
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultStatusCode" value="500" />
+		<property name="defaultErrorView" value="error/500" />
+	</bean>
+    
+    <mvc:interceptors>  
+    <!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 --> 
+    	<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />  
+	</mvc:interceptors> 
+	<!-- 基于Session -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+	<!-- 基于Cookie -->
+	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" > 
+		<property name="cookieName" value="Z_LOCALE" />
+	    设置cookie最大有效时间，60*60*24*365
+	    <property name="cookieMaxAge" value="31536000" />
+	</bean>   -->
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="i18n/message"/>
+    </bean>
+</beans>
