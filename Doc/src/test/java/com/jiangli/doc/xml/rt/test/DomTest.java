@@ -7,10 +7,7 @@ import org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -97,8 +94,19 @@ public class DomTest {
             }else{
                 System.out.println("Node:"+node);
             }
+
+            NamedNodeMap attributes = node.getAttributes();
+
             System.out.println("detail:"+ org.apache.commons.beanutils.BeanUtils.describe(node));
-            System.out.println(String.format("info-getNodeName:%s getNodeValue:%s getLocalName:%s ",node.getNodeName(),node.getNodeValue(),node.getLocalName()));
+            System.out.println("attributes:"+ attributes);
+            if (attributes != null && attributes.getLength() > 0) {
+                for (int j = 0; j < attributes.getLength(); j++) {
+                    Node item = attributes.item(j);
+                    System.out.println(String.format("attribute%d Node:%s ",j,item));
+                    showNodeInfo(item);
+                }
+            }
+            showNodeInfo(node);
             System.out.println(split);
         }
 
@@ -126,6 +134,10 @@ public class DomTest {
         System.out.println(dbdd);
 
 
+    }
+
+    private void showNodeInfo(Node node) {
+        System.out.println(String.format("info-getNodeName:%s getNodeValue:%s getLocalName:%s ",node.getNodeName(),node.getNodeValue(),node.getLocalName()));
     }
 
 
