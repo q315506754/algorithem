@@ -38,6 +38,14 @@
             <artifactId>javacv</artifactId>
             <version>1.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>SIFT</groupId>
+            <artifactId>SIFT</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/Java_SIFT.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>

@@ -24,6 +24,7 @@
         <module>Document</module>
         <module>Graphics</module>
         <module>Hack</module>
+        <module>Hadoop</module>
         <module>IO</module>
         <module>JDK</module>
         <module>JNI</module>
@@ -62,11 +63,11 @@
             <!--<name>sonatype</name>-->
             <!--<url>http://www.sonatype.org/nexus/</url>-->
         <!--</repository>-->
-        <repository>
-            　<id>ibiblio</id>
-        　　<name>Human Readable Name for this Mirror.</name>
-        　　<url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>ibiblio</id>-->
+        <!--　　<name>Human Readable Name for this Mirror.</name>-->
+        <!--　　<url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>-->
+        <!--</repository>-->
         <repository>
             <id>maven repo2</id>
             <name>maven repo2</name>

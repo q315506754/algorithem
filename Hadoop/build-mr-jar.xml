@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="buildRMI" basedir="." default="all">
+    <property name="dir.sources" value="src/main/java"/>
+    <property name="dir.classes" value="target/classes"/>
+    <property name="package.file" value="target/hadoop-test.jar"/>
+    <property name="mainclass" value="com.jiangli.hadoop.EarthQuakesPerDayJob"/>
+
+    <classloader>
+        <classpath id="project.classpath">
+            <!--<pathelement location="dist/test.jar"/>-->
+            <!--<pathelement path="${java.class.path}"/>-->
+            <!--<filelist dir="${basedir}">-->
+                <!--<include name="**/*.jar"/>-->
+            <!--</filelist>-->
+            <!--<dirset dir="${build}">-->
+                <!--<include name="**/classes"/>-->
+                <!--<exclude name="**/classes"/>-->
+            <!--</dirset>-->
+        </classpath>
+    </classloader>
+
+
+    <target name="compile" >
+        <delete dir="${dir.classes}"/>
+        <mkdir dir="${dir.classes}"/>
+        <javac source="1.7" target="1.7" srcdir="${dir.sources}" destdir="${dir.classes}"  includeantruntime="false">
+            <classpath refid="project.classpath" />
+        </javac>
+    </target>
+
+    <target name="package" depends="compile">
+        <delete file="${package.file}"/>
+
+        <jar jarfile="${package.file}">
+
+        	<!-- class打入jar -->
+           <fileset dir="${dir.classes}" >
+           		<!-- rmi 接口  新加接口需在此添加一行-->
+           		<include name="com/jiangli/hadoop/**/**.class"/>
+
+
+           		<!-- 工具类 和 异常类  -->
+           		<!--<include name="**/utils/UpYunUtil.class"/>-->
+           		<!--<include name="**/utils/UpYun.class"/>-->
+           		<!--<include name="**/utils/ProxyRepository.class"/>-->
+           		<!--<include name="**/utils/DateUtil.class"/>-->
+           		<!--<include name="**/ServiceException.class"/>-->
+           		<!--<include name="**/utils/GetIpAddrUtil.class"/>-->
+           	    <!--<include name="**/utils/LogUtil.class"/>-->
+           		<!--<include name="**/utils/EncryptionUtil.class"/>-->
+           		<!--<include name="**/utils/StringUtil.class"/>-->
+           		<!--<include name="**/utils/CommonDateParseUtil.class"/>-->
+           </fileset>
+
+           <!-- 为了给前端调用显示interface的形参名需把java源文件也打入jar包-->
+           <fileset dir="${dir.sources}" >
+               <include name="com/jiangli/hadoop/**/**.java"/>
+           </fileset>
+
+            <manifest>
+                <attribute name="Main-Class" value="${mainclass}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="all" depends="package">
+    </target>
+
+</project>

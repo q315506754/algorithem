@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.jiangli.AlgorithemProject</groupId>
+        <artifactId>AlgorithemProject-parent</artifactId>
+        <version>${com.provider-version}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.jiangli.AlgorithemProject</groupId>
+    <artifactId>Hadoop</artifactId>
+    <packaging>jar</packaging>
+    <version>${com.provider-version}</version>
+
+
+    <properties>
+        <resources.dir>src\main\resources\props</resources.dir>
+        <jdkforthismodule>1.7</jdkforthismodule>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.jiangli.AlgorithemProject</groupId>
+            <artifactId>Common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+
+        <!--for hadoop-->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <finalName>hadoop-test</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdkforthismodule}</source>
+                    <target>${jdkforthismodule}</target>
+                    <encoding>UTF-8</encoding>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <includes>
+                        <include>com/jiangli/hadoop/**/**</include>
+                    </includes>
+                    <excludes>
+                        <!--不打对外接口-->
+                        <!--<exclude>com/bingdian/dubboservice/project/restful/**</exclude>-->
+                    </excludes>
+                    <archive>
+                        <manifest>
+                            <!--<addClasspath>true</addClasspath>-->
+                            <mainClass>com.jiangli.hadoop.EarthQuakesPerDayJob</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <compile-jdk>
+                                ${jdkforthismodule}
+                            </compile-jdk>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

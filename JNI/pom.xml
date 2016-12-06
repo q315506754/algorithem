@@ -38,6 +38,14 @@
             <artifactId>junit</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jna-3.3.0.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>

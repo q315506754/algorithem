@@ -1,7 +1,6 @@
 package com.jiangli.document.pdf.jasper;
 
 import com.jiangli.common.utils.PathUtil;
-import net.sf.jasperreports.engine.*;
 import net.sf.json.JSONObject;
 
 import java.io.File;
@@ -35,11 +34,11 @@ public class JasperSavePdf {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.putAll(message);
         FileInputStream fis = new FileInputStream(new File(modelPath));
-        JasperReport jasperReport = JasperCompileManager.compileReport(fis);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramMap, new JREmptyDataSource());
-
-        File pdFile = new File(pdfPath);
-        JasperExportManager.exportReportToPdfFile(jasperPrint, pdFile.getAbsolutePath());
+//        JasperReport jasperReport = JasperCompileManager.compileReport(fis);
+//        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramMap, new JREmptyDataSource());
+//
+//        File pdFile = new File(pdfPath);
+//        JasperExportManager.exportReportToPdfFile(jasperPrint, pdFile.getAbsolutePath());
 
 
     }
