@@ -14,9 +14,9 @@
     <mvc:annotation-driven/>
 
     <!-- 静态文件配置 -->
-    <mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
-    <mvc:resources location="/WEB-INF/css/" mapping="/css/**" />
-    <mvc:resources location="/WEB-INF/img/" mapping="/img/**" />
+    <mvc:resources location="/assets/js/" mapping="/js/**" />
+    <mvc:resources location="/assets/css/" mapping="/css/**" />
+    <mvc:resources location="/assets/img/" mapping="/img/**" />
     <mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
     <mvc:resources location="/WEB-INF/sound/" mapping="/sound/**" />
     <mvc:resources location="/sockjs/" mapping="/sockjs/**/**" />
