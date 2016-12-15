@@ -20,10 +20,12 @@ public class TaobaoPageProcessor implements PageProcessor {
         page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
         if (page.getResultItems().get("name") == null) {
             //skip this page
-            page.setSkip(true);
+//            page.setSkip(true);
         }
         page.putField("readme", page.getHtml().xpath("//div[@id='readme']/tidyText()"));
 
+//        System.out.println(page.getHtml().links().regex("(https://github\\.com/[\\w\\-]+/[\\w\\-]+)").all().toString());
+//        System.out.println(page.getResultItems());
         // 部分三：从页面发现后续的url地址来抓取
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/[\\w\\-]+/[\\w\\-]+)").all());
     }
