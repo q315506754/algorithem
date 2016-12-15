@@ -40,6 +40,7 @@
         <module>Spring</module>
         <module>SpringMVC</module>
         <module>Test</module>
+        <module>WebCrawler</module>
     </modules>
 
     <repositories>

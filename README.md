@@ -4,8 +4,8 @@
 ## 标题 选择性闭合######
 
 
-* 区块元素  
- 1. 段落和换行 Setext 和类 atx 
+* 区块元素
+ 1. 段落和换行 Setext 和类 atx
  1. 标题
  1. 区块引用 Blockquotes >
  1. 列表
@@ -17,9 +17,9 @@
  1. 代码    sdfsdf `asdasdas`
  1. 图片 ![alt text](/path/to/img.jpg "Title")
 * 其它
- 1. 自动链接 <http://example.com/>  <address@example.com> 
+ 1. 自动链接 <http://example.com/>  <address@example.com>
  1. 反斜杠 \*literal asterisks\*
- 
+
 转自<http://www.appinn.com/markdown/index.html>
 
 * * *
@@ -36,31 +36,31 @@ Setext A First Level Header
 A Second Level Header
 ---------------------
 
-gfdgddf后面有2空格=换行  
-gfdgfdg后面有n空格      
+gfdgddf后面有2空格=换行
+gfdgfdg后面有n空格
 dgfdfg
 
 ##区块
 > This is a blockquote.
-> 
+>
 > This is the second paragraph in the blockquote.
 >
 > ## This is an H2 in a blockquote
 
->sdf  
->sd  
+>sdf
+>sd
 >fsdfsd
 >f
 
->dfgfdgdfgfdgdfgdfgdfgdfgdfgfddfgg  
+>dfgfdgdfgfdgdfgdfgdfgdfgdfgfddfgg
 fdgdfgdfgdfgdfgfdgfd  d
-dfgdfgfdgfdgf  
+dfgdfgfdgfdgf
 fdgdfgdf
 
 > This is the first level of quoting.
 >
-> > This is nested blockquote.  
->>This is nested blockquote.  
+> > This is nested blockquote.
+>>This is nested blockquote.
 >
 > Back to the first level.
 
@@ -82,17 +82,17 @@ fdgdfgdf
 >>
 >>2L
 >
->3L  
+>3L
 
 haha
 
 > ## 这是一个标题。
-> 
+>
 > 1.   这是第一行列表项。
 > 2.   这是第二行列表项。
-> 
+>
 > 给出一些例子代码：
-> 
+>
 >     return shell_exec("echo $input | $markdown_script");
 
 
@@ -134,12 +134,12 @@ With multiple paragraphs.
     viverra nec, fringilla in, laoreet vitae, risus.
 *   Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
     Suspendisse id sem consectetuer libero luctus adipiscing.
-    
+
 *Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
     Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
     viverra nec, fringilla in, laoreet vitae, risus.
 *Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
-    Suspendisse id sem consectetuer libero luctus adipiscing. 
+    Suspendisse id sem consectetuer libero luctus adipiscing.
 
 *   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
 Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
@@ -183,26 +183,26 @@ sit amet, consectetuer adipiscing elit.
 
     > This is a blockquote
     > inside a list item.
-    
+
 *   A list item with a blockquote:
 
-    > This is a blockquote  
+    > This is a blockquote
     >dsfsdfsdfsdfsdfsdfsdf
     > inside a list item.
-    
+
 *   一列表项包含一个列表区块：
 
         <代码写在这>
-        fxgdfgfdg  
-        dfgdfgdfgfd  
+        fxgdfgfdg
+        dfgdfgdfgfd
 
 Here is an example of AppleScript:
 
     tell application "Foo"
         beep
     end tell
-    
-    
+
+
 Here is an example of AppleScript:
 
     tell application "Foo"
@@ -267,7 +267,7 @@ you've got to put paragraph tags in your blockquotes:
   x1If you want your page to validate under XHTML 1.0 Strict,
     x2you've got to put paragraph tags in your blockquotes:
         x4you've got to put paragraph tags in your blockquotes:
-        
+
     至少2个tab才会认为是代码,还需要前面的空行
     public RemoteException setMessage(String message) {
             this.message = message;
@@ -278,21 +278,21 @@ you've got to put paragraph tags in your blockquotes:
               this.message = message;
               return this ;
       }
-      
+
       4个tab 前面有空行
       public RemoteException setMessage(String message) {
               this.message = message;
               return this ;
       }
-      
-      
+
+
         5个tab 前面有2空行
         public RemoteException setMessage(String message) {
                 this.message = message;
                 return this ;
         }
-        
-        
+
+
 #反引号
 `If you want your page to validate under XHTML 1.0 Strict,`
 `you've got to put paragraph tags in your blockquotes:`
@@ -303,4 +303,4 @@ you've got to put paragraph tags in your blockquotes:`
 #space
     x4If you want your page to validate under XHTML 1.0 Strict,
     x4you've got to put paragraph tags in your blockquotes:
-        x8you've got to put paragraph tags in your blockquotes:  
+        x8you've got to put paragraph tags in your blockquotes:

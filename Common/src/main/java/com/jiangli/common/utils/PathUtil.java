@@ -1,6 +1,7 @@
 package com.jiangli.common.utils;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
@@ -25,6 +26,14 @@ public class PathUtil {
     public static String getClassPath(Class cls) {
         try {
             return cls.getClassLoader().getResource("").toURI().getPath();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static URI getClassFileURI(Class cls, String fileName) {
+        try {
+            return cls.getClassLoader().getResource(fileName).toURI();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
