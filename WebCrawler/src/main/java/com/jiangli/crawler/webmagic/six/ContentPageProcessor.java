@@ -20,7 +20,7 @@ public class ContentPageProcessor implements PageProcessor {
     public String match(Pattern pattern,String src) {
         Matcher matcher = pattern.matcher(src);
         matcher.find();
-        return matcher.group();
+        return matcher.group().trim();
     }
 
     @Override
