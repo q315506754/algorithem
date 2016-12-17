@@ -49,6 +49,20 @@
         })();
         $(function () {
             console.log('loaded');
+            $.ajax({
+                url:"/autoc/get",
+                dataType:"json"
+            })
+            $.ajax({
+                url:"/eventinfo",
+                dataType:"json"
+            })
+            $.ajax({
+                url:"/autoc/get",
+            })
+            $.ajax({
+                url:"/eventinfo",
+            })
         })
     </script>
 </head>

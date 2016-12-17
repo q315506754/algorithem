@@ -45,7 +45,7 @@ public class GlobalInterceptorBean extends HandlerInterceptorAdapter {
         attrs.put("bbb", "222");
         WebUtils.exposeRequestAttributes(request,attrs);
 
-        WebUtils.exposeErrorRequestAttributes(request,new Throwable("haha"),"servname" );
+//        WebUtils.exposeErrorRequestAttributes(request,new Throwable("haha"),"servname" );
 
 //        http://localhost:8080/rmi?javax=1232&javax3=sfdf
 //        javax{=1232, 3=sfdf}

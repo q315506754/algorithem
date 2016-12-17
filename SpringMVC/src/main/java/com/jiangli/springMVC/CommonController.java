@@ -78,7 +78,8 @@ public class CommonController {
      *
      * @return
      */
-    @RequestMapping(value = "/autoc/get", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/autoc/get", method = {RequestMethod.POST, RequestMethod.GET})
+//    @RequestMapping(value = "/autoc/get", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=utf-8")
     public
     @ResponseBody
     JSONArray autoc(String type, String key, Integer size) {
@@ -101,29 +102,22 @@ public class CommonController {
         return arr;
     }
 
-//    @RequestMapping(value = "/eventinfo", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=utf-8")
-//    public
-//    @ResponseBody
-//    JSONObject eventinfo() {
-//
-//        JSONObject param = new JSONObject();
-//
-//        List<String> roleGroups = configurator.getRoleGroups();
-//
-//        //除了自己组
-//        String myGroup = String.valueOf(session.getAttribute(SessionAttr.ENTERGROUP));
-//        roleGroups.remove(myGroup);
-//
-//        param.put("groups", roleGroups);
-//
-//        JSONObject bpmEvent = configurator.getBPMEvent();
-//        param.put("subTypes", bpmEvent);
-//
-//        logger.debug("cur group:"+myGroup);
-//        logger.debug("eventinfo result:"+param);
-//
-//        return param;
-//    }
+    @RequestMapping(value = "/eventinfo", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=utf-8")
+//    @RequestMapping(value = "/eventinfo", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    JSONObject eventinfo() {
+
+        JSONObject param = new JSONObject();
+
+        param.put("groups", "fsdfsdf");
+
+        param.put("subTypes", "bbbb");
+
+        logger.debug("eventinfo result:"+param);
+
+        return param;
+    }
 //
 //    @RequestMapping(value = "/hotelPopInfo", method = {RequestMethod.POST, RequestMethod.GET})
 //    public ModelAndView popInfo(HttpServletRequest request, String pName) {

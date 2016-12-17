@@ -41,6 +41,7 @@
         <module>SpringMVC</module>
         <module>Test</module>
         <module>WebCrawler</module>
+        <module>WebCrawlerWeb</module>
     </modules>
 
     <repositories>
