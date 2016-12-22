@@ -39,6 +39,14 @@ public class PathUtil {
         }
         return null;
     }
+    public static File getClassFile(Class cls, String fileName) {
+        try {
+            return new File(getClassFileURI(cls,fileName));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static String getProjectPath(Class cls) {
         File parent = getTargetPath(getClassPath());
