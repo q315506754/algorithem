@@ -29,6 +29,7 @@ ISV(Independent Software Vendors)独立软件开发商
 XSS(Cross Site Scripting)跨站脚本攻击
 CRSF(Cross Site Request Forgery)跨站请求伪造
 DDos(Distributed Denial of Service)分布式拒绝服务攻击
+CORS(Cross-Origin Resource Sharing )跨源资源共享
 
 MD5 (Message Digest Algorithm)消息摘要算法第五版 128位=16字节=32个字符
 SHA(Secure Hash Algorithm)安全散列算法 基于MD4 160位=20字节=40个字符
