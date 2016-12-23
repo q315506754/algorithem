@@ -11,7 +11,7 @@ import java.io.File;
  * @author Jiangli
  * @date 2016/12/22 16:57
  */
-public class JSoupLearn {
+public class JSoupLearnInput {
     public static void main(String[] args) {
         fromHtml();
         printSplit();
@@ -27,12 +27,24 @@ public class JSoupLearn {
 
         fromFile();
         printSplit();
+
+        cmpDiffParse();
+        printSplit();
+    }
+
+    private static void cmpDiffParse() {
+        String html = "<div><p>Lorem ipsum.</p>";
+        Document doc = Jsoup.parse(html);
+        System.out.println(doc);
+        printSplit();
+        doc = Jsoup.parseBodyFragment(html);
+        System.out.println(doc);
     }
 
     private static void fromFile() {
         try {
 
-            File input = PathUtil.getClassFile(JSoupLearn.class, "Example Domain.html");
+            File input = PathUtil.getClassFile(JSoupLearnInput.class, "Example Domain.html");
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             System.out.println("doc:"+doc);
         } catch (Exception e) {

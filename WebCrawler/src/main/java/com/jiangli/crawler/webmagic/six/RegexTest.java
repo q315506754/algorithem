@@ -19,7 +19,7 @@ public class RegexTest {
         String r5 ="<td class=\"author\"> <cite> <a href=\"http://www.baidu.com/forum/space.php?action=viewpro&amp;uid=11797557\">chriscfleung</a><img src=\"images/thankyou.gif\" border=\"0\" align=\"absmiddle\">37 </cite> <em>2016-5-14</em> </td> ";
         String r7 ="<td class=\"nums\">1.21G / MP4 </td> ";
         String r8 ="<td class=\"lastpost\"> <em><a href=\"http://www.baidu.com/forum/redirect.php?tid=9652539&amp;goto=lastpost#lastpost\">2016-5-18 04:37</a></em> <cite>by <a href=\"http://www.baidu.com/forum/space.php?action=viewpro&amp;username=C-B\">C-B</a></cite> </td> ";
-        String title ="SDDE-339「制服 下着 全裸」でおもてなし またがりオマ○コ航空";
+        String title ="SDDE-339「zf xz qqq」sdfsdfsdf aaaaaaaaaaaaa";
 
         Pattern ptn_type = Pattern.compile("(?<=<em>\\[<a href=\"http.{0,200}\">).*?(?=</a>)");
         Pattern ptn_url = Pattern.compile("(?<=<span id=\".{0,50}?\"><a href=\")http://.*?(?=\")");
@@ -42,6 +42,8 @@ public class RegexTest {
 
         l = System.currentTimeMillis() -l;
         System.out.println("cost:"+l);
+
+
     }
 
 }
