@@ -4,6 +4,14 @@
 ## 标题 选择性闭合######
 
 
+
+
+
+
+
+
+
+
 * 区块元素
  1. 段落和换行 Setext 和类 atx
  1. 标题
@@ -19,6 +27,7 @@
 * 其它
  1. 自动链接 <http://example.com/>  <address@example.com>
  1. 反斜杠 \*literal asterisks\*
+
 
 转自<http://www.appinn.com/markdown/index.html>
 
@@ -39,6 +48,8 @@ A Second Level Header
 gfdgddf后面有2空格=换行
 gfdgfdg后面有n空格
 dgfdfg
+
+
 
 ##区块
 > This is a blockquote.
