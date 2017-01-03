@@ -96,4 +96,37 @@ DML：数据操纵语言，关键字：Insert、delete、update
 DCL：数据库控制语言 ，关键字：grant、remove
 DQL：数据库查询语言，关键字：select
 
+PE:product engineer 产品工程师；
+SQE:供货商管理工程师；
+QE:quality engineer 品质工程师；
+QA:Qualtiy Assurance，品质保证。
+SQA:软件质量保证经理（SQA Manager）；
+IQC:来料品质检验，就是收到货后对品质进行确认检查，是否合格；
+SCM : 供应链管理 (Supply Chain Management
+PD: Product Department生产部
+RD: Research and Development engineer，研发工程师
+FE:有多种解释，在实体经济中，FE可以指Facility Engineer，厂务工程师，主要负责工厂的外围的一些支持系统。
+FE:FE可以指Front-End Development，前端开发，新新职业。
+OP: Operator，操作员，管理员。
 
+CEO Chief Executive Officer 首席执行官
+COO Chief Operating Officer 首席运营官
+CFO Chief Financial Officer 首席财务官
+CTO Chief Technology Officer 首席技术官
+CIO Chief Information Officer 首席信息官
+CSO Chief Security Officer 首席安全官
+CKO Chief Knowledge Officer 首席知识官
+CMO Chief Marketing Officer 首席市场官/首席营销官
+CCO Chief Crisis Official 首席危机官
+CHO Chief Human Resources Officer 人力资源总监
+CPA Certified Public Accountant 注册会计师
+CPO Chief Privacy Officer 首席隐私官
+CBO Chief Brand Officer 首席品牌官
+CAO Chief Administrative Officer 首席行政官
+CGO Chief Government Officer 首席政府关系官
+CRO Chief Research Officer 研究总监
+CPO Chief Procurement Officer 首席采购官
+CQO Chief Quality Officer 首席质量官
+
+RDC：Regional Distribution Center，区域分发中心
+RDC：Research and Development Center, 研发中心,也作"R&C"
