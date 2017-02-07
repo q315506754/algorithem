@@ -16,15 +16,13 @@ import java.util.Set;
  * Created by Jiangli on 2016/12/15.
  */
 public class Conf {
-//    public final static String startTableUrl = "http://www.sis001.com/forum/forumdisplay.php?fid=58&filter=type&typeid=1255&page=1";
-    //all youma asia
-//    public final static String startTableUrl = "http://www.sis001.com/forum/forum-58-1.html";
+//    public final static String startTableUrl = "http://www.baidu.com/forum/forumdisplay.php?fid=58&filter=type&typeid=1255&page=1";
+//    public final static String startTableUrl = "http://www.baidu.com/forum/forum-58-1.html";
 
-    //all wuma asia
-    public final static String startTableUrl = "http://www.sis001.com/forum/forum-25-1.html";
+    public final static String startTableUrl = "http://www.baidu.com/forum/forum-25-1.html";
 
 
-    public final static String startDetailUrl = "http://www.sis001.com/forum/viewthread.php?tid=9665239&extra=page%3D4%26amp%3Bfilter%3Dtype%26amp%3Btypeid%3D1255";
+    public final static String startDetailUrl = "http://www.baidu.com/forum/viewthread.php?tid=9665239&extra=page%3D4%26amp%3Bfilter%3Dtype%26amp%3Btypeid%3D1255";
 
     public final static String listRegex = "forum/forum";
     public final static String detailRegex = "forum/viewthread.php";
