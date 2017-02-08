@@ -70,7 +70,7 @@
 
 课程
 类型TURN_TYPE：0 非校内翻转课|1 校内翻转课程
-类型TYPE：1进阶课程|2微课程|4海外课程
+类型TYPE：1进阶课程|2微课程|3私有云|4海外课程
 类型COURSE_TYPE：如果COURSE_OPENER=2（学校课程），则1共享课程|2校内课程|3校内+共享
                  如果COURSE_OPENER=3（企业课程），则1企业内部课程|2企业服务课程
 类别COURSE_CATEGORY：1.公共必修课；2.通识必修课；3.专业基础课；4.专业必修课 5其他 6 通识课 7 专业课,
@@ -92,3 +92,7 @@ HIT：
 课程预览
 课程教学团队
 
+
+机构老师：
+给定一个userid,如果有机构学校的数据（myuni TBL_SCHOOL），size>=1，则该老师为机构老师
+创建Online TBL_COUSE课程前需要先创建ShareCourseDto(myuni TBL_COURSE）
