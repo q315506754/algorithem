@@ -68,13 +68,14 @@
 ------------------------------------------------------------------------------------------------
 
 
-课程
+课程 TBL_COURSE
 类型TURN_TYPE：0 非校内翻转课|1 校内翻转课程
 类型TYPE：1进阶课程|2微课程|3私有云|4海外课程
 类型COURSE_TYPE：如果COURSE_OPENER=2（学校课程），则1共享课程|2校内课程|3校内+共享
                  如果COURSE_OPENER=3（企业课程），则1企业内部课程|2企业服务课程
 类别COURSE_CATEGORY：1.公共必修课；2.通识必修课；3.专业基础课；4.专业必修课 5其他 6 通识课 7 专业课,
-状态STATE：NULL建课中|0已建课待审核|1通过审核|2不通过
+状态STATE：
+    NULL(建课中)|0已建课(待审核)|1通过审核(招生中V2_RECRUIT.STATUS=2,COURSE_STATE=1、运行中V2_RECRUIT.STATUS=3，COURSE_STATE=2)|2不通过(已拒绝)
 运行模式COURSE_MODE：1混合式|2在线式
 用户范围USER_RANGE：0:本机构注册用户 |1:G2School注册用户 |2:所有用户
 是否免费IS_FREE：0免费|1收费
@@ -86,7 +87,34 @@
 审核结果APPROVAL_RESULT_STATUS：
 HIT：
 
+招生：V2_RECRUIT
+招生编号CODE
+招生类型TYPE:1:自学辅导式、2:混合式
+招生开始时间START_TIME
+招生结束时间END_TIME
+招生状态STATUS:1:未开始 2:进行中 3:终止 4:暂停
+课程状态COURSE_STATE:1未开始[混合式]、2进行中、3已完成
+人为终止时间STOP_TIME
+课程运行开始时间(混合式)COURSE_STARTTIME
+课程运行结束时间(混合式)COURSE_ENDTIME
+c2b招生范围C2B_RANGES：（0不限，1限制范围）
+c2c招生范围C2C_RANGES：（0不限范围，1限制范围）
+录取流程ENROLL：（1:申请即可加入 2:加验证码 3:加报名表 4:校内招生）
+引进课程收费模式PAY_TYPE：（1免费，2按单个人算，3团购）
+招生对象RECRUIT_FOR:（1针对个人、2针对机构（学校和企业）、3个人+机构）
+是否开启观摩班IS_VISIT: 0关闭 1开启
+期末考试开始时间EXAM_START_TIME
+期末考试结束时间EXAM_END_TIME
 
+
+见面课（建课）：MEET_COURSE
+任务类型TASK_TYPE: 1、直播互动课  2、小组讨论课  3、实践课  4、直播课（无互动）5、虚拟教室
+是否计入总成绩IS_ADD_SCORE：0 否 ; 1 是
+
+见面课（运行）：V2_TEACHING_TASK
+任务类型TASK_TYPE: 1、直播互动课  2、小组讨论课  3、实践课  4、直播课（无互动）5、虚拟教室
+考勤状态ATTENDANCE:0表示不考勤1表示考勤
+教学任务类型TYPE:0表示招生或班级计划 1表示招生创建班级计划
 
 课程学习页
 课程预览

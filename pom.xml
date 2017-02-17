@@ -38,6 +38,7 @@
         <module>SOA</module>
         <module>Sort</module>
         <module>Spring</module>
+        <module>SpringBoot</module>
         <module>SpringMVC</module>
         <module>Test</module>
         <module>WebCrawler</module>
