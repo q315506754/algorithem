@@ -1,0 +1,23 @@
+Task Schedule
+1.先来先服务 FCFS
+2.短作业优先 SJF
+3.响应比高者优先 HRN  需要顾及响应比
+3.优先度（静态，动态）
+4.多级队列优先度
+
+
+Page Schedule
+FIFO
+LRU
+
+Hardware Drive
+
+Space Distribution
+1.首次匹配适应 FF
+2.首次循环适应
+3.最佳适应
+4.最坏分割
+5.快速适应，分类搜索（索引了的最佳适应算法）
+
+Other
+1.Banker's Algorithm
