@@ -11,11 +11,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @EnableAutoConfiguration
+@ComponentScan
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})  -Dspring.autoconfigure.exclude
 public class Example implements ApplicationContextAware{
     private ApplicationContext applicationContext;
@@ -45,6 +47,7 @@ public class Example implements ApplicationContextAware{
 
     }
 
+//    http://localhost:8080
     @RequestMapping("/")
     String home() {
         //AnnotationConfigEmbeddedWebApplicationContext
