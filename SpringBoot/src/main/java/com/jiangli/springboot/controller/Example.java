@@ -6,18 +6,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
+import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.TimeUnit;
+
 @RestController
+
+//@SpringBootApplication = as follows
 @EnableAutoConfiguration
 @ComponentScan
+@Configuration
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})  -Dspring.autoconfigure.exclude
 public class Example implements ApplicationContextAware{
     private ApplicationContext applicationContext;
@@ -34,6 +46,30 @@ public class Example implements ApplicationContextAware{
     @Value("${random.value}")
     private String randomStr;
 
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        System.out.println("corsConfigurer");
+//        return new WebMvcConfigurerAdapter() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**");
+//            }
+//        };
+//    }
+
+    //or define your EmbeddedServletContainerCustomizer bean
+//        @Bean
+//        public EmbeddedServletContainerFactory servletContainer() {
+//            TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
+//            factory.setPort(9000);
+//            factory.setSessionTimeout(10, TimeUnit.MINUTES);
+////            factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/src/main/resources/public/error/404.html"));
+////            factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404.html"));
+////            factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.html"));
+////            factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error/555.html"));
+//            return factory;
+//        }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -49,6 +85,7 @@ public class Example implements ApplicationContextAware{
 
 //    http://localhost:8080
     @RequestMapping("/")
+    @CrossOrigin
     String home() {
         //AnnotationConfigEmbeddedWebApplicationContext
 //        or AnnotationConfigApplicationContext

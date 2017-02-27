@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <version>${com.provider-version}</version>
 
+
     <name>AlgorithemProject-parent</name>
 
     <modules>
@@ -44,6 +45,12 @@
         <module>WebCrawler</module>
         <module>WebCrawlerWeb</module>
     </modules>
+
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
     <repositories>
         <!--<repository>-->

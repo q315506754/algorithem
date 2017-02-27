@@ -1,0 +1,13 @@
+Spring Boot includes auto-configuration support for the following templating engines:
+
+FreeMarker
+Groovy
+Thymeleaf
+Mustache
+
+
+JSPs should be avoided if possible, there are several known limitations when using them with embedded servlet containers.
+
+
+When you’re using one of these templating engines with the default configuration, your templates will be picked up automatically from src/main/resources/templates.
+
