@@ -37,6 +37,8 @@ public class LogbackTest {
     @Test
     public void func() {
         logger.debug("ok");
+
+        System.out.println("  ...".startsWith("..."));
     }
 
     @Test

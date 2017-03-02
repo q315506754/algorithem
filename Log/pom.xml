@@ -22,6 +22,7 @@
             <!--<groupId>com.jiangli.AlgorithemProject</groupId>-->
             <!--<artifactId>Common</artifactId>-->
         <!--</dependency>-->
+
         <!-- slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -32,6 +33,18 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>3.2.4.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>1.3.1.RELEASE</version>
         </dependency>
 
         <dependency>

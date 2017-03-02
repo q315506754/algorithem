@@ -67,6 +67,25 @@
 
 ------------------------------------------------------------------------------------------------
 
+老版建课
+course.getType() != null && course.getType().equals(1)
+                 && course.getTurnType() != null && course.getTurnType().equals(0)
+                 && course.getFirstStepStat() == null
+
+
+新版建课
+course.getFirstStepStat() != null
+
+私有云建课
+course.getTurnType() != null && course.getTurnType().equals(1) && (!"4".equals(course.getType()+""))
+
+海外建课
+course.getType() != null && course.getType().equals(4)
+
+微课程
+course.getType() != null && course.getType().equals(2)
+
+
 
 课程 TBL_COURSE
 类型TURN_TYPE：0 非校内翻转课|1 校内翻转课程
