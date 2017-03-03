@@ -1,12 +1,12 @@
 package com.jiangli.test;
 
-import static org.mockito.Mockito.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.mockito.Mockito.*;
 /**
  * @author Jiangli
  *
@@ -30,6 +30,11 @@ public class MockTest {
 
         //junit测试
         Assert.assertEquals("helloworld", result);
+
+        System.out.println(list.get(0));
+        System.out.println(list.get(1));
+        System.out.println(list.get(2));
+        System.out.println(list.get(3));
     }
 
     @Test
@@ -45,8 +50,41 @@ public class MockTest {
 
         Assert.assertEquals("helloworld", result);
 
+        System.out.println(list.get(0));
+        System.out.println(list.get(1));
+        System.out.println(list.get(2));
+        System.out.println(list.get(3));
+
     }
 
+    interface A {
+        default String a(int a) {
+            String x = "a" + a;
+            System.out.println(x);
+            return x;
+        }
+        default void b(String b) {
+            System.out.println("b"+b);
+        }
+    }
+
+    @Test
+    public void testObject() {
+        A aIns = new A() {
+        };
+        System.out.println(aIns.a(12));
+
+        A mock = mock(A.class);
+        System.out.println(mock);
+
+        String a = mock.a(12);
+        System.out.println(a);
+
+        when(mock.a(12)).thenReturn("gggggggaaa");
+
+        a = mock.a(12);
+        System.out.println(a);
+    }
     @Test
     public void argumentMatcherTest2(){
 
