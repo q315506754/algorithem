@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.jiangli.AlgorithemProject</groupId>
+        <artifactId>AlgorithemProject-parent</artifactId>
+        <version>${com.provider-version}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.jiangli.AlgorithemProject</groupId>
+    <artifactId>MavenPluginClient</artifactId>
+    <packaging>jar</packaging>
+    <version>${com.provider-version}</version>
+
+
+    <properties>
+        <resources.dir>src\main\resources\props</resources.dir>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.jiangli.AlgorithemProject</groupId>
+            <artifactId>Common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.jiangli.AlgorithemProject</groupId>
+                <artifactId>MavenPlugin</artifactId>
+                <version>${com.provider-version}</version>
+
+                <configuration>
+                    <includes>
+                        <include>java</include>
+                        <include>properties</include>
+                    </includes>
+                    <ratios>
+                        <ratio>1.0</ratio>
+                        <ratio>0.5</ratio>
+                    </ratios>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>count line number</id>
+                        <!--<phase>install</phase>-->
+                        <goals>
+                            <goal>count</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
