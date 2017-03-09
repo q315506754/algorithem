@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>task_bing.html</title>
+
+</head>
+<body>
+
+<div>
+
+
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div id="main" style="width: 500px;height:600px;border: solid 2px black;float: left"></div>
+
+</div>
+
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="content" style="width: 600px;height:600px;border: solid 1px gray;display: inline-block;float: left">
+    <table style="text-align: center" border="2">
+        <thead>
+            <tr>
+                <th>course</th>
+                <th>成员</th>
+                <th>数据</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>The first</td>
+                <td>小明，小红，小军，小花</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>The first</td>
+                <td>小明，小红，小军，小花</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>The first</td>
+                <td>小明，小红，小军，小花</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>The first</td>
+                <td>小明，小红，小军，小花</td>
+                <td>5</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+
+
+<!-- 引入 ECharts 文件 -->
+<script src="../common/assets/js/echarts/echarts_full_source.js"></script>
+<script src="../common/assets/js/jquery/jquery-1.8.3.min.js"></script>
+<script>
+    $(function () {
+        console.log('load..');
+    });
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    option = {
+        backgroundColor: 'RGB(239,239,239)',
+        title: {
+            text: 'Modern civilization and the sustainable \r\n   development of life',
+            subtext:'Class time 10:30-12:00',
+            x: 'center',
+//            right: "50%",
+            top: "4%",
+            padding: [
+                25,  // 上
+                5, // 右
+                25,  // 下
+                5, // 左
+            ],
+            itemGap:30,
+            textStyle: {
+                fontSize: 20
+            },
+            subtextStyle: {
+                fontSize: 15,
+                color:"gray"
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'horizontal',
+            x: 'center',
+//            top: "50%",
+            bottom:"0%",
+            formatter: '{name}',
+            align: 'left',
+            padding: 50,
+            data: ['Actual to Number','Number of leave', 'Number of leave2'],
+            textStyle: {
+                color: 'gray'
+            },
+            itemGap: 18,
+            selectedMode: false // 图例选择的模式，控制是否可以通过点击图例改变系列的显示状态。
+        },
+        series: [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: ['0%', '60%'],
+                center: ['50%', '55%'],
+                avoidLabelOverlap: false,
+//                x:"left",
+                label: {
+                    normal: {
+//                        show: true,
+                        show: false,
+//                        position: 'center'
+                        position: 'inner',
+                        formatter: '{d}%'
+                    },
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                markPoint:{
+                    silent:true,
+                    symbol:"circle",
+                    data: [
+                        {
+                            name: '1',
+                            x: 352,
+                            y: 175,
+                            value:"1",
+                            symbolSize:30,
+                        }
+                    ],
+                    label:{
+                        normal:{
+                            show:true,
+//                            show:false
+                            textStyle:{
+                                color:"black"
+                            }
+                        }
+                    },
+                    itemStyle:{
+                        normal:{
+                            color:"white",
+                            borderColor:"black",
+                            borderWidth:2
+                        },
+                        emphasis:{
+                            formatter:""
+                        }
+                    }
+                },
+                markLine:{
+                    silent:true,
+                    symbol:"arrow",
+                    data: [
+                        [{
+                            name: '1',
+                            x: 352,
+                            y: 175,
+                        },{
+                            name: '1',
+                            x: 352,
+                            y: 148,
+                        },]
+                    ],
+                    label:{
+                        normal:{
+                            show:false
+                        }
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: 'black'
+                        }
+                    }
+                },
+                data: [
+                    {
+                        value: 15,
+                        name: 'Number of leave',
+                        itemStyle: {
+                            normal: {
+                                color: 'RGB(26,151,170)'
+                            }
+                        },
+                        legendHoverLink: true,
+//                        hoverAnimation :false,
+                    },
+                    {
+                        value: 5,
+                        name: 'Number of leave2',
+                        itemStyle: {
+                            normal: {
+                                color: 'RGB(206,131,0)'
+                            }
+                        },
+                        legendHoverLink: true,
+//                        hoverAnimation:false,
+                    },
+                    {
+                        value: 80,
+                        name: 'Actual to Number',
+                        itemStyle: {
+                            normal: {
+                                color: 'RGB(100,210,111)'
+                            }
+                        },
+                        legendHoverLink: true,
+//                        hoverAnimation:false,
+                    }
+                ]
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+</script>
+</html>
