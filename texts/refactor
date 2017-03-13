@@ -1,4 +1,19 @@
+什么时候应该重构？
+感受到代码的坏味道时。
+过大类、函数、参数列
+代码分散、重复、职责不单一
+面向过程思想
+
 重新组织函数
+1.Extract Method.  fragment -> method
+2.Inline Method. method -> fragment
+3.Inline Temp. variable expression -> expression
+4.Replace Temp with Query. variable expression -> method
+5.Introduce Explaining Variable. complex expression -> variable
+6.Split Temporary Variable. duplicate variable assignment -> different variable
+7.Remove Assignments to Parameters.
+8.Replace Method with Method Object. method -> Class method
+9.Substitute Algorithm. more common
 
 在对象之间搬移特性
 
