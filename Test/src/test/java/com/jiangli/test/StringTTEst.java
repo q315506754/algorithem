@@ -1,5 +1,6 @@
 package com.jiangli.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -19,6 +20,7 @@ public class StringTTEst {
         String c = "c";
         String d = "d";
         String s2 = a+b+c+d;
+        Assert.assertTrue(true);
     }
 
 }

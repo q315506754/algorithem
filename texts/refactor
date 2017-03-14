@@ -16,6 +16,14 @@
 9.Substitute Algorithm. more common
 
 在对象之间搬移特性
+1.Move Method. Method -> Method(in another class)
+2.Move Field. Field -> Field(in another class)
+3.Extract Class.  Method,Field -> Class
+4.Inline Class.  Class ->  Method,Field
+5.Hide Delegate.  create Method for Method
+6.Remove Middle Man.  remove Method for Method
+7.Introduce Foreign Method. extend Method with Method
+8.Introduce Local Extension. extends or wrap a class
 
 重新组织数据
 

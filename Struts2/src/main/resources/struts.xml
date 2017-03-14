@@ -18,6 +18,43 @@
             <result name="login">login.jsp</result>
         </action>
 
+
+        <!--<action name="*/*/*" class="{1}Action" method="{2}">-->
+            <!--<param name="paramId">{3}</param>-->
+            <!--<result name="{2}">/web/pages/{1}/{2}.jsp</result>-->
+            <!--<result name="redirectUrl">${redirectUrl}</result>-->
+            <!--<result type="redirect">${redirectUrl}</result>-->
+            <!--<result name="{2}Success" type="redirect">${redirectUrl}</result>-->
+            <!--<result name="default">/web/pages/{1}/${paramId}.jsp</result>-->
+            <!--<result name="noaccess" type="redirect">${redirectUrl}</result>-->
+            <!--<result name="customURL">/web/pages/{1}/${customURL}.jsp</result>-->
+            <!--<result name="thCustomURL">/web2/pages/{1}/{2}.jsp</result>&lt;!&ndash; v3专用&ndash;&gt;-->
+            <!--<result name="noResult">/web2/pages/course/searchNoCourse.jsp</result>&lt;!&ndash; 查询课程专用 &ndash;&gt;-->
+            <!--<interceptor-ref name="defaultStack"/>-->
+            <!--&lt;!&ndash; pbl小组ID检查拦截器 &ndash;&gt;-->
+            <!--<interceptor-ref name="pblAccessInterceptor">-->
+                <!--<param name="includeMethods">detailGroup,editGroup,saveStuGroup</param>-->
+            <!--</interceptor-ref>-->
+            <!--<interceptor-ref name="exportExcelInterceptor"></interceptor-ref>-->
+            <!--<interceptor-ref name="customI18nInterceptor"></interceptor-ref>-->
+        <!--</action>-->
+
     </package>
+
+    <!--<package name="json" namespace="/json" extends="json-default">-->
+        <!--<action name="*/*/*" class="{1}Action" method="{2}">-->
+            <!--<param name="paramId">{3}</param>-->
+            <!--<result name="ajaxSuccess" type="json"></result>-->
+            <!--<result name="{2}">/web/pages/{1}/{2}.jsp</result>-->
+            <!--<result name="thCustomURL">/web2/pages/{1}/{2}.jsp</result>&lt;!&ndash; v3专用&ndash;&gt;-->
+            <!--<result name="redirectUrl">${redirectUrl}</result>-->
+            <!--<result name="execlSuccess" type="stream">-->
+                <!--<param name="contentType">text/plain</param>-->
+                <!--<param name="inputName">inputStream</param>-->
+                <!--<param name="contentDisposition">attachment;filename="${downloadFileName}"</param>-->
+                <!--<param name="bufferSize">4096</param>-->
+            <!--</result>-->
+        <!--</action>-->
+    <!--</package>-->
 
 </struts>

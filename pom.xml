@@ -24,6 +24,7 @@
         <module>Doc</module>
         <module>Document</module>
         <module>Graphics</module>
+        <module>Guava</module>
         <module>Hack</module>
         <module>Hadoop</module>
         <module>IO</module>
@@ -44,6 +45,7 @@
         <module>Spring</module>
         <module>SpringBoot</module>
         <module>SpringMVC</module>
+        <module>Struts2</module>
         <module>Test</module>
         <module>WebCrawler</module>
         <module>WebCrawlerWeb</module>
