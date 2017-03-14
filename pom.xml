@@ -16,6 +16,7 @@
         <module>AOP</module>
         <module>ByteCode</module>
         <module>Cache</module>
+        <module>Camel</module>
         <module>Cocurrent</module>
         <module>Code</module>
         <module>Common</module>
