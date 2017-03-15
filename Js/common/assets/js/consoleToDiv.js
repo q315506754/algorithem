@@ -1,6 +1,11 @@
-function consoleToDiv(id) {
+;(function () {
+    document.createStyleSheet().cssText="" +
+    ".console_line{"+
+    "    margin: 1px;"+
+    "}";
+
     var oldFunc = window.console;
-    var el = document.getElementById(id);
+    var el = document.getElementById("console");
     el.innerHTML = "";
     window.console = {
         log:function (msg) {
@@ -35,4 +40,4 @@ function consoleToDiv(id) {
             el.innerHTML = el.innerHTML+"><span class='console_line' style='color:"+cls+"'>"+msg+"</span><br/>";
         }
     }
-}
+})();
