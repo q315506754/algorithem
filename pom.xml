@@ -50,6 +50,7 @@
         <module>Test</module>
         <module>WebCrawler</module>
         <module>WebCrawlerWeb</module>
+        <module>Zookeeper</module>
     </modules>
 
 

@@ -1,0 +1,91 @@
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>hello.html</title>
+
+    <link href="../common/assets/css/common.css" rel="stylesheet"/>
+    <style>
+        .red{color:red}
+    </style>
+</head>
+
+
+<body>
+<div id="app">
+    <p>{{ message }}</p>
+    <div v-html="message"></div>
+    <!--v-bind缩写 去掉 v-bind-->
+    <div v-bind:class="{'red': class1}">
+        directiva v-bind:class
+    </div>
+    <div :class="{'red': class1}">
+        directiva v-bind:class
+    </div>
+    <!--v-on:缩写 v-on:->@ -->
+    <button v-on:click="reverseMessage">反转字符串</button><br>
+    <button @click="reverseMessage">反转字符串</button><br>
+    {{5+5}}<br>
+    {{ ok ? 'YES' : 'NO' }}<br>
+    {{ message.split('').reverse().join('') }}
+    <div v-bind:id="'list-' + id">菜鸟教程</div>
+    <!--指令是带有 v- 前缀的特殊属性。   -->
+    <p v-if="seen">现在你看到我了</p>
+    <!--参数在指令后以冒号指明。例如， v-bind 指令被用来响应地更新 HTML 属性：-->
+    <pre><a v-bind:href="url">菜鸟教程</a></pre>
+
+    <!--使用 v-model 指令来实现双向数据绑定：-->
+    <input v-model="message">
+    <input v-model="url">
+
+    <button v-on:click="reverseMessage">反转字符串</button><br>
+
+
+    <!--过滤器-->
+    <!-- 在两个大括号中 -->
+    <!--过滤器函数接受表达式的值作为第一个参数。-->
+    {{ message | capitalize }}
+    <!--过滤器可以串联：-->
+    <!--{{ message | filterA | filterB }}-->
+    <!--过滤器是 JavaScript 函数，因此可以接受参数：-->
+    <!--{{ message | filterA('arg1', arg2) }}-->
+    <!--这里，message 是第一个参数，字符串 'arg1' 将传给过滤器作为第二个参数， arg2 表达式的值将被求值然后传给过滤器作为第三个参数。-->
+
+    <!-- 在 v-bind 指令中 -->
+
+</div>
+
+</body>
+<script src="../common/assets/js/vue/vue.js" type="text/javascript"></script>
+
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue.js!',
+            class1: true,
+            ok: true,
+            id : 1,
+            url: 'http://www.runoob.com',
+            seen: true
+        },
+        methods: {
+            reverseMessage: function () {
+                this.message = this.message.split('').reverse().join('')
+            }
+        },
+        filters: {
+            capitalize: function (value) {
+//                if (!value) return ''
+//                    value = value.toString()
+//                return value.charAt(0).toUpperCase() + value.slice(1)
+                return value.toUpperCase()
+            }
+        }
+    });
+    console.log(vm.$data);
+    console.log(vm.$el);
+    vm.$watch('a', function (newVal, oldVal) {
+        // 这个回调将在 `vm.a`  改变后调用
+        console.log('a changed');
+    })
+</script>
+</html>

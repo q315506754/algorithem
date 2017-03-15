@@ -18,8 +18,13 @@ React page
 
 <!--<%&#45;&#45;react.js 是 React 的核心库，&#45;&#45;%>-->
 <!--<%&#45;&#45;react-dom.js 是提供与 DOM 相关的功能，&#45;&#45;%>-->
-<!--<%&#45;&#45;Browser.js 的作用是将 JSX 语法转为 JavaScript 语法，这一步很消耗时间，实际上线的时候，应该将它放到服务器完成。&#45;&#45;%>-->
 
+<!--<%&#45;&#45;Browser.js 的作用是将 JSX 语法转为 JavaScript 语法，这一步很消耗时间，实际上线的时候，应该将它放到服务器完成。&#45;&#45;%>-->
+<!--第二代编译器——babel-->
+<!--React官方博客发布了一篇文章，声明其自身用于JSX语法解析的编译器JSTransform已经过期，
+不再维护，React JS和React Native已经全部采用第三方Babel的JSX编译器实现。
+原因是两者在功能上已经完全重复，而Babel作为专门的JavaScript语法编译工具，提供了更为强大的功能。
+而browser.js是babel编译器的浏览器版本。-->
 <script src="../common/assets/js/react/react.js" type="text/javascript"></script>
 <script src="../common/assets/js/react/react-dom.js" type="text/javascript"></script>
 <script src="../common/assets/js/react/browser.min.js" type="text/javascript"></script>

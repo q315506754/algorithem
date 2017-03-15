@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jiangli.AlgorithemProject</groupId>
-    <artifactId>Camel</artifactId>
+    <artifactId>Zookeeper</artifactId>
     <packaging>jar</packaging>
     <version>${com.provider-version}</version>
 
@@ -31,18 +31,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stream</artifactId>
-            <version>2.18.3</version>
         </dependency>
     </dependencies>
 

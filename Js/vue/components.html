@@ -1,0 +1,53 @@
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>components.html</title>
+
+    <link href="../common/assets/css/common.css" rel="stylesheet"/>
+    <style>
+        .red{color:red}
+    </style>
+</head>
+
+
+<body>
+<div id="app">
+    <runoob></runoob>
+
+    <child message="hello!"></child>
+    <child v-bind:message="parentMsg"></child>
+    <input v-model="parentMsg">
+    message:{{parentMsg}}<br/>
+</div>
+
+</body>
+<script src="../common/assets/js/vue/vue.js" type="text/javascript"></script>
+
+<script>
+    Vue.component('runoob', {
+        template: '<div><h1>自定义组件!</h1><br/></div>'
+    });
+
+    // 注册
+    Vue.component('child', {
+        // 声明 props
+        props: ['message'],
+//        prop 是一个对象而不是字符串数组时，它包含验证要求：
+//        props:{
+//            message:{
+//                type: String,
+////                required: true
+//            }
+//        },
+        // 同样也可以在 vm 实例中像 "this.message" 这样使用
+        template: '<div><span>{{ message }}</span></h1><br/></div>'
+    });
+
+    // 创建根实例
+    new Vue({
+        el: '#app',
+        data: {
+            parentMsg: '父组件内容'
+        }
+    })
+</script>
+</html>

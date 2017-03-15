@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>closure.html</title>
+
+    <link href="../common/assets/css/common.css" rel="stylesheet"/>
+</head>
+
+
+<body>
+closure.html
+
+</body>
+
+
+
+<script>
+    var a = [];
+    for (var i = 0; i < 10; i++) {
+        a[i] = function () {
+            console.log(i);
+        };
+    }
+    a[6](); // 10
+
+    var a = [];
+    for (let i = 0; i < 10; i++) {
+        a[i] = function () {
+            console.log(i);
+        };
+    }
+    a[6](); // 6
+
+
+    function iter(i) {
+        var onclick = function(e){
+            console.log(i)
+        }
+        return onclick;
+    }
+    var a = [];
+    for (var  i = 0; i < 10; i++) {
+        a[i] = iter(i);
+    }
+    a[6](); // 6
+</script>
+
+</html>
