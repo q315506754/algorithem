@@ -11,3 +11,5 @@ out
 !*.exe
 !*.pdb
 !*.dll
+
+node_modules

@@ -15,7 +15,7 @@
 
     <child message="hello!"></child>
     <child v-bind:message="parentMsg"></child>
-    <input v-model="parentMsg">
+    <input v-model="parentMsg" v-focus>
     message:{{parentMsg}}<br/>
 </div>
 
@@ -41,6 +41,15 @@
         // 同样也可以在 vm 实例中像 "this.message" 这样使用
         template: '<div><span>{{ message }}</span></h1><br/></div>'
     });
+
+    // 注册一个全局自定义指令 v-focus
+    Vue.directive('focus', {
+        // 当绑定元素插入到 DOM 中。
+        inserted: function (el) {
+            // 聚焦元素
+            el.focus()
+        }
+    })
 
     // 创建根实例
     new Vue({
