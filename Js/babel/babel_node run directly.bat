@@ -1,2 +1,1 @@
-call babel-node src/myTool.js
-pause
+start babel-node src/myTool.js

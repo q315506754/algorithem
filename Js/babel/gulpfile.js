@@ -5,10 +5,10 @@ const rename = require('gulp-rename');
 
 gulp.task('minimize', ['compile'], function () {
     let options = {
-        sourceMap: true,
-        sourceMapIncludeSources: true,
-        sourceMapRoot: './src/',
-        mangle: true,
+        // sourceMap: true,
+        // sourceMapIncludeSources: true,
+        // sourceMapRoot: './src/',
+        // mangle: true,
         compress: {
             sequences: true,
             dead_code: true,
@@ -23,18 +23,43 @@ gulp.task('minimize', ['compile'], function () {
     return gulp.src('target/bundle.js')
         .pipe(rename({extname: '.min.js'}))
             .pipe(uglify(options))
+        .pipe(gulp.dest('./target/'));
           ;
 });
 
-gulp.task('compile', function() {
-  // ½«ÄãµÄÄ¬ÈÏµÄÈÎÎñ´úÂë·ÅÔÚÕâ
+gulp.task('compile', function(cb) {
+    // å°†ä½ çš„é»˜è®¤çš„ä»»åŠ¡ä»£ç æ”¾åœ¨è¿™
   console.log('default task start...');
   exec("npm run build",function(err){
 	  exec("browserify target/myTool.js -o target/bundle.js",function(err){
-	  
+          cb()
 		});
   });
   
+});
+
+gulp.task('run', function (cb) {
+	exec("start babel-node src/myTool.js",function(err){
+	  cb();
+	});
+});
+
+gulp.task('watch', function (cb) {
+    let gulpWatcher = gulp.watch(['src/**/*.js']);
+	
+			
+    gulpWatcher.on('change', function (e) {
+        if (e.type === 'changed' ) {
+            console.log('changed');
+			
+			 exec("start babel-node src/myTool.js",function(err){
+			 //exec("start babel_node run directly.bat\"",function(err){
+				//cb()
+			});
+        }
+    });
+
+   
 });
 
 gulp.task('default', ['compile', 'minimize']);
