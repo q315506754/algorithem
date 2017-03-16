@@ -8,22 +8,22 @@
         return link;
     }
     function createConsole() {
-        var link = document.createElement("div");
-        link.id = consoleId;
-        link.className = "floatConsole";
-        document.getElementsByTagName("body")[0].appendChild(link);
+        mainDiv = document.createElement("div");
+        mainDiv.id = consoleId;
+        mainDiv.className = "floatConsole";
+        document.getElementsByTagName("body")[0].appendChild(mainDiv);
 
-        var consoleTitle = document.createElement("div");
+         consoleTitle = document.createElement("div");
         consoleTitle.className = "consoleTitle";
         consoleTitle.innerHTML="Console"
 
          container = document.createElement("div");
         container.className = "consoleContainer";
 
-        link.appendChild(consoleTitle);
-        link.appendChild(container);
+        mainDiv.appendChild(consoleTitle);
+        mainDiv.appendChild(container);
 
-        return link;
+        return mainDiv;
     }
 
     function scrollBottom() {
@@ -57,12 +57,24 @@
     "    background:RGB(163,191,229)"+
     "}";
 
-    createConsole();
+
 
     var oldFunc = window.console;
-    var el = document.getElementById(consoleId);
+    var mainDiv ;
     var container;
-    container.innerHTML = "";
+    var consoleTitle;
+
+    createConsole();
+    
+    consoleTitle.onclick=function () {
+        if (container.style.display !== "none"){
+            container.style.display = "none";
+        }else {
+            container.style.display = "block";
+        }
+    };
+
+
     window.console = {
         log:function (msg) {
             this._print(msg);
