@@ -412,3 +412,1462 @@ string text line 2`);
 
     console.log(  String.raw({ raw: 'test' }, 0, 132, 32,345,23));
 }
+
+console.log('-------------number-----------------');
+{
+    console.log(Number('0b111'));//8进制
+    console.log(Number('0o10') );//10进制
+
+    Number.isFinite(15); // true
+    Number.isFinite(0.8); // true
+    Number.isFinite(NaN); // false
+    Number.isFinite(Infinity); // false
+    Number.isFinite(-Infinity); // false
+    Number.isFinite('foo'); // false
+    Number.isFinite('15'); // false
+    Number.isFinite(true); // false
+    Number.isNaN(NaN) // true
+    Number.isNaN(15) // false
+    Number.isNaN('15') // false
+    Number.isNaN(true) // false
+    Number.isNaN(9/NaN) // true
+    Number.isNaN('true'/0) // true
+    Number.isNaN('true'/'true') // true
+
+    // ES5的写法
+    parseInt('12.34') // 12
+    parseFloat('123.45#') // 123.45
+
+// ES6的写法
+    Number.parseInt('12.34') // 12
+    Number.parseFloat('123.45#') // 123.45
+    // 这样做的目的，是逐步减少全局性方法，使得语言逐步模块化。
+    Number.isInteger(25) // true
+    Number.isInteger(25.0) // true ，在Jav aScript内部，整数和浮点数是同样的储存方法，所以3和3.0被视为同一个值。
+    Number.isInteger(25.1) // false
+    Number.isInteger("15") // false
+    Number.isInteger(true) // false
+
+
+    //Math.trunc方法用于去除一个数的小数部分，返回整数部分。
+    Math.trunc(4.1) // 4
+    Math.trunc(4.9) // 4
+    Math.trunc(-4.1) // -4
+    Math.trunc(-4.9) // -4
+    Math.trunc(-0.1234) // -0
+
+    //Math.sign方法用来判断一个数到底是正数、负数、还是零。
+    Math.sign(-5) // -1
+    Math.sign(5) // +1
+    Math.sign(0) // +0
+    Math.sign(-0) // -0
+    Math.sign(NaN) // NaN
+    Math.sign('foo'); // NaN
+    Math.sign();      // NaN
+
+    //Math.cbrt方法用于计算一个数的立方根。
+    Math.cbrt(-1) // -1
+    Math.cbrt(0)  // 0
+    Math.cbrt(1)  // 1
+    Math.cbrt(2)  // 1.2599210498948734
+
+    // JavaScript的整数使用32位二进制形式表示，Math.clz32方法返回一个数的32位无符号整数形式有多少个前导0。
+    //count leading zero bits in 32-bit binary representations of a number“
+    Math.clz32(0) // 32
+    Math.clz32(1) // 31
+    Math.clz32(1000) // 22
+    Math.clz32(0b01000000000000000000000000000000) // 1
+    Math.clz32(0b00100000000000000000000000000000) // 2
+    Math.clz32(0) // 32
+    Math.clz32(1) // 31
+    Math.clz32(1 << 1) // 30
+    Math.clz32(1 << 2) // 29
+    Math.clz32(1 << 29) // 2
+    Math.clz32(3.2) // 30 对于小数，Math.clz32方法只考虑整数部分。
+    Math.clz32(3.9) // 30
+    Math.clz32() // 32
+    Math.clz32(NaN) // 32
+    Math.clz32(Infinity) // 32
+    Math.clz32(null) // 32
+    Math.clz32('foo') // 32
+    Math.clz32([]) // 32
+    Math.clz32({}) // 32
+    Math.clz32(true) // 31
+
+//    Math.hypot方法返回所有参数的平方和的平方根。
+    Math.hypot(3, 4);        // 5
+    Math.hypot(3, 4, 5);     // 7.0710678118654755
+    Math.hypot();            // 0
+    Math.hypot(NaN);         // NaN
+    Math.hypot(3, 4, 'foo'); // NaN
+    Math.hypot(3, 4, '5');   // 7.0710678118654755
+    Math.hypot(-3);          // 3
+
+
+    // Math.expm1(x)返回ex - 1，即Math.exp(x) - 1。
+    Math.expm1(-1) // -0.6321205588285577
+    Math.expm1(0)  // 0
+    Math.expm1(1)  // 1.718281828459045
+
+    // Math.log1p(x)方法返回1 + x的自然对数，即Math.log(1 + x)。如果x小于-1，返回NaN。
+    Math.log1p(1)  // 0.6931471805599453
+    Math.log1p(0)  // 0
+    Math.log1p(-1) // -Infinity
+    Math.log1p(-2) // NaN
+
+    // Math.log10(x)返回以10为底的x的对数。如果x小于0，则返回NaN。
+    Math.log10(2)      // 0.3010299956639812
+    Math.log10(1)      // 0
+    Math.log10(0)      // -Infinity
+    Math.log10(-2)     // NaN
+    Math.log10(100000) // 5
+
+    // Math.log2(x)返回以2为底的x的对数。如果x小于0，则返回NaN。
+    Math.log2(3)       // 1.584962500721156
+    Math.log2(2)       // 1
+    Math.log2(1)       // 0
+    Math.log2(0)       // -Infinity
+    Math.log2(-2)      // NaN
+    Math.log2(1024)    // 10
+    Math.log2(1 << 29) // 29
+
+    // let a = 2;
+    // a **= 2;
+// 等同于 a = a * a;
+    // ES2016 新增了一个指数运算符（**）。
+    // console.log(a);// 4
+    // console.log( 2 ** 3 )// 8
+}
+
+console.log('-------------Array-----------------');
+{
+
+//    Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象
+    let arrayLike = {
+        '0': 'a',
+        '1': 'b',
+        '2': 'c',
+        length: 3
+    };
+
+// ES5的写法
+    var arr1 = [].slice.call(arrayLike); // ['a', 'b', 'c']
+
+// ES6的写法
+    let arr2 = Array.from(arrayLike); // ['a', 'b', 'c']
+
+    //字符串和Set结构都具有Iterator接口，因此可以被Array.from转为真正的数组。
+    console.log(Array.from('hello'));
+
+    let namesSet = new Set(['a', 'b'])
+    Array.from(namesSet) // ['a', 'b']
+
+
+    // arguments对象
+    function foo() {
+        var args = Array.from(arguments);
+        // ...
+    }
+
+    // arguments对象
+    function foo2() {
+        var args = [...arguments];
+    }
+
+    // 所谓类似数组的对象，本质特征只有一点，即必须有length属性。
+    // 因此，任何有length属性的对象，都可以通过Array.from方法转为数组，
+    // 而此时扩展运算符就无法转换。
+    console.log(Array.from({ length: 3 }));// [ undefined, undefined, undefined ]
+
+    Array.from(arrayLike, x => x * x);
+// 等同于
+    Array.from(arrayLike).map(x => x * x);
+
+    Array.from([1, 2, 3], (x) => x * x);
+// [1, 4, 9]
+
+    Array.from([1, , 2, , 3], (n) => n || 0)
+// [1, 0, 2, 0, 3]
+
+    Array.from({ length: 2 }, () => 'jack')
+// ['jack', 'jack']
+
+
+    Array() // []
+    Array(3) // [, , ,]
+    Array(3, 11, 8) // [3, 11, 8]
+    Array.of(3, 11, 8) // [3,11,8]
+    Array.of(3) // [3]
+    Array.of(3).length // 1
+    Array.of() // []
+    Array.of(undefined) // [undefined]
+    Array.of(1) // [1]
+    Array.of(1, 2) // [1, 2]
+
+
+//     target（必需）：从该位置开始替换数据。
+// start（可选）：从该位置开始读取数据，默认为0。如果为负值，表示倒数。
+// end（可选）：到该位置前停止读取数据，默认等于数组长度。如果为负值，表示倒数。
+    console.log( [1, 2, 3, 4, 5].copyWithin(0, 3));
+// // [4, 5, 3, 4, 5]
+//
+//     // 将3号位复制到0号位
+    console.log( [1, 2, 3, 4, 5].copyWithin(0, 3, 4));
+// // [4, 2, 3, 4, 5]
+//
+//     // -2相当于3号位，-1相当于4号位
+//     [1, 2, 3, 4, 5].copyWithin(0, -2, -1)
+// // [4, 2, 3, 4, 5]
+    console.log([1, 2, 3, 4, 5].copyWithin(0, -2, -1));
+
+    // find方法，用于找出第一个符合条件的数组成员。
+    console.log([1, 4, -5, 10].find((n) => n < 0));
+// -5
+
+    // 依次为当前的值、当前的位置和原数组。
+    var f = [1, 5, 10, 15].find(function(value, index, arr) {
+        return value > 9;
+    }) // 10
+    console.log(f);
+
+    // 如果所有成员都不符合条件，则返回-1。
+    var fi = [1, 5, 10, 15].findIndex(function(value, index, arr) {
+        return value > 9;
+    }) // 10
+    console.log(fi);
+
+    console.log(['a', 'b', 'c'].fill(7));
+    // [7, 7, 7]
+
+    console.log(new Array(3).fill(7));
+// [7, 7, 7]
+
+    console.log(['a', 'b', 'c'].fill(7, 1, 2));
+// ['a', 7, 'c']
+
+    console.log("keys:"+['a', 'b'].keys());
+    for (let index of ['a', 'b'].keys()) {
+        console.log(index);
+    }
+// 0
+// 1
+
+    console.log("values:"+['a', 'b'].values());
+    for (let elem of ['a', 'b'].values()) {
+        console.log(elem);
+    }
+// 'a'
+// 'b'
+
+    console.log("entries:"+['a', 'b'].entries());
+    for (let [index, elem] of ['a', 'b'].entries()) {
+        console.log(index, elem);
+    }
+// 0 "a"
+// 1 "b"
+
+    let letter = ['a', 'b', 'c'];
+    let entries = letter.entries();
+    console.log(entries.next().value); // [0, 'a']
+    console.log(entries.next().value); // [1, 'b']
+    console.log(entries.next().value); // [2, 'c']
+
+    console.log(0 in [undefined, undefined, undefined] );// true
+   console.log( 0 in [, , ,] );// false
+
+
+//ES5对空位的处理，已经很不一致了，大多数情况下会忽略空位。
+//     forEach(), filter(), every() 和some()都会跳过空位。
+// map()会跳过空位，但会保留这个值
+//     join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。
+    // forEach方法
+
+    // ES6则是明确将空位转为undefined。
+    console.log(Array.from(['a',,'b']));
+// [ "a", undefined, "b" ]
+
+    console.log("...:"+[...['a',,'b']]);
+    // [ "a", undefined, "b" ]
+
+    console.log([,'a','b',,].copyWithin(2,0) );// [,"a",,"a"]
+
+    let arr = [, ,];
+    for (let i of arr) {
+        console.log(1);
+    }
+// 1
+
+//     // entries()
+    console.log([...[,'a'].entries()]); // [[0,undefined], [1,"a"]]
+    console.log([[,'a'].entries()]); // [{}]
+//
+// // keys()
+   console.log( [...[,'a'].keys()]); // [0,1]
+//
+// // values()
+    console.log([...[,'a'].values()]); // [undefined,"a"]
+//
+// // find()
+   console.log( [,'a'].find(x => true)); // undefined
+//
+// // findIndex()
+   console.log( [,'a'].findIndex(x => true)); // 0
+}
+
+console.log('-------------Function-----------------');
+{
+    function Point(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+    }
+
+    var p = new Point();
+    console.log(p); // { x: 0, y: 0 }
+
+    let x = 99;
+    function foo(p = x + 1) {
+        console.log(p);
+    }
+
+    foo() // 100
+
+    x = 100;
+    foo() // 101
+}
+{
+    function foo({x, y = 5}) {
+        console.log(x, y);
+    }
+
+    foo({}) // undefined, 5
+    foo({x: 1}) // 1, 5
+    foo({x: 1, y: 2}) // 1, 2
+    // foo() // TypeError: Cannot read property 'x' of undefined
+
+    function fetch(url, { body = '', method = 'GET', headers = {} } = {}) {
+        console.log(method);
+    }
+
+    fetch('http://example.com', {})
+// "GET"
+
+    fetch('http://example.com')
+}
+{
+    // 例一
+    function f(x = 1, y) {
+        return [x, y];
+    }
+    f() // [1, undefined]
+    f(2) // [2, undefined])
+    // f(, 1) // 报错
+    f(undefined, 1) // [1, 1]
+}
+{
+    // 例二
+    function f(x, y = 5, z) {
+        return [x, y, z];
+    }
+
+    f() // [undefined, 5, undefined]
+    f(1) // [1, 5, undefined]
+    // f(1, ,2) // 报错
+    f(1, undefined, 2) // [1, 5, 2]
+    console.log(f(1, null, 2) );// [1, null, 2]
+}
+{
+    //函数的length属性，将返回没有指定默认值的参数个数。
+    console.log((function (a) {}).length); // 1
+    console.log((function (a = 5) {}).length );// 0
+    console.log((function (a, b, c = 5) {}).length );// 2
+    console.log((function (a, b= 5, c ) {}).length );// 1
+    console.log((function (a= 5, b, c ) {}).length );// 0
+
+
+}
+{
+    var x = 1;
+
+    function f(x, y = x) {
+        console.log(y);
+    }
+
+    f(2) // 2
+}
+{
+    function throwIfMissing() {
+        throw new Error('Missing parameter');
+    }
+
+    function foo(mustBeProvided = throwIfMissing()) {
+        return mustBeProvided;
+    }
+
+    // foo()
+// Error: Missing parameter
+
+    foo(123)
+// Ok
+}
+{
+    // rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。
+    // function f(a, ...b, c) {
+    // // ...
+    // }
+    console.log((function(a) {}).length ); // 1
+    console.log((function(...a) {}).length ); // 0
+   console.log((function(a, ...b) {}).length ); // 1
+}
+
+console.log('-------------spread ...-----------------');
+{
+    console.log(...[1, 2, 3]);
+    console.log([1, 2, 3]);
+    // console.log([...document.querySelectorAll('div')]);
+
+    // 该运算符主要用于函数调用。 展开数组
+    function push(array, ...items) {
+        array.push(...items);
+    }
+
+    function add(x, y) {
+        return x + y;
+    }
+
+    var numbers = [4, 38];
+    console.log(add(...numbers) );// 42
+
+    // ES5的写法
+    function f(x, y, z) {
+        // ...
+    }
+    var args = [0, 1, 2];
+    f.apply(null, args);
+
+// ES6的写法
+    function f(x, y, z) {
+        // ...
+    }
+    var args = [0, 1, 2];
+    f(...args);
+
+    // ES5
+    new (Date.bind.apply(Date, [null, 2015, 1, 1]))
+// ES6
+    new Date(...[2015, 1, 1]);
+}
+{
+    // 扩展运算符的应用
+    // （1）合并数组
+    // ES5
+    let more = [4,5,6];
+    console.log([1, 2].concat(more));
+// ES6
+    console.log([1, 2, ...more]);
+
+    var arr1 = ['a', 'b'];
+    var arr2 = ['c'];
+    var arr3 = ['d', 'e'];
+
+// ES5的合并数组
+    console.log(arr1.concat(arr2, arr3));
+// [ 'a', 'b', 'c', 'd', 'e' ]
+
+// ES6的合并数组
+   console.log( [...arr1, ...arr2, ...arr3]);
+// [ 'a', 'b', 'c', 'd', 'e' ]
+
+// （2）与解构赋值结合
+    // ES5
+    // a = list[0], rest = list.slice(1)
+// ES6
+//     [a, ...rest] = list
+
+    // const [first, ...rest] = [1, 2, 3, 4, 5];
+    // first // 1
+    // rest  // [2, 3, 4, 5]
+    //
+    // const [first, ...rest] = [];
+    // first // undefined
+    // rest  // []:
+    //
+    // const [first, ...rest] = ["foo"];
+    // first  // "foo"
+    // rest   // []
+
+    // 如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错。
+    // const [...butLast, last] = [1, 2, 3, 4, 5];
+    // // 报错
+    //
+    //     const [first, ...middle, last] = [1, 2, 3, 4, 5];
+    // // 报错
+
+// （4）字符串
+//     扩展运算符还可以将字符串转为真正的数组。
+
+    console.log([...'hello']);
+// [ "h", "e", "l", "l", "o" ]
+
+// （5）实现了Iterator接口的对象
+//     任何Iterator接口的对象，都可以用扩展运算符转为真正的数组。
+
+    // var nodeList = document.querySelectorAll('div');
+    // var array = [...nodeList];
+
+    // 对于那些没有部署Iterator接口的类似数组的对象，扩展运算符就无法将其转为真正的数组。
+let arrayLike = {
+    '0': 'a',
+    '1': 'b',
+    '2': 'c',
+    length: 3
+};
+
+// TypeError: Cannot spread non-iterable object.
+//     let arr = [...arrayLike];
+
+// （6）Map和Set结构，Generator函数
+    let map = new Map([
+        [1, 'one'],
+        [2, 'two'],
+        [3, 'three'],
+    ]);
+
+    let arr = [...map.keys()]; // [1, 2, 3]
+    console.log(arr);
+
+    var go = function*(){
+        yield 1;
+        yield 2;
+        yield 3;
+    };
+
+    console.log([...go()] );// [1, 2, 3]
+
+
+    // 如果对没有iterator接口的对象，使用扩展运算符，将会报错。
+    // var obj = {a: 1, b: 2};
+    // let arr = [...obj]; // TypeError: Cannot spread non-iterable object
+}
+{
+    var f = function () {};
+
+// ES5
+    f.name // ""
+
+// ES6
+    f.name // "f"
+
+    console.log((new Function).name); // "anonymous"
+
+
+    function foo() {};
+    console.log(foo.bind({}).name); // "bound foo"
+
+    console.log((function(){}).bind({}).name); // "bound "
+}
+console.log('-------------Rambda-----------------');
+{
+    const full = ({ first, last }) => first + ' ' + last;
+
+// 等同于
+    function full2(person) {
+        return person.first + ' ' + person.last;
+    }
+}
+{
+    //es7
+    //bind
+//     var method = obj::obj.foo;
+// // 等同于
+//     var method2= ::obj.foo;
+//
+//     let log = ::console.log;
+// // 等同于
+//     var log2= console.log.bind(console);
+}
+console.log('-------------Object-----------------');
+{
+    var foo = 'bar';
+    var baz = {foo};
+    // baz // {foo: "bar"}
+    console.log(baz);
+
+// 等同于
+//     var baz = {foo: foo};
+
+    function f(x, y) {
+        return {x, y};
+    }
+// 等同于
+    function f2(x, y) {
+        return {x: x, y: y};
+    }
+    console.log(f(3,4));
+
+    var o = {
+        method() {
+            return "Hello!";
+        },
+        method2(dd) {
+            return "Hello!"+dd;
+        }
+    };
+
+// 等同于
+//     var o = {
+//         method: function() {
+//             return "Hello!";
+//         }
+//     };
+    console.log(o.method());
+    console.log(o.method2("asdasd"));
+
+    // CommonJS模块输出变量，就非常合适使用简洁写法。
+    // module.exports = { getItem, setItem, clear };
+
+    // var cart = {
+    //     _wheels: 4,
+    //
+    //     get wheels () {
+    //         return this._wheels;
+    //     },
+    //
+    //     set wheels (value) {
+    //         if (value < this._wheels) {
+    //             throw new Error('数值太小了！');
+    //         }
+    //         this._wheels = value;
+    //     }
+    // }
+    // console.log(cart.wheels(99));
+    // console.log(cart.wheels());
+    var obj = {
+            * m(){
+        yield 'hello world';
+        }
+    };
+    console.log(obj.m());
+}
+{
+    let propKey = 'foo';
+
+    //ES6 允许字面量定义对象时，用方法二（表达式）作为对象的属性名，即把表达式放在方括号内。
+    let obj = {
+        [propKey]: true,
+        ['a' + 'bc']: 123
+    };
+    console.log(obj);
+
+    var lastWord = 'last word';
+
+    var a = {
+        'first word': 'hello',
+        [lastWord]: 'world'
+    };
+
+    console.log(a['first word']); // "hello"
+    console.log(a[lastWord]); // "world"
+    console.log( a['last word'] );// "world"
+}
+{
+    let obj = {
+        ['h' + 'ello']() {
+            return 'hi';
+        }
+    };
+
+    console.log(obj.hello()); // hi
+
+}
+{
+    const obj = {
+        get foo() {},
+        set foo(x) {}
+    };
+    //obj.foo.name
+    // TypeError: Cannot read property 'name' of undefined
+
+    const descriptor = Object.getOwnPropertyDescriptor(obj, 'foo');
+
+    console.log(descriptor.get.name );// "get foo"
+    console.log(descriptor.set.name );// "set foo"
+}
+{
+    const key1 = Symbol('description');
+    const key2 = Symbol();
+    let obj = {
+        [key1]() {},
+        [key2]() {},
+    };
+    console.log(obj[key1]);
+    console.log(obj[key2]);
+    console.log(key1);
+    console.log(key2);
+    console.log(obj);
+}
+{
+    Object.is('foo', 'foo')
+// true
+    Object.is({}, {})
+// false
+
+    +0 === -0 //true
+    NaN === NaN // false
+
+    Object.is(+0, -0) // false
+    Object.is(NaN, NaN) // true
+}
+{
+    var target = { a: 1 };
+
+    var source1 = { b: 2 };
+    var source2 = { c: 3 };
+
+    Object.assign(target, source1, source2);
+    console.log(target); // {a:1, b:2, c:3}
+    console.log(source1); // {b:2}
+    console.log(source2); // { c:3}
+
+    console.log(Object.assign(2));//[Number: 2]
+    // console.log(Object.assign(undefined));// 报错
+    // console.log(Object.assign(null));// 报错
+
+    // 其他类型的值（即数值、字符串和布尔值）不在首参数，也不会报错。
+    // 但是，除了字符串会以数组形式，拷贝入目标对象，其他值都不会产生效果。
+    // 这是因为只有字符串的包装对象，会产生可枚举属性。
+    var v1 = 'abc';
+    var v2 = true;
+    var v3 = 10;
+
+    var obj = Object.assign({}, v1, v2, v3);
+    console.log(obj); // { "0": "a", "1": "b", "2": "c" }
+
+    // Object.assign方法实行的是浅拷贝，而不是深拷贝。
+    // 也就是说，如果源对象某个属性的值是对象，那么目标对象拷贝得到的是这个对象的引用。
+
+    var obj1 = {a: {b: 1}};
+    var obj2 = Object.assign({}, obj1);
+
+    obj1.a.b = 2;//;
+    console.log(obj2.a.b); // 2
+
+    console.log(Object.defineProperty({}, 'invisible', {
+        enumerable: false,
+        value: 'hello'
+    }));
+
+    console.log(Object(true));// {[[PrimitiveValue]]: true}
+    console.log(Object(10) ); //  {[[PrimitiveValue]]: 10}
+   console.log( Object('abc') );// {0: "a", 1: "b", 2: "c", length: 3, [[PrimitiveValue]]: "abc"}
+}
+{
+    // （1）为对象添加属性
+    class Point {
+        constructor(x, y) {
+            Object.assign(this, {x, y});
+        }
+    }
+    var point = new Point(44,55);
+    console.log(point);
+
+    //（2）为对象添加方法
+    Object.assign(Point.prototype, {
+        someMethod(arg1, arg2) {
+          console.log('someMethod');
+        },
+        anotherMethod() {
+            console.log('anotherMethod');
+        }
+    });
+
+    point.someMethod();
+    point.anotherMethod();
+    console.log(point);
+
+    // （3）克隆对象
+    function clone(origin) {
+        return Object.assign({}, origin);
+    }
+
+    var clonePoint = clone(point);
+    console.log(clonePoint);
+    // clonePoint.someMethod(); //TypeError: clonePoint.someMethod is not a function
+    // clonePoint.anotherMethod(); //TypeError: clonePoint.anotherMethod is not a function
+
+    function cloneExtend(origin) {
+        let originProto = Object.getPrototypeOf(origin);
+        return Object.assign(Object.create(originProto), origin);
+    }
+
+    // 如果想要保持继承链，可以采用下面的代码。能克隆它继承的值
+    var clonePoint2 = cloneExtend(point);
+    console.log(clonePoint2);
+    clonePoint2.someMethod();
+    clonePoint2.anotherMethod();
+
+// （4）合并多个对象
+
+// （5）为属性指定默认值
+    const DEFAULTS = {
+        logLevel: 0,
+        outputFormat: 'html'
+    };
+
+    // 由于存在深拷贝的问题，DEFAULTS对象和options对象的所有属性的值，最好都是简单类型，不要指向另一个对象。
+    // 否则，DEFAULTS对象的该属性很可能不起作用。
+    function processContent(options) {
+        options = Object.assign({}, DEFAULTS, options);
+        console.log(options);
+        // ...
+    }
+    processContent({sdd:232});
+}
+{
+    const DEFAULTS = {
+        url: {
+            host: 'example.com',
+            port: 7070
+        },
+    };
+
+    function processContent(options) {
+        options = Object.assign({}, DEFAULTS, options);
+        console.log(options);
+        // ...
+    }
+
+    processContent({ url: {port: 8000} });//{ url: { port: 8000 } }
+}
+{
+    // 属性的可枚举性
+    let obj = { foo: 123 };
+    console.log(Object.getOwnPropertyDescriptor(obj, 'foo'));
+
+//     ES5有三个操作会忽略enumerable为false的属性。
+//
+// for...in循环：只遍历对象自身的和继承的可枚举的属性
+//     Object.keys()：返回对象自身的所有可枚举的属性的键名
+//     JSON.stringify()：只串行化对象自身的可枚举的属性
+
+    // ES6新增了一个操作Object.assign()，会忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性。
+
+// 。实际上，引入enumerable的最初目的，就是让某些属性可以规避掉for...in操作。
+    console.log(Object.getOwnPropertyDescriptor(Object.prototype, 'toString').enumerable);
+// false
+
+   console.log( Object.getOwnPropertyDescriptor([], 'length').enumerable);
+// false
+
+    // 另外，ES6规定，所有Class的原型的方法都是不可枚举的。
+    console.log(Object.getOwnPropertyDescriptor(class {foo() {}}.prototype, 'foo').enumerable);
+// false
+
+    // console.log({a:111,b:222}.keys()); //Error
+    console.log(Object.keys({a:111,b:222}));//[ 'a', 'b' ]
+    console.log(['a','b'].keys());//{}
+    for(let a of ['a','b'].keys()){
+        console.log(a);//0 \r\n 1
+    }
+}
+{
+    // （1）for...in
+    //
+    //     for...in循环遍历对象自身的和继承的可枚举属性（不含Symbol属性）。
+    //
+    // （2）Object.keys(obj)
+    //
+    //     Object.keys返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含Symbol属性）。
+    //
+    // （3）Object.getOwnPropertyNames(obj)
+    //
+    //     Object.getOwnPropertyNames返回一个数组，包含对象自身的所有属性（不含Symbol属性，但是包括不可枚举属性）。
+    //
+    // （4）Object.getOwnPropertySymbols(obj)
+    //
+    //     Object.getOwnPropertySymbols返回一个数组，包含对象自身的所有Symbol属性。
+    //
+    // （5）Reflect.ownKeys(obj)
+    //
+    //     Reflect.ownKeys返回一个数组，包含对象自身的所有属性，不管是属性名是Symbol或字符串，也不管是否可枚举。
+    //
+    // 以上的5种方法遍历对象的属性，都遵守同样的属性遍历的次序规则。
+    //
+    // 首先遍历所有属性名为数值的属性，按照数字排序。
+    // 其次遍历所有属性名为字符串的属性，按照生成时间排序。
+    // 最后遍历所有属性名为Symbol值的属性，按照生成时间排序。
+    // Reflect.ownKeys({ [Symbol()]:0, b:0, 10:0, 2:0, a:0 })
+    // // ['2', '10', 'b', 'a', Symbol()]
+}
+console.log("------------Prototype---------------");
+{
+    // es6的写法
+    var obj = {
+        method: function() {}
+    };
+    obj.__proto__ = {a:11};
+    console.log(obj);
+
+// es5的写法
+    var obj2 = Object.create({a:22});
+    obj2.method = function() { };
+
+// 用法
+    var o = Object.setPrototypeOf({a:123}, null);
+    console.log(o);
+
+}
+{
+    let proto = {};
+    let obj = { x: 10 };
+    Object.setPrototypeOf(obj, proto);
+
+    proto.y = 20;
+    proto.z = 40;
+
+     console.log(obj.x );// 10
+    console.log( obj.y );// 20
+     console.log(obj.z );// 40
+
+    function Rectangle() {
+        // ...
+    }
+
+    var rec = new Rectangle();
+
+    Object.getPrototypeOf(rec) === Rectangle.prototype
+// true
+
+    Object.setPrototypeOf(rec, Object.prototype);
+    Object.getPrototypeOf(rec) === Rectangle.prototype;
+// false
+}
+{
+    //es 2017
+    // let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+    // console.log(x); // 1
+    // console.log(y );// 2
+    // console.log(z );// { a: 3, b: 4 }
+}
+console.log("------------Symbol---------------");
+{
+    // 它是JavaScript语言的第七种数据类型，
+    // 前六种是：Undefined、Null、布尔值（Boolean）、字符串（String）、数值（Number）、对象（Object）。
+
+    let s = Symbol();
+
+    console.log(typeof s);
+// "symbol"
+
+    const obj = {
+        toString() {
+            return 'abc';
+        }
+    };
+    const sym = Symbol(obj);
+    console.log(sym); // Symbol(abc)
+}
+{
+    // 没有参数的情况
+    var s1 = Symbol();
+    var s2 = Symbol();
+
+    s1 === s2 // false
+
+// 有参数的情况
+    var s1 = Symbol('foo');
+    var s2 = Symbol('foo');
+
+    s1 === s2 // false
+
+    var sym = Symbol('My symbol');
+
+    // "your symbol is " + sym
+// TypeError: can't convert symbol to string
+//         `your symbol is ${sym}`
+// TypeError: can't convert symbol to string
+
+    // 另外，Symbol值也可以转为布尔值，但是不能转为数值。
+
+var sym = Symbol();
+    Boolean(sym) // true
+    !sym  // false
+
+    if (sym) {
+        // ...
+    }
+
+    // Number(sym) // TypeError
+    // sym + 2 // TypeError
+}
+{
+    var mySymbol = Symbol();
+
+// 第一种写法
+    var a1 = {};
+    a1[mySymbol] = 'Hello!';
+
+// 第二种写法
+    var a2 = {
+        [mySymbol]: 'Hello!'
+    };
+
+// 第三种写法
+    var a3 = {};
+    Object.defineProperty(a3, mySymbol, { value: 'Hello!' });
+
+// 以上写法都得到同样结果
+   console.log( a1[mySymbol]); // "Hello!"
+   console.log( a2[mySymbol]); // "Hello!"
+   console.log( a3[mySymbol]); // "Hello!"
+
+    var mySymbol = Symbol();
+    var a = {};
+
+     a.mySymbol = 'Hello!';
+    console.log( a[mySymbol]); // undefined
+    console.log( a['mySymbol'] );// "Hello!"
+    console.log(a);
+}
+{
+    const COLOR_RED    = Symbol();
+    const COLOR_GREEN  = Symbol();
+
+    function getComplement(color) {
+        switch (color) {
+            case COLOR_RED:
+                return COLOR_GREEN;
+            case COLOR_GREEN:
+                return COLOR_RED;
+            default:
+                throw new Error('Undefined color');
+        }
+    }
+    console.log(getComplement(COLOR_RED));
+    // console.log(getComplement("COLOR_RED")); //Error('Undefined color');
+}
+{
+    let a = {k:2};
+    var mySymbol = Symbol('mySymbol');
+    a[mySymbol] = 123123;
+    console.log(a);
+    console.log(Object.getOwnPropertyDescriptor(a, 'mySymbol'));//undefined
+    console.log(Object.getOwnPropertyDescriptor(a, mySymbol));//ok
+    var objectSymbols = Object.getOwnPropertySymbols(a);
+    console.log(objectSymbols);
+
+    var foo = Symbol("foo");
+    Object.defineProperty(a, foo, {
+        value: "foobar",
+    });
+
+    for (var i in a) {
+        console.log(i); // k
+    }
+
+    console.log(Object.getOwnPropertyNames(a));;//[ 'k' ]
+
+    console.log(Object.getOwnPropertySymbols(a));//[ Symbol(mySymbol), Symbol(foo) ]
+
+    console.log(Reflect.ownKeys(a));//[ 'k', Symbol(mySymbol), Symbol(foo) ]
+
+}
+{
+    var s1 = Symbol.for('foo');
+    var s2 = Symbol.for('foo');
+
+    console.log(s1 === s2); // true
+}{
+    var s1 = Symbol('foo');
+    var s2 = Symbol('foo');
+
+    console.log(s1 === s2 );// false
+
+    // 比如，如果你调用Symbol.for("cat")30次，每次都会返回同一个 Symbol 值，但是调用Symbol("cat")30次，
+    // 会返回30个不同的Symbol值。
+
+
+}
+{
+    // Symbol.keyFor方法返回一个已登记的 Symbol 类型值的key。
+    var s1 = Symbol.for("foo");
+    Symbol.keyFor(s1) // "foo"
+
+    var s2 = Symbol("foo");
+    Symbol.keyFor(s2) // undefined
+}
+{
+    //内11个内置的Symbol值 向语言内部使用的方法。
+    //Symbol.hasInstance § ⇧
+    class MyClass {
+        [Symbol.hasInstance](foo) {
+            return foo instanceof Array;
+        }
+    }
+
+    console.log([1, 2, 3] instanceof new MyClass() );// true
+
+    class Even {
+        static [Symbol.hasInstance](obj) {
+            return Number(obj) % 2 === 0;
+        }
+    }
+
+    1 instanceof Even // false
+    2 instanceof Even // true
+    12345 instanceof Even // false
+
+
+    //Symbol.isConcatSpreadable
+    let arr1 = ['c', 'd'];
+    ['a', 'b'].concat(arr1, 'e') // ['a', 'b', 'c', 'd', 'e']
+    arr1[Symbol.isConcatSpreadable] // undefined
+
+    let arr2 = ['c', 'd'];
+    arr2[Symbol.isConcatSpreadable] = false;
+    ['a', 'b'].concat(arr2, 'e') // ['a', 'b', ['c','d'], 'e']
+
+    // 类似数组的对象也可以展开，但它的Symbol.isConcatSpreadable属性默认为false，必须手动打开。
+    let obj = {length: 2, 0: 'c', 1: 'd'};
+    ['a', 'b'].concat(obj, 'e') // ['a', 'b', obj, 'e']
+
+    obj[Symbol.isConcatSpreadable] = true;
+    ['a', 'b'].concat(obj, 'e') // ['a', 'b', 'c', 'd', 'e']
+
+
+    class A1 extends Array {
+        constructor(args) {
+            super(args);
+            this[Symbol.isConcatSpreadable] = true;
+        }
+    }
+    class A2 extends Array {
+        constructor(args) {
+            super(args);
+            this[Symbol.isConcatSpreadable] = false;
+        }
+    }
+    let a1 = new A1();
+    a1[0] = 3;
+    a1[1] = 4;
+    let a2 = new A2();
+    a2[0] = 5;
+    a2[1] = 6;
+    console.log([1, 2].concat(a1).concat(a2));
+// [1, 2, 3, 4, [5, 6]]
+}
+{
+    //Symbol.species
+    class MyArray extends Array {
+        static get [Symbol.species]() { return Array; }
+    }
+    var a = new MyArray(1,2,3);
+    var mapped = a.map(x => x * x);
+
+    mapped instanceof MyArray // false
+    mapped instanceof Array // true
+    // 上面代码中，由于构造函数被替换成了Array。所以，mapped对象不是MyArray的实例，而是Array的实例。
+}
+{
+    // String.prototype.match(regexp)
+// 等同于
+//     regexp[Symbol.match](this)
+
+    class MyMatcher {
+        [Symbol.match](string) {
+            return 'hello world'.indexOf(string);
+        }
+    }
+
+    console.log('e'.match(new MyMatcher()) );// 1
+}
+{
+    //Symbol.replace
+    const x = {};
+    x[Symbol.replace] = (...s) => console.log(s);
+
+    'Hello'.replace(x, 'World') // ["Hello", "World"]
+}
+{
+    //Symbol.split
+    class MySplitter {
+        constructor(value) {
+            this.value = value;
+        }
+        [Symbol.split](string) {
+            var index = string.indexOf(this.value);
+            if (index === -1) {
+                return string;
+            }
+            return [
+                string.substr(0, index),
+                string.substr(index + this.value.length)
+            ];
+        }
+    }
+
+    'foobar'.split(new MySplitter('foo'))
+// ['', 'bar']
+
+    'foobar'.split(new MySplitter('bar'))
+// ['foo', '']
+
+    'foobar'.split(new MySplitter('baz'))
+// 'foobar'
+}
+{
+    //对象进行for...of循环时，会调用Symbol.iterator方法，返回该对象的默认遍历器
+    //Symbol.iterator
+    var myIterable = {};
+    myIterable[Symbol.iterator] = function* () {
+        yield 1;
+        yield 2;
+        yield 3;
+    };
+
+    console.log([...myIterable]);// [1, 2, 3]
+    for(let a of myIterable) {
+        console.log(a);
+    }
+}
+{
+
+    //Symbol.toPrimitive
+    // Number：该场合需要转成数值
+    // String：该场合需要转成字符串
+    // Default：该场合可以转成数值，也可以转成字符串
+    let obj = {
+        [Symbol.toPrimitive](hint) {
+            switch (hint) {
+                case 'number':
+                    return 123;
+                case 'string':
+                    return 'str';
+                case 'default':
+                    return 'default';
+                default:
+                    throw new Error();
+            }
+        }
+    };
+
+     console.log(2 * obj); // 246
+     console.log(3 + obj );// '3default'
+     console.log(obj == 'default'); // true
+     console.log(obj );// 'str'
+}
+{
+    //Symbol.toStringTag
+    // 例一
+    console.log(({[Symbol.toStringTag]: 'Foo'}.toString()));
+// "[object Foo]"
+
+// 例二
+    class Collection {
+        get [Symbol.toStringTag]() {
+            return 'xxx';
+        }
+    }
+    var x = new Collection();
+    console.log(Object.prototype.toString.call(x)); // "[object xxx]"
+
+    console.log(Collection[Symbol.toStringTag]);//UNDEFINED
+    console.log(x[Symbol.toStringTag]);//xxx
+    console.log(JSON[Symbol.toStringTag]);//JSON
+}
+{
+    // /Symbol.unscopables
+    console.log(Array.prototype[Symbol.unscopables]);
+    // {
+//   copyWithin: true,
+//   entries: true,
+//   fill: true,
+//   find: true,
+//   findIndex: true,
+//   includes: true,
+//   keys: true
+// }
+
+    // 没有 unscopables 时
+    class MyClass {
+        foo() { return 1; }
+    }
+
+    console.log(MyClass.prototype[Symbol.unscopables]);
+
+    var foo = function () { return 2; };
+
+    // (function asd() {
+    //     with (MyClass.prototype) {
+    //         console.log(foo()); // 1
+    //     }
+    // })();
+
+}
+console.log("------------Set---------------");
+{
+    const s = new Set();
+
+    [2, 3, 5, 4, 5, 2, 2].forEach(x => s.add(x));
+
+    for (let i of s) {
+        console.log(i);
+    }
+// 2 3 5 4
+
+    // 例一
+    var set = new Set([1, 2, 3, 4, 4]);
+   console.log( [...set]);
+// [1, 2, 3, 4]
+
+// 例二
+    var items = new Set([1, 2, 3, 4, 5, 5, 5, 5]);
+   console.log( items.size); // 5
+
+// 例三
+    function divs () {
+        // return [...document.querySelectorAll('div')];
+    }
+
+    // var set = new Set(divs());
+    // console.log(set.size); // 56
+
+// 类似于
+//     divs().forEach(div => set.add(div));
+//     console.log(set.size); // 56
+
+    // 去除数组的重复成员
+   console.log( [...new Set([1, 2, 3, 4, 5, 5, 5, 5])]);
+
+    // 另外，两个对象总是不相等的。
+    let set2 = new Set();
+
+    set2.add({});
+    // set2.size // 1
+
+    set2.add({});
+    // set2.size // 2
+    console.log(set2);//Set { {}, {} }
+
+    const s2 = new Set();
+    s2.add(1).add(2).add(2);
+// 注意2被加入了两次
+
+    s2.size // 2
+
+    s2.has(1) // true
+    s2.has(2) // true
+    s2.has(3) // false
+
+    s2.delete(2);
+    s2.has(2) // false
+}
+{
+    var items = new Set([4, 2, 1, 3, 5]);
+    var array = Array.from(items);
+    console.log(items);
+    console.log(array);
+}
+{
+    //iterate
+    // keys()：返回键名的遍历器
+    // values()：返回键值的遍历器
+    // entries()：返回键值对的遍历器
+    // forEach()：使用回调函数遍历每个成员
+
+    let set = new Set(['red', 'green', 'blue']);
+    for (let item of set.entries()) {
+        console.log(item);
+    }
+// ["red", "red"]
+// ["green", "green"]
+// ["blue", "blue"]
+
+    set.forEach((a)=>console.log(a));
+    set.forEach((value, key)=>console.log(value, key));
+
+
+    // Set结构的实例默认可遍历，它的默认遍历器生成函数就是它的values方法。
+Set.prototype[Symbol.iterator] === Set.prototype.values
+// true
+
+    // 扩展运算符（...）内部使用for...of循环，所以也可以用于Set结构。
+    let arr = [...set];
+    console.log(arr);
+// ['red', 'green', 'blue']
+}
+{
+    // 数组的map和filter方法也可以用于Set了。
+
+    let set = new Set([1, 2, 3]);
+    set = new Set([...set].map(x => x * 2));
+    console.log(set);
+// 返回Set结构：{2, 4, 6}
+
+    let set2 = new Set([1, 2, 3, 4, 5]);
+    set2 = new Set([...set2].filter(x => (x % 2) == 0));
+// 返回Set结构：{2, 4}
+    console.log(set2);
+}
+{
+    let a = new Set([1, 2, 3]);
+    let b = new Set([4, 3, 2]);
+
+// 并集
+    let union = new Set([...a, ...b]);
+    console.log(union);
+// Set {1, 2, 3, 4}
+
+// 交集
+    let intersect = new Set([...a].filter(x => b.has(x)));
+    console.log(intersect);
+// set {2, 3}
+
+// 差集
+    let difference = new Set([...a].filter(x => !b.has(x)));
+    console.log(difference);
+// Set {1}
+}
+{
+    // WeakSet结构与Set类似，它与Set有两个区别。
+    // 首先，WeakSet的成员只能是对象，而不能是其他类型的值。
+    // 其次，WeakSet中的对象都是弱引用，即垃圾回收机制不考虑WeakSet对该对象的引用，也就是说，
+    // 如果其他对象都不再引用该对象，那么垃圾回收机制会自动回收该对象所占用的内存，
+    // 不考虑该对象还存在于WeakSet之中。这个特点意味着，无法引用WeakSet的成员，因此WeakSet是不可遍历的。
+    // var ws = new WeakSet();
+    // ws.add(1)
+// TypeError: Invalid value used in weak set
+//     ws.add(Symbol())
+// TypeError: invalid value used in weak set
+//     作为构造函数，WeakSet可以接受一个数组或类似数组的对象作为参数。
+//     （实际上，任何具有iterable接口的对象，都可以作为WeakSet的参数。）
+//     该数组的所有成员，都会自动成为WeakSet实例对象的成员。
+    var a = [[1,2], [3,4]];
+    var ws = new WeakSet(a);
+    console.log(a);
+    console.log(ws);
+    // 注意，是a数组的成员成为WeakSet的成员，而不是a数组本身。这意味着，数组的成员只能是对象。
+
+}
+{
+    var ws = new WeakSet();
+    var obj = {};
+    var foo = {};
+
+    // ws.add(window);
+    ws.add(obj);
+
+    // ws.has(window); // true
+    ws.has(foo);    // false
+    console.log(ws.has(obj));    // true
+
+    // ws.delete(window);
+    // ws.has(window);    // false
+    // WeakSet没有size属性，没有办法遍历它的成员。
+
+    // ws.size // undefined
+    // ws.forEach // undefined
+
+    // ws.forEach(function(item){ console.log('WeakSet has ' + item)})
+// TypeError: undefined is not a function
+
+}

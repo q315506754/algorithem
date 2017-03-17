@@ -1,1 +1,1 @@
-start babel-node src/myTool.js
+call babel-node src/myTool.js

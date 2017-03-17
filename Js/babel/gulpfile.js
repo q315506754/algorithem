@@ -51,6 +51,7 @@ gulp.task('watch', function (cb) {
     gulpWatcher.on('change', function (e) {
         if (e.type === 'changed' ) {
             console.log('changed');
+			console.log(e);
 			
 			 exec("start babel-node src/myTool.js",function(err){
 			 //exec("start babel_node run directly.bat\"",function(err){
