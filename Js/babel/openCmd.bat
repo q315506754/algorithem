@@ -1,1 +1,1 @@
-start
+start "babel_node run directly.bat"

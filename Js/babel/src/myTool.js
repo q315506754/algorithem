@@ -178,9 +178,9 @@ console.log('-------------descructing-----------------');
         return [x, y];
     }
 
-    move3({x: 3, y: 8}); // [3, 8]
-    move3({x: 3}); // [3, undefined]
-    move3({}); // [undefined, undefined]
+    move3({x: 3, y: 8}); //,
+    move3({x: 3}); // ,
+    move3({}); //,
     move3(); // [0, 0]
 
   var n1=  [1, undefined, 3].map((x = 'yes') => x);
@@ -407,10 +407,10 @@ string text line 2`);
     tag2`First line\nSecond line`
     // 上面代码中，t
 
-    console.log(String.raw`Hi\n${2+3}!`);
+    console.log(String.raw`Hi\n${2+3}!`);//Hi\n5!
     console.log(String.raw`Hi\\n`);
 
-    console.log(  String.raw({ raw: 'test' }, 0, 132, 32,345,23));
+    console.log(  String.raw({ raw: 'test' }, 0, 132, 32,345,23));//t0e132s32t
 }
 
 console.log('-------------number-----------------');
@@ -557,7 +557,7 @@ console.log('-------------Array-----------------');
     let arr2 = Array.from(arrayLike); // ['a', 'b', 'c']
 
     //字符串和Set结构都具有Iterator接口，因此可以被Array.from转为真正的数组。
-    console.log(Array.from('hello'));
+    console.log(Array.from('hello'));//["h", "e", "l", "l", "o"]
 
     let namesSet = new Set(['a', 'b'])
     Array.from(namesSet) // ['a', 'b']
@@ -589,7 +589,7 @@ console.log('-------------Array-----------------');
     Array.from([1, , 2, , 3], (n) => n || 0)
 // [1, 0, 2, 0, 3]
 
-    Array.from({ length: 2 }, () => 'jack')
+    Array.from({ length: 2 }, () => 'jack') //初始化一个数组 相当于fill
 // ['jack', 'jack']
 
 
@@ -1870,4 +1870,163 @@ Set.prototype[Symbol.iterator] === Set.prototype.values
     // ws.forEach(function(item){ console.log('WeakSet has ' + item)})
 // TypeError: undefined is not a function
 
+}
+console.log("------------Map---------------");
+{
+// ，ES6提供了Map数据结构。它类似于对象，也是键值对的集合，
+// 但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
+    var m = new Map();
+    var o = {p: 'Hello World'};
+
+    m.set(o, 'content')
+   console.log( m.get(o)); // "content"
+
+    m.has(o) // true
+    m.delete(o) // true
+    m.has(o) // false
+}
+{
+    var map = new Map([
+        ['name', '张三'],
+        ['title', 'Author']
+    ]);
+
+    map.size // 2
+    map.has('name') // true
+    map.get('name') // "张三"
+    map.has('title') // true
+    map.get('title') // "Author"
+
+    // 实际上执行的是下面的算法。
+    // items.forEach(([key, value]) => map.set(key, value));
+}
+{
+    var m = new Map([
+        [true, 'foo'],
+        ['true', 'bar']
+    ]);
+
+    m.get(true) // 'foo'
+    m.get('true') // 'bar'
+}
+{
+    // 注意，只有对同一个对象的引用，Map结构才将其视为同一个键。这一点要非常小心。
+var map = new Map();
+
+    map.set(['a'], 555);
+    map.get(['a']) // undefined
+    // 内存地址是不一样的，因此get方法无法读取该键，返回undefined。
+    // 由上可知，Map的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键。
+    // 这就解决了同名属性碰撞（clash）的问题，我们扩展别人的库的时候，如果使用对象作为键名，
+    // 就不用担心自己的属性与原作者的属性同名。
+}
+{
+    let map = new Map();
+
+    map.set(NaN, 123);
+    map.get(NaN) // 123
+
+    map.set(-0, 123);
+    map.get(+0) // 123
+}
+{
+    let map = new Map([
+        ['F', 'no'],
+        ['T',  'yes'],
+    ]);
+
+    for (let key of map.keys()) {
+        console.log(key);
+    }
+// "F"
+// "T"
+
+    for (let value of map.values()) {
+        console.log(value);
+    }
+// "no"
+// "yes"
+
+    for (let item of map.entries()) {
+        console.log(item[0], item[1]);
+    }
+// "F" "no"
+// "T" "yes"
+
+// 或者
+    for (let [key, value] of map.entries()) {
+        console.log(key, value);
+    }
+
+// 等同于使用map.entries()
+    for (let [key, value] of map) {
+        console.log(key, value);
+    }
+
+    console.log(Map.prototype[Symbol.iterator] === Map.prototype.values);//false
+    console.log(Map.prototype[Symbol.iterator] === Map.prototype.entries);//true
+}
+{
+    //快速转数组结构
+    let map = new Map([
+        [1, 'one'],
+        [2, 'two'],
+        [3, 'three'],
+    ]);
+
+    console.log([...map.keys()]);
+// [1, 2, 3]
+
+    console.log([...map.values()]);
+// ['one', 'two', 'three']
+
+    console.log([...map.entries()]);
+// [[1,'one'], [2, 'two'], [3, 'three']]
+
+    console.log([...map]);
+// [[1,'one'], [2, 'two'], [3, 'three']]
+}
+{
+    // 互相转换
+// （1）Map转为数组
+    let myMap = new Map().set(true, 7).set({foo: 3}, ['abc']);
+    console.log([...myMap]);
+// [ [ true, 7 ], [ { foo: 3 }, [ 'abc' ] ] ]
+
+
+// （2）数组转为Map
+   console.log( new Map([[true, 7], [{foo: 3}, ['abc']]]));
+// Map {true => 7, Object {foo: 3} => ['abc']}
+
+    // 3）Map转为对象
+    // 如果所有Map的键都是字符串，它可以转为对象。
+
+    function strMapToObj(strMap) {
+        let obj = Object.create(null);
+        for (let [k,v] of strMap) {
+            obj[k] = v;
+        }
+        return obj;
+    }
+
+    let myMap2 = new Map().set('yes', true).set('no', false);
+    console.log(strMapToObj(myMap2));
+// { yes: true, no: false }
+
+
+    // （4）对象转为Map
+    function objToStrMap(obj) {
+        let strMap = new Map();
+        for (let k of Object.keys(obj)) {
+            strMap.set(k, obj[k]);
+        }
+        return strMap;
+    }
+
+   console.log( objToStrMap({yes: true, no: false}));
+// [ [ 'yes', true ], [ 'no', false ] ]
+
+}
+{
+    console.log("------------Map---------------");
 }
