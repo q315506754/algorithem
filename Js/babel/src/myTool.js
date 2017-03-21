@@ -2027,6 +2027,499 @@ var map = new Map();
 // [ [ 'yes', true ], [ 'no', false ] ]
 
 }
+console.log("------------Proxy---------------");
 {
-    console.log("------------Map---------------");
+    //var proxy = new Proxy(target, handler);
+    // 第一个参数是所要代理的目标对象（上例是一个空对象），即如果没有Proxy的介入，操作原来要访问的就是这个对象；
+    // 第二个参数是一个配置对象，对于每一个被代理的操作，需要提供一个对应的处理函数，该函数将拦截对应的操作。
+    var obj = new Proxy({}, {
+        get: function (target, key, receiver) {
+            console.log(`getting ${key}!`);
+            console.log("target:"+target);
+            // console.log(receiver);
+            return Reflect.get(target, key, receiver);
+        },
+        set: function (target, key, value, receiver) {
+            console.log(`setting ${key}!`);
+            return Reflect.set(target, key, value, receiver);
+        }
+    });
+   console.log( obj.count = 1);
+//  setting count!
+  console.log(  ++obj.count);
+//  getting count!
+//  setting count!
+//  2
+}
+{
+    // 一个技巧是将 Proxy 对象，设置到object.proxy属性，从而可以在object对象上调用。
+    // var object = { proxy: new Proxy(target, handler) };
+
+}
+{
+    // Proxy 实例也可以作为其他对象的原型对象。
+    var proxy = new Proxy({}, {
+        get: function(target, property) {
+            return 35;
+        }
+    });
+
+    let obj = Object.create(proxy);
+    console.log(obj.time );// 35
+
+    obj.aa="asdas";
+    console.log(obj.aa)//asdas
+}
+{
+    var handler = {
+        get: function(target, name) {
+            if (name === 'prototype') {
+                return Object.prototype;
+            }
+            return 'Hello, ' + name;
+        },
+
+        apply: function(target, thisBinding, args) {
+            return args[0];
+        },
+
+        construct: function(target, args) {
+            return {value: args[1]};
+        }
+    };
+
+    var fproxy = new Proxy(function(x, y) {
+        return x + y;
+    }, handler);
+
+    console.log( fproxy(1, 2)); // 1    apply
+     console.log(new fproxy(1,2) );// {value: 2}   construct
+     console.log(fproxy.prototype === Object.prototype); // true
+    console.log(typeof fproxy); // function
+    var abc = function () {
+    }
+    console.log(abc.prototype === Object.prototype); // false
+    console.log(abc.prototype === Function.prototype); // false
+    console.log(abc.prototype == Object.prototype); // false
+    console.log(abc.prototype == Function.prototype); // false
+    console.log(typeof abc); // function
+
+     console.log(fproxy.foo );// "Hello, foo"  get
+}
+{
+//     下面是 Proxy 支持的拦截操作一览。
+//
+// 对于可以设置、但没有设置拦截的操作，则直接落在目标对象上，按照原先的方式产生结果。
+//
+// （1）get(target, propKey, receiver)
+//
+//     拦截对象属性的读取，比如proxy.foo和proxy['foo']。
+//
+// 最后一个参数receiver是一个对象，可选，参见下面Reflect.get的部分。
+//
+// （2）set(target, propKey, value, receiver)
+//
+//     拦截对象属性的设置，比如proxy.foo = v或proxy['foo'] = v，返回一个布尔值。
+//
+// （3）has(target, propKey)
+//
+//     拦截propKey in proxy的操作，返回一个布尔值。
+//
+// （4）deleteProperty(target, propKey)
+//
+//     拦截delete proxy[propKey]的操作，返回一个布尔值。
+//
+// （5）ownKeys(target)
+//
+//     拦截Object.getOwnPropertyNames(proxy)、Object.getOwnPropertySymbols(proxy)、Object.keys(proxy)，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而Object.keys()的返回结果仅包括目标对象自身的可遍历属性。
+//
+// （6）getOwnPropertyDescriptor(target, propKey)
+//
+//     拦截Object.getOwnPropertyDescriptor(proxy, propKey)，返回属性的描述对象。
+//
+// （7）defineProperty(target, propKey, propDesc)
+//
+//     拦截Object.defineProperty(proxy, propKey, propDesc）、Object.defineProperties(proxy, propDescs)，返回一个布尔值。
+//
+// （8）preventExtensions(target)
+//
+//     拦截Object.preventExtensions(proxy)，返回一个布尔值。
+//
+// （9）getPrototypeOf(target)
+//
+//     拦截Object.getPrototypeOf(proxy)，返回一个对象。
+//
+// （10）isExtensible(target)
+//
+//     拦截Object.isExtensible(proxy)，返回一个布尔值。
+//
+// （11）setPrototypeOf(target, proto)
+//
+//     拦截Object.setPrototypeOf(proxy, proto)，返回一个布尔值。
+//
+// 如果目标对象是函数，那么还有两种额外操作可以拦截。
+//
+// （12）apply(target, object, args)
+//
+//     拦截 Proxy 实例作为函数调用的操作，比如proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)。
+//
+// （13）construct(target, args)
+//
+//     拦截 Proxy 实例作为构造函数调用的操作，比如new proxy(...args)。
+}
+console.log("------------Reflect---------------");
+{
+// 老写法
+//     try {
+//         Object.defineProperty(target, property, attributes);
+//         // success
+//     } catch (e) {
+//         // failure
+//     }
+
+// 新写法
+//     if (Reflect.defineProperty(target, property, attributes)) {
+//         // success
+//     } else {
+//         // failure
+//     }
+
+    // 老写法
+    // 'assign' in Object // true
+
+// 新写法
+//     Reflect.has(Object, 'assign') // true
+
+    // Reflect对象的方法与Proxy对象的方法一一对应，只要是Proxy对象的方法，
+    // 就能在Reflect对象上找到对应的方法。这就让Proxy对象可以方便地调用对应的Reflect方法
+    // ，完成默认行为，作为修改行为的基础。也就是说，不管Proxy怎么修改默认行为，你总可以在Reflect上获取默认行为。
+    let target = {};
+    let log = console.log;
+    target=new Proxy(target, {
+    set: function(target, name, value, receiver) {
+            var success = Reflect.set(target,name, value, receiver);
+            if (success) {
+                log('property ' + name + ' on ' + target + ' set to ' + value);
+            }
+            return success;
+        }
+    });
+
+    target.b = 23;
+}
+console.log("------------Promise---------------");
+{
+    // Promise对象代表一个异步操作，有三种状态：Pending（进行中）、Resolved（已完成，又称 Fulfilled）和Rejected（已失败）。
+    // 只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。
+
+    // Promise对象的状态改变，只有两种可能：从Pending变为Resolved和从Pending变为Rejected。
+    // 只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果。
+
+    // 如果改变已经发生了，就算你再对Promise对象添加回调函数，也会立即得到这个结果。
+    // 这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。
+
+    // 有了Promise对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。
+
+
+    // 缺点。:
+    // 首先，无法取消Promise，一旦新建它就会立即执行，无法中途取消。
+    // 其次，如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。
+    // 第三，当处于Pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
+
+}
+{
+    var promise = new Promise(function(resolve, reject) {
+        // ... some code
+
+        if (true/* 异步操作成功 */){
+            // 将Promise对象的状态从“未完成”变为“成功”（即从Pending变为Resolved），
+            // 在异步操作成功时调用，并将异步操作的结果，作为参数传递出去；
+            resolve('asd');
+        } else {
+            // reject函数的作用是，将Promise对象的状态从“未完成”变为“失败”（即从Pending变为Rejected），
+            // 在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去。
+            reject(error);
+        }
+    });
+
+    promise.then(function(value) {
+        // success
+    }, function(error) {
+        // failure
+    });
+}
+{
+    function timeout(ms) {
+        return new Promise((resolve, reject) => {
+                setTimeout(resolve, ms, 'done');
+     });
+    }
+
+    // timeout(100).then((value) => {
+    //         console.log(value);
+    // });
+
+}
+{
+    let promise = new Promise(function(resolve, reject) {
+        console.log('Promise');
+        resolve();
+    });
+
+    //then方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行
+    promise.then(function() {
+        // console.log('Resolved.');
+    });
+
+    console.log('Hi!');
+
+// Promise
+// Hi!
+// Resolved
+}
+{
+    var XMLHttpRequest = function () {
+
+    }
+    var func = ()=>{};
+    Object.assign(XMLHttpRequest.prototype, {
+        status:0,
+        readyState:0,
+        statusText:"ok",
+        type:"",
+        url:"",
+        response:"",
+        open:function (type,url){this.type=type;this.url=url},
+        send:function () {
+            setTimeout(()=>{this.response="response:"+this.type+" "+this.url;this.status=200;this.readyState=4;console.log(this);this.onreadystatechange();},100);
+        },
+        setRequestHeader:func
+    });
+
+    var getJSON = function(url) {
+        var promise = new Promise(function(resolve, reject){
+            var client = new XMLHttpRequest();
+            client.open("GET", url);
+            client.onreadystatechange = handler;
+            client.responseType = "json";
+            client.setRequestHeader("Accept", "application/json");
+            client.send();
+
+            function handler() {
+                if (this.readyState !== 4) {
+                    return;
+                }
+                if (this.status === 200) {
+                    resolve(this.response);
+                } else {
+                    reject(new Error(this.statusText));
+                }
+            };
+        });
+
+        return promise;
+    };
+
+    // var p1 = new Promise(function (resolve, reject) {
+    //     setTimeout(() => reject(new Error('fail')), 3000)
+    // })
+    //
+    // var p2 = new Promise(function (resolve, reject) {
+    //     setTimeout(() => resolve(p1), 1000)
+    // })
+
+//     p2
+//         .then(result => console.log(result))
+// .catch(error => console.log(error))
+// Error: fail
+
+//     上面代码中，p1是一个Promise，3秒之后变为rejected。
+// p2的状态在1秒之后改变，resolve方法返回的是p1。
+// 由于p2返回的是另一个 Promise，导致p2自己的状态无效了，由p1的状态决定p2的状态。
+// 所以，后面的then语句都变成针对后者（p1）。又过了2秒，p1变为rejected，导致触发catch方法指定的回调函数。
+}
+{
+    // 采用链式的then，可以指定一组按照次序调用的回调函数。这时，前一个回调函数，有可能返回的还是一个Promise对象（即有异步操作），这时后一个回调函数，就会等待该Promise对象的状态发生变化，才会被调用。
+
+    // getJSON("/post/1.json").then(function(post) {
+    //     return getJSON(post.commentURL);
+    // }).then(function funcA(comments) {
+    //     console.log("Resolved: ", comments);
+    // }, function funcB(err){
+    //     console.log("Rejected: ", err);
+    // });
+
+    // getJSON("/post/1.json").then(
+    //     post => getJSON(post.commentURL)
+    // ).then(
+    //     comments => console.log("Resolved: ", comments),
+    //     err => console.log("Rejected: ", err)
+    // );
+}
+{
+    // Promise.prototype.catch方法是.then(null, rejection)的别名，用于指定发生错误时的回调函数。
+    // getJSON('/posts.json').then(function(posts) {
+    //     // ...
+    //     console.log(posts);
+    // }).catch(function(error) {
+    //     // 处理 getJSON 和 前一个回调函数运行时发生的错误
+    //     console.log('发生错误！', error);
+    // });
+}
+{
+    // var promise=getJSON('/posts.json');
+    // bad
+    // promise
+    //     .then(function(data) {
+    //         // success
+    //     }, function(err) {
+    //         // error
+    //     });
+
+// good
+//     promise
+//         .then(function(data) { //cb
+//             // success
+//         })
+//         .catch(function(err) {
+//             // error
+//         });
+}
+{
+    // var someAsyncThing = function() {
+    //     return new Promise(function(resolve, reject) {
+    //         // 下面一行会报错，因为x没有声明
+    //         resolve(x + 2);
+    //     });
+    // };
+    //
+    // someAsyncThing().then(function() {
+    //     console.log('everything is great');
+    // });
+
+    // 上面代码中，someAsyncThing函数产生的Promise对象会报错，但是由于没有指定catch方法，这个错误不会被捕获，
+    // 也不会传递到外层代码，导致运行后没有任何输出。
+    // 注意，Chrome浏览器不遵守这条规定，它会抛出错误“ReferenceError: x is not defined”。
+
+
+    // var promise = new Promise(function(resolve, reject) {
+    //     resolve('ok');
+    //     setTimeout(function() { throw new Error('test') }, 0)
+    // });
+    // promise.then(function(value) { console.log(value) });
+// ok
+// Uncaught Error: test
+
+    // 上面代码中，Promise 指定在下一轮“事件循环”再抛出错误，结果由于没有指定使用try...catch语句，就冒泡到最外层，
+    // 成了未捕获的错误。因为此时，Promise的函数体已经运行结束了，所以这个错误是在Promise函数体外抛出的。
+
+    // someAsyncThing().then(function() {
+    //     return someOtherAsyncThing();
+    // }).catch(function(error) {
+    //     console.log('oh no', error);
+    //     // 下面一行会报错，因为y没有声明
+    //     y + 2;
+    // }).catch(function(error) {
+    //     console.log('carry on', error);
+    // });
+// oh no [ReferenceError: x is not defined]
+// carry on [ReferenceError: y is not defined]
+}
+{
+    // var p = Promise.all([p1, p2, p3]);
+    // （1）只有p1、p2、p3的状态都变成fulfilled，p的状态才会变成fulfilled，
+    // 此时p1、p2、p3的返回值组成一个数组，传递给p的回调函数。
+
+// （2）只要p1、p2、p3之中有一个被rejected，p的状态就变成rejected，
+// 此时第一个被reject的实例的返回值，会传递给p的回调函数。
+    // 生成一个Promise对象的数组
+    // var promises = [2, 3, 5, 7, 11, 13].map(function (id) {
+    //     return getJSON("/post/" + id + ".json");
+    // });
+    //
+    // Promise.all(promises).then(function (posts) {
+    //     // ...
+    //     console.log('all ok:'+posts);
+    // }).catch(function(reason){
+    //     // ...
+    //     console.log('reason:'+reason);
+    // });
+}
+{
+    // var p = Promise.race([p1, p2, p3]);
+    // 上面代码中，只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变。
+    // 那个率先改变的 Promise 实例的返回值，就传递给p的回调函数。
+
+}
+{
+// （2）参数是一个thenable对象
+
+    // thenable对象指的是具有then方法的对象，比如下面这个对象。
+    // Promise.resolve方法会将这个对象转为Promise对象，然后就立即执行thenable对象的then方法。
+
+    // let thenable = {
+    //     then: function(resolve, reject) {
+    //         console.log('invoked..');
+    //         resolve(42);
+    //     }
+    // };
+    //
+    // let p1 = Promise.resolve(thenable);
+    // p1.then(function(value) {
+    //     console.log(value);  // 42
+    // });
+}
+
+{
+    // var p = Promise.resolve('Hello');
+    //
+    // p.then(function (s){
+    //     console.log(s)
+    // });
+    // Hello
+}
+{
+    // setTimeout(function () {
+    //     console.log('three');
+    // }, 0);
+    //
+    // //Promise.resolve方法允许调用时不带参数，直接返回一个Resolved状态的Promise对象。
+    // Promise.resolve().then(function () {
+    //     console.log('two');
+    // });
+    //
+    // console.log('one');
+
+// one
+// two
+// three
+}
+{
+    //部署 自定义方法
+    Promise.prototype.done = function (onFulfilled, onRejected) {
+        this.then(onFulfilled, onRejected)
+            .catch(function (reason) {
+                // 抛出一个全局错误
+                setTimeout(() => { throw reason }, 0);
+            });
+    };
+//    asyncFunc()
+// .then(f1)
+//     .catch(r1)
+//     .then(f2)
+//     .done();
+
+
+    Promise.prototype.finally = function (callback) {
+        let P = this.constructor;
+        return this.then(
+                value  => P.resolve(callback()).then(() => value),
+        reason => P.resolve(callback()).then(() => { throw reason })
+        );
+    };
+    // server.listen(0)
+    //     .then(function () {
+    //         // run test
+    //     })
+    //     .finally(server.stop);
 }
