@@ -30,6 +30,8 @@
         container.scrollTop=container.scrollHeight;
     }
 
+    try{
+
     createStyleSheet().innerHTML="" +
     ".console_line{"+
     "    margin: 0px;"+
@@ -56,10 +58,15 @@
     "    padding: 3px;"+
     "    background:RGB(163,191,229)"+
     "}";
-
+    }catch(e){}
 
 
     var oldFunc = window.console;
+    if(!"console" in window){
+        var emptyFunc = function () {
+        }
+        oldFunc={log:emptyFunc,warn:emptyFunc,error:emptyFunc};
+    }
     var mainDiv ;
     var container;
     var consoleTitle;
@@ -77,38 +84,46 @@
 
     window.console = {
         log:function (msg) {
-            this._print(msg);
-            oldFunc.log.apply(this,arguments);
+            window.console._print(msg);
+            try{oldFunc.log.apply(this,arguments);}
+            catch (e){
+                oldFunc.log(arguments);
+            }
         },
         warn:function (msg) {
             this._print(msg,'yellow');
-            oldFunc.warn.apply(this,arguments);
+            try{oldFunc.warn.apply(this,arguments);}
+            catch (e){
+                oldFunc.warn(arguments);
+            }
         },
         _print:function (msg,cls) {
-            if (msg == null || msg == undefined) {
-                cls = 'gray';
-            }else if(msg instanceof Array) {
-                msg = "["+msg+"]";
-                cls="RGB(97,116,56);"
-            } else {
-                if(typeof msg == "object") {
-                    msg = JSON.stringify(msg);
-                    cls=" RGB(186,180,40);"
+            try{
+                if (msg == null || msg == undefined) {
+                    cls = 'gray';
+                }else if(msg instanceof Array) {
+                    msg = "["+msg+"]";
+                    cls="RGB(97,116,56);"
+                } else {
+                    if(typeof msg == "object") {
+                        msg = JSON.stringify(msg);
+                        cls=" RGB(186,180,40);"
+                    }
+                    if(typeof msg == "function") {
+                        msg = "function "+msg.name+"(...){...}";
+                        cls=" RGB(204,120,50);"
+                    }
+                    if(typeof msg == "number") {
+                        cls = "RGB(135,117,130)"
+                    }
+                    if(typeof msg == "string") {
+                        msg = "\""+msg+"\"";
+                    }
                 }
-                if(typeof msg == "function") {
-                    msg = "function "+msg.name+"(...){...}";
-                    cls=" RGB(204,120,50);"
-                }
-                if(typeof msg == "number") {
-                    cls = "RGB(135,117,130)"
-                }
-                if(typeof msg == "string") {
-                    msg = "\""+msg+"\"";
-                }
-            }
 
-            container.innerHTML = container.innerHTML+"><span class='console_line' style='color:"+cls+"'>"+msg+"</span><br/>";
-            scrollBottom();
+                container.innerHTML = container.innerHTML+"><span class='console_line' style='color:"+cls+"'>"+msg+"</span><br/>";
+                scrollBottom();
+            }catch(e){}
         }
     }
 

@@ -200,6 +200,77 @@ TBL_USER 账号密码等等，Course的主讲人连到了该表
 
 --------------------------------------------------------------------------------------
 
+私有云字幕
+——节：
+————删除：
+——————action参数：{videoSubTitleId字幕id}
+——————接口：IVideoSubtitleInvoker.delVideoSubtitleInfo
+————添加：
+——————前置判断：每种语言类型只能上传一个字幕
+————————action参数：{videoId，语言类型(0:中文，1：英文，2：中英文)}
+————————接口：IVideoSubtitleInvoker.listVideoSubtitleInfos
+——————action参数：{filePath路径，videoId，fileName，语言类型(0:中文，1：英文，2：中英文)}
+——————接口：IVideoSubtitleInvoker.addVideoSubtitleInfo
+————查询：
+——————action参数：{videoId}
+——————接口：IVideoSubtitleInvoker.listVideoSubtitleInfos
+
+
+——小节：
+同节
+
+私有云视频：
+——节：
+————删除：
+——————action参数：{videoId,lessonId,courseId},
+——————接口：ILessonVideoService.deleteVideoByVideoId，TipInfoOpenService.deleteTipInfo
+——————后置操作：清空videoId对应的字幕
+————————action参数：{videoId}
+————————接口：IVideoSubtitleInvoker.listVideoSubtitleInfos，delVideoSubtitleInfo
+————添加：
+——————上传视频：
+————————action参数：{fileName,videoId,size,filePath,author,lessonId,saveType=1,courseId},
+————————接口：ILessonService.saveVideo，TipInfoOpenService.saveOrUpdateTipInfo
+————————后置操作：若studentFolderId < 1，创建一个学生文件夹
+——————————action参数：{courseId，courseName}
+——————————接口：IFolderService.saveStudentFolder
+————————后置操作：若为覆盖视频操作，把字幕关系中的oldVideoId=>newVideoId
+——————————action参数：{oldVideoId，newVideoId}
+——————————接口：IVideoSubtitleInvoker.updateVideoSubtitleInfo
+——————使用资源库视频：
+————————action参数：{dataId,lessonVideoId,lessonId,saveType=1,courseId},
+————————接口：ILessonService.get，IDataService.findDataById,ILessonService.saveLessonVideo,TipInfoOpenService.saveOrUpdateTipInfo
+————————后置操作：若为覆盖视频操作，把字幕关系中的oldVideoId=>newVideoId
+——————————action参数：{oldVideoId，newVideoId}
+——————————接口：IVideoSubtitleInvoker.updateVideoSubtitleInfo
+
+
+——小节：
+————删除：
+——————action参数：{lessonVideoId,courseId},
+——————接口：ILessonVideoService.deleteChildrenLessonVideo，TipInfoOpenService.deleteTipInfo
+——————后置操作：清空videoId对应的字幕
+————————action参数：{videoId}
+————————接口：IVideoSubtitleInvoker.listVideoSubtitleInfos，delVideoSubtitleInfo
+————添加：
+——————上传视频：
+————————action参数：{fileName,videoId,size,filePath,author,lessonId,lessonVideoId,saveType=2,courseId},
+————————接口：ILessonVideoService.update，TipInfoOpenService.saveOrUpdateTipInfo
+————————后置操作：若studentFolderId < 1，创建一个学生文件夹
+——————————action参数：{courseId，courseName}
+——————————接口：IFolderService.saveStudentFolder
+————————后置操作：不管什么操作，把字幕关系中的oldVideoId=>newVideoId
+——————————action参数：{oldVideoId，newVideoId}
+——————————接口：IVideoSubtitleInvoker.updateVideoSubtitleInfo
+——————使用资源库视频：
+————————action参数：{dataId,lessonVideoId,lessonId,saveType=2,courseId},
+————————接口：ILessonService.get，IDataService.findDataById,ILessonService.saveLessonVideo,TipInfoOpenService.saveOrUpdateTipInfo
+————————后置操作：若为覆盖视频操作，把字幕关系中的oldVideoId=>newVideoId
+——————————action参数：{oldVideoId，newVideoId}
+——————————接口：IVideoSubtitleInvoker.updateVideoSubtitleInfo
+
+--------------------------------------------------------------------------------------
+
 见面课（建课）：MEET_COURSE
 任务类型TASK_TYPE: 1、直播互动课  2、小组讨论课  3、实践课  4、直播课（无互动）5、虚拟教室
 是否计入总成绩IS_ADD_SCORE：0 否 ; 1 是
