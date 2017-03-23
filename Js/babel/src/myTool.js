@@ -2529,6 +2529,7 @@ console.log("------------Promise---------------");
     // 回答是可以的，并且还有两种写法。第一种写法是用async函数来写。
 
 
+    //第二种
     const f = () => console.log('now');
     (
         () => new Promise(
