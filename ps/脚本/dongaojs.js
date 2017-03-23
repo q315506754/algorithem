@@ -115,7 +115,8 @@ var _handle = {
             //choose
             $("input:radio[name='useranswer'][value='"+rightAnswer+"']").attr("checked","checked");
             //save
-            savePointAnswer();
+            setTimeout(()=>$("#pointDiv .Tibutton").click(),1000);
+            // savePointAnswer();
 
             openNotify("[INFO]答题成功"+this.statistics.questions.appearedTimes, 9000);
         } else {
