@@ -62,7 +62,7 @@ console.log(module1.year);
 console.log(module1.multiplyV1(3,2));
 
 
-console.log('-------------descructing-----------------');
+console.log('-------------destructing-----------------');
 {
     let [a, b, c] = [1, 2, 3];
     console.log(a,b,c);
