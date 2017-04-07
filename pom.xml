@@ -24,6 +24,7 @@
         <module>DB</module>
         <module>Doc</module>
         <module>Document</module>
+        <module>DownUpload</module>
         <module>Graphics</module>
         <module>Guava</module>
         <module>Hack</module>

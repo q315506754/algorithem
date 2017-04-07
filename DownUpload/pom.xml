@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jiangli.AlgorithemProject</groupId>
-    <artifactId>Test</artifactId>
+    <artifactId>DownUpload</artifactId>
     <packaging>jar</packaging>
     <version>${com.provider-version}</version>
 
@@ -31,7 +31,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>

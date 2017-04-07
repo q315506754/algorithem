@@ -3,6 +3,7 @@ package com.jiangli.test;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -93,6 +94,17 @@ public class MockTest {
         map.put(1, "world");
         verify(map).put(eq(1), eq("world")); //eq("world")替换成"world"也会报错
 
+    }
+
+    @Test
+    public void testSession(){
+        HttpSession mock = mock(HttpSession.class);
+        mock.setAttribute("ddd","xxx");
+        System.out.println(mock.getAttribute("ddd"));
+
+        when(mock.getAttribute("ddd")).thenReturn("hello");
+
+        System.out.println(mock.getAttribute("ddd"));
     }
 
     @Test
