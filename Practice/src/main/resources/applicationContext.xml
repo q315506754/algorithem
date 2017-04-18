@@ -2,10 +2,59 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/data/jpa
+            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
            http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       "
         >
     <context:component-scan base-package="com.jiangli"/>
+
+    <jpa:repositories base-package="com.jiangli.practice.eleme.dao" entity-manager-factory-ref="entityManagerFactory"/>
+
+    <!-- 配置 JPA 的 EntityManagerFactory  -->
+     <bean id="entityManagerFactory"
+         class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+         <property name="dataSource" ref="basicDataSource"></property><!-- 添加数据源 -->
+         <property name="jpaVendorAdapter">
+             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
+         </property>
+         <!--<property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml" />-->
+         <property name="packagesToScan" value="com.jiangli.practice.eleme.model"></property>
+         <!-- hibernate 配置 -->
+         <property name="jpaProperties">
+             <props>
+                 <!--<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>-->
+                 <!--<prop key="hibernate.hbm2ddl.auto">none</prop>-->
+
+                 <!--<prop key="hibernate.show_sql">true</prop>-->
+                 <!--<prop key="hibernate.format_sql">true</prop>-->
+
+                 <!-- 方言 hibernate 并不知道自己要使用哪种数据库 -->
+                 <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>-->
+                 <!--  
+                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                 <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+                 <prop key="hibernate.cache.use_query_cache">true</prop>
+                 -->
+             </props>
+         </property>
+         <!--  <property name="sharedCacheMode" value="ENABLE_SELECTIVE"></property>-->
+     </bean>
+
+    <!-- 配置事务 纯事物     jpa事物 -->
+     <bean id="transactionManager"
+         class="org.springframework.orm.jpa.JpaTransactionManager">
+         <property name="entityManagerFactory" ref="entityManagerFactory"></property>
+     </bean>
+
+     <!-- 配置支持基于注解的事务 -->
+     <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+     <!-- 配置 SpringData -->
+     <!--<jpa:repositories base-package="com.dao"-->
+         <!--entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>-->
 </beans>

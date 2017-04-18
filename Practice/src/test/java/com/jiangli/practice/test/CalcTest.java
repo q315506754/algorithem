@@ -48,6 +48,7 @@ public class CalcTest {
     public void testCommit() {
         System.out.println(calculator);
         CalcContext context = new CalcContext();
+        context.setMerchantId(1);
         context.setReduceForEachOrder(4d);
         calculator.calc(context);
     }
