@@ -40,6 +40,7 @@
         <module>MavenPluginClient</module>
         <module>Memory</module>
         <module>OSGI</module>
+        <module>Practice</module>
         <module>RPC</module>
         <module>Security</module>
         <module>SOA</module>
