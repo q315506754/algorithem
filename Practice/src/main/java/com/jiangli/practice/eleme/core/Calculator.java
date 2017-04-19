@@ -1,5 +1,6 @@
 package com.jiangli.practice.eleme.core;
 
+import com.jiangli.common.utils.ArrayUtil;
 import com.jiangli.practice.eleme.dao.DishRespository;
 import com.jiangli.practice.eleme.dao.MerchantRespository;
 import com.jiangli.practice.eleme.dao.RuleRespository;
@@ -40,7 +41,11 @@ public class Calculator {
         logger.debug("rules:"+rules);
 
         for (int i=context.getMinOrder();i<=context.getMaxOrder();i++) {
-            int[][] orderIndexes=new int[i][];
+            OrderDistributor distributor = new OrderDistributor(i, ArrayUtil.newArray(selectedDishes.size(),0));
+
+            for (int[][] ints : distributor) {
+
+            }
         }
     }
 }

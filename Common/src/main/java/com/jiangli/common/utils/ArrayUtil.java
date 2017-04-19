@@ -1,5 +1,7 @@
 package com.jiangli.common.utils;
 
+import java.util.Arrays;
+
 /**
  * Created by Jiangli on 2016/6/8.
  */
@@ -62,5 +64,32 @@ public class ArrayUtil {
         }
 
         System.out.println(sb.toString());
+    }
+
+    public static String toString(int[][] ints1){
+        String[] t = new String[ints1.length];
+        for (int i = 0; i < ints1.length; i++) {
+            t[i] = Arrays.toString(ints1[i]);
+        }
+        return Arrays.toString(t);
+    }
+
+    public static int[] newArray(int length,int start){
+        int[] ret = new int[length];
+        while (length-->0) {
+            ret[length]=length+start;
+        }
+        return ret;
+    }
+
+    public static int[] substractBiSearch(int[] ints1,int[]  ints2){
+        int[] ret = new int[ints1.length-ints2.length];
+        int n=0;
+        for (int i = 0; i < ints1.length; i++) {
+            if (Arrays.binarySearch(ints2,ints1[i]) < 0) {
+                ret[n++]=ints1[i];
+            }
+        }
+        return ret;
     }
 }
