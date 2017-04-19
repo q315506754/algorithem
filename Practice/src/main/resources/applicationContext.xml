@@ -11,7 +11,9 @@
            http://www.springframework.org/schema/context/spring-context-3.0.xsd
        "
         >
-    <context:component-scan base-package="com.jiangli"/>
+    <context:component-scan base-package="com.jiangli" >
+        <context:exclude-filter type="regex" expression="com.jiangli.*.controller.*"></context:exclude-filter>
+    </context:component-scan>
 
     <jpa:repositories base-package="com.jiangli.practice.eleme.dao" entity-manager-factory-ref="entityManagerFactory"/>
 

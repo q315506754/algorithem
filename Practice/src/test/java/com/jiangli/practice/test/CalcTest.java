@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.sql.DataSource;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Jiangli
@@ -68,10 +69,11 @@ public class CalcTest {
         calculator.calc(context);
 
         List<Solution> solutions = context.getSolutions();
-        for (Solution solution : solutions) {
+        Stream<Solution> stream = solutions.stream();
+        stream.forEach(solution->{
             System.out.println(solution);
             System.out.println(solution.getPrice());
-        }
+        });
     }
 
     public Item newItem(String name,Double money) {

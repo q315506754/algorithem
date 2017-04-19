@@ -58,6 +58,7 @@ public class JpaTest {
 
         findAll();
     }
+
     @Test
     public void testFindDish() {
         System.out.println(dishRespository);
