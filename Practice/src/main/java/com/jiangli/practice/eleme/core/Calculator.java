@@ -80,10 +80,12 @@ public class Calculator {
             OrderDistributor distributor = new OrderDistributor(i, ArrayUtil.newArray(size,0));
             Solution minSolution=null;
 
+            //各订单已经分好dish[[],[],[]]
             for (int[][] ints : distributor) {
                 Solution cur = new Solution();
                 cur.setOrderNum(i);
 
+                //生成每一个订单
                 for (int orderNum = 0; orderNum < ints.length; orderNum++) {
                     Order one = new Order();
 
@@ -119,27 +121,52 @@ public class Calculator {
                     }
 
                     //满x减y
-                    Double reduceMoney=null;
-                    String reduceString=null;
+                    Double activityReduce=null;
+                    String activityReduceString=null;
                     for (Rule rule : rules) {
                         if (priceTotal >= rule.getReach()) {
-                            reduceMoney = rule.getReduce();
-                            reduceString="在线支付立减优惠,满"+rule.getReach()+"减"+reduceMoney;
+                            activityReduce = rule.getReduce();
+                            activityReduceString="在线支付立减优惠,满"+rule.getReach()+"减"+activityReduce;
                             break;
                         }
                     }
 
                     double priceAfterReduce = priceTotal;
-                    if (reduceMoney!=null) {
-                        one.addReducedMoney(reduceString,reduceMoney);
-
-                        priceAfterReduce-=reduceMoney;
+                    if (activityReduce!=null) {
+                        one.addReducedMoney(activityReduceString,activityReduce);
                     }
 
+                    //红包减免
+                    Double redEnvelopReduce=null;
+                    String redEnvelopReduceString=null;
+                    if (redEnvelopReduce!=null) {
+                        one.addReducedMoney(redEnvelopReduceString,redEnvelopReduce);
+                    }
+
+
+                    //reduce
+                    if (activityReduce!=null) {
+                        priceAfterReduce-=activityReduce;
+                    }
+                    if (redEnvelopReduce!=null) {
+                        priceAfterReduce-=redEnvelopReduce;
+                    }
+
+                    double priceFinal = priceAfterReduce;
+
                     //加上配送
-                    one.addExtraMoney("配送费",5d);
-                    one.addReducedMoney("会员减免配送费",4d);
-                    double priceFinal = priceAfterReduce+context.getExtraMoneyForEachOrder();
+                    Double distributionMoney = merchant.getDistributionMoney();
+                    priceFinal+=distributionMoney;
+                    one.addExtraMoney("配送费",distributionMoney);
+
+                    //会员减免
+                    if (context.getVip()) {
+                        double vipReduce = 4d;
+                        one.addReducedMoney("会员减免配送费", vipReduce);
+                        priceFinal-= vipReduce;
+                    }
+
+                    //set rs
                     one.setPrice(priceFinal);
 
                     cur.addOrder(one);

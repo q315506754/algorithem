@@ -65,7 +65,7 @@ public class CalcTest {
         items.add(newItem("蒸腊鸭",18d));
 
         context.setMerchantId(1);
-        context.setExtraMoneyForEachOrder(1d);
+//        context.setExtraMoneyForEachOrder(1d);
         calculator.calc(context);
 
         List<Solution> solutions = context.getSolutions();

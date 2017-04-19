@@ -12,6 +12,7 @@ import java.util.List;
 public class CalcContext {
     private Double extraMoneyForEachOrder =0d;
     private Integer  merchantId;
+    private Boolean  isVip=true;
     private List<Rule> extraRules;
     private Cart cart;
     private Integer  minOrder=1;
@@ -68,5 +69,13 @@ public class CalcContext {
 
     public void setMaxOrder(Integer maxOrder) {
         this.maxOrder = maxOrder;
+    }
+
+    public Boolean getVip() {
+        return isVip;
+    }
+
+    public void setVip(Boolean vip) {
+        isVip = vip;
     }
 }

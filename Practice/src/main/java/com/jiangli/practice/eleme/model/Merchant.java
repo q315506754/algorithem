@@ -19,6 +19,8 @@ public class Merchant {
 
     private Double  baseMoney=20d;
 
+    private Double  distributionMoney=5d;
+
     public Integer getId() {
         return id;
     }
@@ -44,12 +46,21 @@ public class Merchant {
         this.baseMoney = baseMoney;
     }
 
+    public Double getDistributionMoney() {
+        return distributionMoney;
+    }
+
+    public void setDistributionMoney(Double distributionMoney) {
+        this.distributionMoney = distributionMoney;
+    }
+
     @Override
     public String toString() {
         return "Merchant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", baseMoney=" + baseMoney +
+                ", distributionMoney=" + distributionMoney +
                 '}';
     }
 }
