@@ -39,6 +39,6 @@ public class Calculator {
         logger.debug("selectedDishes:"+selectedDishes);
         logger.debug("rules:"+rules);
 
-        
+
     }
 }
