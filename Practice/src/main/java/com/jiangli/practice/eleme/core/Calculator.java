@@ -39,6 +39,8 @@ public class Calculator {
         logger.debug("selectedDishes:"+selectedDishes);
         logger.debug("rules:"+rules);
 
-
+        for (int i=context.getMinOrder();i<=context.getMaxOrder();i++) {
+            int[][] orderIndexes=new int[i][];
+        }
     }
 }
