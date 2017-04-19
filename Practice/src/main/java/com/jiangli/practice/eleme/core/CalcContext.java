@@ -2,6 +2,7 @@ package com.jiangli.practice.eleme.core;
 
 import com.jiangli.practice.eleme.model.Rule;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,19 +10,24 @@ import java.util.List;
  * @date 2017/4/18 13:37
  */
 public class CalcContext {
-    private Double  reduceForEachOrder=0d;
+    private Double extraMoneyForEachOrder =0d;
     private Integer  merchantId;
     private List<Rule> extraRules;
     private Cart cart;
     private Integer  minOrder=1;
     private Integer  maxOrder=3;
+    private final List<Solution> solutions=new LinkedList<>();
 
-    public Double getReduceForEachOrder() {
-        return reduceForEachOrder;
+    public List<Solution> getSolutions() {
+        return solutions;
     }
 
-    public void setReduceForEachOrder(Double reduceForEachOrder) {
-        this.reduceForEachOrder = reduceForEachOrder;
+    public Double getExtraMoneyForEachOrder() {
+        return extraMoneyForEachOrder;
+    }
+
+    public void setExtraMoneyForEachOrder(Double extraMoneyForEachOrder) {
+        this.extraMoneyForEachOrder = extraMoneyForEachOrder;
     }
 
     public Integer getMerchantId() {

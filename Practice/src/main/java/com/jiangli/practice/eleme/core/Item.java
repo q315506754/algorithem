@@ -1,23 +1,20 @@
 package com.jiangli.practice.eleme.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Jiangli on 2017/4/18.
  */
 public class Item {
     private String  name;
     private Double  money;
-    private List<Double> extraMoney=new ArrayList<>();
+    private Double  packageMoney;
     private int  num=1;
 
-    public List<Double> getExtraMoney() {
-        return extraMoney;
+    public Double getPackageMoney() {
+        return packageMoney;
     }
 
-    public void setExtraMoney(List<Double> extraMoney) {
-        this.extraMoney = extraMoney;
+    public void setPackageMoney(Double packageMoney) {
+        this.packageMoney = packageMoney;
     }
 
     public String getName() {
@@ -42,5 +39,36 @@ public class Item {
 
     public void setNum(int num) {
         this.num = num;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (name != null ? !name.equals(item.name) : item.name != null) return false;
+        if (money != null ? !money.equals(item.money) : item.money != null) return false;
+        return packageMoney != null ? packageMoney.equals(item.packageMoney) : item.packageMoney == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (money != null ? money.hashCode() : 0);
+        result = 31 * result + (packageMoney != null ? packageMoney.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + name + '\'' +
+                ", money=" + money +
+                ", packageMoney=" + packageMoney +
+                ", num=" + num +
+                '}';
     }
 }

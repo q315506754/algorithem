@@ -109,4 +109,11 @@ public class MethodUtil {
         Object invoke = setter.invoke(obj,value);
         return invoke;
     }
+    public static void copyProp(Object from,String property,Object to){
+        try {
+            invokeSetter(to,property,invokeGetter(from,property));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -17,6 +17,8 @@ public class Merchant {
     @Column(name = "name")
     private String  name;
 
+    private Double  baseMoney=20d;
+
     public Integer getId() {
         return id;
     }
@@ -33,11 +35,21 @@ public class Merchant {
         this.name = name;
     }
 
+
+    public Double getBaseMoney() {
+        return baseMoney;
+    }
+
+    public void setBaseMoney(Double baseMoney) {
+        this.baseMoney = baseMoney;
+    }
+
     @Override
     public String toString() {
         return "Merchant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", baseMoney=" + baseMoney +
                 '}';
     }
 }
