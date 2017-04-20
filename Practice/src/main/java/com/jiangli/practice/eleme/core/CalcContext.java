@@ -13,7 +13,7 @@ public class CalcContext {
     private Double extraMoneyForEachOrder =0d;
     private Integer  merchantId;
     private Boolean  isVip=true;
-    private List<Rule> extraRules;
+    private List<Rule> redEnvelope;
     private Cart cart;
     private Integer  minOrder=1;
     private Integer  maxOrder=3;
@@ -39,12 +39,12 @@ public class CalcContext {
         this.merchantId = merchantId;
     }
 
-    public List<Rule> getExtraRules() {
-        return extraRules;
+    public List<Rule> getRedEnvelope() {
+        return redEnvelope;
     }
 
-    public void setExtraRules(List<Rule> extraRules) {
-        this.extraRules = extraRules;
+    public void setRedEnvelope(List<Rule> redEnvelope) {
+        this.redEnvelope = redEnvelope;
     }
 
     public Cart getCart() {

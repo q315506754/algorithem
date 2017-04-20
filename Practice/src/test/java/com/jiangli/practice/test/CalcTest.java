@@ -1,6 +1,7 @@
 package com.jiangli.practice.test;
 
 import com.jiangli.practice.eleme.core.*;
+import com.jiangli.practice.eleme.model.Rule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,9 +65,16 @@ public class CalcTest {
         items.add(newItem("米饭",2d,5));
         items.add(newItem("蒸腊鸭",18d));
 
+        List<Rule> redEnvelops = new LinkedList<>();
+        redEnvelops.add(newRule(110d, 9.9d));
+        redEnvelops.add(newRule(20d, 1d));
+        context.setRedEnvelope(redEnvelops);
+
         context.setMerchantId(1);
 //        context.setExtraMoneyForEachOrder(1d);
         calculator.calc(context);
+
+
 
         List<Solution> solutions = context.getSolutions();
         Stream<Solution> stream = solutions.stream();
@@ -74,6 +82,28 @@ public class CalcTest {
             System.out.println(solution);
             System.out.println(solution.getPrice());
         });
+    }
+
+    @Test
+    public void testRedEnvelop() {
+        List<Rule> redEnvelops = new LinkedList<>();
+        redEnvelops.add(newRule(110d, 9.9d));
+        redEnvelops.add(newRule(20d, 1d));
+
+
+        ArrangementSupport redEnvelopDistributor = new ArrangementSupport(3,redEnvelops.size());
+
+//        for (int[] redEnvelopIdxForList : redEnvelopDistributor) {
+//            int envelopIdx = redEnvelopIdxForList[0];
+//            Rule redEnvelop = CollectionUtil.get(context.getRedEnvelope(), envelopIdx);
+//        }
+
+    }
+    private Rule newRule(double reach, double reduce) {
+        Rule rule = new Rule();
+        rule.setReach(reach);
+        rule.setReduce(reduce);
+        return rule;
     }
 
     public Item newItem(String name,Double money) {
@@ -86,5 +116,41 @@ public class CalcTest {
         item.setMoney(money);
         item.setNum(num);
         return item;
+    }
+
+    @Test
+    public void testCalc20170420() {
+        CalcContext context = new CalcContext();
+
+        Cart cart = new Cart();
+        context.setCart(cart);
+        List<Item> items = new LinkedList<>();
+        cart.setItems(items);
+
+        items.add(newItem("西红柿炒蛋",15d));
+        items.add(newItem("韭菜千叶丝",12d));
+        items.add(newItem("农家小炒肉",18d));
+        items.add(newItem("辣子鸡",18d));
+        items.add(newItem("豆芽",12d));
+        items.add(newItem("鸡柳",18d));
+        items.add(newItem("米饭",2d,4));
+
+        List<Rule> redEnvelops = new LinkedList<>();
+        redEnvelops.add(newRule(110d, 9.9d));
+        redEnvelops.add(newRule(20d, 1d));
+        context.setRedEnvelope(redEnvelops);
+
+        context.setMerchantId(1);
+//        context.setExtraMoneyForEachOrder(1d);
+        calculator.calc(context);
+
+
+
+        List<Solution> solutions = context.getSolutions();
+        Stream<Solution> stream = solutions.stream();
+        stream.forEach(solution->{
+            System.out.println(solution);
+            System.out.println(solution.getPrice());
+        });
     }
 }

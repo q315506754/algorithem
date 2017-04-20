@@ -1,6 +1,7 @@
 package com.jiangli.practice.eleme.core;
 
 import com.jiangli.common.utils.ArrayUtil;
+import com.jiangli.common.utils.CollectionUtil;
 import com.jiangli.common.utils.MethodUtil;
 import com.jiangli.practice.eleme.dao.DishRespository;
 import com.jiangli.practice.eleme.dao.MerchantRespository;
@@ -80,100 +81,119 @@ public class Calculator {
             OrderDistributor distributor = new OrderDistributor(i, ArrayUtil.newArray(size,0));
             Solution minSolution=null;
 
+
             //各订单已经分好dish[[],[],[]]
             for (int[][] ints : distributor) {
-                Solution cur = new Solution();
-                cur.setOrderNum(i);
+                int redEnvelopSize = CollectionUtil.size(context.getRedEnvelope());
 
-                //生成每一个订单
-                for (int orderNum = 0; orderNum < ints.length; orderNum++) {
-                    Order one = new Order();
+                //迭代每一种红包使用方法
+                ArrangementSupport redEnvelopDistributor = new ArrangementSupport(i,redEnvelopSize);
 
-                    int[] dishes =  ints[orderNum];
-                    //菜总价
-                    double priceForDish = 0d;
-                    //打包费
-                    double priceForPackage = 0d;
+                for (int[] redEnvelopIdxForList : redEnvelopDistributor) {
+                    Solution cur = new Solution();
+                    cur.setOrderNum(i);
 
-                    for (int dishOrd : dishes) {
-                        Dish dish = selectedDishes.get(dishOrd);
-                        priceForDish+=dish.getMoney();
-                        priceForPackage+=dish.getPackageMoney();
+                    //生成每一个订单
+                    for (int orderNum = 0; orderNum < ints.length; orderNum++) {
+                        Order one = new Order();
+                        int envelopIdxForOrder = redEnvelopIdxForList[orderNum];
+                        Rule redEnvelop = CollectionUtil.get(context.getRedEnvelope(), envelopIdxForOrder);
 
-                        Item item = new Item();
-                        MethodUtil.copyProp(dish,"name",item);
-                        MethodUtil.copyProp(dish,"money",item);
-                        MethodUtil.copyProp(dish,"packageMoney",item);
-                        one.addItem(item);
-                    }
+                        int[] dishes =  ints[orderNum];
+                        //菜总价
+                        double priceForDish = 0d;
+                        //打包费
+                        double priceForPackage = 0d;
 
-                    double priceTotal = priceForDish+priceForPackage;
-                    one.addExtraMoney("一般",priceForDish);
-                    one.addExtraMoney("餐盒",priceForPackage);
-                    one.addExtraMoney("合计",priceTotal);
+                        for (int dishOrd : dishes) {
+                            Dish dish = selectedDishes.get(dishOrd);
+                            priceForDish+=dish.getMoney();
+                            priceForPackage+=dish.getPackageMoney();
 
-                    //reach min?
-                    if(priceTotal<merchant.getBaseMoney()){
-                        //if not
-                        //该Solution作废
-                        cur = null;
-                        break;
-                    }
+                            Item item = new Item();
+                            MethodUtil.copyProp(dish,"name",item);
+                            MethodUtil.copyProp(dish,"money",item);
+                            MethodUtil.copyProp(dish,"packageMoney",item);
+                            one.addItem(item);
+                        }
 
-                    //满x减y
-                    Double activityReduce=null;
-                    String activityReduceString=null;
-                    for (Rule rule : rules) {
-                        if (priceTotal >= rule.getReach()) {
-                            activityReduce = rule.getReduce();
-                            activityReduceString="在线支付立减优惠,满"+rule.getReach()+"减"+activityReduce;
+                        double priceTotal = priceForDish+priceForPackage;
+                        one.addExtraMoney("一般",priceForDish);
+                        one.addExtraMoney("餐盒",priceForPackage);
+                        one.addExtraMoney("合计",priceTotal);
+
+                        //reach min?
+                        if(priceTotal<merchant.getBaseMoney()){
+                            //if not
+                            //该Solution作废
+                            cur = null;
                             break;
                         }
+
+                        //满x减y
+                        Double activityReduce=null;
+                        String activityReduceString=null;
+                        for (Rule rule : rules) {
+                            if (priceTotal >= rule.getReach()) {
+                                activityReduce = rule.getReduce();
+                                activityReduceString="在线支付立减优惠,满"+rule.getReach()+"减"+activityReduce;
+                                break;
+                            }
+                        }
+
+                        double priceAfterReduce = priceTotal;
+                        if (activityReduce!=null) {
+                            one.addReducedMoney(activityReduceString,activityReduce);
+                        }
+
+                        //红包减免
+                        Double redEnvelopReduce=null;
+                        String redEnvelopReduceString=null;
+
+                        if (redEnvelop!=null) {
+                            //使用红包
+                            if (priceTotal >= redEnvelop.getReach()) {
+                                redEnvelopReduce = redEnvelop.getReduce();
+                                redEnvelopReduceString="使用红包,满"+redEnvelop.getReach()+"减"+redEnvelopReduce;
+                            }
+                        }
+
+                        if (redEnvelopReduce!=null) {
+                            one.addReducedMoney(redEnvelopReduceString,redEnvelopReduce);
+                        }
+
+
+                        //reduce
+                        if (activityReduce!=null) {
+                            priceAfterReduce-=activityReduce;
+                        }
+                        if (redEnvelopReduce!=null) {
+                            priceAfterReduce-=redEnvelopReduce;
+                        }
+
+                        double priceFinal = priceAfterReduce;
+
+                        //加上配送
+                        Double distributionMoney = merchant.getDistributionMoney();
+                        priceFinal+=distributionMoney;
+                        one.addExtraMoney("配送费",distributionMoney);
+
+                        //会员减免
+                        if (context.getVip()) {
+                            double vipReduce = 4d;
+                            one.addReducedMoney("会员减免配送费", vipReduce);
+                            priceFinal-= vipReduce;
+                        }
+
+                        //set rs
+                        one.setPrice(priceFinal);
+
+                        cur.addOrder(one);
                     }
 
-                    double priceAfterReduce = priceTotal;
-                    if (activityReduce!=null) {
-                        one.addReducedMoney(activityReduceString,activityReduce);
+                    if (cur!=null && (minSolution==null ||  cur.getPrice()<minSolution.getPrice())) {
+                        minSolution=cur;
                     }
-
-                    //红包减免
-                    Double redEnvelopReduce=null;
-                    String redEnvelopReduceString=null;
-                    if (redEnvelopReduce!=null) {
-                        one.addReducedMoney(redEnvelopReduceString,redEnvelopReduce);
-                    }
-
-
-                    //reduce
-                    if (activityReduce!=null) {
-                        priceAfterReduce-=activityReduce;
-                    }
-                    if (redEnvelopReduce!=null) {
-                        priceAfterReduce-=redEnvelopReduce;
-                    }
-
-                    double priceFinal = priceAfterReduce;
-
-                    //加上配送
-                    Double distributionMoney = merchant.getDistributionMoney();
-                    priceFinal+=distributionMoney;
-                    one.addExtraMoney("配送费",distributionMoney);
-
-                    //会员减免
-                    if (context.getVip()) {
-                        double vipReduce = 4d;
-                        one.addReducedMoney("会员减免配送费", vipReduce);
-                        priceFinal-= vipReduce;
-                    }
-
-                    //set rs
-                    one.setPrice(priceFinal);
-
-                    cur.addOrder(one);
-                }
-
-                if (cur!=null && (minSolution==null ||  cur.getPrice()<minSolution.getPrice())) {
-                    minSolution=cur;
                 }
             }
 
