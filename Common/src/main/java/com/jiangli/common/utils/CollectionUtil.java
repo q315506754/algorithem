@@ -24,6 +24,16 @@ public class CollectionUtil {
        }
         return collection.size();
     }
+    public static int sizeIter(Iterable iterable){
+       if(iterable==null){
+            return 0;
+       }
+       int count=0;
+        for (Object o : iterable) {
+            count++;
+        }
+        return count;
+    }
 
     public static boolean isEmpty(Collection collection){
         return collection==null || collection.size()==0;

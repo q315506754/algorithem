@@ -53,11 +53,22 @@ public class Calculator {
         return ret;
     }
 
+    public double calcTotalMoney(List<Dish> selectedDishes) {
+        double ret = 0d;
+        for (Dish selectedDish : selectedDishes) {
+            ret+=selectedDish.getMoney();
+            ret+=selectedDish.getPackageMoney();
+        }
+        return ret;
+    }
+
     public void calc(CalcContext context) {
         Integer merchantId = context.getMerchantId();
         Merchant merchant=merchantRespository.findOne(merchantId);
 //        List<Dish> selectedDishes=dishRespository.findByMerchantId(merchantId);
         List<Dish> selectedDishes=convertToDish(context);
+        double calcTotalMoney = calcTotalMoney(selectedDishes);
+
         List<Rule> rules=ruleRespository.findByMerchantIdOrderBySortAsc(merchantId);
         Collections.reverse(rules);
 
@@ -67,6 +78,8 @@ public class Calculator {
 
         List<Solution> solutions = context.getSolutions();
         for (int i = context.getMinOrder(); i<=context.getMaxOrder(); i++) {
+            logger.debug("ordernum:{} maxorder:{}",i,context.getMaxOrder());
+
             int size = selectedDishes.size();
             if (i>size) {
                 Solution cur = new Solution();
@@ -77,14 +90,28 @@ public class Calculator {
                 solutions.add(cur);
                 continue;
             }
-
+            if (calcTotalMoney<i*merchant.getDistributionMoney()) {
+                Solution cur = new Solution();
+                cur.setOrderNum(i);
+                cur.setOrderNum(i);
+                cur.setFailed(true);
+                cur.setFailedReason("无法满足起送条件");
+                solutions.add(cur);
+                continue;
+            }
+            int redEnvelopSize = CollectionUtil.size(context.getRedEnvelope());
             OrderDistributor distributor = new OrderDistributor(i, ArrayUtil.newArray(size,0));
-            Solution minSolution=null;
+            int _expectedOrder = CollectionUtil.sizeIter(distributor);
+            int _expectedRedEnvelope = CollectionUtil.sizeIter(new ArrangementSupport(i,redEnvelopSize));
+            int _expectedLoop=_expectedOrder*_expectedRedEnvelope;
+            logger.debug("expectedOrder:{}",_expectedOrder);
+            logger.debug("expectedRedEnvelope:{}",_expectedRedEnvelope);
+            logger.debug("expectedLoop:{}",_expectedLoop);
 
+            Solution minSolution=null;
 
             //各订单已经分好dish[[],[],[]]
             for (int[][] ints : distributor) {
-                int redEnvelopSize = CollectionUtil.size(context.getRedEnvelope());
 
                 //迭代每一种红包使用方法
                 ArrangementSupport redEnvelopDistributor = new ArrangementSupport(i,redEnvelopSize);

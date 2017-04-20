@@ -138,7 +138,9 @@ public class CalcTest {
         List<Rule> redEnvelops = new LinkedList<>();
         redEnvelops.add(newRule(110d, 9.9d));
         redEnvelops.add(newRule(20d, 1d));
-        context.setRedEnvelope(redEnvelops);
+//        context.setRedEnvelope(redEnvelops);
+
+        context.setMaxOrder(6);
 
         context.setMerchantId(1);
 //        context.setExtraMoneyForEachOrder(1d);
