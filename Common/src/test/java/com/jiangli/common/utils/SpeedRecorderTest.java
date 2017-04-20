@@ -27,13 +27,14 @@ public class SpeedRecorderTest {
 
     @Test
     public void test_asdas() {
-        SpeedRecorder recorder = new SpeedRecorder();
+        SpeedRecorder recorder = SpeedRecorder.build();
         while (true) {
             recorder.record();
             System.out.println(recorder.averageSpeedString(2));
-            System.out.println(recorder.getCount());
+            System.out.println(recorder.estimateRestTime(36000));
+//            System.out.println(recorder.getCount());
             try {
-                Thread.sleep(RandomUtil.getRandomNum(1,30));
+                Thread.sleep(RandomUtil.getRandomNum(100,100));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

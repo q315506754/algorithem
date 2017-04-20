@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class CalcContext {
     private Double extraMoneyForEachOrder =0d;
+    private String  queryId;
     private Integer  merchantId;
     private Boolean  isVip=true;
     private List<Rule> redEnvelope;
@@ -77,5 +78,13 @@ public class CalcContext {
 
     public void setVip(Boolean vip) {
         isVip = vip;
+    }
+
+    public String getQueryId() {
+        return queryId;
+    }
+
+    public void setQueryId(String queryId) {
+        this.queryId = queryId;
     }
 }

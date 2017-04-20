@@ -1,8 +1,7 @@
 package com.jiangli.practice.eleme.core;
 
-import com.jiangli.common.utils.ArrayUtil;
-import com.jiangli.common.utils.CollectionUtil;
-import com.jiangli.common.utils.MethodUtil;
+import com.jiangli.common.core.ThreadCollector;
+import com.jiangli.common.utils.*;
 import com.jiangli.practice.eleme.dao.DishRespository;
 import com.jiangli.practice.eleme.dao.MerchantRespository;
 import com.jiangli.practice.eleme.dao.RuleRespository;
@@ -35,6 +34,7 @@ public class Calculator {
 
     @Autowired
     private RuleRespository ruleRespository;
+    private boolean cancelled=false;
 
     public List<Dish>  convertToDish(CalcContext context) {
         List<Dish> ret = new LinkedList<>();
@@ -62,7 +62,55 @@ public class Calculator {
         return ret;
     }
 
+    public static class QueryDetail {
+         List<Solution> solutions;
+         int curOrder;
+         int maxOrder;
+
+        public List<Solution> getSolutions() {
+            return solutions;
+        }
+
+        public void setSolutions(List<Solution> solutions) {
+            this.solutions = solutions;
+        }
+
+        public int getCurOrder() {
+            return curOrder;
+        }
+
+        public void setCurOrder(int curOrder) {
+            this.curOrder = curOrder;
+        }
+
+        public int getMaxOrder() {
+            return maxOrder;
+        }
+
+        public void setMaxOrder(int maxOrder) {
+            this.maxOrder = maxOrder;
+        }
+
+        @Override
+        public String toString() {
+            return "QueryDetail{" +
+                    "solutions=" + solutions +
+                    ", curOrder=" + curOrder +
+                    ", maxOrder=" + maxOrder +
+                    '}';
+        }
+    }
     public void calc(CalcContext context) {
+        ThreadCollector.registerCancelListener(context.getQueryId(),()->{
+            cancelled =true;
+        } );
+        QueryDetail queryDetail = new QueryDetail();
+        queryDetail.maxOrder=context.getMaxOrder();
+        queryDetail.solutions = context.getSolutions();
+
+        ThreadCollector.RunningStatistics<QueryDetail> statistics = ThreadCollector.start(context.getQueryId());
+        statistics.setDetail(queryDetail);
+
         Integer merchantId = context.getMerchantId();
         Merchant merchant=merchantRespository.findOne(merchantId);
 //        List<Dish> selectedDishes=dishRespository.findByMerchantId(merchantId);
@@ -82,28 +130,29 @@ public class Calculator {
 
             int size = selectedDishes.size();
             if (i>size) {
-                Solution cur = new Solution();
-                cur.setOrderNum(i);
-                cur.setOrderNum(i);
-                cur.setFailed(true);
-                cur.setFailedReason("无法分配至该订单数目");
-                solutions.add(cur);
+                solutions.add(Solution.newFailed(i,"无法分配至该订单数目"));
                 continue;
             }
             if (calcTotalMoney<i*merchant.getDistributionMoney()) {
-                Solution cur = new Solution();
-                cur.setOrderNum(i);
-                cur.setOrderNum(i);
-                cur.setFailed(true);
-                cur.setFailedReason("无法满足起送条件");
-                solutions.add(cur);
+                solutions.add(Solution.newFailed(i,"无法满足起送条件"));
                 continue;
             }
             int redEnvelopSize = CollectionUtil.size(context.getRedEnvelope());
             OrderDistributor distributor = new OrderDistributor(i, ArrayUtil.newArray(size,0));
             int _expectedOrder = CollectionUtil.sizeIter(distributor);
             int _expectedRedEnvelope = CollectionUtil.sizeIter(new ArrangementSupport(i,redEnvelopSize));
-            int _expectedLoop=_expectedOrder*_expectedRedEnvelope;
+            int _expectedLoop=_expectedOrder*_expectedRedEnvelope*2;
+            final int curOrderN = i;
+            SpeedRecorder speedRecorder = SpeedRecorder.build();
+            speedRecorder.setInterval(a->{
+                logger.debug("{}:estimate time:{}  {} _expectedLoop:{}/count:{}",a,speedRecorder.estimateRestTime(_expectedLoop), NumberUtil.getPercentString(speedRecorder.getCount(),_expectedLoop),_expectedLoop,speedRecorder.getCount());
+                statistics.setCurrent(speedRecorder.getCount());
+                statistics.setTotal(_expectedLoop);
+                statistics.setPercent(NumberUtil.getPercentString(speedRecorder.getCount(),_expectedLoop));
+                statistics.setRestTime(speedRecorder.estimateRestTime(_expectedLoop));
+
+                queryDetail.curOrder=curOrderN;
+            },3000);
             logger.debug("expectedOrder:{}",_expectedOrder);
             logger.debug("expectedRedEnvelope:{}",_expectedRedEnvelope);
             logger.debug("expectedLoop:{}",_expectedLoop);
@@ -122,6 +171,14 @@ public class Calculator {
 
                     //生成每一个订单
                     for (int orderNum = 0; orderNum < ints.length; orderNum++) {
+                        speedRecorder.record();
+                        if (cancelled) {
+                            for (int restOrderIdx = i; restOrderIdx < context.getMaxOrder(); restOrderIdx++) {
+                                solutions.add(Solution.newFailed(i,"查询已被取消"));
+                            }
+                            return;
+                        }
+
                         Order one = new Order();
                         int envelopIdxForOrder = redEnvelopIdxForList[orderNum];
                         Rule redEnvelop = CollectionUtil.get(context.getRedEnvelope(), envelopIdxForOrder);
@@ -225,14 +282,10 @@ public class Calculator {
             }
 
             if(minSolution==null){
-                minSolution = new Solution();
-                minSolution.setOrderNum(i);
-                minSolution.setFailed(true);
-                minSolution.setFailedReason("无法满足起送条件");
+                minSolution=Solution.newFailed(i,"无法满足起送条件");
             }
 
             solutions.add(minSolution);
-
         }
 
         //merge item
@@ -244,6 +297,8 @@ public class Calculator {
                 }
             }
         }
+
+        ThreadCollector.finish(context.getQueryId());
     }
 
     private List<Item> mergeItem(List<Item> items){

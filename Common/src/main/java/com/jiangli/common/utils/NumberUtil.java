@@ -14,6 +14,16 @@ public class NumberUtil {
         return new BigDecimal(left).setScale(length,BigDecimal.ROUND_DOWN).toString();
     }
 
+    public static String getPercentString(long cur,long total) {
+        double d = cur*1.0/total;
+        if (d<0) {
+            d=0d;
+        }
+        else if (d>1) {
+            d=1d;
+        }
+        return getDoubleString(d * 100, 2)+"%";
+    }
     public static int parseInt(String intStr,int defaultInt) {
         try {
            return  Integer.parseInt(intStr);

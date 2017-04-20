@@ -1,5 +1,6 @@
 package com.jiangli.practice.test;
 
+import com.jiangli.common.core.ThreadCollector;
 import com.jiangli.practice.eleme.core.*;
 import com.jiangli.practice.eleme.model.Rule;
 import org.junit.After;
@@ -140,7 +141,7 @@ public class CalcTest {
         redEnvelops.add(newRule(20d, 1d));
 //        context.setRedEnvelope(redEnvelops);
 
-//        context.setMaxOrder(6);
+        context.setMaxOrder(6);
 
         context.setMerchantId(1);
 //        context.setExtraMoneyForEachOrder(1d);
@@ -154,5 +155,102 @@ public class CalcTest {
             System.out.println(solution);
             System.out.println(solution.getPrice());
         });
+    }
+
+    @Test
+    public void testCancel() {
+        CalcContext context = new CalcContext();
+
+        Cart cart = new Cart();
+        context.setCart(cart);
+        List<Item> items = new LinkedList<>();
+        cart.setItems(items);
+
+        items.add(newItem("西红柿炒蛋",15d));
+        items.add(newItem("韭菜千叶丝",12d));
+        items.add(newItem("农家小炒肉",18d));
+        items.add(newItem("辣子鸡",18d));
+        items.add(newItem("豆芽",12d));
+        items.add(newItem("鸡柳",18d));
+        items.add(newItem("米饭",2d,4));
+
+        List<Rule> redEnvelops = new LinkedList<>();
+        redEnvelops.add(newRule(110d, 9.9d));
+        redEnvelops.add(newRule(20d, 1d));
+//        context.setRedEnvelope(redEnvelops);
+
+        context.setMaxOrder(6);
+
+        context.setMerchantId(1);
+
+        String queryId = ThreadCollector.generateQueryId();
+        context.setQueryId(queryId);
+
+//        context.setExtraMoneyForEachOrder(1d);
+
+        new Thread(() ->{
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            ThreadCollector.cancelExecute(queryId);
+        }).start();
+
+        calculator.calc(context);
+
+        context.getSolutions().stream().forEach(System.out::println);
+
+    }
+
+    @Test
+    public void testAjaxQuery() {
+        CalcContext context = new CalcContext();
+
+        Cart cart = new Cart();
+        context.setCart(cart);
+        List<Item> items = new LinkedList<>();
+        cart.setItems(items);
+
+        items.add(newItem("西红柿炒蛋",15d));
+        items.add(newItem("韭菜千叶丝",12d));
+        items.add(newItem("农家小炒肉",18d));
+        items.add(newItem("辣子鸡",18d));
+        items.add(newItem("豆芽",12d));
+        items.add(newItem("鸡柳",18d));
+        items.add(newItem("米饭",2d,4));
+
+        List<Rule> redEnvelops = new LinkedList<>();
+        redEnvelops.add(newRule(110d, 9.9d));
+        redEnvelops.add(newRule(20d, 1d));
+//        context.setRedEnvelope(redEnvelops);
+
+        context.setMaxOrder(6);
+
+        context.setMerchantId(1);
+
+        String queryId = ThreadCollector.generateQueryId();
+        context.setQueryId(queryId);
+
+//        context.setExtraMoneyForEachOrder(1d);
+
+        new Thread(() ->{
+            while (true) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                ThreadCollector.QueryResult query = ThreadCollector.query(queryId);
+                System.out.println(query);
+            }
+
+        }).start();
+
+        calculator.calc(context);
+
+        context.getSolutions().stream().forEach(System.out::println);
+
     }
 }

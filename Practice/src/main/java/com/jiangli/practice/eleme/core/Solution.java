@@ -14,6 +14,13 @@ public class Solution {
     private boolean failed=false;
     private String failedReason;
 
+    public static  Solution newFailed(int orderNum,String reason){
+        Solution cur = new Solution();
+        cur.setOrderNum(orderNum);
+        cur.setFailed(true);
+        cur.setFailedReason(reason);
+        return cur;
+    }
     @Override
     public String toString() {
         return "Solution{" +
