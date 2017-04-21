@@ -150,7 +150,7 @@ public class Calculator {
 
             SpeedRecorder speedRecorder = SpeedRecorder.build();
             speedRecorder.setInterval(a->{
-                logger.debug("{}:estimate time:{}  {} _expectedLoop:{}/count:{}",a,speedRecorder.estimateRestTime(_expectedLoop), NumberUtil.getPercentString(speedRecorder.getCount(),_expectedLoop),_expectedLoop,speedRecorder.getCount());
+                logger.debug("{}:estimate time:{}  {} _expectedLoop:{}/count:{} speed:{}loop/sec",a,speedRecorder.estimateRestTime(_expectedLoop), NumberUtil.getPercentString(speedRecorder.getCount(),_expectedLoop),_expectedLoop,speedRecorder.getCount(),speedRecorder.averageSpeedString(3));
                 statistics.setCurrent(speedRecorder.getCount());
                 statistics.setTotal(_expectedLoop);
                 statistics.setPercent(NumberUtil.getPercentString(speedRecorder.getCount(),_expectedLoop));
@@ -171,7 +171,8 @@ public class Calculator {
                 LimittedArrangementSupport redEnvelopDistributor = new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen());
 
                 for (int[] redEnvelopIdxForList : redEnvelopDistributor) {
-                    Double curSolutionMoney=null;
+                    Solution cur = new Solution();
+                    cur.setOrderNum(i);
 
                     //生成每一个订单 orderAndDishIdx.length=i
                     for (int orderNum = 0; orderNum < i; orderNum++) {
@@ -185,6 +186,8 @@ public class Calculator {
                             return;
                         }
 
+                        Order one = new Order();
+
                         //菜总价
                         double priceForDish = 0d;
                         //打包费
@@ -194,15 +197,25 @@ public class Calculator {
                             Dish dish = selectedDishes.get(dishOrd);
                             priceForDish+=dish.getMoney();
                             priceForPackage+=dish.getPackageMoney();
+
+                            Item item = new Item();
+                            MethodUtil.copyProp(dish,"name",item);
+                            MethodUtil.copyProp(dish,"money",item);
+                            MethodUtil.copyProp(dish,"packageMoney",item);
+                            one.addItem(item);
                         }
 
                         double priceBase = priceForDish+priceForPackage;
+                        one.addExtraMoney("一般",priceForDish);
+                        one.addExtraMoney("餐盒",priceForPackage);
+                        one.addExtraMoney("合计",priceBase);
+                        double priceFinal=priceBase;
 
                         //reach min?
                         if(priceBase<merchant.getBaseMoney()){
                             //if not
                             //该Solution作废
-                            curSolutionMoney = null;
+                            cur = null;
 
                             //剩下的需要记录
                             for (int rest = orderNum + 1; rest < i; rest++) {
@@ -210,101 +223,45 @@ public class Calculator {
                             }
                             break;
                         }
-                        double curOrderTotal=priceBase;
 
                         //满x减y
-                        Double activityReduce = activityReduce(rules, priceBase);
-                        curOrderTotal= calcReduce(curOrderTotal,activityReduce);
+                        Rule activityReduceRule = activityReduce(rules, priceBase);
+                        if (activityReduceRule!=null) {
+                            Double activityReduce=activityReduceRule.getReduce();
+                            one.addReducedMoney("在线支付立减优惠,满"+activityReduceRule.getReach()+"减"+activityReduce,activityReduce);
+                            priceFinal = calcReduce(priceFinal, activityReduce);
+                        }
+
 
                         //红包减免
-                        Double redEnvelopReduce = redEnvelopReduce(CollectionUtil.get(redEnvelopeCandicates, redEnvelopIdxForList[orderNum]), priceBase);
-                        curOrderTotal= calcReduce(curOrderTotal,redEnvelopReduce);
+                        Rule redEnvelop = CollectionUtil.get(redEnvelopeCandicates, redEnvelopIdxForList[orderNum]);
+                        Double redEnvelopReduce = redEnvelopReduce(redEnvelop, priceBase);
+                        if (redEnvelopReduce!=null) {
+                            one.addReducedMoney("使用红包,满"+redEnvelop.getReach()+"减"+redEnvelopReduce,redEnvelopReduce);
+                            priceFinal = calcReduce(priceFinal, redEnvelopReduce);
+                        }
+
 
                         //加上配送
                         Double distributionMoney = merchant.getDistributionMoney();
-                        curOrderTotal+=distributionMoney;
+                        priceFinal+=distributionMoney;
+                        one.addExtraMoney("配送费",distributionMoney);
 
                         //会员减免
                         if (context.getVip()) {
-                            curOrderTotal= calcReduce(curOrderTotal,4d);
+                            double vipReduce = 4d;
+                            one.addReducedMoney("会员减免配送费", vipReduce);
+                            priceFinal = calcReduce(priceFinal, vipReduce);
                         }
 
                         //set rs
-                        curSolutionMoney = curOrderTotal;
+                        one.setPrice(priceFinal);
+
+                        cur.addOrder(one);
                     }
 
-                    if (curSolutionMoney!=null && (minSolution==null ||  curSolutionMoney<minSolution.getPrice())) {
-                        Solution cur = new Solution();
+                    if (cur!=null && (minSolution==null ||  cur.getPrice()<minSolution.getPrice())) {
                         minSolution=cur;
-
-                        cur.setOrderNum(i);
-
-                        //计算必要字段
-                        for (int orderNum = 0; orderNum < i; orderNum++) {
-                            Order one = new Order();
-
-                            //菜总价
-                            double priceForDish = 0d;
-                            //打包费
-                            double priceForPackage = 0d;
-
-                            for (int dishOrd : orderAndDishIdx[orderNum]) {
-                                Dish dish = selectedDishes.get(dishOrd);
-                                priceForDish+=dish.getMoney();
-                                priceForPackage+=dish.getPackageMoney();
-
-                                Item item = new Item();
-                                MethodUtil.copyProp(dish,"name",item);
-                                MethodUtil.copyProp(dish,"money",item);
-                                MethodUtil.copyProp(dish,"packageMoney",item);
-                                one.addItem(item);
-                            }
-
-                            double priceBase = priceForDish+priceForPackage;
-                            double curOrderTotal=priceBase;
-                            one.addExtraMoney("一般",priceForDish);
-                            one.addExtraMoney("餐盒",priceForPackage);
-                            one.addExtraMoney("合计",curOrderTotal);
-
-                            //满x减y
-                            Double activityReduce = activityReduce(rules, priceBase);
-                            curOrderTotal= calcReduce(curOrderTotal,activityReduce);
-                            if (activityReduce!=null) {
-                                for (Rule rule : rules) {
-                                    if (priceBase >= rule.getReach()) {
-                                        activityReduce = rule.getReduce();
-                                        one.addReducedMoney("在线支付立减优惠,满"+rule.getReach()+"减"+activityReduce,activityReduce);
-                                        break;
-                                    }
-                                }
-                            }
-
-                            //红包减免
-                            Rule redEnvelop = CollectionUtil.get(redEnvelopeCandicates, redEnvelopIdxForList[orderNum]);
-                            Double redEnvelopReduce = redEnvelopReduce(redEnvelop, priceBase);
-                            curOrderTotal= calcReduce(curOrderTotal,redEnvelopReduce);
-                            if (redEnvelopReduce!=null) {
-                                one.addReducedMoney("在线支付立减优惠,满"+redEnvelop.getReach()+"减"+activityReduce,activityReduce);
-                            }
-
-
-                            //加上配送
-                            Double distributionMoney = merchant.getDistributionMoney();
-                            curOrderTotal+=distributionMoney;
-                            one.addExtraMoney("配送费",distributionMoney);
-
-
-                            //会员减免
-                            if (context.getVip()) {
-                                curOrderTotal=calcReduce(curOrderTotal,4d);
-                                one.addReducedMoney("会员减免配送费", 4d);
-                            }
-
-                            //set rs
-                            one.setPrice(curOrderTotal);
-
-                            cur.addOrder(one);
-                        }
                     }
                 }
             }
@@ -332,6 +289,16 @@ public class Calculator {
         ThreadCollector.finish(context.getQueryId());
     }
 
+    private Rule activityReduce(List<Rule> rules, double priceBase) {
+        for (Rule rule : rules) {
+            Double aDouble = redEnvelopReduce(rule, priceBase);
+            if (aDouble!=null) {
+                return rule;
+            }
+        }
+        return null;
+    }
+
     private Double redEnvelopReduce(Rule redEnvelop, double priceBase) {
         Double redEnvelopReduce=null;
 
@@ -351,16 +318,6 @@ public class Calculator {
         return curOrderTotal;
     }
 
-    private Double activityReduce(List<Rule> rules, double priceBase) {
-        Double activityReduce=null;
-        for (Rule rule : rules) {
-            Double aDouble = redEnvelopReduce(rule, priceBase);
-            if (aDouble!=null) {
-                return aDouble;
-            }
-        }
-        return activityReduce;
-    }
 
     private List<Item> mergeItem(List<Item> items){
         List<Item> ret = new ArrayList<>(items.size());
