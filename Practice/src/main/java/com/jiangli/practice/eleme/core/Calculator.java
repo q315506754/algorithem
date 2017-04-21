@@ -171,12 +171,13 @@ public class Calculator {
                 LimittedArrangementSupport redEnvelopDistributor = new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen());
 
                 for (int[] redEnvelopIdxForList : redEnvelopDistributor) {
-                    Solution cur = new Solution();
-                    cur.setOrderNum(i);
+                    Double curSolutionMoney=null;
 
                     //生成每一个订单 orderAndDishIdx.length=i
                     for (int orderNum = 0; orderNum < i; orderNum++) {
                         speedRecorder.record();
+
+                        //中断
                         if (cancelled) {
                             for (int restOrderIdx = i; restOrderIdx < context.getMaxOrder(); restOrderIdx++) {
                                 solutions.add(Solution.newFailed(i,"查询已被取消"));
@@ -184,38 +185,24 @@ public class Calculator {
                             return;
                         }
 
-                        Order one = new Order();
-                        int envelopIdxForOrder = redEnvelopIdxForList[orderNum];
-                        Rule redEnvelop = CollectionUtil.get(redEnvelopeCandicates, envelopIdxForOrder);
-
-                        int[] dishes =  orderAndDishIdx[orderNum];
                         //菜总价
                         double priceForDish = 0d;
                         //打包费
                         double priceForPackage = 0d;
 
-                        for (int dishOrd : dishes) {
+                        for (int dishOrd : orderAndDishIdx[orderNum]) {
                             Dish dish = selectedDishes.get(dishOrd);
                             priceForDish+=dish.getMoney();
                             priceForPackage+=dish.getPackageMoney();
-
-                            Item item = new Item();
-                            MethodUtil.copyProp(dish,"name",item);
-                            MethodUtil.copyProp(dish,"money",item);
-                            MethodUtil.copyProp(dish,"packageMoney",item);
-                            one.addItem(item);
                         }
 
-                        double priceTotal = priceForDish+priceForPackage;
-                        one.addExtraMoney("一般",priceForDish);
-                        one.addExtraMoney("餐盒",priceForPackage);
-                        one.addExtraMoney("合计",priceTotal);
+                        double priceBase = priceForDish+priceForPackage;
 
                         //reach min?
-                        if(priceTotal<merchant.getBaseMoney()){
+                        if(priceBase<merchant.getBaseMoney()){
                             //if not
                             //该Solution作废
-                            cur = null;
+                            curSolutionMoney = null;
 
                             //剩下的需要记录
                             for (int rest = orderNum + 1; rest < i; rest++) {
@@ -223,70 +210,101 @@ public class Calculator {
                             }
                             break;
                         }
+                        double curOrderTotal=priceBase;
 
                         //满x减y
-                        Double activityReduce=null;
-                        String activityReduceString=null;
-                        for (Rule rule : rules) {
-                            if (priceTotal >= rule.getReach()) {
-                                activityReduce = rule.getReduce();
-                                activityReduceString="在线支付立减优惠,满"+rule.getReach()+"减"+activityReduce;
-                                break;
-                            }
-                        }
-
-                        double priceAfterReduce = priceTotal;
-                        if (activityReduce!=null) {
-                            one.addReducedMoney(activityReduceString,activityReduce);
-                        }
+                        Double activityReduce = activityReduce(rules, priceBase);
+                        curOrderTotal= calcReduce(curOrderTotal,activityReduce);
 
                         //红包减免
-                        Double redEnvelopReduce=null;
-                        String redEnvelopReduceString=null;
-
-                        if (redEnvelop!=null) {
-                            //使用红包
-                            if (priceTotal >= redEnvelop.getReach()) {
-                                redEnvelopReduce = redEnvelop.getReduce();
-                                redEnvelopReduceString="使用红包,满"+redEnvelop.getReach()+"减"+redEnvelopReduce;
-                            }
-                        }
-
-                        if (redEnvelopReduce!=null) {
-                            one.addReducedMoney(redEnvelopReduceString,redEnvelopReduce);
-                        }
-
-
-                        //reduce
-                        if (activityReduce!=null) {
-                            priceAfterReduce-=activityReduce;
-                        }
-                        if (redEnvelopReduce!=null) {
-                            priceAfterReduce-=redEnvelopReduce;
-                        }
-
-                        double priceFinal = priceAfterReduce;
+                        Double redEnvelopReduce = redEnvelopReduce(CollectionUtil.get(redEnvelopeCandicates, redEnvelopIdxForList[orderNum]), priceBase);
+                        curOrderTotal= calcReduce(curOrderTotal,redEnvelopReduce);
 
                         //加上配送
                         Double distributionMoney = merchant.getDistributionMoney();
-                        priceFinal+=distributionMoney;
-                        one.addExtraMoney("配送费",distributionMoney);
+                        curOrderTotal+=distributionMoney;
 
                         //会员减免
                         if (context.getVip()) {
-                            double vipReduce = 4d;
-                            one.addReducedMoney("会员减免配送费", vipReduce);
-                            priceFinal-= vipReduce;
+                            curOrderTotal= calcReduce(curOrderTotal,4d);
                         }
 
                         //set rs
-                        one.setPrice(priceFinal);
-
-                        cur.addOrder(one);
+                        curSolutionMoney = curOrderTotal;
                     }
 
-                    if (cur!=null && (minSolution==null ||  cur.getPrice()<minSolution.getPrice())) {
+                    if (curSolutionMoney!=null && (minSolution==null ||  curSolutionMoney<minSolution.getPrice())) {
+                        Solution cur = new Solution();
                         minSolution=cur;
+
+                        cur.setOrderNum(i);
+
+                        //计算必要字段
+                        for (int orderNum = 0; orderNum < i; orderNum++) {
+                            Order one = new Order();
+
+                            //菜总价
+                            double priceForDish = 0d;
+                            //打包费
+                            double priceForPackage = 0d;
+
+                            for (int dishOrd : orderAndDishIdx[orderNum]) {
+                                Dish dish = selectedDishes.get(dishOrd);
+                                priceForDish+=dish.getMoney();
+                                priceForPackage+=dish.getPackageMoney();
+
+                                Item item = new Item();
+                                MethodUtil.copyProp(dish,"name",item);
+                                MethodUtil.copyProp(dish,"money",item);
+                                MethodUtil.copyProp(dish,"packageMoney",item);
+                                one.addItem(item);
+                            }
+
+                            double priceBase = priceForDish+priceForPackage;
+                            double curOrderTotal=priceBase;
+                            one.addExtraMoney("一般",priceForDish);
+                            one.addExtraMoney("餐盒",priceForPackage);
+                            one.addExtraMoney("合计",curOrderTotal);
+
+                            //满x减y
+                            Double activityReduce = activityReduce(rules, priceBase);
+                            curOrderTotal= calcReduce(curOrderTotal,activityReduce);
+                            if (activityReduce!=null) {
+                                for (Rule rule : rules) {
+                                    if (priceBase >= rule.getReach()) {
+                                        activityReduce = rule.getReduce();
+                                        one.addReducedMoney("在线支付立减优惠,满"+rule.getReach()+"减"+activityReduce,activityReduce);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            //红包减免
+                            Rule redEnvelop = CollectionUtil.get(redEnvelopeCandicates, redEnvelopIdxForList[orderNum]);
+                            Double redEnvelopReduce = redEnvelopReduce(redEnvelop, priceBase);
+                            curOrderTotal= calcReduce(curOrderTotal,redEnvelopReduce);
+                            if (redEnvelopReduce!=null) {
+                                one.addReducedMoney("在线支付立减优惠,满"+redEnvelop.getReach()+"减"+activityReduce,activityReduce);
+                            }
+
+
+                            //加上配送
+                            Double distributionMoney = merchant.getDistributionMoney();
+                            curOrderTotal+=distributionMoney;
+                            one.addExtraMoney("配送费",distributionMoney);
+
+
+                            //会员减免
+                            if (context.getVip()) {
+                                curOrderTotal=calcReduce(curOrderTotal,4d);
+                                one.addReducedMoney("会员减免配送费", 4d);
+                            }
+
+                            //set rs
+                            one.setPrice(curOrderTotal);
+
+                            cur.addOrder(one);
+                        }
                     }
                 }
             }
@@ -298,6 +316,7 @@ public class Calculator {
             solutions.add(minSolution);
 
             logger.debug("_expectedLoop:{} realLoop:{}",_expectedLoop,speedRecorder.getCount());
+            logger.debug("i:{} minSolution:{}",i,minSolution);
         }
 
         //merge item
@@ -311,6 +330,36 @@ public class Calculator {
         }
 
         ThreadCollector.finish(context.getQueryId());
+    }
+
+    private Double redEnvelopReduce(Rule redEnvelop, double priceBase) {
+        Double redEnvelopReduce=null;
+
+        if (redEnvelop!=null) {
+            //使用红包
+            if (priceBase >= redEnvelop.getReach()) {
+                redEnvelopReduce = redEnvelop.getReduce();
+            }
+        }
+        return redEnvelopReduce;
+    }
+
+    private double calcReduce(double curOrderTotal, Double activityReduce) {
+        if (activityReduce!=null) {
+            return curOrderTotal-activityReduce;
+        }
+        return curOrderTotal;
+    }
+
+    private Double activityReduce(List<Rule> rules, double priceBase) {
+        Double activityReduce=null;
+        for (Rule rule : rules) {
+            Double aDouble = redEnvelopReduce(rule, priceBase);
+            if (aDouble!=null) {
+                return aDouble;
+            }
+        }
+        return activityReduce;
     }
 
     private List<Item> mergeItem(List<Item> items){
