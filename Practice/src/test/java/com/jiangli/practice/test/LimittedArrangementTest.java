@@ -1,6 +1,7 @@
 package com.jiangli.practice.test;
 
-import com.jiangli.practice.eleme.core.Combination;
+import com.jiangli.practice.eleme.core.ArrangementSupport;
+import com.jiangli.practice.eleme.core.LimittedArrangementSupport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,7 @@ import java.util.Arrays;
  * @date 2017/4/18 11:11
  */
 
-public class CombinationTest {
+public class LimittedArrangementTest {
     private long startTs;
 
 
@@ -32,36 +33,7 @@ public class CombinationTest {
 
     @Test
     public void testCommit() {
-        Combination combination = new Combination(3,new int[]{1,2,3,4,5});
-        int count =0;
-        for (int[] ints : combination) {
-            System.out.println(Arrays.toString(ints));
-            count++;
-        }
-        System.out.println("total:"+count);
-    }
-
-    @Test
-    public void testCommit_2() {
-        Combination combination = new Combination(4,new int[]{1,2,3,4,5,6,7,8});
-        int count =0;
-        for (int[] ints : combination) {
-            System.out.println(Arrays.toString(ints));
-            count++;
-        }
-        System.out.println("total:"+count);
-    }
-
-    @Test
-    public void testCommit_3() {
-        int LENGTH=20;
-        int CHOOSE=10;
-        int[] p = new int[LENGTH];
-        for (int i = 0; i < LENGTH; i++) {
-            p[i]=i+1;
-        }
-
-        Combination combination = new Combination(CHOOSE,p);
+        ArrangementSupport combination = new ArrangementSupport(1,5);
         int count =0;
         for (int[] ints : combination) {
             System.out.println(Arrays.toString(ints));
@@ -72,7 +44,9 @@ public class CombinationTest {
 
     @Test
     public void testCommit2() {
-        Combination combination = new Combination(1,new int[]{1,2,3,4,5});
+        //C3 2 * A3 2
+
+        LimittedArrangementSupport combination = new LimittedArrangementSupport(3,3,2);
         int count =0;
         for (int[] ints : combination) {
             System.out.println(Arrays.toString(ints));
@@ -82,8 +56,10 @@ public class CombinationTest {
     }
 
     @Test
-    public void testCommit4() {
-        Combination combination = new Combination(4,new int[]{1,2});
+    public void testCommit21() {
+        //C3 2 * A3 2
+
+        LimittedArrangementSupport combination = new LimittedArrangementSupport(3,1,2);
         int count =0;
         for (int[] ints : combination) {
             System.out.println(Arrays.toString(ints));
@@ -93,8 +69,10 @@ public class CombinationTest {
     }
 
     @Test
-    public void testCommit3() {
-        Combination combination = new Combination(1,new int[]{5});
+    public void testCommit22() {
+        //C3 2 * A3 2
+
+        LimittedArrangementSupport combination = new LimittedArrangementSupport(3,0,2);
         int count =0;
         for (int[] ints : combination) {
             System.out.println(Arrays.toString(ints));

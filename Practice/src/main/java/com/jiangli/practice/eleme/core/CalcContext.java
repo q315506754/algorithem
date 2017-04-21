@@ -18,6 +18,8 @@ public class CalcContext {
     private Cart cart;
     private Integer  minOrder=1;
     private Integer  maxOrder=3;
+    private Integer  maxRedEnvelopeChosen=2;
+
     private final List<Solution> solutions=new LinkedList<>();
 
     public List<Solution> getSolutions() {
@@ -86,5 +88,13 @@ public class CalcContext {
 
     public void setQueryId(String queryId) {
         this.queryId = queryId;
+    }
+
+    public Integer getMaxRedEnvelopeChosen() {
+        return maxRedEnvelopeChosen;
+    }
+
+    public void setMaxRedEnvelopeChosen(Integer maxRedEnvelopeChosen) {
+        this.maxRedEnvelopeChosen = maxRedEnvelopeChosen;
     }
 }

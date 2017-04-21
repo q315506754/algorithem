@@ -31,7 +31,7 @@ public class ThreadCollector {
             dataMap.put(queryId,one);
             return one;
         }
-        return null;
+        return new RunningStatistics();
     }
     public static void finish(String queryId){
         setStatus(queryId,ExecuteStatus.FINISHED);

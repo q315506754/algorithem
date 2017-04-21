@@ -113,36 +113,41 @@ public class Calculator {
 
         Integer merchantId = context.getMerchantId();
         Merchant merchant=merchantRespository.findOne(merchantId);
-//        List<Dish> selectedDishes=dishRespository.findByMerchantId(merchantId);
         List<Dish> selectedDishes=convertToDish(context);
-        double calcTotalMoney = calcTotalMoney(selectedDishes);
+        final double selectedDishesTotalMoney = calcTotalMoney(selectedDishes);
 
         List<Rule> rules=ruleRespository.findByMerchantIdOrderBySortAsc(merchantId);
         Collections.reverse(rules);
+
+        List<Rule> redEnvelopeCandicates = context.getRedEnvelope();
 
         logger.debug("merchant:"+merchant);
         logger.debug("selectedDishes:"+selectedDishes);
         logger.debug("rules:"+rules);
 
         List<Solution> solutions = context.getSolutions();
-        for (int i = context.getMinOrder(); i<=context.getMaxOrder(); i++) {
+        for ( int i = context.getMinOrder(); i<=context.getMaxOrder(); i++) {
+            final int I = i;
             logger.debug("ordernum:{} maxorder:{}",i,context.getMaxOrder());
 
-            int size = selectedDishes.size();
-            if (i>size) {
+            int selectedDishesSize = selectedDishes.size();
+            if (i>selectedDishesSize) {
                 solutions.add(Solution.newFailed(i,"无法分配至该订单数目"));
                 continue;
             }
-            if (calcTotalMoney<i*merchant.getDistributionMoney()) {
+            if (selectedDishesTotalMoney<i*merchant.getDistributionMoney()) {
                 solutions.add(Solution.newFailed(i,"无法满足起送条件"));
                 continue;
             }
-            int redEnvelopSize = CollectionUtil.size(context.getRedEnvelope());
-            OrderDistributor distributor = new OrderDistributor(i, ArrayUtil.newArray(size,0));
+
+            OrderDistributor distributor = new OrderDistributor(i, ArrayUtil.newArray(selectedDishesSize,0));
+            Solution minSolution=null;
+
+            int redEnvelopSize = CollectionUtil.size(redEnvelopeCandicates);
             int _expectedOrder = CollectionUtil.sizeIter(distributor);
-            int _expectedRedEnvelope = CollectionUtil.sizeIter(new ArrangementSupport(i,redEnvelopSize));
-            int _expectedLoop=_expectedOrder*_expectedRedEnvelope*2;
-            final int curOrderN = i;
+            int _expectedRedEnvelope = CollectionUtil.sizeIter(new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen()));
+            int _expectedLoop=_expectedOrder*_expectedRedEnvelope*i;
+
             SpeedRecorder speedRecorder = SpeedRecorder.build();
             speedRecorder.setInterval(a->{
                 logger.debug("{}:estimate time:{}  {} _expectedLoop:{}/count:{}",a,speedRecorder.estimateRestTime(_expectedLoop), NumberUtil.getPercentString(speedRecorder.getCount(),_expectedLoop),_expectedLoop,speedRecorder.getCount());
@@ -151,26 +156,26 @@ public class Calculator {
                 statistics.setPercent(NumberUtil.getPercentString(speedRecorder.getCount(),_expectedLoop));
                 statistics.setRestTime(speedRecorder.estimateRestTime(_expectedLoop));
 
-                queryDetail.curOrder=curOrderN;
+                queryDetail.curOrder= I;
             },3000);
             logger.debug("expectedOrder:{}",_expectedOrder);
             logger.debug("expectedRedEnvelope:{}",_expectedRedEnvelope);
             logger.debug("expectedLoop:{}",_expectedLoop);
 
-            Solution minSolution=null;
-
             //各订单已经分好dish[[],[],[]]
-            for (int[][] ints : distributor) {
+            for (int[][] orderAndDishIdx : distributor) {
 
                 //迭代每一种红包使用方法
-                ArrangementSupport redEnvelopDistributor = new ArrangementSupport(i,redEnvelopSize);
+//                ArrangementSupport redEnvelopDistributor = new ArrangementSupport(i,redEnvelopSize);
+                //红包使用量受限
+                LimittedArrangementSupport redEnvelopDistributor = new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen());
 
                 for (int[] redEnvelopIdxForList : redEnvelopDistributor) {
                     Solution cur = new Solution();
                     cur.setOrderNum(i);
 
-                    //生成每一个订单
-                    for (int orderNum = 0; orderNum < ints.length; orderNum++) {
+                    //生成每一个订单 orderAndDishIdx.length=i
+                    for (int orderNum = 0; orderNum < i; orderNum++) {
                         speedRecorder.record();
                         if (cancelled) {
                             for (int restOrderIdx = i; restOrderIdx < context.getMaxOrder(); restOrderIdx++) {
@@ -181,9 +186,9 @@ public class Calculator {
 
                         Order one = new Order();
                         int envelopIdxForOrder = redEnvelopIdxForList[orderNum];
-                        Rule redEnvelop = CollectionUtil.get(context.getRedEnvelope(), envelopIdxForOrder);
+                        Rule redEnvelop = CollectionUtil.get(redEnvelopeCandicates, envelopIdxForOrder);
 
-                        int[] dishes =  ints[orderNum];
+                        int[] dishes =  orderAndDishIdx[orderNum];
                         //菜总价
                         double priceForDish = 0d;
                         //打包费
@@ -211,6 +216,11 @@ public class Calculator {
                             //if not
                             //该Solution作废
                             cur = null;
+
+                            //剩下的需要记录
+                            for (int rest = orderNum + 1; rest < i; rest++) {
+                                speedRecorder.record();
+                            }
                             break;
                         }
 
@@ -286,6 +296,8 @@ public class Calculator {
             }
 
             solutions.add(minSolution);
+
+            logger.debug("_expectedLoop:{} realLoop:{}",_expectedLoop,speedRecorder.getCount());
         }
 
         //merge item

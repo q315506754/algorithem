@@ -52,6 +52,26 @@ public class ArrangementTest {
         }
         System.out.println("total:"+count);
     }
+    @Test
+    public void testCommit22() {
+        Arrangement distributeIter = new Arrangement(3, new int[]{0,1});
+        int count =0;
+        for (int[] ints : distributeIter) {
+            System.out.println(Arrays.toString(ints));
+            count++;
+        }
+        System.out.println("total:"+count);
+    }
+    @Test
+    public void testCommit23() {
+        Arrangement distributeIter = new Arrangement(3, new int[]{2,4});
+        int count =0;
+        for (int[] ints : distributeIter) {
+            System.out.println(Arrays.toString(ints));
+            count++;
+        }
+        System.out.println("total:"+count);
+    }
 
     @Test
     public void testCommit3() {

@@ -1,5 +1,6 @@
 package com.jiangli.practice.eleme.core;
 
+import com.jiangli.common.utils.ArrayUtil;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;
@@ -41,9 +42,14 @@ public class Arrangement implements  Iterable<int[]>{
         @Override
         public int[] next() {
             int[] next = arrangementSupport.next();
+
             int[] ret = new int[next.length];
+            ArrayUtil.init(ret,-1);
+
             for (int i = 0; i < next.length; i++) {
-                ret[i]=pool[next[i]];
+                if (next[i]>=0) {
+                    ret[i]=pool[next[i]];
+                }
             }
             return ret;
         }
