@@ -181,7 +181,8 @@ public class CalcTest {
         redEnvelops.add(newRule(20d, 1d));
         context.setRedEnvelope(redEnvelops);
 
-        context.setMaxOrder(3);
+        context.setMaxOrder(6);
+//        context.setMaxOrder(3);
 
         context.setMerchantId(1);
 //        context.setExtraMoneyForEachOrder(1d);

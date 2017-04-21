@@ -144,9 +144,9 @@ public class Calculator {
             Solution minSolution=null;
 
             int redEnvelopSize = CollectionUtil.size(redEnvelopeCandicates);
-            int _expectedOrder = CollectionUtil.sizeIter(distributor);
-            int _expectedRedEnvelope = CollectionUtil.sizeIter(new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen()));
-            int _expectedLoop=_expectedOrder*_expectedRedEnvelope*i;
+            long _expectedOrder = CollectionUtil.sizeIter(distributor);
+            long _expectedRedEnvelope = CollectionUtil.sizeIter(new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen()));
+            long _expectedLoop=_expectedOrder*_expectedRedEnvelope*i;
 
             SpeedRecorder speedRecorder = SpeedRecorder.build();
             speedRecorder.setInterval(a->{
@@ -170,8 +170,8 @@ public class Calculator {
                 LimittedArrangementSupport redEnvelopDistributor = new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen());
 
                 for (int[] redEnvelopIdxForList : redEnvelopDistributor) {
-                    Solution cur = new Solution();
-                    cur.setOrderNum(i);
+                    Double ordersMoney=null;
+                    CalcOrderRs[] rsRecord = new CalcOrderRs[i];
 
                     //生成每一个订单 orderAndDishIdx.length=i
                     for (int orderNum = 0; orderNum < i; orderNum++) {
@@ -198,7 +198,7 @@ public class Calculator {
                         if (!rs.success) {
                             //if not
                             //该Solution作废
-                            cur = null;
+                            ordersMoney = null;
 
                             //剩下的需要记录
                             for (int rest = orderNum + 1; rest < i; rest++) {
@@ -207,52 +207,67 @@ public class Calculator {
                             break;
                         }
 
-                        Order one = new Order();
+                        rsRecord[orderNum]=rs;
 
-                        for (int dishOrd : orderAndDishIdx[orderNum]) {
-                            Dish dish = selectedDishes.get(dishOrd);
-
-                            Item item = new Item();
-                            MethodUtil.copyProp(dish,"name",item);
-                            MethodUtil.copyProp(dish,"money",item);
-                            MethodUtil.copyProp(dish,"packageMoney",item);
-                            one.addItem(item);
+                        if (ordersMoney==null) {
+                            ordersMoney=rs.priceFinal;
+                        }else {
+                            ordersMoney+=rs.priceFinal;
                         }
-
-                        one.addExtraMoney("一般",rs.priceForDish);
-                        one.addExtraMoney("餐盒",rs.priceForPackage);
-                        one.addExtraMoney("合计",rs.priceBase);
-
-                        //满x减y
-                        if (rs.activityReduce!=null) {
-                            one.addReducedMoney("在线支付立减优惠,满"+rs.activityReduceRule.getReach()+"减"+rs.activityReduce,rs.activityReduce);
-                        }
-
-
-                        //红包减免
-                        if (rs.redEnvelopReduce!=null) {
-                            one.addReducedMoney("使用红包,满"+rs.redEnvelop.getReach()+"减"+rs.redEnvelopReduce,rs.redEnvelopReduce);
-                        }
-
-
-                        //加上配送
-                        if (rs.distributionMoney!=null) {
-                            one.addExtraMoney("配送费",rs.distributionMoney);
-                        }
-
-                        //会员减免
-                        if (rs.vipReduce!=null) {
-                            one.addExtraMoney("会员减免配送费",rs.vipReduce);
-                        }
-
-                        //set rs
-                        one.setPrice(rs.priceFinal);
-
-                        cur.addOrder(one);
                     }
 
-                    if (cur!=null && (minSolution==null ||  cur.getPrice()<minSolution.getPrice())) {
+                    if (ordersMoney!=null && (minSolution==null ||  ordersMoney<minSolution.getPrice())) {
+                        Solution cur = new Solution();
+                        cur.setOrderNum(i);
+
                         minSolution=cur;
+
+                        for (int j = 0; j < rsRecord.length; j++) {
+                            CalcOrderRs rs = rsRecord[j];
+
+                            Order one = new Order();
+
+                            for (int dishOrd : orderAndDishIdx[j]) {
+                                Dish dish = selectedDishes.get(dishOrd);
+
+                                Item item = new Item();
+                                MethodUtil.copyProp(dish,"name",item);
+                                MethodUtil.copyProp(dish,"money",item);
+                                MethodUtil.copyProp(dish,"packageMoney",item);
+                                one.addItem(item);
+                            }
+
+                            one.addExtraMoney("一般",rs.priceForDish);
+                            one.addExtraMoney("餐盒",rs.priceForPackage);
+                            one.addExtraMoney("合计",rs.priceBase);
+
+                            //满x减y
+                            if (rs.activityReduce!=null) {
+                                one.addReducedMoney("在线支付立减优惠,满"+rs.activityReduceRule.getReach()+"减"+rs.activityReduce,rs.activityReduce);
+                            }
+
+
+                            //红包减免
+                            if (rs.redEnvelopReduce!=null) {
+                                one.addReducedMoney("使用红包,满"+rs.redEnvelop.getReach()+"减"+rs.redEnvelopReduce,rs.redEnvelopReduce);
+                            }
+
+
+                            //加上配送
+                            if (rs.distributionMoney!=null) {
+                                one.addExtraMoney("配送费",rs.distributionMoney);
+                            }
+
+                            //会员减免
+                            if (rs.vipReduce!=null) {
+                                one.addReducedMoney("会员减免配送费",rs.vipReduce);
+                            }
+
+                            //set rs
+                            one.setPrice(rs.priceFinal);
+
+                            cur.addOrder(one);
+                        }
                     }
                 }
             }

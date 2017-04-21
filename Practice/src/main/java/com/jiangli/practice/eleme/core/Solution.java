@@ -69,6 +69,9 @@ public class Solution {
         this.orders.add(order);
         this.price += order.getPrice();
     }
+    public void addPrice(double price) {
+        this.price += price;
+    }
 
     public boolean isFailed() {
         return failed;
