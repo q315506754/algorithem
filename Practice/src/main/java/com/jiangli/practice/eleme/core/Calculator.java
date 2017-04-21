@@ -187,6 +187,16 @@ public class Calculator {
 
                         Order one = new Order();
 
+
+                        CalcOrderRs calcOrderRs = calcOrder(
+                                selectedDishes,
+                                orderAndDishIdx[orderNum],
+                                merchant.getBaseMoney(),
+                                rules, CollectionUtil.get(redEnvelopeCandicates, redEnvelopIdxForList[orderNum]),
+                                merchant.getDistributionMoney(),
+                                context.getVip()
+                        );
+
                         //菜总价
                         double priceForDish = 0d;
                         //打包费
@@ -286,6 +296,82 @@ public class Calculator {
         }
 
         ThreadCollector.finish(context.getQueryId());
+    }
+
+    class CalcOrderRs{
+        //菜总价
+        double priceForDish = 0d;
+        //打包费
+        double priceForPackage = 0d;
+        //菜总价+打包费
+        double priceBase= 0d;
+        //活动减免
+        Double activityReduce;
+        Rule activityReduceRule;
+        //红包减免
+        Double redEnvelopReduce;
+        Rule redEnvelop;
+        //配送
+        Double distributionMoney;
+        //vip减免配送
+        Double vipReduce;
+        double priceFinal=0d;
+        boolean success=true;
+    }
+    public CalcOrderRs calcOrder(List<Dish> selectedDishes, int[] orderDish, Double baseMoney, List<Rule> activityRules, Rule redEnvelop, Double distributionMoney, Boolean vip) {
+        CalcOrderRs ret = new CalcOrderRs();
+
+
+        for (int dishOrd : orderDish) {
+            Dish dish = selectedDishes.get(dishOrd);
+            ret.priceForDish+=dish.getMoney();
+            ret.priceForPackage+=dish.getPackageMoney();
+        }
+
+        ret.priceBase = ret.priceForDish+ret.priceForPackage;
+        ret.priceFinal=ret.priceBase;
+
+        //reach min?起送费
+        if(baseMoney!=null && ret.priceBase<baseMoney){
+            ret.success=false;
+            return ret;
+        }
+
+        //满x减y
+        Rule activityReduceRule = activityReduce(activityRules, ret.priceBase);
+        if (activityReduceRule!=null) {
+            ret.activityReduce=activityReduceRule.getReduce();
+            ret.activityReduceRule=activityReduceRule;
+
+            ret.priceFinal = calcReduce(ret.priceFinal, ret.activityReduce);
+        }
+
+
+        //红包减免
+        Double redEnvelopReduce = redEnvelopReduce(redEnvelop, ret.priceBase);
+        if (redEnvelopReduce!=null) {
+            ret.redEnvelop=redEnvelop;
+            ret.redEnvelopReduce=redEnvelopReduce;
+
+            ret.priceFinal = calcReduce(ret.priceFinal, ret.redEnvelopReduce);
+        }
+
+
+        //加上配送
+        if (distributionMoney!=null) {
+            ret.distributionMoney=distributionMoney;
+
+            ret.priceFinal += distributionMoney;
+        }
+
+        //会员减免
+        if (vip!=null && vip) {
+            ret.vipReduce=4d;
+
+            ret.priceFinal = calcReduce( ret.priceFinal, ret.vipReduce);
+        }
+
+        return ret;
     }
 
     private Rule activityReduce(List<Rule> rules, double priceBase) {
