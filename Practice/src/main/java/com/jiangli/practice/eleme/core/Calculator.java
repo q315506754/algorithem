@@ -166,8 +166,7 @@ public class Calculator {
             for (int[][] orderAndDishIdx : distributor) {
 
                 //迭代每一种红包使用方法
-//                ArrangementSupport redEnvelopDistributor = new ArrangementSupport(i,redEnvelopSize);
-                //红包使用量受限
+                //红包使用量受限 default:max=2
                 LimittedArrangementSupport redEnvelopDistributor = new LimittedArrangementSupport(i,redEnvelopSize,context.getMaxRedEnvelopeChosen());
 
                 for (int[] redEnvelopIdxForList : redEnvelopDistributor) {
@@ -211,7 +210,7 @@ public class Calculator {
                         one.addExtraMoney("合计",priceBase);
                         double priceFinal=priceBase;
 
-                        //reach min?
+                        //reach min?起送费
                         if(priceBase<merchant.getBaseMoney()){
                             //if not
                             //该Solution作废
