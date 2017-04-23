@@ -17,10 +17,13 @@ public class Merchant {
     @Column(name = "name")
     private String  name;
 
+    @Column(name = "baseMoney")
     private Double  baseMoney=20d;
 
+    @Column(name = "distributionMoney")
     private Double  distributionMoney=5d;
 
+    @Column(name = "likeit")
     private Integer likeit=0;
 
     public Integer getId() {

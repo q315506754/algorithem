@@ -12,17 +12,23 @@
 
 .mainContainer .content .left-content .table ul{}
 .mainContainer .content .left-content .table ul li{list-style-type:none;margin-bottom: 10px;display: block;height:50px;clear: right}
-.mainContainer .content .left-content .table ul li .comment{margin-right: 5px;float: left;height:50px;}
-.mainContainer .content .left-content .table ul li .comment span{display: block}
+.comment{margin-right: 5px;float: left;height:50px;}
+.comment span{display: block}
 .mainContainer .content .left-content .table ul li .merchant{float: left;background: RGB(51,133,255) ;width: 150px;height:50px;text-overflow: ellipsis}
 
-.mainContainer .right-content .btn{height: 10%}
-.mainContainer .right-content .dishes{height: 50%}
-.mainContainer .right-content .money{height: 30%}
+.mainContainer .right-content .btn{height: 5%}
+.mainContainer .right-content .dishes{height: 50%;overflow: scroll;overflow-x: hidden;overflow-y: auto}
+.mainContainer .right-content .money{height: 35%}
 .mainContainer .right-content .action{height: 10%}
 
+.mainContainer .right-content ul {width: 100%;height: 100%;margin: 0px;}
+.mainContainer .right-content ul li{list-style-type:none;width: 33%;height: 50px;border: 1px solid gold;float: left}
+.mainContainer .right-content ul li .dish{float: left;height: inherit;width: 100px;margin: 5px;text-overflow:ellipsis}
+.mainContainer .right-content ul li .chooseNum{float: left;height: inherit;width: 115px;margin: 5px}
+.mainContainer .right-content ul li .chooseNum input{width: 50px}
+.mainContainer .right-content ul li>.price{float: left;height: inherit;margin: 5px}
 
-.price{ background-color: aqua}
+.price{ color: #FF6633}
 .chosen{ background-color: aqua}
 .selected{ background-color: RGB(33,66,131) }
 

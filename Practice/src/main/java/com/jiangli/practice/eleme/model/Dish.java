@@ -13,24 +13,24 @@ public class Dish {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
+
+    @Column(name = "merchantId")
     private Integer merchantId;
+
+    @Column(name = "name")
     private String  name;
+
+    @Column(name = "money")
     private Double  money;
 
     @Column(name = "package")
     private Double  packageMoney=0d;
 
+    @Column(name = "likeit")
+    private Integer likeit=0;
 
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "id=" + id +
-                ", merchantId=" + merchantId +
-                ", name='" + name + '\'' +
-                ", money=" + money +
-                ", packageMoney=" + packageMoney +
-                '}';
-    }
+    @Column(name = "times")
+    private Integer times=0;
 
     public Integer getId() {
         return id;
@@ -68,7 +68,40 @@ public class Dish {
         return packageMoney;
     }
 
+    public Integer getLikeit() {
+        return likeit;
+    }
+
+    public void setLikeit(Integer likeit) {
+        this.likeit = likeit;
+    }
+
     public void setPackageMoney(Double packageMoney) {
+
+
         this.packageMoney = packageMoney;
     }
+
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "id=" + id +
+                ", merchantId=" + merchantId +
+                ", name='" + name + '\'' +
+                ", money=" + money +
+                ", packageMoney=" + packageMoney +
+                ", likeit=" + likeit +
+                ", times=" + times +
+                '}';
+    }
+
+    public Integer getTimes() {
+        return times;
+    }
+
+    public void setTimes(Integer times) {
+        this.times = times;
+    }
+
+
 }

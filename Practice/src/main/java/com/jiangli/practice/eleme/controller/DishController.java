@@ -1,7 +1,7 @@
 package com.jiangli.practice.eleme.controller;
 
-import com.jiangli.practice.eleme.dao.MerchantRepository;
-import com.jiangli.practice.eleme.model.Merchant;
+import com.jiangli.practice.eleme.dao.DishRepository;
+import com.jiangli.practice.eleme.model.Dish;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ import java.util.List;
  *         CreatedTime  2015/6/9 0009 10:39
  */
 @Controller
-@RequestMapping(value = "/merchant")
-public class MerchantController {
+@RequestMapping(value = "/dish")
+public class DishController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -31,21 +31,21 @@ public class MerchantController {
     private ServletContext servletContext;
 
     @Autowired
-    private MerchantRepository merchantRepository;
+    private DishRepository dishRepository;
 
 
     /**
-     * http://localhost:8080/merchant/list
+     * http://localhost:8080/dish/list
      * @return
      */
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     public
     @ResponseBody
-    List<Merchant> list() {
+    List<Dish> list(Integer merchantId) {
 
-        List<Merchant> list = merchantRepository.findAllOrderByLikeitDesc();
+        List<Dish> list = dishRepository.findByMerchantId(merchantId);
 
-        logger.debug("merchants result:"+list);
+        logger.debug("Dish result:"+list);
 
         return list;
     }
@@ -53,8 +53,17 @@ public class MerchantController {
     @RequestMapping(value = "/like", method = {RequestMethod.POST, RequestMethod.GET})
     public
     @ResponseBody
-   void like(Integer id,Integer like) {
-        merchantRepository.setLikeit(id,like);
+    void like(Integer id,Integer like) {
+        dishRepository.setLikeit(id,like);
         logger.debug("like id:{} like:{}",id,like);
     }
+
+    @RequestMapping(value = "/inc", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    void inc(Integer id,Integer inc) {
+        dishRepository.incTimes(id,inc);
+        logger.debug("inc id:{} inc:{}",id,inc);
+    }
+
 }

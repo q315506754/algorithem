@@ -33,14 +33,33 @@
                  </div>
                  <div class="btn">
                     <button @click="merchantCreate">create</button>
+                     <button @click="merchantQuery">refresh</button>
                  </div>
              </div>
              <div class="right-content">
                  <div class="btn">
                      <button @click="">create</button>
+                     <button @click="dishQuery">refresh</button>
                  </div>
                  <div class="dishes">
+                    <ul>
+                        <li v-for="dish in dishes">
+                            <div class="comment">
+                                <span class="like"  v-bind:class="{chosen:dish.likeit>0}" @click="dishLike(dish)">↑</span>
+                                <span class="dislike"  v-bind:class="{chosen:dish.likeit<0}" @click="dishDislike(dish)">↓</span>
+                            </div>
 
+                            <span class="dish" >{{dish.name}}<br/><span class="price" >￥{{dish.money}}</span></span>
+
+                            <span class="chooseNum" >
+                                 <button class="addBtn" @click="dishRem(dish)">-</button>
+                                 <input type="text" v-model="dish.chooseNum" @keyup.left="dishRem(dish)" @keyup.right="dishAdd(dish)" @keyup.down="dishRem(dish)" @keyup.up="dishAdd(dish)"/>
+                                 <button class="removeBtn" @click="dishAdd(dish)">+</button>
+                            </span>
+
+                            <span class="price" >￥{{dish.chooseNum*dish.money}}</span>
+                        </li>
+                    </ul>
                  </div>
                  <div class="money">
 
@@ -60,22 +79,27 @@
         var vm = new Vue({
             el: '#mainContainer',
             data: {
-                merchants:[{
-                    id:1,
-                    name:"啊啊啊啊1",
-                    likeit:1,
-                    isSelected:false
-                },{
-                    id:2,
-                    name:"啊啊啊啊2",
-                    likeit:0,
-                    isSelected:false
-                },{
-                    id:3,
-                    name:"啊啊啊啊3",
-                    likeit:-1,
-                    isSelected:false
-                }]
+                prop:{selected:"isSelected"},
+                merchants:[
+//                        {
+//                    id:1,
+//                    name:"啊啊啊啊1",
+//                    likeit:0,
+//                    isSelected:false
+//                }
+                ],
+                merchantSelected:-1,
+                dishes:[
+//                        {
+//                    merchantId: 1,
+//                    money:18,
+//                    name:"蒜苗炒香肠",
+//                    packageMoney:1,
+//                    isSelected:false,
+//                    chooseNum:0,
+//                    likeit:0
+//                }
+                ]
             },
             methods: {
                 setArrayProp(arr,prop,value){
@@ -85,13 +109,15 @@
                 },
                 merchantSelect(obj){
 //                    console.log(arguments);
-                    var prop="isSelected";
-//                        console.log('Hello ' + obj.id + '!')
-                    this.setArrayProp(this.merchants,prop,false);
+                    this.setArrayProp(this.merchants,this.prop.selected,false);
 
-                    obj[prop]=true;
+                    obj[this.prop.selected]=true;
 //                    console.log(this.merchants);
 //                    this.$set('merchants',this.merchants);
+
+                    this.merchantSelected=obj.id;
+
+                    this.dishQuery();
                 },
                 merchantEdit(obj) {
 
@@ -102,13 +128,54 @@
                     this.merchants=[];
                 },
                 merchantQuery(){
-                    this.merchants.push({id:1,name:"asdas"});
+//                    this.merchants.push({id:1,name:"asdas"});
+                    let $this = this;
+                    $.ajax("/merchant/list").done(function(arr){
+                        $this.setArrayProp(arr,$this.prop.selected,false);
+                        $this.merchants=arr;
+                    } )
                 },
                 merchantLike(obj){
-                    obj.likeit=1;
+                    this.like(obj,1,"merchant");
                 },
                 merchantDislike(obj){
-                    obj.likeit=-1;
+                    this.like(obj,-1,"merchant");
+                },
+                like(obj,val,path){
+                    if(obj.likeit==val){
+                        obj.likeit = 0;
+                    }else {
+                        obj.likeit=val;
+                    }
+
+                    $.ajax({url:"/"+path+"/like",data:{id:obj.id,like:obj.likeit}});
+                },
+                dishQuery(){
+                    let $this = this;
+                    $.ajax({url:"/dish/list",data:{merchantId:this.merchantSelected}}).done(function(arr){
+//                        console.log(arr);
+                        $this.setArrayProp(arr,$this.prop.selected,false);
+                        $this.setArrayProp(arr,"chooseNum",0);
+                        $this.dishes=arr;
+//                        console.log($this.dishes);
+                    } )
+                },
+                dishAdd(dish){
+                    dish.chooseNum++;
+                    this.incDishTimes(dish,1);
+                },
+                dishRem(dish){
+                    dish.chooseNum>0?dish.chooseNum--:0;
+                    this.incDishTimes(dish,-1);
+                },
+                incDishTimes(obj,times){
+                    $.ajax({url:"/dish/inc",data:{id:obj.id,inc:times}});
+                },
+                dishLike(obj){
+                    this.like(obj,1,"dish");
+                },
+                dishDislike(obj){
+                    this.like(obj,-1,"dish");
                 },
                 doSeparate(){
 
@@ -128,5 +195,6 @@
             console.log(oldVal);
         })
 
+        vm.merchantQuery();
     </script>
 </html>

@@ -11,8 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,6 +61,57 @@ public class JpaTest {
         findAll();
     }
 
+    @Rollback(false)
+    @Transactional
+    @Test
+    public void testMerchantLikeit() {
+        System.out.println(merchantRepository);
+
+        merchantRepository.setLikeit(1,1);
+
+        findAll();
+    }
+
+    @Rollback(false)
+    @Transactional
+    @Test
+    public void testDishLikeit() {
+        System.out.println(dishRepository);
+
+        dishRepository.setLikeit(1,1);
+
+        List<Dish> dishes = dishRepository.listAll();
+        System.out.println(dishes);
+    }
+
+    @Rollback(false)
+    @Transactional
+    @Test
+    public void testDishincTimes() {
+        System.out.println(dishRepository);
+
+        dishRepository.incTimes(1,1);
+    }
+
+    @Rollback(false)
+    @Transactional
+    @Test
+    public void testDishincTimes2() {
+        System.out.println(dishRepository);
+
+        dishRepository.incTimes(2,-1);
+    }
+
+    @Test
+    public void testFindDish() {
+        System.out.println(dishRepository);
+
+        List<Dish> list = dishRepository.findByMerchantId(1);
+
+        printAll(list);
+    }
+
+
     @Test
     public void testFindMerchantByName() {
         System.out.println(merchantRepository);
@@ -89,14 +142,7 @@ public class JpaTest {
 
     }
 
-    @Test
-    public void testFindDish() {
-        System.out.println(dishRepository);
 
-        List<Dish> list = dishRepository.findByMerchantId(1);
-
-        printAll(list);
-    }
     @Test
     public void testFindRule() {
         System.out.println(ruleRespository);
@@ -123,6 +169,18 @@ public class JpaTest {
         one.setName("aasd22");
         one.setLikeit(-1);
         merchantRepository.save(one);
+
+        findAll();
+    }
+
+    @Test
+    public void testCreateDish() {
+        Dish one =new Dish();
+        one.setName("豆芽");
+        one.setPackageMoney(1d);
+        one.setMerchantId(1);
+        one.setMoney(12d);
+        dishRepository.save(one);
 
         findAll();
     }
