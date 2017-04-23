@@ -1,7 +1,7 @@
 package com.jiangli.practice.test;
 
-import com.jiangli.practice.eleme.dao.DishRespository;
-import com.jiangli.practice.eleme.dao.MerchantRespository;
+import com.jiangli.practice.eleme.dao.DishRepository;
+import com.jiangli.practice.eleme.dao.MerchantRepository;
 import com.jiangli.practice.eleme.dao.RuleRespository;
 import com.jiangli.practice.eleme.model.Dish;
 import com.jiangli.practice.eleme.model.Merchant;
@@ -27,10 +27,10 @@ public class JpaTest {
     private long startTs;
 
     @Autowired
-    private DishRespository dishRespository;
+    private DishRepository dishRepository;
 
     @Autowired
-    private MerchantRespository merchantRespository;
+    private MerchantRepository merchantRepository;
 
     @Autowired
     private RuleRespository ruleRespository;
@@ -51,19 +51,49 @@ public class JpaTest {
 
     @Test
     public void testFindMerchant() {
-        System.out.println(merchantRespository);
+        System.out.println(merchantRepository);
 
-        Merchant one = merchantRespository.findOne(1);
+        Merchant one = merchantRepository.findOne(1);
         System.out.println(one);
 
         findAll();
     }
 
     @Test
-    public void testFindDish() {
-        System.out.println(dishRespository);
+    public void testFindMerchantByName() {
+        System.out.println(merchantRepository);
 
-        List<Dish> list = dishRespository.findByMerchantId(1);
+        List<Merchant> byNameOrderByLikeit = merchantRepository.findByNameOrderByLikeitDesc(null);
+        System.out.println(byNameOrderByLikeit);
+
+        byNameOrderByLikeit = merchantRepository.findAllOrderByLikeitDesc();
+        System.out.println(byNameOrderByLikeit);
+
+    }
+
+    @Test
+    public void testFindMerchantlistAll() {
+
+        List<Merchant> byNameOrderByLikeit = merchantRepository.listAll();
+        System.out.println(byNameOrderByLikeit);
+        for (Merchant merchant : byNameOrderByLikeit) {
+            System.out.println(merchant);
+        }
+    }
+    @Test
+    public void testFindMerchantByName2() {
+        System.out.println(merchantRepository);
+
+        List<Merchant> byNameOrderByLikeit = merchantRepository.findByNameOrderByLikeitDesc("asd");
+        System.out.println(byNameOrderByLikeit);
+
+    }
+
+    @Test
+    public void testFindDish() {
+        System.out.println(dishRepository);
+
+        List<Dish> list = dishRepository.findByMerchantId(1);
 
         printAll(list);
     }
@@ -77,7 +107,7 @@ public class JpaTest {
     }
 
     private void findAll() {
-        Iterable<Merchant> all = merchantRespository.findAll();
+        Iterable<Merchant> all = merchantRepository.findAll();
         printAll(all);
     }
 
@@ -90,8 +120,9 @@ public class JpaTest {
     @Test
     public void testCreate() {
         Merchant one =new Merchant();
-        one.setName("aasd");
-        merchantRespository.save(one);
+        one.setName("aasd22");
+        one.setLikeit(-1);
+        merchantRepository.save(one);
 
         findAll();
     }

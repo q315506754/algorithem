@@ -19,8 +19,8 @@
     <mvc:resources location="/assets/js/" mapping="/js/**" />
     <mvc:resources location="/assets/css/" mapping="/css/**" />
     <mvc:resources location="/assets/img/" mapping="/img/**" />
-    <mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
-    <mvc:resources location="/WEB-INF/sound/" mapping="/sound/**" />
+    <mvc:resources location="/assets/fonts/" mapping="/fonts/**" />
+    <mvc:resources location="/assets/sound/" mapping="/sound/**" />
     <mvc:resources location="/sockjs/" mapping="/sockjs/**/**" />
     <mvc:resources location="/assets/" mapping="/assets/**" />
     <mvc:resources location="/audio/" mapping="/audio/**" />

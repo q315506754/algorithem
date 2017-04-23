@@ -2,8 +2,8 @@ package com.jiangli.practice.eleme.core;
 
 import com.jiangli.common.core.ThreadCollector;
 import com.jiangli.common.utils.*;
-import com.jiangli.practice.eleme.dao.DishRespository;
-import com.jiangli.practice.eleme.dao.MerchantRespository;
+import com.jiangli.practice.eleme.dao.DishRepository;
+import com.jiangli.practice.eleme.dao.MerchantRepository;
 import com.jiangli.practice.eleme.dao.RuleRespository;
 import com.jiangli.practice.eleme.model.Dish;
 import com.jiangli.practice.eleme.model.Merchant;
@@ -27,10 +27,10 @@ public class Calculator {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private DishRespository dishRespository;
+    private DishRepository dishRepository;
 
     @Autowired
-    private MerchantRespository merchantRespository;
+    private MerchantRepository merchantRepository;
 
     @Autowired
     private RuleRespository ruleRespository;
@@ -112,7 +112,7 @@ public class Calculator {
         statistics.setDetail(queryDetail);
 
         Integer merchantId = context.getMerchantId();
-        Merchant merchant=merchantRespository.findOne(merchantId);
+        Merchant merchant= merchantRepository.findOne(merchantId);
         List<Dish> selectedDishes=convertToDish(context);
         final double selectedDishesTotalMoney = calcTotalMoney(selectedDishes);
 

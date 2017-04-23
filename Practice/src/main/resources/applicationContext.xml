@@ -15,7 +15,7 @@
         <context:exclude-filter type="regex" expression="com.jiangli.*.controller.*"></context:exclude-filter>
     </context:component-scan>
 
-    <jpa:repositories base-package="com.jiangli.practice.eleme.dao" entity-manager-factory-ref="entityManagerFactory"/>
+    <jpa:repositories base-package="com.jiangli.practice.eleme.dao" entity-manager-factory-ref="entityManagerFactory"  base-class="com.jiangli.practice.eleme.dao.BaseRepositoryImpl"/>
 
     <!-- 配置 JPA 的 EntityManagerFactory  -->
      <bean id="entityManagerFactory"

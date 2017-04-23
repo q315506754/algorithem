@@ -21,6 +21,8 @@ public class Merchant {
 
     private Double  distributionMoney=5d;
 
+    private Integer likeit=0;
+
     public Integer getId() {
         return id;
     }
@@ -54,6 +56,14 @@ public class Merchant {
         this.distributionMoney = distributionMoney;
     }
 
+    public Integer getLikeit() {
+        return likeit;
+    }
+
+    public void setLikeit(Integer likeit) {
+        this.likeit = likeit;
+    }
+
     @Override
     public String toString() {
         return "Merchant{" +
@@ -61,6 +71,7 @@ public class Merchant {
                 ", name='" + name + '\'' +
                 ", baseMoney=" + baseMoney +
                 ", distributionMoney=" + distributionMoney +
+                ", likeit=" + likeit +
                 '}';
     }
 }

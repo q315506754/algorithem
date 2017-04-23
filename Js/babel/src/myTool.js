@@ -1005,6 +1005,7 @@ console.log('-------------Object-----------------');
     }
     console.log(f(3,4));
 
+    //缩写function
     var o = {
         method() {
             return "Hello!";

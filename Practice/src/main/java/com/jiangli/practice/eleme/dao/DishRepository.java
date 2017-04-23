@@ -10,6 +10,6 @@ import java.util.List;
  * @date 2017/4/18 16:21
  */
 //@Repository
-public interface DishRespository extends CrudRepository<Dish, Integer> {
+public interface DishRepository extends CrudRepository<Dish, Integer> {
     List<Dish> findByMerchantId(Integer merchantId);
 }

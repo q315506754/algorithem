@@ -1,6 +1,6 @@
 package com.jiangli.practice.eleme.controller;
 
-import com.jiangli.practice.eleme.dao.MerchantRespository;
+import com.jiangli.practice.eleme.dao.MerchantRepository;
 import com.jiangli.practice.eleme.model.Merchant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class MerchantController {
     private ServletContext servletContext;
 
     @Autowired
-    private MerchantRespository merchantRespository;
+    private MerchantRepository merchantRepository;
 
 
     /**
@@ -44,7 +44,7 @@ public class MerchantController {
     @ResponseBody
     List<Merchant> list() {
 
-        Iterable<Merchant> all = merchantRespository.findAll();
+        Iterable<Merchant> all = merchantRepository.findAll();
         List<Merchant> merchants = new ArrayList<>();
         for (Merchant merchant : all) {
             merchants.add(merchant);

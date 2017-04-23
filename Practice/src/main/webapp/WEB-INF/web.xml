@@ -10,6 +10,9 @@
         <!--<param-value>pro</param-value>-->
     </context-param>
 
+    <welcome-file-list>
+        <welcome-file>index</welcome-file>
+    </welcome-file-list>
 
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
