@@ -31,4 +31,17 @@
 .price{ color: #FF6633}
 .chosen{ background-color: aqua}
 .selected{ background-color: RGB(33,66,131) }
+.floatRight{ float: right}
+.floatLeft{ float: left}
+
+
+.dialog{width: 600px;height: auto;padding: 5px;text-align: center}
+.dialog .dialogHead{width: 100%;height: 50px;}
+.dialog .dialogBody{width: 100%;height: auto;}
+.dialog .dialogFoot{width: 100%;height: 50px;}
+
+.dialog table  {width: 100%;}
+.dialog table tbody {width: 100%;}
+.dialog table tbody tr{width: 100%;}
+.dialog table tbody tr td{width: 50%;}
 

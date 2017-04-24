@@ -64,31 +64,42 @@
                  <div class="action">
                      <button @click="doSeparate">doSeparate</button>
                  </div>
+
              </div>
          </div>
+
+        <dialog-x v-bind:show="true">
+            <h2 slot="head">创建商户</h2>
+            <div>
+                <div class="row">
+                        商户名称 <input type="text"  v-model="merchantCreate.name"/>
+                </div>
+                <div class="row">
+                        起送价格 <Choose v-bind:obj="merchantCreate" v-bind:p="'baseMoney'"  ></Choose>
+                </div>
+                <div class="row">
+                        打包价格 <Choose v-bind:obj="merchantCreate" v-bind:p="'distributionMoney'"  ></Choose>
+                </div>
+            </div>
+
+            <div slot="foot">
+                <button @click="">save</button>
+                <button @click="">cancel</button>
+            </div>
+        </dialog-x>
+
       </div>
 
-      <%--<script type="text/x-template" id="createMerchantTemp">--%>
-          <%--<router-link to="/index">cancel</router-link>--%>
-      <%--</script>--%>
-      <%--<script type="text/x-template" id="createMerchantView">--%>
-          <%--<div class="btn">--%>
-              <%--<button @click="merchantCreate">create</button>--%>
-                  <%--&lt;%&ndash;<a href="/merchant/create">create</a>&ndash;%&gt;--%>
-              <%--&lt;%&ndash;<router-link to="/merchant/create">create</router-link>&ndash;%&gt;--%>
-              <%--<button @click="merchantQuery">refresh</button>--%>
-          <%--</div>--%>
-      <%--</script>--%>
 
-      <%--<router-link :to="href"></router-link>--%>
   </body>
 
   <%@include file="common/head_js.jsp"%>
+  <script src="/assets/js/pl_choose.js" ></script>
+  <script src="/assets/js/pl_likeit.js" ></script>
+  <script src="/assets/js/pl_dialog.js" ></script>
   <%--<script src="/assets/js/vue/vue-router.js" ></script>--%>
 
   <%--<script src="/assets/js/route.js" ></script>--%>
   <script src="/assets/js/main.js" ></script>
-  <script src="/assets/js/pl_choose.js" ></script>
-  <script src="/assets/js/pl_likeit.js" ></script>
 
 </html>

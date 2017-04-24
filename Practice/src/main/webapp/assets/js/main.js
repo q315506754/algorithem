@@ -1,7 +1,6 @@
 var vm = new Vue({
     el: '#mainContainer',
     data: {
-        // href:"/index",
         prop:{selected:"isSelected",choose:"chooseNum",like:"likeit"},
         merchants:[
 //                        {
@@ -22,7 +21,12 @@ var vm = new Vue({
 //                    chooseNum:0,
 //                    likeit:0
 //                }
-        ]
+        ],
+        merchantCreate: {
+            name: "",
+            baseMoney: 0,
+            distributionMoney: 1
+        }
     },
     methods: {
         setArrayProp(arr,prop,value){
@@ -49,8 +53,23 @@ var vm = new Vue({
 //                    this.merchants.push({id:1,name:"asdas"});
 //             router.push();
 //             this.href="/merchant/create";
-            console.log(this);
-            this.merchants=[];
+//             console.log(this);
+            // this.merchants=[];
+
+            //自定页
+            // layer.open({
+            //     title:"创建商户",
+            //     type: 1,
+            //     skin: 'layui-layer-demo', //样式类名
+            //     closeBtn: 1, //不显示关闭按钮
+            //     anim: 2,
+            //     area: ['630px', '360px'],
+            //     shade: 0.5,
+            //     shadeClose: true, //开启遮罩关闭
+            //     content: $("#createMerchant")
+            // });
+
+
         },
         merchantQuery(){
 //                    this.merchants.push({id:1,name:"asdas"});
