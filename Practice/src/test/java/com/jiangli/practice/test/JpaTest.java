@@ -2,9 +2,11 @@ package com.jiangli.practice.test;
 
 import com.jiangli.practice.eleme.dao.DishRepository;
 import com.jiangli.practice.eleme.dao.MerchantRepository;
+import com.jiangli.practice.eleme.dao.RedEnvelopeRespository;
 import com.jiangli.practice.eleme.dao.RuleRespository;
 import com.jiangli.practice.eleme.model.Dish;
 import com.jiangli.practice.eleme.model.Merchant;
+import com.jiangli.practice.eleme.model.RedEnvelope;
 import com.jiangli.practice.eleme.model.Rule;
 import org.junit.After;
 import org.junit.Before;
@@ -36,6 +38,9 @@ public class JpaTest {
 
     @Autowired
     private RuleRespository ruleRespository;
+
+    @Autowired
+    private RedEnvelopeRespository redEnvelopeRespository;
 
     @Before
     public void before() {
@@ -147,9 +152,27 @@ public class JpaTest {
     public void testFindRule() {
         System.out.println(ruleRespository);
 
-        List<Rule> list = ruleRespository.findByMerchantIdOrderBySortAsc(1);
+        List<Rule> list = ruleRespository.findListForMerchant(1);
 
         printAll(list);
+    }
+
+    @Test
+    public void testFindRedEnvelope() {
+        System.out.println(redEnvelopeRespository);
+
+        List<RedEnvelope> list = redEnvelopeRespository.findList();
+
+        printAll(list);
+    }
+    @Test
+    public void testSaveRedEnvelope() {
+        System.out.println(redEnvelopeRespository);
+
+        RedEnvelope entity = new RedEnvelope();
+        entity.setReach(110d);
+        entity.setReduce(9.9d);
+        redEnvelopeRespository.save(entity);
     }
 
     private void findAll() {

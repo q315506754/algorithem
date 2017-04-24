@@ -1,6 +1,7 @@
 var vm = new Vue({
     el: '#mainContainer',
     data: {
+        // href:"/index",
         prop:{selected:"isSelected",choose:"chooseNum",like:"likeit"},
         merchants:[
 //                        {
@@ -46,6 +47,8 @@ var vm = new Vue({
         },
         merchantCreate(){
 //                    this.merchants.push({id:1,name:"asdas"});
+//             router.push();
+//             this.href="/merchant/create";
             console.log(this);
             this.merchants=[];
         },
@@ -90,7 +93,8 @@ var vm = new Vue({
     },
     filters: {
 
-    }
+    },
+    // router
 //            components: {
 //                'Choose': Child
 //            }

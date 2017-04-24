@@ -37,14 +37,6 @@ Vue.component('Choose', {
                 </span>`,
     methods: {
         increment: function (dir) {
-//                    this.r_cur=this.r_cur+dir;
-
-//                    if (this.r_cur<this.from){
-//                        this.r_cur=this.from;
-//                    }
-//                    if(this.to>=this.from&&this.r_cur>this.to){
-//                        this.r_cur=this.to;
-//                    }
             this.r_cur=this.validateN(this.r_cur+dir);
 
             this.obj[this.p]=this.r_cur;

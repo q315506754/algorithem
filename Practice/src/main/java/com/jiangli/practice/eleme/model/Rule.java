@@ -23,20 +23,6 @@ public class Rule {
     @Column(name = "REDUCE")
     private Double  reduce;
 
-    @Column(name = "SORT")
-    private Integer sort;
-
-
-    @Override
-    public String toString() {
-        return "Rule{" +
-                "id=" + id +
-                ", merchantId=" + merchantId +
-                ", reach=" + reach +
-                ", reduce=" + reduce +
-                ", order=" + sort +
-                '}';
-    }
 
     public Integer getId() {
         return id;
@@ -70,11 +56,13 @@ public class Rule {
         this.reduce = reduce;
     }
 
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "id=" + id +
+                ", merchantId=" + merchantId +
+                ", reach=" + reach +
+                ", reduce=" + reduce +
+                '}';
     }
 }

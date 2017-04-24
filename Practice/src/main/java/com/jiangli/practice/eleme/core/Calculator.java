@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -116,8 +115,8 @@ public class Calculator {
         List<Dish> selectedDishes=convertToDish(context);
         final double selectedDishesTotalMoney = calcTotalMoney(selectedDishes);
 
-        List<Rule> rules=ruleRespository.findByMerchantIdOrderBySortAsc(merchantId);
-        Collections.reverse(rules);
+        List<Rule> rules=ruleRespository.findListForMerchant(merchantId);
+//        Collections.reverse(rules);
 
         List<Rule> redEnvelopeCandicates = context.getRedEnvelope();
 
