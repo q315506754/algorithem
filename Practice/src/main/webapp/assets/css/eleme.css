@@ -1,6 +1,6 @@
 .mainContainer{border: 1px solid gray;width: 100%;height: auto}
 .mainContainer .nav_bar{border:inherit;height: 50px;}
-.mainContainer .nav_bar .config{border:inherit;float: right;height: 100%;}
+.mainContainer .nav_bar .config{border:inherit;float: right;height: 100%;background-color: gray}
 
 .mainContainer .content{border:inherit;height: 860px;}
 .mainContainer .content .left-content{border:inherit;width: 20%;height:inherit;float: left}
@@ -18,8 +18,12 @@
 
 .mainContainer .right-content .btn{height: 5%}
 .mainContainer .right-content .dishes{height: 50%;overflow: scroll;overflow-x: hidden;overflow-y: auto}
-.mainContainer .right-content .money{height: 35%}
+.mainContainer .right-content .statistics{height: 35%;width: 100%}
 .mainContainer .right-content .action{height: 10%}
+
+.mainContainer .right-content .dishesStats{border: 1px solid gold;width: 45%;overflow: scroll;overflow-x: hidden;overflow-y: auto;float: left}
+.mainContainer .right-content .feesStats{border: 1px solid gold;width: 45%;overflow: scroll;overflow-x: hidden;overflow-y: auto;float: left}
+
 
 .mainContainer .right-content ul {width: 100%;height: 100%;margin: 0px;}
 .mainContainer .right-content ul li{list-style-type:none;width: 33%;height: 50px;border: 1px solid gold;float: left}
@@ -35,8 +39,10 @@
 .floatLeft{ float: left}
 
 
-.dialog{width: 600px;height: auto;padding: 5px;text-align: center}
+.dialog{width: 600px;height: auto;padding: 5px;text-align: center;z-index: 1010;position: absolute;top: 30%;left: 30%;background-color: white}
 .dialog .dialogHead{width: 100%;height: 50px;}
+.dialog .dialogHead .close{float: right}
+/*.dialog .dialogHead h2 {width: 90%;}*/
 .dialog .dialogBody{width: 100%;height: auto;}
 .dialog .dialogFoot{width: 100%;height: 50px;}
 
@@ -44,4 +50,6 @@
 .dialog table tbody {width: 100%;}
 .dialog table tbody tr{width: 100%;}
 .dialog table tbody tr td{width: 50%;}
+
+.dialogLayer {z-index: 101;background-color: #000;opacity: 0.6;position: absolute;width: 100%;height: 100%;top: 0%;left: 0%;}
 

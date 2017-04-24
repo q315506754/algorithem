@@ -10,7 +10,7 @@
   <body>
       <div id="mainContainer" class="mainContainer">
          <div class="nav_bar">
-             <span class="config">*</span>
+             <span class="config">配置</span>
          </div>
 
 
@@ -33,7 +33,7 @@
 
                  <%--<router-view  name="merchantCreate"></router-view>--%>
                  <div class="btn">
-                     <button @click="merchantCreate">create</button>
+                     <button @click="show.merchantCreate=true">create</button>
                      <%--<a href="/merchant/create">create</a>--%>
                      <%--<router-link to="/merchant/create">create</router-link>--%>
                      <button @click="merchantQuery">refresh</button>
@@ -41,7 +41,7 @@
              </div>
              <div class="right-content">
                  <div class="btn">
-                     <button @click="">create</button>
+                     <button @click="show.dishCreate=true">create</button>
                      <button @click="dishQuery">refresh</button>
                  </div>
                  <div class="dishes">
@@ -58,8 +58,13 @@
                         </li>
                     </ul>
                  </div>
-                 <div class="money">
-
+                 <div class="statistics">
+                     <div class="dishesStats">
+asdasd
+                     </div>
+                     <div class="feesStats">
+asdasd
+                     </div>
                  </div>
                  <div class="action">
                      <button @click="doSeparate">doSeparate</button>
@@ -68,7 +73,7 @@
              </div>
          </div>
 
-        <dialog-x v-bind:show="true">
+        <dialog-x  v-bind:p="'merchantCreate'" @save="merchantSave">
             <h2 slot="head">创建商户</h2>
             <div>
                 <div class="row">
@@ -81,10 +86,20 @@
                         打包价格 <Choose v-bind:obj="merchantCreate" v-bind:p="'distributionMoney'"  ></Choose>
                 </div>
             </div>
+        </dialog-x>
 
-            <div slot="foot">
-                <button @click="">save</button>
-                <button @click="">cancel</button>
+        <dialog-x  v-bind:p="'dishCreate'" @save="dishSave">
+            <h2 slot="head">创建菜类</h2>
+            <div>
+                <div class="row">
+                        菜名 <input type="text"  v-model="dishCreate.name"/>
+                </div>
+                <div class="row">
+                        价格 <Choose v-bind:obj="dishCreate" v-bind:p="'money'"  ></Choose>
+                </div>
+                <div class="row">
+                        打包价格 <Choose v-bind:obj="dishCreate" v-bind:p="'packageMoney'"  ></Choose>
+                </div>
             </div>
         </dialog-x>
 

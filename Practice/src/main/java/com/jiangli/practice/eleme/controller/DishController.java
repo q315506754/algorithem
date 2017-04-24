@@ -66,4 +66,12 @@ public class DishController {
         logger.debug("inc id:{} inc:{}",id,inc);
     }
 
+
+    @RequestMapping(value = "/save", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    void save(Dish dish) {
+        logger.debug("save dish:{}",dish);
+        dishRepository.save(dish);
+    }
 }

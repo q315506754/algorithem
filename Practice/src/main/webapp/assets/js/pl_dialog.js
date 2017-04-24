@@ -3,7 +3,7 @@
  */
 Vue.component('dialog-x', {
     // 声明 props
-//            props: ['obj','from','to','cur'],
+    //        props: ['p','from','to','cur'],
     data(){
         return {
         }
@@ -19,31 +19,31 @@ Vue.component('dialog-x', {
         //     type: String,
         //     required: true
         // },
-        show:{
-            type: Boolean,
-            default: false
+        // show:{
+        //     type: Boolean,
+        //     default: false
+        // },
+        p:{
+            type: String,
+            required: true
         }
     },
     computed:{
-        chosenLikeCls(){
-            let $this= this;
-            return {
-                [$this.cls]:$this.obj[$this.p]>0
-            }
+        getShow(){
+            // console.log(this.$parent.show);
+            // console.log(this.$parent.$data);
+            // console.log(this.$parent.show);
+            // console.log(this.$parent.$data);
+            return this.$parent.show;
         },
-        chosenDisLikeCls(){
-            let $this= this;
-            return {
-                [$this.cls]:$this.obj[$this.p]<0
-            }
-        },
+
     },
     // 同样也可以在 vm 实例中像 "this.message" 这样使用
     template: `
-        <div>
-        <div  class="dialogLayer" v-show="show">
+        <div  @keydown.esc="cancel">
+        <div  class="dialogLayer" v-show="getShow[p]">
         </div>
-         <div  class="dialog" v-show="show">
+         <div  class="dialog" v-show="getShow[p]">
               <div class="dialogHead">
                 <slot name="head"></slot>
               </div>
@@ -53,23 +53,23 @@ Vue.component('dialog-x', {
               </div>
               <hr/>
               <div class="dialogFoot">
+                    <button @click="save">save</button>
+                    <button @click="cancel">cancel</button>
                        <slot name="foot"></slot>
               </div>
           </div>
     </div>
 `,
     methods: {
-        like(val){
-            if(this.obj[this.p]==val){
-                this.obj[this.p] = 0;
-            }else {
-                this.obj[this.p]=val;
-            }
+        save(){
+            this.cancel();
 
-            var id=this.obj.id;
-            var like=this.obj[this.p];
-            $.ajax({url:`/${this.path}/like`,data:{id,like}});
-            // this.$emit('increment',this.obj,dir);
+            // $.ajax({url:`/${this.path}/like`,data:{id,like}});
+            this.$emit('save');
+        },
+        cancel(){
+            this.getShow[this.p]=false;
         }
     }
+
 });

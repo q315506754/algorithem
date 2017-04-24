@@ -2,6 +2,7 @@ var vm = new Vue({
     el: '#mainContainer',
     data: {
         prop:{selected:"isSelected",choose:"chooseNum",like:"likeit"},
+        show:{merchantCreate:false,dishCreate:false},
         merchants:[
 //                        {
 //                    id:1,
@@ -24,8 +25,14 @@ var vm = new Vue({
         ],
         merchantCreate: {
             name: "",
-            baseMoney: 0,
-            distributionMoney: 1
+            baseMoney: 5,
+            distributionMoney: 5
+        },
+        dishCreate: {
+            name: "",
+            money: 5,
+            packageMoney: 1,
+            merchantId: null,
         }
     },
     methods: {
@@ -43,33 +50,28 @@ var vm = new Vue({
 //                    this.$set('merchants',this.merchants);
 
             this.merchantSelected=obj.id;
+            this.dishCreate.merchantId=obj.id;
 
             this.dishQuery();
         },
         merchantEdit(obj) {
 
         },
-        merchantCreate(){
-//                    this.merchants.push({id:1,name:"asdas"});
-//             router.push();
-//             this.href="/merchant/create";
-//             console.log(this);
-            // this.merchants=[];
+        merchantSave() {
+            var $this =this;
+            console.log(this.merchantCreate);
 
-            //自定页
-            // layer.open({
-            //     title:"创建商户",
-            //     type: 1,
-            //     skin: 'layui-layer-demo', //样式类名
-            //     closeBtn: 1, //不显示关闭按钮
-            //     anim: 2,
-            //     area: ['630px', '360px'],
-            //     shade: 0.5,
-            //     shadeClose: true, //开启遮罩关闭
-            //     content: $("#createMerchant")
-            // });
+            $.ajax({url:"/merchant/save",data:this.merchantCreate}).done(function(arr){
+                $this.merchantQuery();
+            } )
+        },
+        dishSave() {
+            var $this =this;
+            console.log(this.dishCreate);
 
-
+            $.ajax({url:"/dish/save",data:this.dishCreate}).done(function(arr){
+                $this.dishQuery();
+            } )
         },
         merchantQuery(){
 //                    this.merchants.push({id:1,name:"asdas"});

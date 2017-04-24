@@ -57,4 +57,12 @@ public class MerchantController {
         merchantRepository.setLikeit(id,like);
         logger.debug("like id:{} like:{}",id,like);
     }
+
+    @RequestMapping(value = "/save", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+   void save(Merchant merchant) {
+        logger.debug("save merchant:{}",merchant);
+        merchantRepository.save(merchant);
+    }
 }
