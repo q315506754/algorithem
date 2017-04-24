@@ -38,6 +38,11 @@ public class CommonController {
     }
 
 
+    @RequestMapping(value = "/", method = { RequestMethod.GET})
+    public String root() {
+        return "redirect:index";
+    }
+
     /**
      * http://localhost:8081/rmi.go
      *
