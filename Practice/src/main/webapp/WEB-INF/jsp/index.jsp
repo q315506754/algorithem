@@ -152,12 +152,12 @@
   </body>
 
   <%@include file="common/head_js.jsp"%>
-  <script src="/assets/js/pl_choose.js" ></script>
-  <script src="/assets/js/pl_likeit.js" ></script>
-  <script src="/assets/js/pl_dialog.js" ></script>
-  <%--<script src="/assets/js/vue/vue-router.js" ></script>--%>
+  <script src="${basePath}/assets/js/pl_choose.js" ></script>
+  <script src="${basePath}/assets/js/pl_likeit.js" ></script>
+  <script src="${basePath}/assets/js/pl_dialog.js" ></script>
+  <%--<script src="${basePath}/assets/js/vue/vue-router.js" ></script>--%>
 
-  <%--<script src="/assets/js/route.js" ></script>--%>
-  <script src="/assets/js/main.js" ></script>
+  <%--<script src="${basePath}/assets/js/route.js" ></script>--%>
+  <script src="${basePath}/assets/js/main.js" ></script>
 
 </html>

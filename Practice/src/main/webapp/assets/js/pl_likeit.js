@@ -54,7 +54,7 @@ Vue.component('Likeit', {
 
             var id=this.obj.id;
             var like=this.obj[this.p];
-            $.ajax({url:`/${this.path}/like`,data:{id,like}});
+            $.ajax({url:`${basePath}/${this.path}/like`,data:{id,like}});
             // this.$emit('increment',this.obj,dir);
         }
     }

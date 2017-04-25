@@ -87,7 +87,7 @@ var vm = new Vue({
             var $this =this;
             console.log(this.merchantCreate);
 
-            $.ajax({url:"/merchant/save",data:this.merchantCreate}).done(function(arr){
+            $.ajax({url:`${basePath}/merchant/save`,data:this.merchantCreate}).done(function(arr){
                 $this.merchantQuery();
             } )
         },
@@ -95,14 +95,14 @@ var vm = new Vue({
             var $this =this;
             console.log(this.dishCreate);
 
-            $.ajax({url:"/dish/save",data:this.dishCreate}).done(function(arr){
+            $.ajax({url:`${basePath}/dish/save`,data:this.dishCreate}).done(function(arr){
                 $this.dishQuery();
             } )
         },
         merchantQuery(){
 //                    this.merchants.push({id:1,name:"asdas"});
             let $this = this;
-            $.ajax("/merchant/list").done(function(arr){
+            $.ajax(`${basePath}/merchant/list`).done(function(arr){
                 $this.setArrayProp(arr,$this.prop.selected,false);
                 $this.merchants=arr;
 
@@ -119,11 +119,11 @@ var vm = new Vue({
                 obj.likeit=val;
             }
 
-            $.ajax({url:`/${path}/like`,data:{id:obj.id,like:obj.likeit}});
+            $.ajax({url:`${basePath}/${path}/like`,data:{id:obj.id,like:obj.likeit}});
         },
         dishQuery(){
             let $this = this;
-            $.ajax({url:"/dish/list",data:{merchantId:this.merchantSelected}}).done(function(arr){
+            $.ajax({url:`${basePath}/dish/list`,data:{merchantId:this.merchantSelected}}).done(function(arr){
 //                        console.log(arr);
                 $this.setArrayProp(arr,$this.prop.selected,false);
                 $this.setArrayProp(arr,$this.prop.choose,0);
@@ -134,7 +134,7 @@ var vm = new Vue({
         },
         queryDefaults(){
             let $this = this;
-            $.ajax("/defaults").done(function(data){
+            $.ajax(`${basePath}/defaults`).done(function(data){
                 $this.defaults=data;
                 console.log($this.defaults);
             });
@@ -149,13 +149,13 @@ var vm = new Vue({
             console.log(items);
 
             let iArr=[5,3,2,7];
-            $.ajax({url:"/calc/listtest",data:serialize({items,itemsArr:items,items2:items,iArr,iListArr:iArr,iListArr2:iArr}),type:"POST"}).done(function(data){
+            $.ajax({url:`${basePath}/calc/listtest`,data:serialize({items,itemsArr:items,items2:items,iArr,iListArr:iArr,iListArr2:iArr}),type:"POST"}).done(function(data){
 
             });
-            // $.ajax({url:"/calc/listtest2",data:{items5:items},type:"POST"}).done(function(data){
+            // $.ajax({url:"${basePath}/calc/listtest2",data:{items5:items},type:"POST"}).done(function(data){
             //
             // });
-            $.ajax({url:"/calc/listtest2",data:serialize({items5:items}),type:"POST"}).done(function(data){
+            $.ajax({url:`${basePath}/calc/listtest2`,data:serialize({items5:items}),type:"POST"}).done(function(data){
 
             });
         },
@@ -174,12 +174,12 @@ var vm = new Vue({
             return ret;
         },
         incDishTimes(obj,times){
-            $.ajax({url:"/dish/inc",data:{id:obj.id,inc:times}});
+            $.ajax({url:`${basePath}/dish/inc`,data:{id:obj.id,inc:times}});
 
             let $this = this;
             let items = this.getSelectedItems();
             let merchantId=this.merchantSelected;
-            $.ajax({url:"/calc/preview",data:serialize({items,merchantId}),type:"POST"}).done(function(data){
+            $.ajax({url:`${basePath}/calc/preview`,data:serialize({items,merchantId}),type:"POST"}).done(function(data){
                 $this.preview=data;
             });
         },
@@ -197,7 +197,7 @@ var vm = new Vue({
             //
             // this.separateParam.cart=;
 
-            $.ajax({url:"/rede/list",type:"POST"}).done(function(arr){
+            $.ajax({url:`${basePath}/rede/list`,type:"POST"}).done(function(arr){
                 $this.separateParam.redEnvelope=arr;
 
                 //open

@@ -1,3 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link href="assets/css/common.css" rel="stylesheet"/>
-<link href="assets/css/eleme.css" rel="stylesheet"/>
+<%
+    String basePath = request.getContextPath();
+    System.out.println(basePath);
+    request.setAttribute("basePath",basePath);
+%>
+<link href="${basePath}/assets/css/common.css" rel="stylesheet"/>
+<link href="${basePath}/assets/css/eleme.css" rel="stylesheet"/>
+<script>
+    let basePath = "${basePath}";
+</script>

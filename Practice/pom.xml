@@ -184,5 +184,6 @@
     </dependencies>
 
     <build>
+        <finalName>SeparateSystem</finalName>
     </build>
 </project>
