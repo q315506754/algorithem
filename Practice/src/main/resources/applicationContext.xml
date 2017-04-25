@@ -37,7 +37,9 @@
 
                  <!-- 方言 hibernate 并不知道自己要使用哪种数据库 -->
                  <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>-->
-                 <!--  
+                 <prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
+                 <!--<prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>-->
+                 <!--
                  <prop key="hibernate.cache.use_second_level_cache">true</prop>
                  <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
                  <prop key="hibernate.cache.use_query_cache">true</prop>

@@ -60,10 +60,38 @@
                  </div>
                  <div class="statistics">
                      <div class="dishesStats">
-asdasd
+                         <div class="" v-if="preview.failed">
+                             {{preview.failedReason}}
+                         </div>
+                         <div class="" v-else>
+                             <ul>
+                                 <li v-for="item in previewOrder.items">
+                                     <span>{{item.name}}</span>
+                                     x<span>{{item.num}}</span>
+                                     <span class="price">￥{{item.num*item.money}}</span>
+                                 </li>
+                             </ul>
+                         </div>
                      </div>
                      <div class="feesStats">
-asdasd
+                         <div class="" v-if="preview.failed">
+                             {{preview.failedReason}}
+                         </div>
+                         <div class="" v-else>
+                             <ul>
+                                 <li v-for="one in previewOrder.extraMoneyList">
+                                     <span>{{one.name}}</span>
+                                     <span class="price">￥{{one.price}}</span>
+                                 </li>
+                             </ul>
+                             <ul>
+                                 <li v-for="one in previewOrder.reducedMoneyList">
+                                     <span>{{one.name}}</span>
+                                     <span class="price">￥{{one.price}}</span>
+                                 </li>
+                             </ul>
+                             <span class="price">￥{{previewOrder.price}}</span>
+                         </div>
                      </div>
                  </div>
                  <div class="action">
@@ -99,6 +127,21 @@ asdasd
                 </div>
                 <div class="row">
                         打包价格 <Choose v-bind:obj="dishCreate" v-bind:p="'packageMoney'"  ></Choose>
+                </div>
+            </div>
+        </dialog-x>
+
+        <dialog-x  v-bind:p="'separate'" @save="">
+            <h2 slot="head">拆</h2>
+            <div>
+                <div class="row">
+                      最小单数 <Choose v-bind:obj="separateParam" v-bind:p="'minOrder'"  ></Choose>
+                </div>
+                <div class="row">
+                     最大单数 <Choose v-bind:obj="separateParam" v-bind:p="'maxOrder'"  ></Choose>
+                </div>
+                <div class="row">
+                     最多使用红包数 <Choose v-bind:obj="separateParam" v-bind:p="'maxRedEnvelopeChosen'"  ></Choose>
                 </div>
             </div>
         </dialog-x>

@@ -20,7 +20,7 @@ public class RedEnvelope {
     @Column(name = "REDUCE")
     private Double  reduce;
 
-    private Boolean  isEnable=true;
+    private Integer  isEnable=1;
 
     public Integer getId() {
         return id;
@@ -47,12 +47,13 @@ public class RedEnvelope {
         this.reduce = reduce;
     }
 
-    public Boolean getEnable() {
+
+    public Integer getIsEnable() {
         return isEnable;
     }
 
-    public void setEnable(Boolean enable) {
-        isEnable = enable;
+    public void setIsEnable(Integer isEnable) {
+        this.isEnable = isEnable;
     }
 
     @Override

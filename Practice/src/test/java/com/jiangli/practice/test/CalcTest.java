@@ -277,6 +277,47 @@ public class CalcTest {
     }
 
     @Test
+    public void testCalc20170425() {
+        CalcContext context = new CalcContext();
+
+        Cart cart = new Cart();
+        context.setCart(cart);
+        List<Item> items = new LinkedList<>();
+        cart.setItems(items);
+
+        items.add(newItem("豆芽",12d));
+        items.add(newItem("小炒豆皮",12d));
+        items.add(newItem("红烧鲫鱼",24d));
+        items.add(newItem("韭菜炒蛋",16d));
+        items.add(newItem("鸡柳",18d));
+        items.add(newItem("酸辣鸡杂",18d));
+        items.add(newItem("四季豆炒肉",18d));
+        items.add(newItem("米饭",2d,5));
+
+        List<Rule> redEnvelops = new LinkedList<>();
+        redEnvelops.add(newRule(38d, 3.4d));
+        redEnvelops.add(newRule(37d, 3.4d));
+        redEnvelops.add(newRule(40d, 2d));
+        redEnvelops.add(newRule(20d, 1d));
+        context.setRedEnvelope(redEnvelops);
+
+//        context.setMaxOrder(6);
+        context.setMaxOrder(3);
+
+        context.setMerchantId(1);
+//        context.setExtraMoneyForEachOrder(1d);
+        calculator.calc(context);
+
+
+        List<Solution> solutions = context.getSolutions();
+        Stream<Solution> stream = solutions.stream();
+        stream.forEach(solution->{
+            System.out.println(solution);
+            System.out.println(solution.getPrice());
+        });
+    }
+
+    @Test
     public void testCancel() {
         CalcContext context = new CalcContext();
 

@@ -2,6 +2,9 @@ package com.jiangli.common.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Jiangli on 2016/6/1.
@@ -32,5 +35,34 @@ public class ClassDescribeUtil {
         }
         return sb.toString();
 
+    }
+
+    public static Map<String, Object> describeFields(Class cls) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            Field[] declaredFields = cls.getDeclaredFields();
+            Object o = cls.newInstance();
+            for (Field declaredField : declaredFields) {
+    //            Class<?> type = declaredField.getType();
+
+                declaredField.setAccessible(true);
+
+                Object val = declaredField.get(o);
+                if (val != null ) {
+                    boolean valid=true;
+
+                    if (val instanceof Collection) {
+                        valid=!CollectionUtil.isEmpty((Collection)val);
+                    }
+
+                    if (valid) {
+                        map.put(declaredField.getName(),val);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 }

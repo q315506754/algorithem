@@ -1,5 +1,7 @@
 package com.jiangli.practice.eleme.controller;
 
+import com.jiangli.common.utils.ClassDescribeUtil;
+import com.jiangli.practice.eleme.core.CalcContext;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @author Jiangli
@@ -41,6 +44,12 @@ public class CommonController {
     @RequestMapping(value = "/", method = { RequestMethod.GET})
     public String root() {
         return "redirect:index";
+    }
+
+    @RequestMapping(value = "/defaults", method = { RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> defaults() {
+        return ClassDescribeUtil.describeFields(CalcContext.class);
     }
 
     /**
