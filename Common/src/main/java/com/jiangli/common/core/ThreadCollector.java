@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.jiangli.common.core.ThreadCollector.ExecuteStatus.NOT_EXISTS;
-import static com.jiangli.common.core.ThreadCollector.ExecuteStatus.RUNNING;
 
 /**
  * Created by Jiangli on 2017/4/20.
@@ -48,9 +47,9 @@ public class ThreadCollector {
         } else {
             ret.code=executeStatus.code;
 
-            if (ret.code==RUNNING.code) {
+//            if (ret.code==RUNNING.code) {
                 ret.data = dataMap.get(queryId);
-            }
+//            }
         }
         return ret;
     }

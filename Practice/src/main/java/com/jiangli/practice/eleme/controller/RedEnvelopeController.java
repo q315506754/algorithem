@@ -1,6 +1,6 @@
 package com.jiangli.practice.eleme.controller;
 
-import com.jiangli.practice.eleme.dao.RedEnvelopeRespository;
+import com.jiangli.practice.eleme.dao.RedEnvelopeRepository;
 import com.jiangli.practice.eleme.model.RedEnvelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class RedEnvelopeController {
     private ServletContext servletContext;
 
     @Autowired
-    private RedEnvelopeRespository redEnvelopeRespository;
+    private RedEnvelopeRepository redEnvelopeRepository;
 
 
     /**
@@ -43,7 +43,7 @@ public class RedEnvelopeController {
     @ResponseBody
     List<RedEnvelope> list() {
 
-        List<RedEnvelope> list = redEnvelopeRespository.findList();
+        List<RedEnvelope> list = redEnvelopeRepository.findList();
 
         logger.debug("RedEnvelope result:"+list);
 

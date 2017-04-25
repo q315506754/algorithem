@@ -10,7 +10,7 @@ import java.util.List;
  * @author Jiangli
  * @date 2017/4/18 16:21
  */
-public interface RedEnvelopeRespository extends BaseRepository<RedEnvelope, Integer> {
+public interface RedEnvelopeRepository extends BaseRepository<RedEnvelope, Integer> {
     @Query("select u from RedEnvelope u where u.isEnable=1 order by u.reach desc ,u.reduce desc")
     List<RedEnvelope> findList();
 }

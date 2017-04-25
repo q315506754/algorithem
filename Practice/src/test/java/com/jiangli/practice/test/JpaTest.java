@@ -1,9 +1,10 @@
 package com.jiangli.practice.test;
 
+import com.jiangli.common.utils.BeanCopyUtil;
 import com.jiangli.practice.eleme.dao.DishRepository;
 import com.jiangli.practice.eleme.dao.MerchantRepository;
-import com.jiangli.practice.eleme.dao.RedEnvelopeRespository;
-import com.jiangli.practice.eleme.dao.RuleRespository;
+import com.jiangli.practice.eleme.dao.RedEnvelopeRepository;
+import com.jiangli.practice.eleme.dao.RuleRepository;
 import com.jiangli.practice.eleme.model.Dish;
 import com.jiangli.practice.eleme.model.Merchant;
 import com.jiangli.practice.eleme.model.RedEnvelope;
@@ -37,10 +38,10 @@ public class JpaTest {
     private MerchantRepository merchantRepository;
 
     @Autowired
-    private RuleRespository ruleRespository;
+    private RuleRepository ruleRepository;
 
     @Autowired
-    private RedEnvelopeRespository redEnvelopeRespository;
+    private RedEnvelopeRepository redEnvelopeRepository;
 
     @Before
     public void before() {
@@ -150,29 +151,32 @@ public class JpaTest {
 
     @Test
     public void testFindRule() {
-        System.out.println(ruleRespository);
+        System.out.println(ruleRepository);
 
-        List<Rule> list = ruleRespository.findListForMerchant(1);
+        List<Rule> list = ruleRepository.findListForMerchant(1);
 
         printAll(list);
     }
 
     @Test
     public void testFindRedEnvelope() {
-        System.out.println(redEnvelopeRespository);
+        System.out.println(redEnvelopeRepository);
 
-        List<RedEnvelope> list = redEnvelopeRespository.findList();
+        List<RedEnvelope> list = redEnvelopeRepository.findList();
 
         printAll(list);
+
+        List<Rule> rules = BeanCopyUtil.convertList(list, Rule.class);
+        System.out.println(rules);
     }
     @Test
     public void testSaveRedEnvelope() {
-        System.out.println(redEnvelopeRespository);
+        System.out.println(redEnvelopeRepository);
 
         RedEnvelope entity = new RedEnvelope();
-        entity.setReach(110d);
-        entity.setReduce(9.9d);
-        redEnvelopeRespository.save(entity);
+        entity.setReach(34d);
+        entity.setReduce(1.5d);
+        redEnvelopeRepository.save(entity);
     }
 
     private void findAll() {

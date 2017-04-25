@@ -8,6 +8,7 @@
       
   </script>
   <body>
+  <div class="container">
       <div id="mainContainer" class="mainContainer">
          <div class="nav_bar">
              <span class="config">配置</span>
@@ -50,7 +51,7 @@
 
                             <Likeit v-bind:obj="dish" v-bind:p="prop.like" v-bind:cls="'chosen'" v-bind:path="'dish'"></Likeit>
 
-                            <span class="dish" >{{dish.name}}<br/><span class="price" >￥{{dish.money}}</span></span>
+                            <span class="dish"  v-bind:class="{burning:dish.chooseNum>0}">{{dish.name}}<br/><span class="price" >￥{{dish.money}}</span></span>
 
                             <Choose v-bind:obj="dish" v-bind:p="prop.choose" @increment="incDishTimes"  ></Choose>
 
@@ -87,15 +88,17 @@
                              <ul>
                                  <li v-for="one in previewOrder.reducedMoneyList">
                                      <span>{{one.name}}</span>
-                                     <span class="price">￥{{one.price}}</span>
+                                     <span class="price">-￥{{one.price}}</span>
                                  </li>
                              </ul>
-                             <span class="price">￥{{previewOrder.price}}</span>
+                             <div v-if="preview.failed!=undefined && !preview.failed">
+                                合计<span class="price">￥{{previewOrder.price}}</span>
+                             </div>
                          </div>
                      </div>
                  </div>
                  <div class="action">
-                     <button @click="doSeparate">doSeparate</button>
+                     <button @click="doSeparateDialog">doSeparate</button>
                  </div>
 
              </div>
@@ -131,9 +134,12 @@
             </div>
         </dialog-x>
 
-        <dialog-x  v-bind:p="'separate'" @save="">
+        <dialog-x  v-bind:p="'separate'" @save="doSeparateProcess">
             <h2 slot="head">拆</h2>
             <div>
+                <div class="row">
+                    是否使用会员<input type="checkbox"  v-model="separateParam.isVip"/>
+                </div>
                 <div class="row">
                       最小单数 <Choose v-bind:obj="separateParam" v-bind:p="'minOrder'"  ></Choose>
                 </div>
@@ -143,12 +149,20 @@
                 <div class="row">
                      最多使用红包数 <Choose v-bind:obj="separateParam" v-bind:p="'maxRedEnvelopeChosen'"  ></Choose>
                 </div>
+                <div class="row">
+                    参与计算的红包
+                    <ul class="redEnvelope">
+                        <li v-for="one in separateParam.redEnvelope" v-bind:class="{burning:one.isEnable==1}" @click="one.isEnable=1-one.isEnable">
+                            满{{one.reach}}减{{one.reduce}}
+                        </li>
+                    </ul>
+                </div>
             </div>
         </dialog-x>
 
       </div>
 
-
+    </div>
   </body>
 
   <%@include file="common/head_js.jsp"%>

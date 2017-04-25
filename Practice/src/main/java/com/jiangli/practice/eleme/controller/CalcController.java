@@ -1,8 +1,12 @@
 package com.jiangli.practice.eleme.controller;
 
+import com.jiangli.common.core.ThreadCollector;
+import com.jiangli.common.utils.BeanCopyUtil;
 import com.jiangli.practice.eleme.core.*;
 import com.jiangli.practice.eleme.dao.MerchantRepository;
-import com.jiangli.practice.eleme.dao.RuleRespository;
+import com.jiangli.practice.eleme.dao.RedEnvelopeRepository;
+import com.jiangli.practice.eleme.model.RedEnvelope;
+import com.jiangli.practice.eleme.model.Rule;
 import com.jiangli.practice.eleme.param.PreviewModel;
 import com.jiangli.practice.eleme.param.TestModel;
 import org.slf4j.Logger;
@@ -42,7 +46,7 @@ public class CalcController {
     private Calculator calculator;
 
     @Autowired
-    private RuleRespository ruleRespository;
+    private RedEnvelopeRepository redEnvelopeRepository;
 
     @RequestMapping(value = "/listtest", method = {RequestMethod.POST, RequestMethod.GET})
     public
@@ -107,9 +111,28 @@ public class CalcController {
 
         context.setMerchantId(previewModel.getMerchantId());
 
+        List<RedEnvelope> redEnvelopes = redEnvelopeRepository.findList();
+        context.setRedEnvelope(BeanCopyUtil.convertList(redEnvelopes, Rule.class));
+
         calculator.calc(context);
 
         List<Solution> solutions = context.getSolutions();
         return solutions.get(0);
+    }
+
+    @RequestMapping(value = "/caculate", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    String caculate(
+            CalcContext context
+    ) {
+        String queryId = ThreadCollector.generateQueryId();
+        context.setQueryId(queryId);
+
+        logger.debug("context:"+context);
+
+        new Thread(()->calculator.calc(context)).start();
+
+        return queryId;
     }
 }

@@ -41,7 +41,12 @@ var vm = new Vue({
 
         },
         separateParam:{
-
+            maxOrder:-1,
+            minOrder:-1,
+            maxRedEnvelopeChosen:-1,
+            isVip:true,
+            merchantId:-1,
+            redEnvelope:[]
         }
     },
     computed: {
@@ -179,29 +184,56 @@ var vm = new Vue({
             let $this = this;
             let items = this.getSelectedItems();
             let merchantId=this.merchantSelected;
-            $.ajax({url:`${basePath}/calc/preview`,data:serialize({items,merchantId}),type:"POST"}).done(function(data){
-                $this.preview=data;
-            });
+
+            if(items.length>0){
+                $.ajax({url:`${basePath}/calc/preview`,data:serialize({items,merchantId}),type:"POST"}).done(function(data){
+                    $this.preview=data;
+                });
+            }else {
+                $this.preview = {};
+            }
+
         },
-        doSeparate(){
+        doSeparateDialog(){
             let $this = this;
-            this.separateParam={};
+            let items = this.getSelectedItems();
+            let merchantId=this.merchantSelected;
 
-            //default
-            this.separateParam.maxOrder=this.defaults.maxOrder;
-            this.separateParam.minOrder=this.defaults.minOrder;
-            this.separateParam.maxRedEnvelopeChosen=this.defaults.maxRedEnvelopeChosen;
-            this.separateParam.isVip=this.defaults.isVip;
-            this.separateParam.merchantId=this.merchantSelected;
 
-            //
-            // this.separateParam.cart=;
+            if(true){
+            // if($this.preview.failed!=undefined && !$this.preview.failed){
+                //default
+                this.separateParam.maxOrder=this.defaults.maxOrder;
+                this.separateParam.minOrder=this.defaults.minOrder;
+                this.separateParam.maxRedEnvelopeChosen=this.defaults.maxRedEnvelopeChosen;
+                this.separateParam.isVip=this.defaults.isVip;
+                this.separateParam.merchantId=this.merchantSelected;
 
-            $.ajax({url:`${basePath}/rede/list`,type:"POST"}).done(function(arr){
-                $this.separateParam.redEnvelope=arr;
+                //
+                // this.separateParam.cart=;
 
-                //open
-                $this.show.separate=true;
+                $.ajax({url:`${basePath}/rede/list`,type:"POST"}).done(function(arr){
+                    $this.separateParam.redEnvelope=arr;
+                    console.log(arr);
+
+                    //open
+                    $this.show.separate=true;
+                });
+            }
+
+        },
+        doSeparateProcess(){
+            let $this = this;
+            console.log($this.separateParam);
+            let items = this.getSelectedItems();
+            let cart = {items};
+            $this.separateParam.cart=cart;
+            console.log(serialize($this.separateParam));
+
+            $.ajax({url:`${basePath}/calc/caculate`,data:serialize($this.separateParam),type:"POST"}).done(function(dt){
+                console.log(dt);
+
+                window.open(`${basePath}/query/?queryId=${dt}`);
             });
         }
     },

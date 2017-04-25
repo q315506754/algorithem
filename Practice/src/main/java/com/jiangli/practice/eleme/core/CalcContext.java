@@ -97,4 +97,20 @@ public class CalcContext {
     public void setMaxRedEnvelopeChosen(Integer maxRedEnvelopeChosen) {
         this.maxRedEnvelopeChosen = maxRedEnvelopeChosen;
     }
+
+    @Override
+    public String toString() {
+        return "CalcContext{" +
+                "extraMoneyForEachOrder=" + extraMoneyForEachOrder +
+                ", queryId='" + queryId + '\'' +
+                ", merchantId=" + merchantId +
+                ", isVip=" + isVip +
+                ", redEnvelope=" + redEnvelope +
+                ", cart=" + cart +
+                ", minOrder=" + minOrder +
+                ", maxOrder=" + maxOrder +
+                ", maxRedEnvelopeChosen=" + maxRedEnvelopeChosen +
+                ", solutions=" + solutions +
+                '}';
+    }
 }

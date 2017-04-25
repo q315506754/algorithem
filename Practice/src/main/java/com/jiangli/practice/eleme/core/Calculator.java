@@ -4,7 +4,7 @@ import com.jiangli.common.core.ThreadCollector;
 import com.jiangli.common.utils.*;
 import com.jiangli.practice.eleme.dao.DishRepository;
 import com.jiangli.practice.eleme.dao.MerchantRepository;
-import com.jiangli.practice.eleme.dao.RuleRespository;
+import com.jiangli.practice.eleme.dao.RuleRepository;
 import com.jiangli.practice.eleme.model.Dish;
 import com.jiangli.practice.eleme.model.Merchant;
 import com.jiangli.practice.eleme.model.Rule;
@@ -32,7 +32,7 @@ public class Calculator {
     private MerchantRepository merchantRepository;
 
     @Autowired
-    private RuleRespository ruleRespository;
+    private RuleRepository ruleRepository;
     private boolean cancelled=false;
 
     public List<Dish>  convertToDish(CalcContext context) {
@@ -115,7 +115,7 @@ public class Calculator {
         List<Dish> selectedDishes=convertToDish(context);
         final double selectedDishesTotalMoney = calcTotalMoney(selectedDishes);
 
-        List<Rule> rules=ruleRespository.findListForMerchant(merchantId);
+        List<Rule> rules= ruleRepository.findListForMerchant(merchantId);
 //        Collections.reverse(rules);
 
         List<Rule> redEnvelopeCandicates = context.getRedEnvelope();

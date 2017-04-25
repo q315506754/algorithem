@@ -14,7 +14,14 @@ function serialize(data) {
                         ret[name]=sJson[jsonProp];
                     }
                 }
-            }else {
+            }
+            else if(typeof val === "object"){
+                var sJson = serialize(val);
+                for(var jsonProp in sJson) {
+                    ret[prop+"."+jsonProp]=sJson[jsonProp];
+                }
+            }
+            else {
                 ret[prop]=val;
             }
         }

@@ -31,6 +31,10 @@ public class BeanCopyUtil {
         return null;
     }
 
+    public static <T, K> List<K> convertList(List<T> sourceBeans, Class<K> cls) {
+        return getCopyBeansFromObjecIdToStr(sourceBeans, cls, null);
+    }
+
     public static <T, K> List<K> getCopyBeansFromObjecIdToStr(List<T> sourceBeans, Class<K> cls) {
         return getCopyBeansFromObjecIdToStr(sourceBeans, cls, null);
     }

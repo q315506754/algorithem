@@ -32,12 +32,12 @@ Vue.component('Choose', {
     // 同样也可以在 vm 实例中像 "this.message" 这样使用
     template: `<span class="chooseNum" >
                  <button class="removeBtn"  @click="increment(-1)" tabindex="-1">-</button>
-                <input type="text" v-model="obj[p]" @keydown.down="increment(-1)" @keydown.up="increment(1)" @keydown.left="increment(-1)" @keydown.right="increment(1)"/>
+                <input type="text" v-model="obj[p]" @keydown.down.prevent="increment(-1)" @keydown.up.prevent="increment(1)" @keydown.left.prevent="increment(-1)" @keydown.right.prevent="increment(1)"/>
                 <button class="addBtn" @click="increment(1)"  tabindex="-1">+</button>
                 </span>`,
     methods: {
         increment: function (dir) {
-            this.r_cur=this.validateN(this.r_cur+dir);
+            this.r_cur=this.validateN(this.obj[this.p]+dir);
 
             this.obj[this.p]=this.r_cur;
 
