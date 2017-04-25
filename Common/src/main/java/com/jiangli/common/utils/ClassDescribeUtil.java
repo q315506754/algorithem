@@ -1,5 +1,7 @@
 package com.jiangli.common.utils;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -12,6 +14,15 @@ import java.util.Map;
 public class ClassDescribeUtil {
     public static String delimeter = "\r\n";
     public static String delimeter_bet_kv = " = ";
+
+    public static Map describe(Object obj){
+        try {
+            return BeanUtils.describe(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static String describeStaticFields(Class cls){
         Field[] declaredFields = cls.getDeclaredFields();
