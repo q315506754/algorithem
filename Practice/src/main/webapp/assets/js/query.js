@@ -17,7 +17,7 @@ var vm = new Vue({
                 return this.dt.detail;
             }
             return {};
-        },
+        }
     },
     methods: {
         query(){
@@ -27,11 +27,21 @@ var vm = new Vue({
                 $this.queryRs=dt;
                 // $this.detail=dt.detail;
 
-                if(dt.code!=0){
+                if(!(dt.code==0||dt.code==3)){
                     // clearInterval(_ts);
                     setTimeout($this.query,1000);
                 }
             });
+        },
+        getSolution(i){
+            if(this.detail && this.detail.solutions){
+                // console.log(this.detail.solutions);
+                // console.log(i);
+                if(i-1<this.detail.solutions.length){
+                    return this.detail.solutions[i-1];
+                }
+            }
+            return {};
         }
     }
 });

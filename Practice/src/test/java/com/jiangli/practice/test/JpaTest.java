@@ -174,8 +174,8 @@ public class JpaTest {
         System.out.println(redEnvelopeRepository);
 
         RedEnvelope entity = new RedEnvelope();
-        entity.setReach(34d);
-        entity.setReduce(1.5d);
+        entity.setReach(40d);
+        entity.setReduce(2d);
         redEnvelopeRepository.save(entity);
     }
 

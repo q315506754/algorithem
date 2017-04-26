@@ -45,13 +45,13 @@ var vm = new Vue({
             minOrder:-1,
             maxRedEnvelopeChosen:-1,
             isVip:true,
-            merchantId:-1,
-            redEnvelope:[]
-        }
+            merchantId:-1
+        },
+        redEnvelope:[]
     },
     computed: {
         previewOrder: function () {
-            if(this.preview.orders){
+            if(this.preview && this.preview.orders){
                 return this.preview.orders[0];
             }
             return {};
@@ -209,12 +209,10 @@ var vm = new Vue({
                 this.separateParam.isVip=this.defaults.isVip;
                 this.separateParam.merchantId=this.merchantSelected;
 
-                //
-                // this.separateParam.cart=;
 
                 $.ajax({url:`${basePath}/rede/list`,type:"POST"}).done(function(arr){
-                    $this.separateParam.redEnvelope=arr;
-                    console.log(arr);
+                    $this.redEnvelope=arr;
+                    // console.log(arr);
 
                     //open
                     $this.show.separate=true;
@@ -224,11 +222,24 @@ var vm = new Vue({
         },
         doSeparateProcess(){
             let $this = this;
-            console.log($this.separateParam);
+            // console.log($this.separateParam);
             let items = this.getSelectedItems();
             let cart = {items};
             $this.separateParam.cart=cart;
-            console.log(serialize($this.separateParam));
+            // console.log(serialize($this.separateParam));
+
+            //
+            // this.separateParam.cart=;
+            // console.log(this.redEnvelope);
+            var arr = [];
+            for(let on of  this.redEnvelope) {
+                // console.log(on);
+                if(on.isEnable==1){
+                    arr.push(on);
+                }
+            }
+            this.separateParam.redEnvelope=arr;
+
 
             $.ajax({url:`${basePath}/calc/caculate`,data:serialize($this.separateParam),type:"POST"}).done(function(dt){
                 console.log(dt);

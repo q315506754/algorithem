@@ -59,44 +59,10 @@
                         </li>
                     </ul>
                  </div>
-                 <div class="statistics">
-                     <div class="dishesStats">
-                         <div class="" v-if="preview.failed">
-                             {{preview.failedReason}}
-                         </div>
-                         <div class="" v-else>
-                             <ul>
-                                 <li v-for="item in previewOrder.items">
-                                     <span>{{item.name}}</span>
-                                     x<span>{{item.num}}</span>
-                                     <span class="price">￥{{item.num*item.money}}</span>
-                                 </li>
-                             </ul>
-                         </div>
-                     </div>
-                     <div class="feesStats">
-                         <div class="" v-if="preview.failed">
-                             {{preview.failedReason}}
-                         </div>
-                         <div class="" v-else>
-                             <ul>
-                                 <li v-for="one in previewOrder.extraMoneyList">
-                                     <span>{{one.name}}</span>
-                                     <span class="price">￥{{one.price}}</span>
-                                 </li>
-                             </ul>
-                             <ul>
-                                 <li v-for="one in previewOrder.reducedMoneyList">
-                                     <span>{{one.name}}</span>
-                                     <span class="price">-￥{{one.price}}</span>
-                                 </li>
-                             </ul>
-                             <div v-if="preview.failed!=undefined && !preview.failed">
-                                合计<span class="price">￥{{previewOrder.price}}</span>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
+
+                 <Solution v-bind:preview="preview" v-bind:preview-order="previewOrder" ></Solution>
+
+
                  <div class="action">
                      <button @click="doSeparateDialog">doSeparate</button>
                  </div>
@@ -152,7 +118,7 @@
                 <div class="row">
                     参与计算的红包
                     <ul class="redEnvelope">
-                        <li v-for="one in separateParam.redEnvelope" v-bind:class="{burning:one.isEnable==1}" @click="one.isEnable=1-one.isEnable">
+                        <li v-for="one in redEnvelope" v-bind:class="{burning:one.isEnable==1}" @click="one.isEnable=1-one.isEnable">
                             满{{one.reach}}减{{one.reduce}}
                         </li>
                     </ul>
@@ -166,6 +132,7 @@
   </body>
 
   <%@include file="common/head_js.jsp"%>
+  <script src="${basePath}/assets/js/pl_solution.js" ></script>
   <script src="${basePath}/assets/js/pl_choose.js" ></script>
   <script src="${basePath}/assets/js/pl_likeit.js" ></script>
   <script src="${basePath}/assets/js/pl_dialog.js" ></script>

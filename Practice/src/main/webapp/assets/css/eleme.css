@@ -60,9 +60,17 @@
 ul.redEnvelope{width: 100%;height:200px;clear: right;overflow: scroll;overflow-x: hidden;overflow-y: auto;}
 ul.redEnvelope li{width: 40%;float:left;height:20px;list-style-type:none;padding: 10px;border: 1px solid gold;}
 
-.queryContainer{text-align: center;}
-.queryContainer .nav_bar{border:inherit;height: 50px;}
+.qcontainer{height: 100%;text-align: center;width: auto;display: flex;}
+.qcontainer .queryContainer{border: 1px solid gray;height:800px;width: 100%;text-align: center;margin: auto}
 
-.solutionArea{width: 100%;max-width:99999px;height:800px;overflow:scroll;overflow-y: hidden;overflow-x: auto;}
-.solutionArea .solution{width: 600px;height: 99%;float: left;border: 1px solid gold;}
+.qcontainer .queryContainer .nav_bar{border:inherit;height: 5%;}
+
+.qcontainer .solutionArea{border:inherit;height:94.9%;width:100%;overflow:scroll;overflow-y: hidden;overflow-x: auto;display: flex;align-items: stretch;}
+.qcontainer .solutionArea .solutionContainer{border: 1px solid gold;height: inherit;}
+.qcontainer .solutionArea .solutionContainer .solution{width: 600px;height: inherit;overflow:scroll;overflow-x: auto;overflow-y: auto;display: flex;flex-direction: column;}
+
+.queryContainer  .statistics{height: 50%;width: 100%}
+.queryContainer  .dishesStats{border: 1px solid gold;width: 49%;height:100%;float: left;overflow:scroll;overflow-x: hidden;overflow-y: auto;}
+.queryContainer  .feesStats{border: 1px solid gold;width: 49%;height:100%;float: left;overflow:scroll;overflow-x: hidden;overflow-y: auto;}
+
 
