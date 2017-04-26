@@ -1,17 +1,21 @@
 package com.jiangli.springmvc.test;
 
 import com.jiangli.common.utils.ClassDescribeUtil;
+import net.sf.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.MutablePropertyValues;
-import org.springframework.beans.PropertyValue;
+import org.springframework.beans.*;
 import org.springframework.beans.propertyeditors.PropertiesEditor;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
+import java.beans.PropertyEditorSupport;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,9 +92,25 @@ public class SpringmvcTest {
         log.debug(""+ asd.getClass());
     }
 
+    class  B{
+        private String c;
+
+        public String getC() {
+            return c;
+        }
+
+        public void setC(String c) {
+            this.c = c;
+        }
+
+        public B(String c) {
+            this.c = c;
+        }
+    }
     class  A{
         private int a;
         private String b;
+        private B c;
 
         public int getA() {
             return a;
@@ -106,6 +126,14 @@ public class SpringmvcTest {
 
         public void setB(String b) {
             this.b = b;
+        }
+
+        public B getC() {
+            return c;
+        }
+
+        public void setC(B c) {
+            this.c = c;
         }
     }
     @Test
@@ -143,4 +171,78 @@ public class SpringmvcTest {
         System.out.println(editor.getValue());
         System.out.println(editor.getValue().getClass());
     }
+
+    @Test
+    public void testCommit4() {
+        A a = new A();
+        BeanWrapperImpl impl = new BeanWrapperImpl(a);
+        Integer integer = impl.convertIfNecessary("1", Integer.class);
+        System.out.println(integer);
+
+        PropertyEditor customEditor = impl.findCustomEditor(Integer.class,null);
+        System.out.println(customEditor);
+
+        impl.setPropertyValue("b","asdasdasd");
+        impl.setPropertyValue("a",334);
+        impl.setPropertyValue("c",new B("adsdas"));
+        System.out.println(impl.getPropertyValue("b"));
+        System.out.println(impl.getPropertyValue("a"));
+        System.out.println(impl.isReadableProperty("a"));
+        System.out.println(impl.isWritableProperty("a"));
+        System.out.println(impl.getPropertyValue("c.c"));
+    }
+
+    @Test
+    public void testCommit5() throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+        A a = new A();
+        a.a=12312;
+        BeanWrapperImpl impl = new BeanWrapperImpl(a);
+
+
+        Class<?> wrappedClass = impl.getWrappedClass();
+        System.out.println(wrappedClass);
+        Object wrappedInstance = impl.getWrappedInstance();
+        System.out.println(wrappedInstance);
+
+        PropertyDescriptor[] propertyDescriptors = impl.getPropertyDescriptors();
+        for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+            System.out.println(propertyDescriptor);
+        }
+
+        PropertyDescriptor a1 = new PropertyDescriptor("a", A.class);
+        System.out.println(a1);
+
+        System.out.println(ClassDescribeUtil.describe(a1));
+        Method readMethod = a1.getReadMethod();
+        Object invoke = readMethod.invoke(a);
+        System.out.println(invoke);
+        Object b = a1.getValue("a");
+        System.out.println(b);
+
+        System.out.println(impl.getAutoGrowCollectionLimit());
+
+
+    }
+
+    @Test
+    public void test_asd() {
+        A a = new A();
+        a.a=12312;
+        BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(a);
+        System.out.println(beanWrapper.getClass());
+
+        beanWrapper.registerCustomEditor(JSONObject.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+//                super.setAsText(text);
+                setValue(JSONObject.fromObject(text));
+            }
+
+        });
+
+        JSONObject jsonObject = beanWrapper.convertIfNecessary("{a:1}", JSONObject.class);
+        System.out.println(jsonObject);
+    }
+
+
 }
