@@ -1,0 +1,13 @@
+webpack {entry file/入口文件} {destination for bundled file/存放bundle.js的地方}
+
+
+//webpack非全局安装的情况
+node_modules/.bin/webpack app/main.js public/bundle.js
+
+webpack app/main.js public/bundle.js
+
+
+
+让你的浏览器监测你的代码的修改，并自动刷新修改后的结果
+npm install --save-dev webpack-dev-server
+

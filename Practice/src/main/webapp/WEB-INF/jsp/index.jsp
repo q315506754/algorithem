@@ -60,7 +60,7 @@
                     </ul>
                  </div>
 
-                 <Solution v-bind:preview="preview" v-bind:preview-order="previewOrder" ></Solution>
+                 <Solution v-bind:preview="preview" v-bind:preview-order="previeworder" ></Solution>
 
 
                  <div class="action">
