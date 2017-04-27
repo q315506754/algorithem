@@ -61,8 +61,19 @@ public class MerchantController {
     @RequestMapping(value = "/save", method = {RequestMethod.POST, RequestMethod.GET})
     public
     @ResponseBody
-   void save(Merchant merchant) {
+    void save(Merchant merchant) {
         logger.debug("save merchant:{}",merchant);
         merchantRepository.save(merchant);
+    }
+
+    @RequestMapping(value = "/find", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    Merchant find(Integer id) {
+
+        Merchant one = merchantRepository.findOne(id);
+        logger.debug("find one:"+one);
+
+        return one;
     }
 }

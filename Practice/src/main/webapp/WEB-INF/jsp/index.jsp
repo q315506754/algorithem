@@ -11,7 +11,7 @@
   <div class="container">
       <div id="mainContainer" class="mainContainer">
          <div class="nav_bar">
-             <span class="config">配置</span>
+             <span class="config" @click="configDialog">配置</span>
          </div>
 
 
@@ -27,7 +27,7 @@
                              <Likeit v-bind:obj="merchant" v-bind:p="prop.like" v-bind:cls="'chosen'" v-bind:path="'merchant'"></Likeit>
 
 
-                             <span class="merchant" @click="merchantSelect(merchant)" @contextmenu.prevent="merchantEdit(merchant)">{{merchant.name}}</span>
+                             <span class="merchant" @click="merchantSelect(merchant)" @contextmenu.prevent="merchantEditDialog(merchant)">{{merchant.name}}</span>
                          </li>
                      </ul>
                  </div>
@@ -44,10 +44,11 @@
                  <div class="btn">
                      <button @click="show.dishCreate=true">create</button>
                      <button @click="dishQuery">refresh</button>
+                     <button @click="dishClear">clear</button>
                  </div>
                  <div class="dishes">
                     <ul>
-                        <li v-for="dish in dishes">
+                        <li v-for="dish in dishes" @mouseover="dishFocus($event)">
 
                             <Likeit v-bind:obj="dish" v-bind:p="prop.like" v-bind:cls="'chosen'" v-bind:path="'dish'"></Likeit>
 
@@ -122,6 +123,58 @@
                             满{{one.reach}}减{{one.reduce}}
                         </li>
                     </ul>
+                </div>
+            </div>
+        </dialog-x>
+
+        <dialog-x  v-bind:p="'config'" @save="">
+            <h2 slot="head">config</h2>
+            <div>
+                <div class="row">
+                    红包池
+                    <ul class="redEnvelope">
+                        <li v-for="one in redEnvelope" v-bind:class="{burning:one.isEnable==1}" @click="redEnvelopEnable(one)">
+                            满{{one.reach}}减{{one.reduce}}<span class="remove" @click.stop="redEnvelopRemove(one)">-</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    满
+                    <Choose v-bind:obj="redeCreate" v-bind:p="'reach'"  ></Choose>
+                    减
+                    <Choose v-bind:obj="redeCreate" v-bind:p="'reduce'"  ></Choose>
+                    <span class="remove" @click.stop="redEnvelopSave">+</span>
+                </div>
+            </div>
+        </dialog-x>
+
+        <dialog-x  v-bind:p="'merchantUpdate'" @save="merchantUpdate">
+            <h2 slot="head">更新商户</h2>
+            <div>
+                <div class="row">
+                    名称<input type="text"  v-model="merchantUpdateModel.name"/>
+                </div>
+                <div class="row">
+                    起送费 <Choose v-bind:obj="merchantUpdateModel" v-bind:p="'baseMoney'"  ></Choose>
+                </div>
+                <div class="row">
+                    配送费 <Choose v-bind:obj="merchantUpdateModel" v-bind:p="'distributionMoney'"  ></Choose>
+                </div>
+
+                <div class="row">
+                    规则
+                    <ul class="redEnvelope">
+                        <li v-for="one in merchantUpdateRulesModel" >
+                            满{{one.reach}}减{{one.reduce}}<span class="remove" @click.stop="merchantUpdateRuleRemove(one)">-</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    满
+                    <Choose v-bind:obj="merchantUpdateRuleCreateModel" v-bind:p="'reach'"  ></Choose>
+                    减
+                    <Choose v-bind:obj="merchantUpdateRuleCreateModel" v-bind:p="'reduce'"  ></Choose>
+                    <span class="remove" @click.stop="merchantUpdateRuleSave">+</span>
                 </div>
             </div>
         </dialog-x>

@@ -13,4 +13,7 @@ import java.util.List;
 public interface RedEnvelopeRepository extends BaseRepository<RedEnvelope, Integer> {
     @Query("select u from RedEnvelope u where u.isEnable=1 order by u.reach desc ,u.reduce desc")
     List<RedEnvelope> findList();
+
+    @Query("select u from RedEnvelope u order by u.reach desc ,u.reduce desc")
+    List<RedEnvelope> findListAll();
 }

@@ -50,4 +50,49 @@ public class RedEnvelopeController {
         return list;
     }
 
+    @RequestMapping(value = "/listAll", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    List<RedEnvelope> findListAll() {
+
+        List<RedEnvelope> list = redEnvelopeRepository.findListAll();
+
+        logger.debug("RedEnvelope listAll result:"+list);
+
+        return list;
+    }
+
+    @RequestMapping(value = "/remove", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    void remove(Integer id) {
+
+       redEnvelopeRepository.delete(id);
+
+    }
+
+    @RequestMapping(value = "/enable", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    void enable(Integer id,Integer isEnable) {
+
+        RedEnvelope one = redEnvelopeRepository.findOne(id);
+        one.setIsEnable(isEnable);
+        logger.debug("enable one:"+one);
+
+       redEnvelopeRepository.save(one);
+
+    }
+
+    @RequestMapping(value = "/save", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    void save(RedEnvelope redEnvelope) {
+
+        logger.debug("redEnvelope one:"+redEnvelope);
+        redEnvelopeRepository.save(redEnvelope);
+
+
+    }
+
 }

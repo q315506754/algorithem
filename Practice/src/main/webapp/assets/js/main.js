@@ -14,6 +14,34 @@ class ArrayUtil{
         }
         return ret;
     }
+
+    //ArrayUtil.copyArrayProp([{a:1,b:2,c:3}],'b','c');
+    static copyArrayProp(arr,...props){
+        let ret = [];
+        for(let one of arr){
+            let nOne = {};
+            for(let p of props){
+                nOne[p]=one[p]
+            }
+            ret.push(nOne);
+        }
+        return ret;
+    }
+
+    static populateArrayProp(arr,propsArr,keyP){
+        for(let pone of propsArr){
+            for(let aone of arr){
+                if(aone[keyP]==pone[keyP]){
+
+                    for(let pp in pone){
+                        aone[pp]=pone[pp];
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
 }
 
 
@@ -21,7 +49,7 @@ var vm = new Vue({
     el: '#mainContainer',
     data: {
         prop:{selected:"isSelected",choose:"chooseNum",like:"likeit"},
-        show:{merchantCreate:false,dishCreate:false,separate:false},
+        show:{merchantCreate:false,merchantUpdate:false,dishCreate:false,separate:false,config:false},
         merchants:[
         ],
         merchantSelected:-1,
@@ -38,6 +66,10 @@ var vm = new Vue({
             packageMoney: 1,
             merchantId: null,
         },
+        redeCreate: {
+            reach: 0,
+            reduce: 0,
+        },
         preview:{
 
         },
@@ -52,6 +84,14 @@ var vm = new Vue({
             merchantId:-1
         },
         redEnvelope:[]
+        ,
+        merchantUpdateModel:{},
+        merchantUpdateRulesModel:[],
+        merchantUpdateRuleCreateModel: {
+            reach: 0,
+            reduce: 0,
+            merchantId:-1
+        }
     },
     computed: {
         previeworder: function () {
@@ -75,8 +115,33 @@ var vm = new Vue({
 
             this.dishQuery();
         },
-        merchantEdit(obj) {
+        merchantEditDialog(obj) {
+            var $this =this;
 
+            //规则的商户id
+            $this.merchantUpdateRuleCreateModel.merchantId=obj.id;
+
+            $.ajax({url:`${basePath}/merchant/find`,data:{id:obj.id}}).done(function(dt){
+                $this.merchantUpdateModel=dt;
+
+            } ).done($this.merchantUpdateRuleQuery(()=>$this.show.merchantUpdate=true));
+
+        },
+        merchantUpdateRuleQuery(cb) {
+            var $this =this;
+            $.ajax({url:`${basePath}/rule/findList`,data:{merchantId: $this.merchantUpdateRuleCreateModel.merchantId}}).done(function(arr){
+                $this.merchantUpdateRulesModel=arr;
+            }).done(cb);
+        },
+        merchantUpdateRuleSave() {
+            var $this =this;
+            $.ajax({url:`${basePath}/rule/save`,data: $this.merchantUpdateRuleCreateModel})
+                .done($this.merchantUpdateRuleQuery);
+        },
+        merchantUpdateRuleRemove(one) {
+            var $this =this;
+            $.ajax({url:`${basePath}/rule/remove`,data:{id:one.id}})
+                .done($this.merchantUpdateRuleQuery);
         },
         merchantSave() {
             var $this =this;
@@ -86,6 +151,11 @@ var vm = new Vue({
                 $this.merchantQuery();
             } )
         },
+        merchantUpdate() {
+            var $this =this;
+
+            $.ajax({url:`${basePath}/merchant/save`,data:this.merchantUpdateModel});
+        },
         dishSave() {
             var $this =this;
             console.log(this.dishCreate);
@@ -93,6 +163,9 @@ var vm = new Vue({
             $.ajax({url:`${basePath}/dish/save`,data:this.dishCreate}).done(function(arr){
                 $this.dishQuery();
             } )
+        },
+        dishFocus($event) {
+            $($event.target).find("input").focus();
         },
         merchantQuery(){
 //                    this.merchants.push({id:1,name:"asdas"});
@@ -109,14 +182,29 @@ var vm = new Vue({
         },
         dishQuery(){
             let $this = this;
+
+            let recordChoose= ArrayUtil.copyArrayProp($this.dishes,'id',$this.prop.choose);
+            // console.log(recordChoose);
+
             $.ajax({url:`${basePath}/dish/list`,data:{merchantId:this.merchantSelected}}).done(function(arr){
 //                        console.log(arr);
                 ArrayUtil.setArrayProp(arr,$this.prop.selected,false);
                 ArrayUtil.setArrayProp(arr,$this.prop.choose,0);
+
+                ArrayUtil.populateArrayProp(arr,recordChoose,"id");
+                console.log(arr);
+
                 $this.dishes=arr;
-                $this.preview={};
+
+                $this.calcPreview();
 //                        console.log($this.dishes);
             } )
+        },
+        dishClear(){
+            let $this = this;
+            ArrayUtil.setArrayProp($this.dishes,$this.prop.choose,0);
+
+            $this.calcPreview();
         },
         queryDefaults(){
             let $this = this;
@@ -163,8 +251,13 @@ var vm = new Vue({
             $.ajax({url:`${basePath}/dish/inc`,data:{id:obj.id,inc:times}});
 
             let $this = this;
+
+            $this.calcPreview();
+        },
+        calcPreview(){
+            let $this = this;
             let items = this.getSelectedItems();
-            let merchantId=this.merchantSelected;
+            let merchantId = this.merchantSelected;
 
             if(items.length>0){
                 $.ajax({url:`${basePath}/calc/preview`,data:serialize({items,merchantId}),type:"POST"}).done(function(data){
@@ -173,13 +266,9 @@ var vm = new Vue({
             }else {
                 $this.preview = {};
             }
-
         },
         doSeparateDialog(){
             let $this = this;
-            let items = this.getSelectedItems();
-            let merchantId=this.merchantSelected;
-
 
             if(true){
             // if($this.preview.failed!=undefined && !$this.preview.failed){
@@ -191,15 +280,40 @@ var vm = new Vue({
                 this.separateParam.merchantId=this.merchantSelected;
 
 
-                $.ajax({url:`${basePath}/rede/list`,type:"POST"}).done(function(arr){
-                    $this.redEnvelope=arr;
-                    // console.log(arr);
-
-                    //open
-                    $this.show.separate=true;
-                });
+                this.redEnvelopQuery(()=>$this.show.separate=true);
             }
 
+        },
+        configDialog(){
+            let $this = this;
+
+            this.redEnvelopQuery(()=>$this.show.config=true,true);
+        },
+        redEnvelopQuery(cb,isAll){
+            let $this = this;
+
+            let last = isAll?'listAll':'list';
+
+            $.ajax({url:`${basePath}/rede/${last}`,type:"POST"}).done(function(arr){
+                $this.redEnvelope=arr;
+                // console.log(arr);
+
+                //open
+                // $this.show.separate=true;
+            }).done(cb);
+        },
+        redEnvelopEnable(one){
+            one.isEnable=1-one.isEnable;
+
+            $.ajax({url:`${basePath}/rede/enable`,data:{id:one.id,isEnable:one.isEnable},type:"POST"});
+        },
+        redEnvelopRemove(one){
+            let $this = this;
+            $.ajax({url:`${basePath}/rede/remove`,data:{id:one.id},type:"POST"}).done($this.configDialog);
+        },
+        redEnvelopSave(){
+            let $this = this;
+            $.ajax({url:`${basePath}/rede/save`,data:$this.redeCreate,type:"POST"}).done($this.configDialog);
         },
         doSeparateProcess(){
             let $this = this;

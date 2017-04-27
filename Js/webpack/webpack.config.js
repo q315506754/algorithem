@@ -51,6 +51,9 @@ module.exports = {
 
 }
 
+
+//cnpm install -g  webpack
+//cnpm install --save-dev extract-text-webpack-plugin
 //注：“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录。
 
 //安装可以装换JSON的loader  JSON->Object
@@ -72,8 +75,8 @@ module.exports = {
 
 //Webpack有很多内置插件，同时也有很多第三方插件，可以让我们完成更加丰富的功能。
 
-//npm install --save-dev html-webpack-plugin
+//cnpm install --save-dev html-webpack-plugin
 
 
 //安装react-transform-hmr
-//npm install --save-dev babel-plugin-react-transform react-transform-hmr
+//cnpm install --save-dev babel-plugin-react-transform react-transform-hmr
