@@ -1,8 +1,5 @@
 package com.jiangli.common.test;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * @author Jiangli
  *
@@ -18,6 +15,8 @@ public class ClassLoaderTest {
 
         parent = parent.getParent();
         System.out.println(parent);
+
+        System.out.println(ClassLoaderTest.class.getName());
     }
 
 }
