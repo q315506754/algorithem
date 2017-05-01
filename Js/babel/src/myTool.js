@@ -2856,7 +2856,7 @@ let es6 = {
 
     // 解决方法2，使用 Generator 函数将对象重新包装一下。
     for (let [key, value] of entries(es6)) {
-        console.log(key, '->', value);
+        console.log(key, ' g->', value);
     }
     // a -> 1
     // b -> 2
@@ -2873,7 +2873,8 @@ let es6 = {
 //     myArray.forEach(function (value) {
 //         console.log(value);
 //     });
-
+  [1,2,3].map(function(dt){console.log(dt)});
+  [1,2,3].forEach(function(dt){console.log(dt)});
     //3
     // for (var index in myArray) {
     //     console.log(myArray[index]);
@@ -2906,4 +2907,513 @@ let es6 = {
     // number
     console.log(typeof true);
     // boolean
+
+    var t = ar1[Symbol.iterator]().next();
+    console.log(t);
+}
+console.log("------------Generator ---------------");
+{
+    function* helloWorldGenerator() {
+        yield 'hello';
+        yield 'world';
+        return 'ending';
+    }
+
+    // function * foo(x, y) { ··· }
+    // function *foo(x, y) { ··· }
+    // function* foo(x, y) { ··· }
+    // function*foo(x, y) { ··· }
+
+    var hw = helloWorldGenerator();
+    console.log(typeof  hw);
+    console.log(Object.keys(hw));
+    console.log(hw);
+    console.log(hw.next());
+    console.log(hw.next());
+
+    function*helloWorldGenerator2() {
+        let ret = {a:1,b:2,c:3};
+
+        console.log('comming.');//execute only one
+        if(ret.a>2){
+            yield 'hello a';
+        }else {
+            yield 'goodbye a';
+        }
+        yield 'default';
+        return 'ret val';
+    }
+
+    // goodbye a
+    // default
+    let tt=helloWorldGenerator2();
+    console.log(tt);
+    for(let o of tt) {
+        console.log(o);
+    }
+    console.log(tt);
+}
+{
+    // function* f() {
+    //     console.log('执行了！')
+    // }
+    //
+    // var generator = f();//此时并没有执行
+    //
+    // setTimeout(function () {
+    //     generator.next()//此时才会有打印
+    // }, 2000);
+}
+{
+    //yield表达式如果用在另一个表达式之中，必须放在圆括号里面。
+    function* demo() {
+        // console.log('Hello' + yield); // SyntaxError
+        // console.log('Hello' + yield 123); // SyntaxError
+
+        console.log('Hello' + (yield)); // OK
+        console.log('Hello' + (yield 123)); // OK
+    }
+
+    // undefined
+    // Helloundefined
+    // 123
+    // Helloundefined
+    for(let o of demo()) {
+        console.log(o);
+    }
+
+}
+{
+    function* gen(){
+        // some code
+    }
+
+    var g = gen();
+
+    console.log(g[Symbol.iterator]() === g);
+// true
+}
+{
+    function* foo() {
+        yield 'a';
+        yield 'b';
+    }
+
+    function* bar() {
+        yield 'x';
+        foo();
+        yield 'y';
+    }
+
+    for (let v of bar()){
+        console.log(v);
+    }
+// "x"
+// "y"
+}
+{
+    function* foo() {
+        yield 'a';
+        yield 'b';
+    }
+
+    // 等同于
+    /*function* bar() {
+        yield 'x';
+        yield 'a';
+        yield 'b';
+        yield 'y';
+    }
+
+// 等同于
+    function* bar() {
+        yield 'x';
+        for (let v of foo()) {
+            yield v;
+        }
+        yield 'y';
+    }*/
+    function* bar() {
+        yield 'x';
+        yield* foo();
+        yield 'y';
+    }
+
+    // x
+    // a
+    // b
+    // y
+    for (let v of bar()) {
+        console.log(v);
+    }
+
+}
+
+{
+    function* g() {
+        this.a = 11;
+    }
+
+    g.prototype.hello = function () {
+        return 'hi!';
+    };
+
+    let obj = g();
+
+    obj instanceof g // true
+    obj.hello() // 'hi!'
+    console.log(obj.a);//undefined
+
+    // new g()
+// TypeError: g is not a constructor
+}
+{
+    function* F() {
+        this.a = 1;
+        yield this.b = 2;
+        yield this.c = 3;
+    }
+    var obj = {};
+    var f = F.call(obj);
+
+    f.next();  // Object {value: 2, done: false}
+    f.next();  // Object {value: 3, done: false}
+    f.next();  // Object {value: undefined, done: true}
+
+    obj.a // 1
+    obj.b // 2
+    obj.c // 3
+}
+{
+    function* F() {
+        // this.a = 1;
+        yield 1==2;
+        yield 3==3;
+    }
+    for (let v of F()) {
+        console.log(v);
+    }
+}
+{
+    function* F() {
+        let a = 1;
+        yield a++;
+        yield a++;
+    }
+    for (let v of F()) {
+        console.log(v);
+    }
+    //1 2
+}
+{
+    function* F() {
+        let a = 1;
+        yield ++a;
+        yield ++a;
+    }
+    for (let v of F()) {
+        console.log(v);
+    }
+    //2 3
+}
+{
+    function* gen() {
+        this.a = 1;
+        yield this.b = 2;
+        yield this.c = 3;
+    }
+
+    function F() {
+        return gen.call(gen.prototype);
+    }
+
+    var f = new F();
+
+    f.next();  // Object {value: 2, done: false}
+    f.next();  // Object {value: 3, done: false}
+    f.next();  // Object {value: undefined, done: true}
+
+    f.a // 1
+    f.b // 2
+    f.c // 3
+}
+{
+    var clock = function* () {
+        while (true) {
+            console.log('Tick!');
+            yield;
+            console.log('Tock!');
+            yield;
+        }
+    };
+
+    console.log('````');
+
+    let t = clock();
+    console.log(t.next());//Tick { value: undefined, done: false }
+    console.log(t.next().value);//Tock! undefined
+    console.log(t.next().value);//Tick! undefined
+    console.log(t.next().value);//Tock! undefined
+}
+{
+    //（1）异步操作的同步化表达 § ⇧
+    // function* main() {
+    //     console.log('requesting');
+    //     var result = yield request("http://some.url");
+    //     console.log('requesting over');
+    //     // var resp = JSON.parse(result);
+    //     // console.log(resp.value);
+    //     console.log(result);
+    // }
+    //
+    // function request(url) {
+    //     setTimeout(function(){
+    //         it.next({url});
+    //     },2000);
+    // }
+    // var it = main();
+    // it.next();
+}
+{
+// （2）控制流管理
+//     如果有一个多步操作非常耗时，采用回调函数，可能会写成下面这样。
+//
+// step1(function (value1) {
+//     step2(value1, function(value2) {
+//         step3(value2, function(value3) {
+//             step4(value3, function(value4) {
+//                 // Do something with value4
+//             });
+//         });
+//     });
+// });
+    // 采用 Promise 改写上面的代码。
+
+    // Promise.resolve(step1)
+    // .then(step2)
+    // .then(step3)
+    // .then(step4)
+    // .then(function (value4) {
+    //     // Do something with value4
+    // }, function (error) {
+    //     // Handle any error from step1 through step4
+    // })
+    // .done();.
+
+    // function* longRunningTask(value1) {
+    //     try {
+    //         var value2 = yield step1(value1);
+    //         var value3 = yield step2(value2);
+    //         var value4 = yield step3(value3);
+    //         var value5 = yield step4(value4);
+    //         // Do something with value4
+    //     } catch (e) {
+    //         // Handle any error from step1 through step4
+    //     }
+    // }
+    //
+    //
+    // scheduler(longRunningTask(initialValue));
+    //
+    // function scheduler(task) {
+    //     var taskObj = task.next(task.value);
+    //     // 如果Generator函数未结束，就继续调用
+    //     if (!taskObj.done) {
+    //         task.value = taskObj.value
+    //         scheduler(task);
+    //     }
+    // }
+
+    //（3）部署 Iterator 接口
+
+    //（4）作为数据结构
+}
+console.log('----------class-------------');
+{
+    class Point {
+        // ...
+        constructor(){
+            // ...
+        }
+
+        toString(){
+            // ...
+        }
+
+        toValue(){
+            // ...
+        }
+    }
+
+   console.log( typeof Point );// "function"
+    console.log(Point === Point.prototype.constructor); // true
+
+    console.log(Object.keys(Point.prototype));// []
+
+   console.log( Object.getOwnPropertyNames(Point.prototype));
+// ["constructor","toString"]
+
+    let a= Object.create(null);
+    console.log(a);
+    // console.log(Object.create());
+}
+{
+    // 与ES5一样，实例的属性除非显式定义在其本身（即定义在this对象上），否则都是定义在原型上（即定义在class上）。
+    //定义类
+    class Point {
+
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        toString() {
+            return '(' + this.x + ', ' + this.y + ')';
+        }
+
+    }
+
+    var point = new Point(2, 3);
+
+    point.toString() // (2, 3)
+
+    point.hasOwnProperty('x') // true
+    point.hasOwnProperty('y') // true
+    point.hasOwnProperty('toString') // false
+    point.__proto__.hasOwnProperty('toString') // true
+    console.log(point.__proto__===Point.prototype.constructor);// false
+    console.log(point.__proto__===Point);// false
+    console.log(Point.prototype.constructor===Point);// true
+    console.log(Point.prototype===point.__proto__);// true
+    console.log(point.__proto__);//_Point3 {}
+
+
+    var p1 = new Point(2,3);
+    var p2 = new Point(3,2);
+
+    p1.__proto__.printName = function () { return 'Oops' };
+
+    p1.printName() // "Oops"
+    p2.printName() // "Oops"
+
+    var p3 = new Point(4,2);
+    p3.printName() // "Oops"
+}
+{
+    //需要注意的是，这个类的名字是MyClass而不是Me，Me只在Class的内部代码可用，指代当前类。
+    const MyClass = class Me {
+        getClassName() {
+            return Me.name;
+        }
+    };
+
+    let inst = new MyClass();
+    console.log(inst.getClassName() );// Me
+   // console.log( Me.name );// ReferenceError: Me is not defined
+}
+{
+    let person = new class {
+        constructor(name) {
+            this.name = name;
+        }
+
+        sayName() {
+            console.log(this.name);
+        }
+    }('张三');
+
+    console.log(person.sayName());; // "张三"
+}
+{
+    //private method
+    const bar = Symbol('bar');
+    const snaf = Symbol('snaf');
+
+     let l = new class myClass{
+
+        // 公有方法
+        foo(baz) {
+           return  this[bar](baz);
+        }
+
+        // 私有方法
+        [bar](baz) {
+            return this[snaf] = baz;
+        }
+
+        // ...
+    }();
+
+    console.log(l.foo('sdsd'));
+    // console.log(l.bar); //no method
+
+}
+{
+    //extends
+    // 子类必须在constructor方法中调用super方法，否则新建实例时会报错。这是因为子类没有自己的this对象，而是继承父类的this对象，然后对其进行加工。如果不调用super方法，子类就得不到this对象。
+
+    // 如果子类没有定义constructor方法，这个方法会被默认添加，代码如下。也就是说，不管有没有显式定义，任何一个子类都有constructor方法。
+
+    // constructor(...args) {
+    //     super(...args);
+    // }
+
+    // 有调用super之后，才可以使用this关键字，否则会报错。这是因为子类实例的构建，是基于对父类实例加工，只有super方法才能返回父类实例。
+
+}
+{
+    class A {
+    }
+
+    class B extends A {
+    }
+
+    console.log(B.__proto__ === A); // true
+    console.log(B.prototype.__proto__ === A.prototype); // true
+    console.log(B.prototype=== B.__proto__); // false
+    console.log(B.prototype);//B {}
+    console.log(B.__proto__);//[Function: A]
+    console.log(A.prototype);//A {}
+    console.log(A.__proto__);//[Function]
+
+//     Object.setPrototypeOf(B.prototype, A.prototype);
+// // 等同于
+//     B.prototype.__proto__ = A.prototype;
+//
+//     Object.setPrototypeOf(B, A);
+// // 等同于
+//     B.__proto__ = A;
+
+    // 这两条继承链，可以这样理解：
+    // 作为一个对象，子类（B）的原型（__proto__属性）是父类（A）； B.__proto__ = A;
+    // 作为一个构造函数，子类（B）的原型（prototype属性）是父类的实例。   B.prototype.__proto__ = A.prototype;
+
+//     Object.create(A.prototype);
+// // 等同于
+//     B.prototype.__proto__ = A.prototype;
+
+}
+{
+    class Point {
+
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        toString() {
+            return '(' + this.x + ', ' + this.y + ')';
+        }
+
+        b(){
+            console.log('bbb');
+        }
+    }
+
+    let a = Object.create(Point.prototype);
+    console.log(a);
+    console.log(Object.keys(a));// []
+    console.log( Object.getOwnPropertyNames(a));// []
+
+    a.b();//bbb
 }
