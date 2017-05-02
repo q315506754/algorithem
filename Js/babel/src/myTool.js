@@ -3410,10 +3410,103 @@ console.log('----------class-------------');
         }
     }
 
+
+    class Point2 {
+        b(){
+            this.a=333;
+        }
+    }
+
     let a = Object.create(Point.prototype);
     console.log(a);
     console.log(Object.keys(a));// []
+    console.log(Object.keys(new Point(1,2)));// [ 'x', 'y' ]
+    console.log(Object.keys(new Point2()));// []
     console.log( Object.getOwnPropertyNames(a));// []
 
     a.b();//bbb
+}
+{
+    //class B extends A  只要是一个有prototype属性的函数，就能被B继承。
+
+    // 第一种特殊情况，子类继承Object类。
+    // class A extends Object {
+    // }
+    //
+    // A.__proto__ === Object // true
+    // A.prototype.__proto__ === Object.prototype // true
+
+    // 第二种特殊情况，不存在任何继承。
+
+    class A {
+    }
+
+   console.log( A.__proto__ === Function.prototype); // true
+    console.log(A.prototype.__proto__ === Object.prototype );// true
+
+    // 第三种特殊情况，子类继承null。
+    // class A extends null {
+    // }
+    //
+    // A.__proto__ === Function.prototype // true
+    // A.prototype.__proto__ === undefined // true
+    //等同于
+    class C extends null {
+        constructor() {
+            super();
+            return Object.create(null);
+        }
+    }
+
+    console.log( A.__proto__ === Function.prototype);//true
+    console.log(Object.getPrototypeOf(A) === Function);//false
+    console.log(Object.getPrototypeOf(A) === Object);//false
+    console.log(Object.getPrototypeOf(A) === Function.prototype);//true
+}
+{
+    console.log('```a```');
+    class A extends Object {
+        }
+    console.log( A.__proto__ === Function.prototype);//false
+    console.log(Object.getPrototypeOf(A) === Function);//false
+    console.log( A.__proto__ === Object);//true
+    console.log(Object.getPrototypeOf(A) === Object);//true
+}
+{
+    class A {
+        constructor() {
+            console.log(new.target);
+            console.log(typeof new.target);
+            // console.log(Object.keys(new.target));
+        }
+    }
+    class B extends A {
+        constructor() {
+            super();
+        }
+    }
+    new A() // A
+    new B() // B
+
+}
+{
+    //由于super指向父类的原型对象，所以定义在父类实例上的方法或属性，是无法通过super调用的。
+    //ES6 规定，通过super调用父类的方法时，super会绑定子类的this。
+    class A {
+        constructor() {
+            this.x = 1;
+        }
+    }
+
+    class B extends A {
+        constructor() {
+            super();
+            this.x = 2;
+            super.x = 3;
+            console.log(super.x); // undefined
+            console.log(this.x); // 2
+        }
+    }
+
+    let b = new B();
 }

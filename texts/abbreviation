@@ -10,6 +10,7 @@ WebService-UDDI(Universal Description Discovery and Integration),管理，分发
 JAX-WS(Java API for XML-based WebService)
 JAX-RPC(Java API for XML-based RPC)
 JAX-RS(Java API for RESTful Web Services),JAVA EE6 引入的一个新技术
+SAML(Security Assertion Markup Language) 安全声明标记语言
 
 JSON(JavaScript Object Notation)，轻量级的数据交换格式，它基于ECMAScript的一个子集
 ECMAScript（European Computer Manufacturers Association）,欧洲计算机制造商协会通过ECMA-262标准化的脚本程序设计语言

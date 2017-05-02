@@ -135,7 +135,7 @@ var vm = new Vue({
         },
         merchantUpdateRuleSave() {
             var $this =this;
-            $.ajax({url:`${basePath}/rule/save`,data: $this.merchantUpdateRuleCreateModel})
+            $.ajax({url:`${basePath}/rule/save`,data: $this.merchantUpdateRuleCreateModel,type:"POST"})
                 .done($this.merchantUpdateRuleQuery);
         },
         merchantUpdateRuleRemove(one) {
@@ -147,20 +147,20 @@ var vm = new Vue({
             var $this =this;
             console.log(this.merchantCreate);
 
-            $.ajax({url:`${basePath}/merchant/save`,data:this.merchantCreate}).done(function(arr){
+            $.ajax({url:`${basePath}/merchant/save`,data:this.merchantCreate,type:"POST"}).done(function(arr){
                 $this.merchantQuery();
             } )
         },
         merchantUpdate() {
             var $this =this;
 
-            $.ajax({url:`${basePath}/merchant/save`,data:this.merchantUpdateModel});
+            $.ajax({url:`${basePath}/merchant/save`,data:this.merchantUpdateModel,type:"POST"});
         },
         dishSave() {
             var $this =this;
             console.log(this.dishCreate);
 
-            $.ajax({url:`${basePath}/dish/save`,data:this.dishCreate}).done(function(arr){
+            $.ajax({url:`${basePath}/dish/save`,data:this.dishCreate,type:"POST"}).done(function(arr){
                 $this.dishQuery();
             } )
         },
