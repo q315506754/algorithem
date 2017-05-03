@@ -33,6 +33,7 @@
         <module>JDK</module>
         <module>JNI</module>
         <module>JVMLanguage</module>
+        <module>JVMLanguage_Scala</module>
         <module>Log</module>
         <module>Lucene</module>
         <module>Maven</module>
