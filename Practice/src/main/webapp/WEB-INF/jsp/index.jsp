@@ -48,7 +48,7 @@
                  </div>
                  <div class="dishes">
                     <ul>
-                        <li v-for="dish in dishes" @mouseover="dishFocus($event)">
+                        <li v-for="dish in dishes" @mouseover="dishFocus($event)" @contextmenu.prevent="dishEditDialog(dish)">
 
                             <Likeit v-bind:obj="dish" v-bind:p="prop.like" v-bind:cls="'chosen'" v-bind:path="'dish'"></Likeit>
 
@@ -175,6 +175,21 @@
                     减
                     <Choose v-bind:obj="merchantUpdateRuleCreateModel" v-bind:p="'reduce'"  ></Choose>
                     <span class="remove" @click.stop="merchantUpdateRuleSave">+</span>
+                </div>
+            </div>
+        </dialog-x>
+
+        <dialog-x  v-bind:p="'dishUpdate'" @save="dishUpdate">
+            <h2 slot="head">更新菜品</h2>
+            <div>
+                <div class="row">
+                    名称<input type="text"  v-model="dishUpdateModel.name"/>
+                </div>
+                <div class="row">
+                    金额 <Choose v-bind:obj="dishUpdateModel" v-bind:p="'money'"  ></Choose>
+                </div>
+                <div class="row">
+                    打包费 <Choose v-bind:obj="dishUpdateModel" v-bind:p="'packageMoney'"  ></Choose>
                 </div>
             </div>
         </dialog-x>

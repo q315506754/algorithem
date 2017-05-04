@@ -49,7 +49,7 @@ var vm = new Vue({
     el: '#mainContainer',
     data: {
         prop:{selected:"isSelected",choose:"chooseNum",like:"likeit"},
-        show:{merchantCreate:false,merchantUpdate:false,dishCreate:false,separate:false,config:false},
+        show:{merchantCreate:false,merchantUpdate:false,dishCreate:false,separate:false,config:false,dishUpdate:false},
         merchants:[
         ],
         merchantSelected:-1,
@@ -85,6 +85,7 @@ var vm = new Vue({
         },
         redEnvelope:[]
         ,
+        dishUpdateModel:{},
         merchantUpdateModel:{},
         merchantUpdateRulesModel:[],
         merchantUpdateRuleCreateModel: {
@@ -126,6 +127,21 @@ var vm = new Vue({
 
             } ).done($this.merchantUpdateRuleQuery(()=>$this.show.merchantUpdate=true));
 
+        },
+        dishUpdate(obj) {
+            var $this =this;
+
+            $.ajax({url:`${basePath}/dish/save`,data:this.dishUpdateModel,type:"POST"})
+                .done($this.dishQuery);
+        },
+        dishEditDialog(obj) {
+            var $this =this;
+
+            //规则的商户id
+            $.ajax({url:`${basePath}/dish/find`,data:{id:obj.id}}).done(function(dt){
+                $this.dishUpdateModel=dt;
+
+            } ).done($this.merchantUpdateRuleQuery(()=>$this.show.dishUpdate=true));
         },
         merchantUpdateRuleQuery(cb) {
             var $this =this;

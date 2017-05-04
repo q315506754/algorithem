@@ -74,4 +74,15 @@ public class DishController {
         logger.debug("save dish:{}",dish);
         dishRepository.save(dish);
     }
+
+    @RequestMapping(value = "/find", method = {RequestMethod.POST, RequestMethod.GET})
+    public
+    @ResponseBody
+    Dish find(Integer id) {
+
+        Dish one = dishRepository.findOne(id);
+        logger.debug("find one:"+one);
+
+        return one;
+    }
 }
