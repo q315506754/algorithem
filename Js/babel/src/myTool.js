@@ -3510,3 +3510,36 @@ console.log('----------class-------------');
 
     let b = new B();
 }
+{
+    var profiles = [
+        {
+            "name": "Jane",
+            "sleeps": "7",
+        },
+        {
+            "name": "Carl",
+            "sleeps": "9",
+        },
+        {
+            "name": "Jane",
+            "sleeps": "6",
+        },
+        {
+            "name": "extra",
+            "sleeps": "ccc",
+        },
+    ];
+
+    let sleepsArray=[];
+    profiles.forEach(({sleeps})=>sleepsArray.push(Number(sleeps)));
+
+    // sleepsArray
+    // [ 7, 9, 6, NaN ]
+    console.log(sleepsArray);
+
+    let sleepsSum=0;
+    sleepsArray.forEach((o)=>sleepsSum+=o|0);
+
+    //22
+    console.log(sleepsSum);
+}
