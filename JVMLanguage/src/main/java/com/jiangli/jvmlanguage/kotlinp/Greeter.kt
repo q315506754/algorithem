@@ -16,4 +16,5 @@ fun main(args: Array<String>) {
     Greeter(if (args.size == 0)
         "bill"
     else args[0]).greet()
+
 }

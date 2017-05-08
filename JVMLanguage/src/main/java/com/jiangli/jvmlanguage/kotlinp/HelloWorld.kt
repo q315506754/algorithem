@@ -7,6 +7,12 @@ import com.jiangli.jvmlanguage.javap.HelloWorld
 
 fun main(args: Array<String>) {
         val user = HelloWorld()
+
+    val message = user.javaClass
+    println(message)
+    val classLoader = message.classLoader
+    println(classLoader)
+
 //赋值
         user.name = "tutu"
         user.age = "23"
@@ -37,4 +43,9 @@ fun main(args: Array<String>) {
         "IT" -> "Ciao!"
         else -> "Sorry, I can't greet you in $language yet"
     })
+
+//    println(user.name.toInt())  //java.lang.NumberFormatException: For input string: "tutu"
+    println(user.age.toInt())
+
+
 }
