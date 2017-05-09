@@ -47,5 +47,6 @@ fun main(args: Array<String>) {
 //    println(user.name.toInt())  //java.lang.NumberFormatException: For input string: "tutu"
     println(user.age.toInt())
 
-
+//    var   not final
+//    val   final
 }

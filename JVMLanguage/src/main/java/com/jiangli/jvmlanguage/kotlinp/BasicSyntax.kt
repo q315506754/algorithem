@@ -46,6 +46,20 @@ fun main(args: Array<String>) {
     val arr = arrayOf(1, 2, 3);
     val intArr = intArrayOf(1, 2, 3)    //同理还有 booleanArrayOf() 等
     val asc = Array(5, { i -> i * i })  //0,1,4,9,16
+//    val ascSS = Array<String>(5, { i -> (i * i).toString().plus("X") })
+    val ascSS = Array(5, { i -> (i * i).toString().plus("X") }) //ok
+
+    fun p(a:Any)=println(a)
+
+//    ascSS.forEach { ::p } //no result
+    ascSS.forEach(::p)//0x 1x 4x 6x 9x
+//    ascSS.forEach { a->p(a) } // 0x 1x 4x 6x 9x
+//    ascSS.forEach ({a->p(a)})// 0x 1x 4x 6x 9x
+    val t2 =  { ::p }
+    p(t2.javaClass) //class com.jiangli.jvmlanguage.kotlinp.BasicSyntaxKt$main$t2$1
+    val t3 =  ::p
+    p(t3.javaClass) //class com.jiangli.jvmlanguage.kotlinp.BasicSyntaxKt$main$t3$1
+
     val empty = emptyArray<Int>()
     println(asc[3])
     println(asc.get(3))
@@ -66,6 +80,7 @@ fun main(args: Array<String>) {
     println("---foreach---")
 
     asc.forEach{a->println(a)}
+//    asc.forEach({a->println(a)}) //also ok
 
     fun log2(a: Any) = println(a)
 
