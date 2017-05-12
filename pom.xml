@@ -53,6 +53,7 @@
         <module>Test</module>
         <module>WebCrawler</module>
         <module>WebCrawlerWeb</module>
+        <module>WebSocket</module>
         <module>Zookeeper</module>
     </modules>
 
