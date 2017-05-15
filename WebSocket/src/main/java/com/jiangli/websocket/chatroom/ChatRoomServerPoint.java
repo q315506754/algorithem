@@ -25,7 +25,10 @@ public class ChatRoomServerPoint {
     public void onOpen(
             Session session){
         log.info("Websocket Start Connecting: ");
+
         chatRoom().register(session);
+
+
     }
 
     /**
@@ -35,6 +38,7 @@ public class ChatRoomServerPoint {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("onMessage: {}",message);
+
         chatRoom().sendMsgToOthers(session,message);
     }
 
