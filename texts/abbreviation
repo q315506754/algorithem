@@ -14,6 +14,9 @@ SAML(Security Assertion Markup Language) 安全声明标记语言
 WebRTC（Web Real-Time Communication）网页实时通信 支持网页浏览器进行实时语音对话或视频对话的技术
 
 
+NLP (Natural Language Processing)自然语言处理  人工智能（AI）的一个子领域。
+DL(Deep Learning)深度学习是机器学习中一种基于对数据进行表征学习的方法。
+
 JSON(JavaScript Object Notation)，轻量级的数据交换格式，它基于ECMAScript的一个子集
 ECMAScript（European Computer Manufacturers Association）,欧洲计算机制造商协会通过ECMA-262标准化的脚本程序设计语言
 CMS(Content Management System),网站内容管理系统

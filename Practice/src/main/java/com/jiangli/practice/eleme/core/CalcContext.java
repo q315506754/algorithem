@@ -82,6 +82,10 @@ public class CalcContext {
         isVip = vip;
     }
 
+    public void setIsVip(Boolean vip) {
+        isVip = vip;
+    }
+
     public String getQueryId() {
         return queryId;
     }
@@ -97,6 +101,7 @@ public class CalcContext {
     public void setMaxRedEnvelopeChosen(Integer maxRedEnvelopeChosen) {
         this.maxRedEnvelopeChosen = maxRedEnvelopeChosen;
     }
+
 
     @Override
     public String toString() {

@@ -19,6 +19,16 @@
         <location>/module/404.jsp</location>
     </error-page>
 
+    <servlet-mapping>
+           <servlet-name>default</servlet-name>
+          <url-pattern>*.js</url-pattern>
+            <url-pattern>*.ws</url-pattern>
+            <url-pattern>*.css</url-pattern>
+           <url-pattern>/assets/*"</url-pattern>
+            <url-pattern>/images/*</url-pattern>
+      </servlet-mapping>
+
+
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
