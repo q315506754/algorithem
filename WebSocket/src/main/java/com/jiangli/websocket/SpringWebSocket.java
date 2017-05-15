@@ -25,7 +25,7 @@ public class SpringWebSocket extends WebMvcConfigurerAdapter implements WebSocke
         System.out.println("registerWebSocketHandlers..."+systemWebSocketHandler());
         System.out.println("registerWebSocketHandlers..."+handler);
 //        registry.addHandler(handler, "/springws").addInterceptors(new HandShake()).setAllowedOrigins("*");
-//        registry.addHandler(handler, "/ws/sockjs").addInterceptors(new HandShake()).withSockJS();
+        registry.addHandler(handler, "/springws/sockjs").withSockJS();
     }
 
     @Bean

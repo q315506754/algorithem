@@ -12,6 +12,7 @@
   </head>
 
   <script src="assets/js/jquery/jquery-1.8.3.min.js"></script>
+  <script src="assets/js/sockjs-0.3.min.js"></script>
 
   <script>
       var webSocket = null;
@@ -49,13 +50,14 @@
 
           //JSR 356 WebSocket 1.1 implementation
 //          webSocket = new WebSocket(((window.location.protocol == 'http:')? 'ws': 'wss') +"://localhost:8080/websocketpath.ws");
-          webSocket = new WebSocket(((window.location.protocol == 'http:')? 'ws': 'wss') +"://localhost:8080/chatroom.ws");
+//          webSocket = new WebSocket(((window.location.protocol == 'http:')? 'ws': 'wss') +"://localhost:8080/chatroom.ws");
 
           //legacy servlet
 //          webSocket = new WebSocket(((window.location.protocol == 'http:')? 'ws': 'wss') +"://localhost:8080/hellowebsocket.ws");
 
           //spring webSocket
 //          webSocket = new WebSocket(((window.location.protocol == 'http:')? 'ws': 'wss') +"://localhost:8080/springws");
+        webSocket = new SockJS(window.location.protocol  +"//localhost:8080/springws/sockjs");
 
           // 收到服务端消息
 //          webSocket.onmessage = function (msg) {
