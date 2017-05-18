@@ -12,6 +12,7 @@
   </head>
   <link href="assets/css/common.css" rel="stylesheet"/>
   <link href="assets/css/glowinput/glowinputpure.css" rel="stylesheet"/>
+  <%--<link href="assets/css/weather/dynamicWeather.css" rel="stylesheet"/>--%>
   <%--<link href="assets/css/flowborder/flowborder.css" rel="stylesheet"/>--%>
     <style type="text/css">
     </style>
@@ -21,147 +22,67 @@
   <script src="assets/js/keyshot.js" type="text/javascript"></script>
   <script src="assets/js/sortable.js" type="text/javascript"></script>
   <script src="assets/js/shake.js" type="text/javascript"></script>
+  <script src="assets/js/main.js" type="text/javascript"></script>
+  <script src="assets/js/cmdParser.js" type="text/javascript"></script>
   <script>
-      var config = {
-          canvas:true,
-//          canvas:false,
-          num:12  //人数
-      }
 
-      var records = [];//jingshang diyitian diyitian
-      //7v8 9v10 5x7 3+9-5>2 5
-      //shangjing:
-      //1.cai duitiao
-      //2.yan jinshui/chasha
-
-      function validate() {
-          $(".tile_name").css("color","red");
-
-          $("[data-expected]").each(function (obj,ele) {
-              var length = $(ele).children().length;
-//              console.log(length);
-              if(length==parseInt($(ele).attr("data-expected"))){
-                  $(ele).parent().prev(".tile_name").css("color","green");
-              }
-          });
-
-          $("[data-max]").each(function (obj,ele) {
-              var length = $(ele).find(".sort_placeholder").children().length;
-              console.log($(ele).attr("id")+"-data-max:"+length);
-              if(length==parseInt($(ele).attr("data-max"))){
-                  $(ele).children(".tile_name").css("color","green");
-              }
-          });
-
-      }
-
-      function getByShortKey(str) {
-          var $obj = $(`[data-shortkey="${str}"]`);
-          if($obj.length >0){
-              return $obj;
-          }
-      }
-
-      function compressCmd(str) {
-          return str.replace(/\s+/g," ").trim();
-      }
-      function getCmdArray(str) {
-          return str.split(" ");
-      }
-
-      $(function () {
-          if(config.canvas) {
-            $("#canvas").hackCanvas({
-                words:"wolf kill"
-            });
-          }
-
-          $("#cmd").keyShot({
-              errorWhenShake:true,
-              handle:function (str) {
-                  str=compressCmd(str);
-
-                  console.log("cmd:"+str);
-
-                  //[lcynsq]
-                  //move command selected
-                  if(/^[a-z]+$/.test(str)){
-                      var $obj = getByShortKey(str);
-                      if($obj){
-                          $(".selected").appendTo($obj);
-                          validate();
-                          return;
-                      }
-                  }
-
-                  //1 3 5 4 [lcynsq]
-                  //move command
-                  if(/^(\d+\s*)+[a-z]+$/.test(str)){
-                      var arr =getCmdArray(str);
-                      $obj = getByShortKey(arr[arr.length-1]);
-                      if($obj){
-                          for(var i=0;i<arr.length-1;i++) {
-                              var tid=arr[i];
-
-                              $(`[data-id="data${tid}"]`).appendTo($obj);
-                          }
-                          validate();
-                          return;
-                      }
-                  }
-
-                  return false;
-              }
-          });
-
-          //initial
-          var num=config.num;
-          for(var i=0;i<num;i++){
-             $("#group_unkown .sort_placeholder").append($(`<div class="number" data-id="data${i+1}">${i+1}</div>`));
-          }
-
-          //selection
-          $(document).on("mouseover",".number[data-id]",function () {
-              $(this).toggleClass("selected");
-          });
-          $(document).on("click",function () {
-              $(".selected").removeClass("selected");
-          });
-
-          $("#sortContainer .sort_placeholder").each(function (id, ele) {
-              new Sortable(ele, {
-                  group: "name",  // or { name: "...", pull: [true, false, clone], put: [true, false, array] }
-                  sort: true,  // sorting inside list
-                  delay: 0, // time in milliseconds to define when the sorting should start
-                  animation: 150,  // ms, animation speed moving items when sorting, `0` — without animation
-//              handle: ".number",  // Drag handle selector within list items
-                  filter: ".ignore-elements",  // Selectors that do not lead to dragging (String or Function)
-                  preventOnFilter: true, // Call `event.preventDefault()` when triggered `filter`
-                  draggable: ".number",  // Specifies which items inside the element should be draggable
-
-                  forceFallback: false,  // ignore the HTML5 DnD behaviour and force the fallback to kick in
-                  fallbackTolerance: 0, // Specify in pixels how far the mouse should move before it's considered as a drag.
-
-                  scroll: true, // or HTMLElement
-                  scrollSensitivity: 30, // px, how near the mouse must be to an edge to start scrolling.
-                  scrollSpeed: 10,// px
-
-                  // Element dragging ended
-                  onEnd: function (/**Event*/evt) {
-                      validate();
-                  },
-
-              });
-          });
-
-          validate();
-      });
   </script>
   <body>
         <%--命令栏--%>
       <div class="webdesigntuts-workshop">
            <input id="cmd" type="search" placeholder="Input your command">
       </div>
+
+        <div class="selected number" data-id="data1">ad</div>
+        <div class="selected number" data-id="data1">ad</div>
+        <div class="selected number" data-id="data1">ad</div>
+        <div class="selected number" data-id="data1">ad</div>
+
+        <%--<div class="container" style="background-color:  #00BBFF">--%>
+            <%--<div class="sunny"></div>--%>
+            <%--<div class="cloudy"></div>--%>
+            <%--<div class="rainy"></div>--%>
+            <%--<div class="snowy"></div>--%>
+            <%--<div class="rainbow"></div>--%>
+            <%--<div class="starry"></div>--%>
+            <%--<div class="stormy"></div>--%>
+        <%--</div>--%>
+        <%--<div class="starry"></div>--%>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ord</th>
+                    <th>c</th>
+                    <th>c</th>
+                    <th>c</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="4">asd</td>
+                    <td ><div class="sunnyContainer"><div class="sunny"></div></div></td>
+                    <td ></td>
+                    <td >aaaa</td>
+                </tr>
+                <tr>
+                    <td >bbbb</td>
+                    <td >aaaa</td>
+                    <td >aaaa</td>
+                </tr>
+                <tr>
+                    <td >bbbb</td>
+                    <td ></td>
+                    <td >aaaa</td>
+                </tr>
+                <tr>
+                    <td >bbbb</td>
+                    <td >aaaa</td>
+                    <td >aaaa</td>
+                </tr>
+            </tbody>
+        </table>
+
 
 
         <div id="sortContainer">

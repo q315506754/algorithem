@@ -4,10 +4,17 @@
     width: 30px;
     height: 30px;
     line-height: 30px;
-    border: 1px black solid;
+    border: 1px #67dbff solid;
     text-align: center;
-    margin: 3px;
-    color: black;
+    margin: 5px;
+    color: white;
+    /*background: linear-gradient( #67dbff, #2521fb);*/
+    background: linear-gradient( rgba(0,255,0,.4), #6f6);
+    /*background: none;*/
+    text-shadow: 1px 1px 1px #aaa;
+    box-shadow:0px 0px 30px #67DC80;
+    border-radius:3px;
+    /*animation: numberFlow 800ms ease-out infinite alternate;*/
 }
 
 .tile {
@@ -47,5 +54,46 @@
 }
 
 .selected{
-    background-color: blue;
+    background: linear-gradient( #67dbff, #2521fb);
+    box-shadow: 5px 5px 15px #888888 ;
+    animation: selectedGlow 800ms ease-out infinite alternate;
+    transform: scale(1.1,1.1);
+    transition:width 1000ms,height 1000ms;
+    outline:1px solid #67dbff;
+    outline-offset:2px;
+}
+/*.selected::before{*/
+    /*content: "[";*/
+    /*left: -5px;*/
+/*}*/
+
+@keyframes numberFlow
+{
+    0% {
+        background: none;
+    }
+    1% {
+        background: linear-gradient( rgba(0,255,0,.4), #6f6);
+    }
+    49% {
+        background: none;
+    }
+    50% {
+        background: linear-gradient( rgba(0,255,0,.4), #6f6);
+    }
+    100% {
+        background: none;
+    }
+}
+
+@keyframes selectedGlow
+{
+    0% {
+        border-color: #67dbff;
+        box-shadow: 0 0 15px #67dbff
+    }
+    100% {
+        border-color: #67dbff;
+        box-shadow: 0 0 60px #fff
+    }
 }
