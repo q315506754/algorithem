@@ -1,7 +1,7 @@
 var config = {
-    canvas:true,
-//          group:true,
-//          canvas:false,
+    // canvas:true,
+    //      group:true,
+         canvas:false,
     group:false,
     num:12 , //人数
 //          changeSelection:"click",
@@ -86,10 +86,21 @@ $(function () {
 
             console.log("cmd:"+str);
 
+            let cmdParser = new CmdParser(str);
+            let cmdArr = cmdParser.getCmdArr();
+            console.log(`getCmdArr:${cmdArr}`);
+            let numArr = cmdParser.getContinuantNumberArrayForCmd(12);
+            console.log(`numArr:${numArr}`);
+
             //[lcynsq]
             //move command selected
             if(/^[a-z]+$/.test(str)){
-                var $obj = getByShortKey(str);
+                console.log('selected身份定义指令');
+
+                let [shortKey] = cmdArr;
+                console.log(`shortKey:${shortKey}`);
+                var $obj = getByShortKey(shortKey);
+
                 if($obj){
                     $(".selected").appendTo($obj);
                     validate();
@@ -100,14 +111,13 @@ $(function () {
             //1 3 5 4 [lcynsq]
             //move command
             if(/^(\d+\s*)+[a-z]+$/.test(str)){
-                var cmdParser = new CmdParser(str);
+                console.log('身份定义指令');
 
-                let [shortKey] =cmdParser.getCmdArr();
+                let [shortKey] = cmdArr;
+                console.log(`shortKey:${shortKey}`);
                 var $obj = getByShortKey(shortKey);
 
                 if($obj){
-                    var numArr = cmdParser.getContinuantNumberArrayForCmd(12);
-
                     for(var i=0;i<numArr.length-1;i++) {
                         var tid=numArr[i];
 
@@ -117,6 +127,7 @@ $(function () {
                     return;
                 }
             }
+
 
             return false;
         }

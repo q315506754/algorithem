@@ -33,10 +33,10 @@
            <input id="cmd" type="search" placeholder="Input your command">
       </div>
 
-        <div class="selected number" data-id="data1">ad</div>
-        <div class="selected number" data-id="data1">ad</div>
-        <div class="selected number" data-id="data1">ad</div>
-        <div class="selected number" data-id="data1">ad</div>
+        <%--<div class="selected number" data-id="data1">ad</div>--%>
+        <%--<div class="selected number" data-id="data1">ad</div>--%>
+        <%--<div class="selected number" data-id="data1">ad</div>--%>
+        <%--<div class="selected number" data-id="data1">ad</div>--%>
 
         <%--<div class="container" style="background-color:  #00BBFF">--%>
             <%--<div class="sunny"></div>--%>

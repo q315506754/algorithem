@@ -1,4 +1,5 @@
 package com.jiangli.jvmlanguage.kotlinp
+import kotlin.Pair
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
@@ -114,4 +115,11 @@ fun main(args: Array<String>) {
     val userMap = UserMap(map)
 
     println("name = ${userMap.name}, age = ${userMap.age}")
+
+//    val pair = "aaa" to "bbb"
+    val pair = "aaa" kktt "bbb"
+    p(pair)
+    p(pair.javaClass)
 }
+
+public infix fun <A, B> A.kktt(that: B): Pair<A, B> = Pair(this, that)

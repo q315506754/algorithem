@@ -35,7 +35,7 @@ var CmdParser =  class {
 
     getCmdArr(){
        let arr =  this.cmd.replace(/\d+/g,' ').replace(/\s+/g,' ').trim();
-        return arr;
+        return arr.split(" ");
     }
 
     splitGradually(str){

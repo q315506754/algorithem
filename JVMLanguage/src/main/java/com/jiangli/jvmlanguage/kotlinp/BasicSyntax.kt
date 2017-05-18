@@ -101,6 +101,51 @@ fun main(args: Array<String>) {
 
 
     log2("aaaa".plus("adasdsa"))
+
+
+    //RxJava
+    var a = (0 until 100)
+    p(a)
+    var b = 0..99
+    p(b)
+
+    val map = a.map { it }
+    println(map)
+
+    //Kotlin 中有一个专为 Android 开发量身打造的库，名为 anko，其中包含了许多可以简化开发的代码，其中就对线程进行了简化。
+//    val filter = map.filter { it % 2 == 0 }
+//    val filter = map.filter ( { y ->  y % 2 == 0 })
+    val filter = map.filter {y ->  y % 2 == 0 }
+    println(filter)
+
+    SingleInstance.doSth()
+
+//    val ins =  SingleInstance() // compile error
+
+
+    //dsl style
+//    android {
+//        compileSdkVersion 23
+//        buildToolsVersion "23.0.2"
+//
+//        defaultConfig {
+//            applicationId "com.zll.demo"
+//            minSdkVersion 15
+//            targetSdkVersion 23
+//            versionCode 1
+//            versionName "1.0"
+//        }
+//        buildTypes {
+//            release {
+//                minifyEnabled false
+//                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            }
+//        }
+//    }
+
+
+
+    println("asdasdsa".extentionFun())
 }
 fun doSth(status: Any):Any? {
     when(status){
@@ -134,4 +179,16 @@ fun cases(obj: Any) {
         !is String -> println("Not a string")
         else -> println("Unknown")
     }
+}
+
+object SingleInstance{
+    fun doSth(){
+        println("do sth")
+//        "asd"
+    }
+}
+
+fun String.extentionFun(){
+    //like String.prototype.extentionFun = xxx
+    println("String.extentionFun called $this")
 }
