@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
         "IT" -> "Ciao!"
         else -> "Sorry, I can't greet you in $language yet"
     })
-
+//    val aaa="EN" -> "Hello!"
     //if here
     //it is called
     fun max(a: Int, b: Int) = if (a > b) a else b
@@ -146,6 +146,10 @@ fun main(args: Array<String>) {
 
 
     println("asdasdsa".extentionFun())
+
+//    var x = null as Int
+//    var y = null as Int
+//    p(x?*y?)
 }
 fun doSth(status: Any):Any? {
     when(status){
