@@ -9,7 +9,7 @@ package com.jiangli.jvmlanguage.kotlinp
 fun main(args: Array<String>) {
     fun p(a:Any)= println(a)
 
-    val c = Pair(12,false)
+    val c = PairC(12,false)
     p(c)//no toString()
     p(c.hashCode())
     //no copy
@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
     start()
 }
 
-class Pair<K,V>(val a:K,val b:V){
+class PairC<K,V>(val a:K, val b:V){
     operator fun component1(): K {
         return a
     }

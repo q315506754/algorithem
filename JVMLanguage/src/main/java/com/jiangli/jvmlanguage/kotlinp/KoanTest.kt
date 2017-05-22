@@ -212,6 +212,8 @@ fun checkInRange(date: MyDate, first: MyDate, last: MyDate): Boolean {
 
 fun compare(date1: MyDate, date2: MyDate) = date1 < date2
 
+
+
 fun main(args: Array<String>) {
     println(containsEven(arrayListOf(1,5,23)))
     println(containsEven(arrayListOf(2,4,6)))
@@ -272,4 +274,52 @@ fun main(args: Array<String>) {
     println(MyDate(2014, 0, 1) + TimeInterval.DAY*5+TimeInterval.WEEK*3+TimeInterval.YEAR*2)
     println(MyDate(2014, 0, 25) + TimeInterval.DAY*5+TimeInterval.WEEK*3+TimeInterval.YEAR*2)
 
+    println(6())
+
+    val invokable = Invokable()
+    invokeTwice(invokable)
+    println(invokable.numberOfInvocations)
+//    invokable.numberOfInvocations=3 //compile eroor
+
+    println(eval(Sum(Num(45),Num(1231))))
+
+    println(5.r())
+    println(6 to 8.r())
+    println((6 to 8).r())
 }
+
+
+///////////////////////////
+//Objects with invoke() method can be invoked as a function.
+//You can add invoke extension for any class, but it's better not to overuse it:
+operator fun Int.invoke(): List<Int> { return Array(this, { it}).asList() }
+
+class Invokable {
+    var numberOfInvocations: Int = 0
+    private set
+    operator fun invoke(): Invokable {
+        this.numberOfInvocations++
+        return this
+    }
+}
+fun invokeTwice(invokable: Invokable) = invokable()()
+///////////////////////////
+
+///////////////////////////
+fun eval(expr: Expr): Int =
+        when (expr) {
+            is Num -> expr.value
+            is Sum -> eval(expr.left)+eval(expr.right)
+            else -> throw IllegalArgumentException("Unknown expression")
+        }
+interface Expr
+class Num(val value: Int) : Expr
+class Sum(val left: Expr, val right: Expr) : Expr
+///////////////////////////
+
+///////////////////////////
+fun Int.r(): RationalNumber = RationalNumber(this,1)
+fun Pair<Int, Int>.r(): RationalNumber = RationalNumber(this.first,this.second)
+
+data class RationalNumber(val numerator: Int, val denominator: Int)
+///////////////////////////
