@@ -49,49 +49,57 @@
         <%--</div>--%>
         <%--<div class="starry"></div>--%>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ord</th>
-                    <th>c</th>
-                    <th>c</th>
-                    <th>c</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td rowspan="4">asd</td>
-                    <td ><div class="sunnyContainer"><div class="sunny"></div></div></td>
-                    <td ></td>
-                    <td >aaaa</td>
-                </tr>
-                <tr>
-                    <td >bbbb</td>
-                    <td >aaaa</td>
-                    <td >aaaa</td>
-                </tr>
-                <tr>
-                    <td >bbbb</td>
-                    <td ></td>
-                    <td >aaaa</td>
-                </tr>
-                <tr>
-                    <td >bbbb</td>
-                    <td >aaaa</td>
-                    <td >aaaa</td>
-                </tr>
-            </tbody>
-        </table>
+        <%--<table>--%>
+            <%--<thead>--%>
+                <%--<tr>--%>
+                    <%--<th>ord</th>--%>
+                    <%--<th>c</th>--%>
+                    <%--<th>c</th>--%>
+                    <%--<th>c</th>--%>
+                <%--</tr>--%>
+            <%--</thead>--%>
+            <%--<tbody>--%>
+                <%--<tr>--%>
+                    <%--<td rowspan="4">asd</td>--%>
+                    <%--<td ><div class="sunnyContainer"><div class="sunny"></div></div></td>--%>
+                    <%--<td ></td>--%>
+                    <%--<td >aaaa</td>--%>
+                <%--</tr>--%>
+                <%--<tr>--%>
+                    <%--<td >bbbb</td>--%>
+                    <%--<td >aaaa</td>--%>
+                    <%--<td >aaaa</td>--%>
+                <%--</tr>--%>
+                <%--<tr>--%>
+                    <%--<td >bbbb</td>--%>
+                    <%--<td ></td>--%>
+                    <%--<td >aaaa</td>--%>
+                <%--</tr>--%>
+                <%--<tr>--%>
+                    <%--<td >bbbb</td>--%>
+                    <%--<td >aaaa</td>--%>
+                    <%--<td >aaaa</td>--%>
+                <%--</tr>--%>
+            <%--</tbody>--%>
+        <%--</table>--%>
 
 
 
-        <div id="sortContainer">
-            <div id="group_unkown" class="layer tile"  style="display: block">
+        <div id="sortContainer" class="moduleContainer">
+            <div id="group_unkown" class="layer tile"  style="width: 50%">
                 <div class="tile_name">未知u</div>
                 <div class="tile_list">
                     <div class="sort_placeholder" data-expected="0"  data-shortkey="u">
 
                     </div>
+                </div>
+            </div>
+
+            <div  id="group_langren" class="layer tile "    style="width: 40%">
+                <div class="tile_name">狼人l</div>
+                <div class="tile_list">
+                    <span class="sort_placeholder "  data-expected="4"   data-shortkey="l">
+                    </span>
                 </div>
             </div>
 
@@ -154,15 +162,34 @@
 
 
 
-            <div  id="group_langren" class="layer tile "  style="display: block">
-                <div class="tile_name">狼人l</div>
-                <div class="tile_list">
-                    <span class="sort_placeholder "  data-expected="4"   data-shortkey="l">
-                    </span>
-                </div>
-            </div>
+
         </div>
 
+
+        <div  id="electionContainer" class="moduleContainer">
+            <div class="electionRow policeRow">
+                <div class="electionTitle">
+                    <h3>警长竞选</h3>jx
+                </div>
+                <div class="electionTd abstentionTd">
+                    <div class="electionHeader">弃票<br/></div>
+                    <div class="electionResult"></div>
+                </div>
+                <div class="electionTd regretTd">
+                    <div class="electionHeader">退水<br/></div>
+                    <div class="electionResult"><div class="number">1</div></div>
+                </div>
+                <div class="electionTd normalTd">
+                    <div class="electionHeader"><div class="number">1</div><br/></div>
+                    <div class="electionResult"><div class="number">1</div></div>
+                </div>
+                <div class="electionTd finalTd">
+                    <div class="electionHeader"><div class="number">1</div><br/></div>
+                    <div class="electionResult"><div class="number">1</div></div>
+                </div>
+            </div>
+
+        </div>
 
       <canvas id="canvas"></canvas>
   </body>

@@ -8,11 +8,12 @@
     text-align: center;
     margin: 5px;
     color: white;
-    /*background: linear-gradient( #67dbff, #2521fb);*/
-    background: linear-gradient( rgba(0,255,0,.4), #6f6);
+    font-weight: 900;
+    background: linear-gradient( #67dbff, #2521fb);
+    /*background: linear-gradient( rgba(0,255,0,.4), #6f6);*/
     /*background: none;*/
-    text-shadow: 1px 1px 1px #aaa;
-    box-shadow:0px 0px 30px #67DC80;
+    /*text-shadow: 1px 1px 1px #aaa;*/
+    box-shadow:0px 0px 30px #67dbff;
     border-radius:3px;
     /*animation: numberFlow 800ms ease-out infinite alternate;*/
 }
@@ -54,18 +55,85 @@
 }
 
 .selected{
-    background: linear-gradient( #67dbff, #2521fb);
+    background: linear-gradient( #5960FB, #2521fb);
     box-shadow: 5px 5px 15px #888888 ;
     animation: selectedGlow 800ms ease-out infinite alternate;
     transform: scale(1.1,1.1);
     transition:width 1000ms,height 1000ms;
-    outline:1px solid #67dbff;
-    outline-offset:2px;
+    outline:2px solid #6f6;
+    outline-offset:4px;
 }
 /*.selected::before{*/
     /*content: "[";*/
     /*left: -5px;*/
 /*}*/
+
+.moduleContainer{
+    width: 100%;
+    height: auto;
+    background: linear-gradient( #fffcfb, #464346,#fffcfb,#464346,#fffcfb);
+    padding: 30px 3px;
+    border-radius: 5px;
+    margin: 20px 0px;
+}
+
+.electionRow{
+    height: 180px;
+    display: block;
+    text-align: center;
+    margin: 5px 15px;
+    padding: 5px 15px;
+    color: black;
+}
+.electionRow .electionTitle{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    float: left;
+    padding: 0px 5px;
+}
+/*.electionRow .electionTitle h3{*/
+    /*writing-mode:tb-rl;*/
+/*}*/
+
+.electionRow .electionTd{
+    height: 100%;
+    display: inline-block;
+    min-width: 200px;
+    max-width: 300px;
+    float: left;
+    padding: 0px 5px;
+    margin: 0px 5px;
+    border-radius: 5px;
+}
+.electionRow .electionTd.abstentionTd{
+    background: linear-gradient(#777, #ddd);
+}
+.electionRow .electionTd.regretTd{
+    background: linear-gradient(#30fffa, #a9ddd6,#30fffa, #a9ddd6,#30fffa, #a9ddd6,#30fffa, #a9ddd6,#30fffa, #a9ddd6,#30fffa, #a9ddd6,#30fffa, #a9ddd6,#30fffa, #a9ddd6);
+}
+.electionRow .electionTd.normalTd{
+    background: linear-gradient(#d1ffd9, #b2ffbb);
+}
+.electionRow .electionTd.finalTd{
+    background: linear-gradient(#baffc5, #09ff14);
+}
+
+.electionRow .electionTd .electionHeader{
+    /*height: 30%;*/
+    min-height: 50px;
+    padding: 2px 5px;
+    margin: 5px 0px;
+}
+.electionRow .electionHeader::after{
+    content: "↑↑↑↑↑↑";
+}
+
+.electionRow .electionTd .electionResult{
+    min-height: 100px;
+    /*height: 70%;*/
+    padding: 5px 5px;
+}
 
 @keyframes numberFlow
 {

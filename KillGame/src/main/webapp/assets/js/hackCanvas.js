@@ -30,10 +30,12 @@
 
             // $(window).width()（窗口可视区的，包括滚动条,可视区域）= document.body.clientWidth
             // $(document).width() （窗口文档的，包括非可视区域）
-            var W = window.outerWidth;//（窗口文档的，包括非可视区域） 略小于 $(document).width()
+            // var W = window.outerWidth;//（窗口文档的，包括非可视区域） 略小于 $(document).width()
+            var W = $(document).width();//（窗口文档的，包括非可视区域） 略小于 $(document).width()
 
             // var H = window.innerHeight;
-            var H = window.outerHeight;
+            // var H = window.outerHeight;
+            var H = $(document).height();
 
             //显示器宽高
             //window.screen.width

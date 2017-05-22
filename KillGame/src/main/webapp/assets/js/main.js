@@ -1,11 +1,11 @@
 var config = {
-    // canvas:true,
-    //      group:true,
-         canvas:false,
-    group:false,
+    canvas:true,
+         group:true,
+    //      canvas:false,
+    // group:false,
     num:12 , //人数
 //          changeSelection:"click",
-    changeSelection:"mouseover"
+    changeSelection:"mouseenter"
 }
 
 var records = [];//jingshang diyitian diyitian
@@ -118,8 +118,12 @@ $(function () {
                 var $obj = getByShortKey(shortKey);
 
                 if($obj){
-                    for(var i=0;i<numArr.length-1;i++) {
+                    // console.log(numArr);
+                    // console.log(numArr.length);
+
+                    for(var i=0;i<numArr.length;i++) {
                         var tid=numArr[i];
+                        // console.log(tid);
 
                         $(`[data-id="data${tid}"]`).appendTo($obj);
                     }
@@ -136,7 +140,11 @@ $(function () {
     //initial
     var num=config.num;
     for(var i=0;i<num;i++){
+        //默认未知身份
         $("#group_unkown .sort_placeholder").append($(`<div class="number" data-id="data${i+1}">${i+1}</div>`));
+
+        //默认弃票
+        $("#electionContainer .policeRow .abstentionTd .electionResult").append($(`<div class="number" data-elecId="data${i+1}">${i+1}</div>`));
     }
 
     //selection
@@ -145,7 +153,11 @@ $(function () {
         $(this).toggleClass("selected");
     });
     $(document).on("click",function () {
-        $(".selected").removeClass("selected");
+        $(".selected.number[data-id]").removeClass("selected");
+    });
+    $(document).on("click",".sort_placeholder",function (e) {
+        $(".selected.number[data-id]").appendTo($(this));
+        validate();
     });
 
     $("#sortContainer .sort_placeholder").each(function (id, ele) {
