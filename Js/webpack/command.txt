@@ -1,13 +1,39 @@
-webpack {entry file/����ļ�} {destination for bundled file/���bundle.js�ĵط�}
+webpack {entry file/入口文件} {destination for bundled file/存放bundle.js的地方}
 
+//全局安装
+cnpm install -g webpack
+//安装到你的项目目录
+cnpm install --save-dev webpack
 
-//webpack��ȫ�ְ�װ�����
+//webpack非全局安装的情况
 node_modules/.bin/webpack app/main.js public/bundle.js
 
 webpack app/main.js public/bundle.js
 
 
 
-���������������Ĵ�����޸ģ����Զ�ˢ���޸ĺ�Ľ��
-npm install --save-dev webpack-dev-server
+让你的浏览器监测你的代码的修改，并自动刷新修改后的结果
+cnpm install --save-dev webpack-dev-server
+
+//安装可以装换JSON的loader
+cnpm install --save-dev json-loader
+
+// npm一次性安装多个依赖模块，模块之间用空格隔开
+cnpm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react
+
+
+cnpm install --save react react-dom
+
+//安装
+cnpm install --save-dev style-loader css-loader
+
+cnpm install --save-dev postcss-loader autoprefixer
+
+cnpm install --save-dev html-webpack-plugin
+
+cnpm install --save-dev babel-plugin-react-transform react-transform-hmr
+
+cnpm install --save-dev extract-text-webpack-plugin
+
+
 

@@ -5,6 +5,8 @@ import Greeter from './Greeter';
 
 import './main.css';//使用require导入css文件
 
-console.log('aaa');
+console.log('xxxx');
+console.log(document);
+// console.log($);
 
 render(<Greeter />, document.getElementById('root'));

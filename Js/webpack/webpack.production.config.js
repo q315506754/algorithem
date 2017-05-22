@@ -2,24 +2,25 @@ var webpack = require('webpack');
 //var HtmlWebpackPlugin = require('html-webpack-plugin');//Hot Module Replacement
 //var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  devtool: 'source-map',//ÅäÖÃÉú³ÉSource Maps£¬Ñ¡ÔñºÏÊÊµÄÑ¡Ïî
-  entry:  __dirname + "/app/main.js",//ÒÑ¶à´ÎÌá¼°µÄÎ¨Ò»Èë¿ÚÎÄ¼ş
+  devtool: 'source-map',//é…ç½®ç”ŸæˆSource Mapsï¼Œé€‰æ‹©åˆé€‚çš„é€‰é¡¹
+  entry:  __dirname + "/app/main.js",//å·²å¤šæ¬¡æåŠçš„å”¯ä¸€å…¥å£æ–‡ä»¶
   output: {
-    path: __dirname + "/public",//´ò°üºóµÄÎÄ¼ş´æ·ÅµÄµØ·½
-    filename: "bundle.js"//´ò°üºóÊä³öÎÄ¼şµÄÎÄ¼şÃû
+    path: __dirname + "/public",//æ‰“åŒ…åçš„æ–‡ä»¶å­˜æ”¾çš„åœ°æ–¹
+    filename: "bundle.js"//æ‰“åŒ…åè¾“å‡ºæ–‡ä»¶çš„æ–‡ä»¶å
   },
   
   devServer: {
-    contentBase: "./public",//±¾µØ·şÎñÆ÷Ëù¼ÓÔØµÄÒ³ÃæËùÔÚµÄÄ¿Â¼
-    //colors: true,//ÖÕ¶ËÖĞÊä³ö½á¹ûÎª²ÊÉ«
-    historyApiFallback: true,//²»Ìø×ª
-    inline: true,//ÊµÊ±Ë¢ĞÂ
+    contentBase: "./public",//æœ¬åœ°æœåŠ¡å™¨æ‰€åŠ è½½çš„é¡µé¢æ‰€åœ¨çš„ç›®å½•
+    //colors: true,//ç»ˆç«¯ä¸­è¾“å‡ºç»“æœä¸ºå½©è‰²
+    historyApiFallback: true,//ä¸è·³è½¬
+    inline: true,//å®æ—¶åˆ·æ–°
 	hot: true //hot deploy
   } ,
   
-   module: {//ÔÚÅäÖÃÎÄ¼şÀïÌí¼ÓJSON loader
+   module: {//åœ¨é…ç½®æ–‡ä»¶é‡Œæ·»åŠ JSON loader
     loaders: [
       {
         test: /\.json$/,
@@ -28,27 +29,27 @@ module.exports = {
 	   {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',//ÔÚwebpackµÄmodule²¿·ÖµÄloadersÀï½øĞĞÅäÖÃ¼´¿É
+        loader: 'babel-loader',//åœ¨webpackçš„moduleéƒ¨åˆ†çš„loadersé‡Œè¿›è¡Œé…ç½®å³å¯
        // query: {
          // presets: ['es2015','react']
        // }
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader?modules'//Ìí¼Ó¶ÔÑùÊ½±íµÄ´¦Àí ×¢£º¸ĞÌ¾ºÅµÄ×÷ÓÃÔÚÓÚÊ¹Í¬Ò»ÎÄ¼şÄÜ¹»Ê¹ÓÃ²»Í¬ÀàĞÍµÄloader
+        loader: 'style-loader!css-loader?modules'//æ·»åŠ å¯¹æ ·å¼è¡¨çš„å¤„ç† æ³¨ï¼šæ„Ÿå¹å·çš„ä½œç”¨åœ¨äºä½¿åŒä¸€æ–‡ä»¶èƒ½å¤Ÿä½¿ç”¨ä¸åŒç±»å‹çš„loader
 		
-		//css-loaderÊ¹ÄãÄÜ¹»Ê¹ÓÃÀàËÆ@import ºÍ url(...)µÄ·½·¨ÊµÏÖ require()µÄ¹¦ÄÜ,
-		//style-loader½«ËùÓĞµÄ¼ÆËãºóµÄÑùÊ½¼ÓÈëÒ³ÃæÖĞ£¬¶şÕß×éºÏÔÚÒ»ÆğÊ¹ÄãÄÜ¹»°ÑÑùÊ½±íÇ¶Èëwebpack´ò°üºóµÄJSÎÄ¼şÖĞ¡£
+		//css-loaderä½¿ä½ èƒ½å¤Ÿä½¿ç”¨ç±»ä¼¼@import å’Œ url(...)çš„æ–¹æ³•å®ç° require()çš„åŠŸèƒ½,
+		//style-loaderå°†æ‰€æœ‰çš„è®¡ç®—åçš„æ ·å¼åŠ å…¥é¡µé¢ä¸­ï¼ŒäºŒè€…ç»„åˆåœ¨ä¸€èµ·ä½¿ä½ èƒ½å¤ŸæŠŠæ ·å¼è¡¨åµŒå…¥webpackæ‰“åŒ…åçš„JSæ–‡ä»¶ä¸­ã€‚
 		
-		//×î½üÓĞÒ»¸ö½Ğ×ö CSS modules µÄ¼¼Êõ¾ÍÒâÔÚ°ÑJSµÄÄ£¿é»¯Ë¼Ïë´øÈëCSSÖĞÀ´£¬Í¨¹ıCSSÄ£¿é£¬ËùÓĞµÄÀàÃû£¬
+		//æœ€è¿‘æœ‰ä¸€ä¸ªå«åš CSS modules çš„æŠ€æœ¯å°±æ„åœ¨æŠŠJSçš„æ¨¡å—åŒ–æ€æƒ³å¸¦å…¥CSSä¸­æ¥ï¼Œé€šè¿‡CSSæ¨¡å—ï¼Œæ‰€æœ‰çš„ç±»åï¼Œ
       }
     ]
   },
   
    plugins: [
-    new webpack.BannerPlugin("Copyright Flying Unicorns inc.")//ÔÚÕâ¸öÊı×éÖĞnewÒ»¸ö¾Í¿ÉÒÔÁË
+    new webpack.BannerPlugin("Copyright Flying Unicorns inc.")//åœ¨è¿™ä¸ªæ•°ç»„ä¸­newä¸€ä¸ªå°±å¯ä»¥äº†
 	,
-    new webpack.HotModuleReplacementPlugin()//ÈÈ¼ÓÔØ²å¼ş
+    new webpack.HotModuleReplacementPlugin()//çƒ­åŠ è½½æ’ä»¶
 	,
  //   new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin(),
@@ -57,32 +58,32 @@ module.exports = {
 
 }
 
-//×¢£º¡°__dirname¡±ÊÇnode.jsÖĞµÄÒ»¸öÈ«¾Ö±äÁ¿£¬ËüÖ¸Ïòµ±Ç°Ö´ĞĞ½Å±¾ËùÔÚµÄÄ¿Â¼¡£
+//æ³¨ï¼šâ€œ__dirnameâ€æ˜¯node.jsä¸­çš„ä¸€ä¸ªå…¨å±€å˜é‡ï¼Œå®ƒæŒ‡å‘å½“å‰æ‰§è¡Œè„šæœ¬æ‰€åœ¨çš„ç›®å½•ã€‚
 
-//°²×°¿ÉÒÔ×°»»JSONµÄloader  JSON->Object
+//å®‰è£…å¯ä»¥è£…æ¢JSONçš„loader  JSON->Object
 //cnpm install --save-dev json-loader
 
-// npmÒ»´ÎĞÔ°²×°¶à¸öÒÀÀµÄ£¿é£¬Ä£¿éÖ®¼äÓÃ¿Õ¸ñ¸ô¿ª
+// npmä¸€æ¬¡æ€§å®‰è£…å¤šä¸ªä¾èµ–æ¨¡å—ï¼Œæ¨¡å—ä¹‹é—´ç”¨ç©ºæ ¼éš”å¼€
 //cnpm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react
 
 //cnpm install --save react react-dom
 
-////°²×°
+////å®‰è£…
 //cnpm install --save-dev style-loader css-loader
 
-//Ê×ÏÈ°²×°postcss-loader ºÍ autoprefixer£¨×Ô¶¯Ìí¼ÓÇ°×ºµÄ²å¼ş£©
+//é¦–å…ˆå®‰è£…postcss-loader å’Œ autoprefixerï¼ˆè‡ªåŠ¨æ·»åŠ å‰ç¼€çš„æ’ä»¶ï¼‰
 
 //cnpm install --save-dev postcss-loader autoprefixer
 
-//LoadersºÍPlugins³£³£±»Åª»ì£¬µ«ÊÇËûÃÇÆäÊµÊÇÍêÈ«²»Í¬µÄ¶«Î÷£¬¿ÉÒÔÕâÃ´À´Ëµ£¬loadersÊÇÔÚ´ò°ü¹¹½¨¹ı³ÌÖĞÓÃÀ´´¦ÀíÔ´ÎÄ¼şµÄ£¨JSX£¬Scss£¬Less..£©£¬Ò»´Î´¦ÀíÒ»¸ö£¬²å¼ş²¢²»Ö±½Ó²Ù×÷µ¥¸öÎÄ¼ş£¬ËüÖ±½Ó¶ÔÕû¸ö¹¹½¨¹ı³ÌÆä×÷ÓÃ¡£
+//Loaderså’ŒPluginså¸¸å¸¸è¢«å¼„æ··ï¼Œä½†æ˜¯ä»–ä»¬å…¶å®æ˜¯å®Œå…¨ä¸åŒçš„ä¸œè¥¿ï¼Œå¯ä»¥è¿™ä¹ˆæ¥è¯´ï¼Œloadersæ˜¯åœ¨æ‰“åŒ…æ„å»ºè¿‡ç¨‹ä¸­ç”¨æ¥å¤„ç†æºæ–‡ä»¶çš„ï¼ˆJSXï¼ŒScssï¼ŒLess..ï¼‰ï¼Œä¸€æ¬¡å¤„ç†ä¸€ä¸ªï¼Œæ’ä»¶å¹¶ä¸ç›´æ¥æ“ä½œå•ä¸ªæ–‡ä»¶ï¼Œå®ƒç›´æ¥å¯¹æ•´ä¸ªæ„å»ºè¿‡ç¨‹å…¶ä½œç”¨ã€‚
 
-//WebpackÓĞºÜ¶àÄÚÖÃ²å¼ş£¬Í¬Ê±Ò²ÓĞºÜ¶àµÚÈı·½²å¼ş£¬¿ÉÒÔÈÃÎÒÃÇÍê³É¸ü¼Ó·á¸»µÄ¹¦ÄÜ¡£
+//Webpackæœ‰å¾ˆå¤šå†…ç½®æ’ä»¶ï¼ŒåŒæ—¶ä¹Ÿæœ‰å¾ˆå¤šç¬¬ä¸‰æ–¹æ’ä»¶ï¼Œå¯ä»¥è®©æˆ‘ä»¬å®Œæˆæ›´åŠ ä¸°å¯Œçš„åŠŸèƒ½ã€‚
 
 //npm install --save-dev html-webpack-plugin
 
 
-//°²×°react-transform-hmr
+//å®‰è£…react-transform-hmr
 //npm install --save-dev babel-plugin-react-transform react-transform-hmr
 
-//ExtractTextPlugin£º·ÖÀëCSSºÍJSÎÄ¼ş
+//ExtractTextPluginï¼šåˆ†ç¦»CSSå’ŒJSæ–‡ä»¶
 //npm install --save-dev extract-text-webpack-plugin
