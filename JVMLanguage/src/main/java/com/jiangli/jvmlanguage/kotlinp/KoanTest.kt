@@ -286,8 +286,36 @@ fun main(args: Array<String>) {
     println(5.r())
     println(6 to 8.r())
     println((6 to 8).r())
+
+    println(getList2())
+
+    println(membersOf<StringBuilder>().joinToString("\n"))
 }
 
+inline fun <reified T> membersOf() = T::class.members
+
+///////////////////////////
+fun getList(): List<Int> {
+    val arrayList = arrayListOf(1, 5, 2)
+//    Comparator{ (a,b)->{return }}
+//    Collections.sort(arrayList,kotlin.Comparator { a, b -> a>b?-1:1})
+//    Collections.sort(arrayList,{( a:Int, b:Int )->  if (a>b) -1 else 1})
+//    Collections.sort(arrayList,{ a, b -> if (a>b) -1 else 1})
+
+    //anonymous classes in Java.
+    Collections.sort(arrayList,object: Comparator<Int> {
+        override fun compare(a: Int, b: Int): Int {
+            return  if (a>b) -1 else 1
+        }
+    })
+//    Collections.sort(arrayList,kotlin.Comparator { a, b -> if (a>b) -1 else 1})
+    return arrayList
+}
+fun getList2(): List<Int> {
+    return arrayListOf(1, 5, 2).sortedByDescending{i -> i}
+    //TODO("return the list sorted in descending order")
+}
+///////////////////////////
 
 ///////////////////////////
 //Objects with invoke() method can be invoked as a function.
@@ -305,7 +333,7 @@ class Invokable {
 fun invokeTwice(invokable: Invokable) = invokable()()
 ///////////////////////////
 
-///////////////////////////
+////smart cast///////////////////////
 fun eval(expr: Expr): Int =
         when (expr) {
             is Num -> expr.value
@@ -317,7 +345,7 @@ class Num(val value: Int) : Expr
 class Sum(val left: Expr, val right: Expr) : Expr
 ///////////////////////////
 
-///////////////////////////
+//////func extension/////////////////////
 fun Int.r(): RationalNumber = RationalNumber(this,1)
 fun Pair<Int, Int>.r(): RationalNumber = RationalNumber(this.first,this.second)
 

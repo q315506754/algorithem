@@ -50,4 +50,10 @@ fun main(args: Array<String>) {
 
 //    var   not final
 //    val   final
+
+    val aa = 3
+//    println(aa>3?11:22) //error
+
+    val t:String? =null
+    println(t?.equals("aa"))
 }

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>css official 变量教程</title>
+
+    <!--为什么选择两根连词线（--）表示变量？因为$foo被 Sass 用掉了，@foo被 Less 用掉了。为了不产生冲突，官方的 CSS 变量就改用两根连词线了。-->
+    <style>
+        body {
+            --foo: #7F583F;
+            --bar: #F7EFD2;
+        }
+
+        :root{
+            --main-color: #4d4e53;
+            --main-bg: rgb(255, 255, 255);
+            --logo-border-color: rebeccapurple;
+
+            --header-height: 68px;
+            --content-padding: 10px 20px;
+
+            --base-line-height: 1.428571429;
+            --transition-duration: .35s;
+            --external-link: "external link";
+            --margin-top: calc(2vh + 20px);
+
+            --primary-color: red;
+
+            /*var()函数还可以用在变量的声明。*/
+            --logo-text: var(--primary-color);
+
+            /*变量值的类型*/
+            /*值是一个字符串，可以与其他字符串拼接。*/
+            --bar: 'hello';
+            --foo: var(--bar)' world';
+
+            /*如果变量值是数值，不能与数值单位直接连用。*/
+            --gap: 20;
+            /* 无效 */
+            /*margin-top: var(--gap)px;*/
+            /*数值与单位直接写在一起，这是无效的。必须使用calc()函数，将它们连接。*/
+            /*margin-top: calc(var(--gap) * 1px);*/
+
+            /*变量值带有单位，就不能写成字符串。*/
+            /* 无效 */
+            /*.foo {*/
+                /*--foo: '20px';*/
+                /*font-size: var(--foo);*/
+            /*}*/
+
+            /* 有效 */
+            /*.foo {*/
+                /*--foo: 20px;*/
+                /*font-size: var(--foo);*/
+            /*}*/
+        }
+
+        a {
+        /*var()函数还可以使用第二个参数，表示变量的默认值。如果该变量不存在，就会使用这个默认值。*/
+            /*color: var(--foo);*/
+            color: var(--foo, #7F583F);
+            /*对于不支持 CSS 变量的浏览器，可以采用下面的写法。*/
+            /*color: #7F583F;*/
+            /*color: var(--primary);*/
+
+            text-decoration-color: var(--bar);
+        }
+
+
+        /*兼容性处理*/
+        @supports ( (--a: 0)) {
+            /* supported */
+            .dd{
+                color: greenyellow;
+            }
+        }
+
+        @supports ( not (--a: 0)) {
+            /* not supported */
+            .dd{
+                color: black;
+            }
+        }
+    </style>
+
+
+</head>
+<body>
+<a>aaaaa</a>
+<a href="index.html">bbbbb</a>
+<span class="dd">asdasd</span>
+<script>
+    /*兼容性处理*/
+    const isSupported =
+            window.CSS &&
+            window.CSS.supports &&
+            window.CSS.supports('--a', 0);
+    if (isSupported) {
+        /* supported */
+        console.log('supported');
+    } else {
+        /* not supported */
+        console.log('not supported');
+    }
+
+
+//    oper
+    // 设置变量
+    document.body.style.setProperty('--primary', '#7F583F');
+
+    // 读取变量
+    console.log(document.body.style.getPropertyValue('--primary').trim());;
+    // '#7F583F'
+
+    // 删除变量
+    document.body.style.removeProperty('--primary');
+</script>
+</body>
+</html>

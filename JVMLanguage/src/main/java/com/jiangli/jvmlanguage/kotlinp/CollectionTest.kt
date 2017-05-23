@@ -18,6 +18,7 @@ fun main(args: Array<String>) {
     println(arrayListOf(1,"2","3"))
     println(mutableListOf<String>())
     println(mutableListOf(1, 2, "3"))
+    println("toSet:"+listOf(1, 2, "3",3,2).toSet())
 //    listOf(1, 2, "3").forEach { println(it) }
 //    listOf(1, 2, "3").indices
 //    listOf(1, 2, "3").lastIndex
@@ -50,4 +51,12 @@ fun main(args: Array<String>) {
 //    for ( a in message) {
 //        println(a)
 //    }
+
+    val numbers = listOf(1, -1, 2)
+    println(numbers.filter { it > 0 } == listOf(1, 2))
+    println( numbers.map { it * it } == listOf(1, 1, 4))
+    println( numbers.map { it * it } == listOf( 4,1,1))
+    println( listOf( 4,1,1).javaClass) //java.util.Arrays$ArrayList
+
+
 }

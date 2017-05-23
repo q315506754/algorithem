@@ -6,9 +6,20 @@ package com.jiangli.jvmlanguage.kotlinp;
  * See http://kotlinlang.org/docs/reference/classes.html#classes
  */
 
+//public  not final
+open class Base(p: Int) {}
+
+//函数必须加上override标注才能重写父类方法
+class Derived(p: Int) : Base(p) {}
+
 class Greeter(val name: String?="unkown") {
     fun greet() {
         println("Hello, ${name}");
+    }
+
+    //constructor
+    init {
+        println("new Greeter")
     }
 }
 
@@ -17,4 +28,16 @@ fun main(args: Array<String>) {
         "bill"
     else args[0]).greet()
 
+    println(test1(123))
+}
+
+fun test1(x: Any): Int {
+    listOf(1,2,3).map {y->
+        println(y)
+        y
+    }.forEach { x->
+        println(x)
+        if(x%2==0) return x
+    }
+    return -1
 }

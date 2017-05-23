@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>css3 media教程</title>
+
+    <!---->
+    <!--CSS3 @media 查询-->
+    <!--不带@media的必须放上面 否则会覆盖下面的属性-->
+    <style>
+        body {
+            background-color:darkgray;
+        }
+
+        @media screen and (max-width: 600px) {
+        /*@media screen and (device-width: 600px) {*/
+            body {
+                background-color:lightblue;
+            }
+        }
+
+
+        /*CSS 语法*/
+        /*@media mediatype and|not|only (media feature) {*/
+            /*CSS-Code;*/
+        /*}*/
+        /**/
+            /*你也可以针对不同的媒体使用不同 stylesheets :*/
+        /*<link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css">*/
+        /**/
+    </style>
+
+
+</head>
+<body>
+<a>aaaaa</a>
+<a href="index.html">bbbbb</a>
+<span class="dd">asdasd</span>
+<script>
+    
+</script>
+</body>
+</html>

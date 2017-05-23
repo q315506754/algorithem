@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>css3 border 教程</title>
+
+    <!---->
+    <style>
+        div
+        {
+            padding:10px 40px;
+            background:#dddddd;
+            width:300px;
+            margin: 20px;
+        }
+
+        .radius{
+            border:2px solid #a1a1a1;
+            border-radius:25px;
+        }
+
+        .shadow
+        {
+            box-shadow: 10px 10px 5px #888888;
+        }
+
+        .img{
+            border:15px solid transparent;
+            width:250px;
+            padding:10px 20px;
+        }
+
+        .img.round
+        {
+            /*-webkit-border-image:url(border.png) 30 30 round; !* Safari 5 and older *!*/
+            /*-o-border-image:url(border.png) 30 30 round; !* Opera *!*/
+            border-image:url(border.png) 30 30 round;
+        }
+        .img.stretch
+        {
+            /*-webkit-border-image:url(border.png) 30 30 stretch; !* Safari 5 and older *!*/
+            /*-o-border-image:url(border.png) 30 30 stretch; !* Opera *!*/
+            border-image:url(border.png) 30 30 stretch;
+        }
+    </style>
+
+
+</head>
+<body>
+<div class="radius">border-radius 属性允许您为元素添加圆角边框！ </div>
+<div class="radius shadow">border-radius 属性允许您为元素添加圆角边框！ </div>
+<div class="radius img">border-radius 属性允许您为元素添加圆角边框！ </div>
+<div class="img round">border-radius 属性允许您为元素添加圆角边框！ </div>
+<div class="img stretch">border-radius 属性允许您为元素添加圆角边框！ </div>
+<p>这是我们使用的图片素材：</p>
+<img src="border.png" />
+
+<script>
+    
+</script>
+</body>
+</html>
