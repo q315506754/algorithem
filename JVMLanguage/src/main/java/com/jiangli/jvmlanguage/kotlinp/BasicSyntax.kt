@@ -150,6 +150,17 @@ fun main(args: Array<String>) {
 //    var x = null as Int
 //    var y = null as Int
 //    p(x?*y?)
+
+    var x:Int?=null
+    val y = x?:-1
+    println(y)
+
+    (5..100 step 2).mapNotNull { when(it){
+       in 20..30->it
+        else ->null
+    } }.forEach{
+        println(it)
+    }
 }
 fun doSth(status: Any):Any? {
     when(status){
