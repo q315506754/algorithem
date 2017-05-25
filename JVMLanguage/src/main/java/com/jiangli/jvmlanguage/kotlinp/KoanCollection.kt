@@ -7,8 +7,73 @@ package com.jiangli.jvmlanguage.kotlinp
  * @date 2017/5/23 13:16
  */
 fun main(args: Array<String>) {
-
+    println(listOf(1,42,33).max())
 }
+
+//////////////////////////////////////
+//////////////////////////////////////
+
+// Return the set of products that were ordered by every customer
+fun Shop.getSetOfProductsOrderedByEveryCustomer(): Set<Product>
+//    this.customers.flatMap { it.orders }.flatMap { it.products }.
+//            filter {
+//        eachProduct->
+//        this.customers.all { it.orders.flatMap { it.products }.contains(eachProduct) }
+//    }.toSet()
+        {
+            val allProducts=this.customers.flatMap { it.orders }.flatMap { it.products }
+
+            val initial = setOf<Product>()
+
+            allProducts.fold(initial,{
+                sss, ppp ->
+                if(this.customers.all { it.orders.flatMap { it.products }.contains(ppp) })
+                    sss.plus(ppp)
+
+                sss
+            })
+
+            return initial
+        }
+
+//        this.customers.flatMap { it.orders }.flatMap { it.products }.fold(setOf<Product>(),
+//                {
+//                    sss, ppp ->
+//                    if(this.customers.all { it.orders.flatMap { it.products }.contains(ppp) })
+//                        sss.plus(ppp)
+//                    sss
+//                }
+//)
+
+//////////////////////////////////////
+
+// Return customers who have more undelivered orders than delivered
+// (positive, negative)
+fun Shop.getCustomersWithMoreUndeliveredOrdersThanDelivered(): Set<Customer> = this.customers.partition { it.orders.filter {!it.isDelivered}.size > it.orders.filter {it.isDelivered}.size  }.first.toSet()
+
+//////////////////////////////////////
+
+// Return a map of the customers living in each city
+fun Shop.groupCustomersByCity(): Map<City, List<Customer>> = this.customers.groupBy {it.city }
+
+//////////////////////////////////////
+
+// Return the sum of prices of all products that a customer has ordered.
+// Note: the customer may order the same product for several times.
+fun Customer.getTotalOrderPrice(): Double = this.orders.flatMap { it.products }.sumByDouble { it.price }
+
+//////////////////////////////////////
+
+// Return a list of customers, sorted by the ascending number of orders they made
+fun Shop.getCustomersSortedByNumberOfOrders(): List<Customer> = this.customers.sortedBy {it.orders.size}
+
+//////////////////////////////////////
+
+// Return a customer whose order count is the highest among all customers
+fun Shop.getCustomerWithMaximumNumberOfOrders(): Customer? = this.customers.maxBy { it.orders.size }
+
+// Return the most expensive product which has been ordered
+fun Customer.getMostExpensiveOrderedProduct(): Product? = this.orders.flatMap { it.products }.maxBy { it.price }
 
 //////////////////////////////////////
 
