@@ -29,6 +29,11 @@ fun main(args: Array<String>) {
     else args[0]).greet()
 
     println(test1(123))
+
+    val s:String? = null
+//    val s:String? = "123"
+    println(s?.length)
+    println(s?.length?.equals(3))
 }
 
 fun test1(x: Any): Int {

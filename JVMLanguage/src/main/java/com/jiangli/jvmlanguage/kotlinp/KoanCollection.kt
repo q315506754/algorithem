@@ -8,9 +8,48 @@ package com.jiangli.jvmlanguage.kotlinp
  */
 fun main(args: Array<String>) {
     println(listOf(1,42,33).max())
+
+    println(listOf(10,30,20).fold(2,{k,j->j+k}))
+
+    println(listOf(10,30,20).fold(mutableSetOf<Int>(),{ s, j->
+//        println(s+" " +j)
+//        println(s.add(j))
+        s.add(j)
+        s
+    }))
+
+
 }
 
 //////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+
+fun doSomethingStrangeWithCollection(collection: Collection<String>): Collection<String>? {
+
+    val groupsByLength = collection. groupBy { s -> s.length }
+
+    val maximumSizeOfGroup = groupsByLength.values.map { group -> group.size }.max()
+
+    return groupsByLength.values.firstOrNull { group -> group.size==maximumSizeOfGroup }
+}
+
+//////////////////////////////////////
+
+// Return the most expensive product among all delivered products
+// (use the Order.isDelivered flag)
+fun Customer.getMostExpensiveDeliveredProduct(): Product? {
+    return this.orders.filter { it.isDelivered }.maxBy {  it.products.maxBy { it.price }?.price?:0 as Double }
+            ?.products?.maxBy { it.price }
+}
+
+// Return how many times the given product was ordered.
+// Note: a customer may order the same product for several times.
+fun Shop.getNumberOfTimesProductWasOrdered(product: Product): Int {
+    return this.customers.flatMap { it.orders }.flatMap { it.products }.filter { it==product }.count()
+}
+
 //////////////////////////////////////
 
 // Return the set of products that were ordered by every customer
@@ -23,17 +62,14 @@ fun Shop.getSetOfProductsOrderedByEveryCustomer(): Set<Product>
         {
             val allProducts=this.customers.flatMap { it.orders }.flatMap { it.products }
 
-            val initial = setOf<Product>()
 
-            allProducts.fold(initial,{
+
+            return  allProducts.fold(mutableSetOf<Product>(),{
                 sss, ppp ->
                 if(this.customers.all { it.orders.flatMap { it.products }.contains(ppp) })
-                    sss.plus(ppp)
-
+                    sss.add(ppp)
                 sss
             })
-
-            return initial
         }
 
 //        this.customers.flatMap { it.orders }.flatMap { it.products }.fold(setOf<Product>(),

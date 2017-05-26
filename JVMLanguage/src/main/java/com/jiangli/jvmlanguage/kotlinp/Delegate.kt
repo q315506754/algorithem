@@ -1,5 +1,4 @@
 package com.jiangli.jvmlanguage.kotlinp
-import kotlin.Pair
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
@@ -25,7 +24,7 @@ class Example {
  */
 class Delegate() {
     operator fun getValue(thisRef: Any?, prop: KProperty<*>): String {
-        return "$thisRef, thank you for delegating '${prop.name}'='' to me!"
+        return "$thisRef, thank you for delegating '${prop.name}'='${prop}' to me!"
     }
 
     operator fun setValue(thisRef: Any?, prop: KProperty<*>, value: String) {
