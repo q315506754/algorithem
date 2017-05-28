@@ -123,7 +123,6 @@ data class MyDate(var year: Int, var month: Int, var dayOfMonth: Int) : Comparab
 //    a >= b	a.compareTo(b) >= 0
 //    a <= b	a.compareTo(b) <= 0
 
-
     operator fun plus(b:Any):MyDate {
         if (b is Number) {
            dayOfMonth+=b.toInt()

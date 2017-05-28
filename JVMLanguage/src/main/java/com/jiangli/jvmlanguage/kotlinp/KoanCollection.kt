@@ -18,10 +18,54 @@ fun main(args: Array<String>) {
         s
     }))
 
+    val destination = mutableSetOf<Int>()
+    val src = listOf(10, 30, 20)
+    println(src.toCollection(destination))
+    println(destination)
+    println(src)
+
+    println(arrayOf("123","345").toCollection(mutableSetOf<String>()))
+
+    val (words, lines) = listOf("a", "a b", "c", "d e").
+            partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(" ") }
+    println(words)
+    println(lines)
+
+    partitionWordsAndLines()
+    partitionLettersAndOtherSymbols()
 
 }
 
+
 //////////////////////////////////////
+fun partitionWordsAndLines() {
+    val (words, lines) = listOf("a", "a b", "c", "d e").
+            partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(" ") }
+    println(words == listOf("a", "c"))
+    println(lines == listOf("a b", "d e"))
+    println(words)
+    println(lines)
+}
+fun partitionLettersAndOtherSymbols() {
+    val (letters, other) = setOf('a', '%', 'r', '}').
+            partitionTo(HashSet<Char>(), HashSet()) { c -> c in 'a'..'z' || c in 'A'..'Z'}
+    println(letters == setOf('a', 'r'))
+    println(other == setOf('%', '}'))
+    println(letters)
+    println(other)
+}
+fun <T> Collection<T>.partitionTo(correct:MutableCollection<T>,wrong:MutableCollection<T>,predicate:(s:T)->Boolean):Pair<Collection<T>,Collection<T>> {
+    println("partitionTo..")
+//    val (c,w) = this.partition(predicate)
+//    c.toCollection(correct)
+//    w.toCollection(wrong)
+//   return Pair(correct,wrong)
+//   hashSetOf<String>().add()
+    forEach { if (predicate(it)) correct.add(it) else wrong.add(it) }
+//   return this.partition(predicate)
+    return Pair(correct,wrong)
+}
+
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
