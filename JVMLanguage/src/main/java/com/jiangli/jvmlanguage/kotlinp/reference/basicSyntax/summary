@@ -96,7 +96,7 @@ grammar:
         comment:
             like java,can be nested
         features:
-            String template "$xx ${aa.bb} ${exp}"  reg:"""\d*"""
+            String template|Interpolation "$xx ${aa.bb} ${exp}"  reg:"""\d*"""
             null check: x?.invo1?.invo2     val x = y?.getX()?:3  (default value)
             type auto cast:
 util:
