@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>jsMind</title>
+    <link type="text/css" rel="stylesheet" href="css/jsmind.css" />
+    <style type="text/css">
+        #jsmind_container{
+            width:1200px;
+            height:800px;
+            border:solid 1px #ccc;
+            /*background:#f4f4f4;*/
+            background:#f4f4f4;
+        }
+
+        /* custom1 theme */                                                      /* greensea 即是主题名 */
+        jmnodes.theme-custom1 jmnode{overflow: visible;background-color: #bc541b;color:#fff;width: 200px;height: 50px;text-align: center;border: 5px solid #000000;vertical-align: middle;}       /* 节点样式 */
+        jmnodes.theme-custom1 jmnode:hover{background-color: #4aa05b;}            /* 鼠标悬停的节点样式 */
+        jmnodes.theme-custom1 jmnode.selected{background-color: blue;line-height: 50px;font-size: 30px;} /* 选中的节点样式 */
+        jmnodes.theme-custom1 jmnode.root{}                                      /* 根节点样式 */
+        jmnodes.theme-custom1 jmexpander{ color:#ffc2ea;display: none;}                                       /* 展开/关闭节点的控制点样式 */
+        jmnodes.theme-custom1 jmexpander:hover{color:#4aa05b;}                                 /* 鼠标悬停展开/关闭节点的控制点样式 */
+
+        jmnodes.theme-custom1 jmnode button{display: none;position: absolute;width: 20px;height: 20px;border-radius: 20px}
+        jmnodes.theme-custom1 jmnode button.deleteNode{top:-10px;right: -10px;background-color:red;color: white; }
+        jmnodes.theme-custom1 jmnode button.addChildNode{top:50%;right: -10px;background-color:#13816E;color: white;}
+        jmnodes.theme-custom1 jmnode button.addSiblingNode{bottom:-10px;right: 50%;background-color:#13816E;color: white;}
+        jmnodes.theme-custom1 jmnode:hover button{display: inline-block;}
+        jmnodes.theme-custom1 jmnode .text{line-height: 50px;font-size: 30px;text-overflow: ellipsis;width: 100%;}
+    </style>
+</head>
+<body>
+<input type="file" onchange="load_file(this);"/>
+<button onclick="save_nodetree();">nodetree</button>
+<button onclick="replay();">replay</button>
+<div id="jsmind_container"></div>
+<script type="text/javascript" src="../jquery/jquery-1.8.3.min.js"></script>
+<!--<script type="text/javascript" src="js/jsmind.js"></script>-->
+<!--<script type="text/javascript" src="js/jsmind.draggable.js"></script>-->
+<script type="text/javascript" src="js/ext.jsmind.js"></script>
+<script type="text/javascript" src="js/ext.jsmind.draggable.js"></script>
+
+<script type="text/javascript" src="js/jsmind.shell.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        console.log('$$$');
+
+        var getNode = function($obj){
+            return _jm.get_node(getNodeId($obj))
+        }
+        var getNodeId = function($obj){
+            var $node = $obj.parents("jmnode")
+            return $node.attr("nodeid")
+        }
+        var nodeEditBlock = function(fun){
+            _jm.enable_edit()
+            fun();
+            _jm.disable_edit()
+        }
+
+        var count=0;
+
+        $(document).on("click","button.deleteNode",function (e) {
+            console.log('deleteNode');
+            var node = getNode($(this));
+            console.log(node);
+
+            nodeEditBlock(function () {
+                _jm.remove_node(node)
+            });
+        });
+        $(document).on("click","button.addSiblingNode",function (e) {
+            console.log('addSiblingNode');
+
+            var node = getNode($(this));
+
+            nodeEditBlock(function () {
+                _jm.insert_node_after(node, "node"+new Date().getTime(), "sibling"+count++, {})
+            });
+        });
+        $(document).on("click","button.addChildNode",function (e) {
+            console.log('addChildNode');
+
+            var node = getNode($(this));
+
+            nodeEditBlock(function () {
+                _jm.add_node(node, "node"+new Date().getTime(), "child"+count++, {})
+            });
+        });
+    });
+
+    var _jm = null;
+    function load_jsmind(){
+        var mind = {
+            meta:{
+                name:'demo',
+                author:'hizzgdev@163.com',
+                version:'0.2'
+            },
+            format:'node_array',
+            //"node_tree"-mongo,   "node_array"-rdb,   "freemind"-xml,
+            data:[
+                {"id":"root", "isroot":true, "topic":"jsMind"},
+
+                {"id":"sub1", "parentid":"root", "topic":"sub1"},
+                {"id":"sub11", "parentid":"sub1", "topic":"sub11"},
+                {"id":"sub12", "parentid":"sub1", "topic":"sub12"},
+                {"id":"sub13", "parentid":"sub1", "topic":"sub13"},
+
+                {"id":"sub2", "parentid":"root", "topic":"sub2"},
+                {"id":"sub21", "parentid":"sub2", "topic":"sub21"},
+                {"id":"sub22", "parentid":"sub2", "topic":"<span class='text'>测试按钮asdasdsa</span><button class='deleteNode'>x</button><button class='addSiblingNode'>+</button><button class='addChildNode'>+</button>"},
+                {"id":"sub3", "parentid":"root", "topic":"sub3"},
+            ]
+        };
+        var options = {
+            container:'jsmind_container',// [必选] 容器的ID
+            editable : false,       // 是否启用编辑
+//            editable : true,       // 是否启用编辑
+            draggable:true,   //ext 扩展
+            mode :'side',           // 显示模式
+//            jsMind 现支持两种显示模式:
+//        full - 子节点动态分布在根节点两侧 [默认值]
+//        side - 子节点只分布在根节点右侧
+//            theme:'clouds',//自定义主题
+            theme:'custom1',
+            //可选项
+//            primary
+//            warning
+//            danger
+//            success
+//            info
+//            greensea
+//            nephrite
+//            belizehole
+//            wisteria
+//            asphalt
+//            orange
+//            pumpkin
+//            pomegranate
+//            clouds
+//            asbestos
+
+
+            view:{
+                hmargin:100,        // 思维导图距容器外框的最小水平距离
+                vmargin:50,         // 思维导图距容器外框的最小垂直距离
+                line_width:5,       // 思维导图线条的粗细
+                line_color:'#ddd'   // 思维导图线条的颜色
+            },
+            layout:{
+                hspace:50,          // 节点之间的水平间距
+                vspace:30,          // 节点之间的垂直间距
+                pspace:13           // 节点收缩/展开控制器的尺寸
+            },
+            shortcut:{
+//                enable:true,        // 是否启用快捷键
+                enable:false,        // 是否启用快捷键
+                //自定义按键
+                handles:{
+                    test:function(j,e){
+                        console.log(j);
+                    }
+                },
+                mapping:{
+                    test:89  //自定义按键
+                }
+            }
+        }
+        //方法一
+//        _jm = jsMind.show(options,mind);
+
+        //方法二
+        _jm = new jsMind(options);
+        _jm.show(mind);
+
+        // jm.set_readonly(true);
+        // var mind_data = jm.get_data();
+        // alert(mind_data);
+    }
+    
+    function load_file(fi){
+        var files = fi.files;
+        if(files.length > 0){
+            var file_data = files[0];
+            jsMind.util.file.read(file_data, function(freemind_data, jsmind_name){
+                var mind = jsmind_data;
+                if(!!mind){
+                    _jm.show(mind);
+                }else{
+                    console.error('can not open this file as mindmap');
+                }
+            });
+        }
+    }
+
+    function save_nodetree(){
+        var mind_data = _jm.get_data('node_tree');
+        console.log(mind_data);
+    }
+
+    function replay(){
+        var shell = _jm.shell;
+        if(!!shell){
+            shell.replay();
+        }
+    }
+
+    load_jsmind();
+</script>
+</body>
+</html>
