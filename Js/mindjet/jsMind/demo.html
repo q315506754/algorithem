@@ -4,37 +4,57 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>jsMind</title>
-    <link type="text/css" rel="stylesheet" href="css/jsmind.css" />
+    <link type="text/css" rel="stylesheet" href="css/ext.jsmind.css" />
     <style type="text/css">
         #jsmind_container{
             width:1200px;
             height:800px;
+            /*min-width:1200px;*/
+            /*min-height:800px;*/
+            /*width:auto;*/
+            /*height:auto;*/
             border:solid 1px #ccc;
             /*background:#f4f4f4;*/
-            background:#f4f4f4;
+            overflow: visible;
+            background:#fff;
         }
 
+        /*jmnodes{overflow: visible}*/
         /* custom1 theme */                                                      /* greensea 即是主题名 */
-        jmnodes.theme-custom1 jmnode{overflow: visible;background-color: #bc541b;color:#fff;width: 200px;height: 50px;text-align: center;border: 5px solid #000000;vertical-align: middle;}       /* 节点样式 */
-        jmnodes.theme-custom1 jmnode:hover{background-color: #4aa05b;}            /* 鼠标悬停的节点样式 */
-        jmnodes.theme-custom1 jmnode.selected{background-color: blue;line-height: 50px;font-size: 30px;} /* 选中的节点样式 */
+        jmnodes.theme-custom1 jmnode{overflow: visible;background-color: #F8F8F8;color:#606060;width: 250px;height: 33px;text-align: center;border: 2px solid #E0E0E0;vertical-align: middle;}       /* 节点样式 */
+        /*jmnodes.theme-custom1 jmnode:hover{background-color: #4aa05b;}            !* 鼠标悬停的节点样式 *!*/
+        /*jmnodes.theme-custom1 jmnode.selected{background-color: blue;line-height: 50px;font-size: 30px;} !* 选中的节点样式 *!*/
         jmnodes.theme-custom1 jmnode.root{}                                      /* 根节点样式 */
         jmnodes.theme-custom1 jmexpander{ color:#ffc2ea;display: none;}                                       /* 展开/关闭节点的控制点样式 */
-        jmnodes.theme-custom1 jmexpander:hover{color:#4aa05b;}                                 /* 鼠标悬停展开/关闭节点的控制点样式 */
+        /*jmnodes.theme-custom1 jmexpander:hover{color:#4aa05b;}                                 !* 鼠标悬停展开/关闭节点的控制点样式 *!*/
 
         jmnodes.theme-custom1 jmnode button{display: none;position: absolute;width: 20px;height: 20px;border-radius: 20px}
         jmnodes.theme-custom1 jmnode button.deleteNode{top:-10px;right: -10px;background-color:red;color: white; }
         jmnodes.theme-custom1 jmnode button.addChildNode{top:50%;right: -10px;background-color:#13816E;color: white;}
         jmnodes.theme-custom1 jmnode button.addSiblingNode{bottom:-10px;right: 50%;background-color:#13816E;color: white;}
         jmnodes.theme-custom1 jmnode:hover button{display: inline-block;}
-        jmnodes.theme-custom1 jmnode .text{line-height: 50px;font-size: 30px;text-overflow: ellipsis;width: 100%;}
+        jmnodes.theme-custom1 jmnode .nodeText{line-height: 33px;font-size: 17px;width: 100%;overflow: hidden}
+        jmnodes.theme-custom1 jmnode .nodeText .text{width: 250px;text-overflow: ellipsis;height: 100%}
+        jmnodes.theme-custom1 jmnode .nodeText .idx{display:block;margin-right: 2px;width: 200px;height: 100%}
     </style>
 </head>
 <body>
 <input type="file" onchange="load_file(this);"/>
 <button onclick="save_nodetree();">nodetree</button>
 <button onclick="replay();">replay</button>
-<div id="jsmind_container"></div>
+<div style="z-index: 100220">
+    <button onclick="_jm.view.zoomIn()" >放大</button>
+    <button onclick="_jm.view.zoomOut()">缩小</button>
+</div>
+
+
+
+<div id="jsmind_container">
+
+</div>
+
+
+
 <script type="text/javascript" src="../jquery/jquery-1.8.3.min.js"></script>
 <!--<script type="text/javascript" src="js/jsmind.js"></script>-->
 <!--<script type="text/javascript" src="js/jsmind.draggable.js"></script>-->
@@ -43,26 +63,31 @@
 
 <script type="text/javascript" src="js/jsmind.shell.js"></script>
 <script type="text/javascript">
+    var getNode = function($obj){
+        return _jm.get_node(getNodeId($obj))
+    }
+    var getNodeId = function($obj){
+        var $node = $obj.parents("jmnode")
+        return $node.attr("nodeid")
+    }
+    var nodeEditBlock = function(fun){
+        _jm.enable_edit()
+        fun();
+        _jm.disable_edit()
+    }
+    var createTopicHtml = function(str){
+        var s = str==undefined?"":str;
+        return "<div class='nodeText'><span class='idx'></span><span class='text'>"+s+"</span></div><button class='deleteNode'>x</button><button class='addSiblingNode'>+</button><button class='addChildNode'>+</button>";
+    }
+
 
     $(function () {
         console.log('$$$');
 
-        var getNode = function($obj){
-            return _jm.get_node(getNodeId($obj))
-        }
-        var getNodeId = function($obj){
-            var $node = $obj.parents("jmnode")
-            return $node.attr("nodeid")
-        }
-        var nodeEditBlock = function(fun){
-            _jm.enable_edit()
-            fun();
-            _jm.disable_edit()
-        }
-
         var count=0;
 
         $(document).on("click","button.deleteNode",function (e) {
+            e.stopPropagation();
             console.log('deleteNode');
             var node = getNode($(this));
             console.log(node);
@@ -72,22 +97,40 @@
             });
         });
         $(document).on("click","button.addSiblingNode",function (e) {
+            e.stopPropagation();
             console.log('addSiblingNode');
 
             var node = getNode($(this));
 
+            if(node.isroot){
+                return;
+            }
             nodeEditBlock(function () {
-                _jm.insert_node_after(node, "node"+new Date().getTime(), "sibling"+count++, {})
+                _jm.insert_node_after(node, "node"+new Date().getTime(), createTopicHtml("sibling"+count++), {})
             });
         });
         $(document).on("click","button.addChildNode",function (e) {
+            e.stopPropagation();
             console.log('addChildNode');
 
             var node = getNode($(this));
 
             nodeEditBlock(function () {
-                _jm.add_node(node, "node"+new Date().getTime(), "child"+count++, {})
+                _jm.add_node(node, "node"+new Date().getTime(), createTopicHtml("child"+count++), {})
             });
+        });
+
+        _jm.add_event_listener(function (tp,data) {
+            console.log(arguments);
+            console.log(data);
+            console.log(data.evt);
+
+            if(tp==jsMind.event_type.resize){
+                $("#jsmind_container").css({
+                    "width":_jm.view.e_canvas.width+"px",
+                    "height":_jm.view.e_canvas.height+"px"
+                });
+            }
         });
     });
 
@@ -102,23 +145,24 @@
             format:'node_array',
             //"node_tree"-mongo,   "node_array"-rdb,   "freemind"-xml,
             data:[
-                {"id":"root", "isroot":true, "topic":"jsMind"},
+                {"id":"root", "isroot":true, "topic":createTopicHtml("jsMind")},
 
-                {"id":"sub1", "parentid":"root", "topic":"sub1"},
-                {"id":"sub11", "parentid":"sub1", "topic":"sub11"},
-                {"id":"sub12", "parentid":"sub1", "topic":"sub12"},
-                {"id":"sub13", "parentid":"sub1", "topic":"sub13"},
+                {"id":"sub1", "parentid":"root", "topic":createTopicHtml("sub1")},
+                {"id":"sub11", "parentid":"sub1", "topic":createTopicHtml("sub11")},
+                {"id":"sub12", "parentid":"sub1", "topic":createTopicHtml("sub12")},
+                {"id":"sub13", "parentid":"sub1", "topic":createTopicHtml("sub13")},
 
-                {"id":"sub2", "parentid":"root", "topic":"sub2"},
-                {"id":"sub21", "parentid":"sub2", "topic":"sub21"},
-                {"id":"sub22", "parentid":"sub2", "topic":"<span class='text'>测试按钮asdasdsa</span><button class='deleteNode'>x</button><button class='addSiblingNode'>+</button><button class='addChildNode'>+</button>"},
-                {"id":"sub3", "parentid":"root", "topic":"sub3"},
+                {"id":"sub2", "parentid":"root", "topic":createTopicHtml("sub2")},
+                {"id":"sub21", "parentid":"sub2", "topic":createTopicHtml("sub21")},
+                {"id":"sub22", "parentid":"sub2", "topic":createTopicHtml("aaaaaaaaaaaaaaaaaaaadddddddddddddddd发的所发生的")},
+//                {"id":"sub22", "parentid":"sub2", "topic":createTopicHtml("aaaaa的所发生的")},
+                {"id":"sub3", "parentid":"root", "topic":createTopicHtml("sub3")},
             ]
         };
         var options = {
             container:'jsmind_container',// [必选] 容器的ID
-            editable : false,       // 是否启用编辑
-//            editable : true,       // 是否启用编辑
+//            editable : false,       // 是否启用编辑
+            editable : true,       // 是否启用编辑
             draggable:true,   //ext 扩展
             mode :'side',           // 显示模式
 //            jsMind 现支持两种显示模式:
@@ -147,25 +191,38 @@
             view:{
                 hmargin:100,        // 思维导图距容器外框的最小水平距离
                 vmargin:50,         // 思维导图距容器外框的最小垂直距离
-                line_width:5,       // 思维导图线条的粗细
-                line_color:'#ddd'   // 思维导图线条的颜色
+                line_width:2,       // 思维导图线条的粗细
+                line_color:'#ececec'   // 思维导图线条的颜色
             },
             layout:{
                 hspace:50,          // 节点之间的水平间距
                 vspace:30,          // 节点之间的垂直间距
-                pspace:13           // 节点收缩/展开控制器的尺寸
+                pspace:0           // 节点收缩/展开控制器的尺寸
+            },
+            default_event_handle:{
+                enable_mousedown_handle:false,
+                enable_click_handle:false,
+                enable_dblclick_handle:false
             },
             shortcut:{
-//                enable:true,        // 是否启用快捷键
-                enable:false,        // 是否启用快捷键
+                enable:true,        // 是否启用快捷键
+//                enable:false,        // 是否启用快捷键
                 //自定义按键
                 handles:{
                     test:function(j,e){
                         console.log(j);
+                    },
+                    addchild:function(j,e){
+                        console.log(e);
+                    },
+                    addbrother:function(j,e){
+                        console.log(e);
                     }
                 },
                 mapping:{
-                    test:89  //自定义按键
+                    test:89 , //自定义按键
+                    addchild   : 68,    // <Insert>
+                    addbrother : 83    // <Enter>
                 }
             }
         }

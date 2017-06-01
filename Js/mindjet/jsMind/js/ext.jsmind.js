@@ -965,18 +965,40 @@
             rightAngleLinetoWithExt : function(ctx,x1,y1,x2,y2){
 
                 // 先划一段延伸线
-                var X = x1 + 20;
+                //TODO 2
+                var X = x1 + 25;
                 this.lineto(ctx,x1,y1,X,y1);
 
                 this.rightAngleLineto(ctx,X,y1,x2,y2);
             },
+            rightAngleLinetoWithExtReverse : function(ctx,x1,y1,x2,y2){
+                if(x2-x1>=20){
+                    var X = x2 - 20
+                    this.rightAngleLinetoReverse(ctx,x1,y1,X,y2);
+
+                    // 延伸线
+                    this.lineto(ctx,X,y2,x2,y2);
+                }else {
+                    this.rightAngleLinetoReverse(ctx,x1,y1,x2,y2);
+                }
+
+            },
             rightAngleLineto : function(ctx,x1,y1,x2,y2){
                 ctx.beginPath();
 
-                // 先划一段延伸线
                 ctx.moveTo(x1,y1);
                 ctx.lineTo(x1,y2);
                 ctx.moveTo(x1,y2);
+                ctx.lineTo(x2,y2);
+
+                ctx.stroke();
+            },
+            rightAngleLinetoReverse : function(ctx,x1,y1,x2,y2){
+                ctx.beginPath();
+
+                ctx.moveTo(x1,y1);
+                ctx.lineTo(x2,y1);
+                ctx.moveTo(x2,y1);
                 ctx.lineTo(x2,y2);
 
                 ctx.stroke();
@@ -1347,7 +1369,7 @@
         },
 
         add_node:function(parent_node, nodeid, topic, data){
-            if(this.get_editable()){
+            // if(this.get_editable()){
                 var node = this.mind.add_node(parent_node, nodeid, topic, data);
                 if(!!node){
                     this.view.add_node(node);
@@ -1358,14 +1380,14 @@
                     this.invoke_event_handle(jm.event_type.edit,{evt:'add_node',data:[parent_node.id,nodeid,topic,data],node:nodeid});
                 }
                 return node;
-            }else{
-                logger.error('fail, this mind map is not editable');
-                return null;
-            }
+            // }else{
+            //     logger.error('fail, this mind map is not editable');
+            //     return null;
+            // }
         },
 
         insert_node_before:function(node_before, nodeid, topic, data){
-            if(this.get_editable()){
+            // if(this.get_editable()){
                 var beforeid = jm.util.is_node(node_before) ? node_before.id : node_before;
                 var node = this.mind.insert_node_before(node_before, nodeid, topic, data);
                 if(!!node){
@@ -1375,14 +1397,14 @@
                     this.invoke_event_handle(jm.event_type.edit,{evt:'insert_node_before',data:[beforeid,nodeid,topic,data],node:nodeid});
                 }
                 return node;
-            }else{
-                logger.error('fail, this mind map is not editable');
-                return null;
-            }
+            // }else{
+            //     logger.error('fail, this mind map is not editable');
+            //     return null;
+            // }
         },
 
         insert_node_after:function(node_after, nodeid, topic, data){
-            if(this.get_editable()){
+            // if(this.get_editable()){
                 var afterid = jm.util.is_node(node_after) ? node_after.id : node_after;
                 var node = this.mind.insert_node_after(node_after, nodeid, topic, data);
                 if(!!node){
@@ -1392,10 +1414,10 @@
                     this.invoke_event_handle(jm.event_type.edit,{evt:'insert_node_after',data:[afterid,nodeid,topic,data],node:nodeid});
                 }
                 return node;
-            }else{
-                logger.error('fail, this mind map is not editable');
-                return null;
-            }
+            // }else{
+            //     logger.error('fail, this mind map is not editable');
+            //     return null;
+            // }
         },
 
         remove_node:function(node){
@@ -2004,9 +2026,8 @@
             if(pout_cache.x == -1 || pout_cache.y == -1){
                 if(node.isroot){
                     var view_data = node._data.view;
-                    pout_cache.x = view_data.width/2+14;
+                    pout_cache.x = view_data.width/2+5;//TODO 1
                     pout_cache.y = 0;
-                    console.log(node);
                 }else{
                     var view_data = node._data.view;
                     var offset_p = this.get_node_offset(node);

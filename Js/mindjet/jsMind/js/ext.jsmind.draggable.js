@@ -24,9 +24,9 @@
     };
 
     var options = {
-        line_width : 5,
+        line_width : 3,
         lookup_delay : 500,
-        lookup_interval : 80
+        lookup_interval : 24
     };
 
     jsMind.draggable = function(jm){
@@ -104,7 +104,7 @@
             this.shadow.style.visibility = 'hidden';
         },
 
-        clear_lines:function(){
+         clear_lines:function(){
             jcanvas.clear(this.canvas_ctx, 0, 0, this.jm.view.size.w, this.jm.view.size.h);
         },
 
@@ -116,11 +116,12 @@
                 this.clear_lines();
 
 
-                jcanvas.rightAngleLineto(this.canvas_ctx,
-                    node.sp.x,
-                    node.sp.y,
+                jcanvas.rightAngleLinetoWithExtReverse(this.canvas_ctx,
                     node.np.x,
-                    node.np.y);
+                    node.np.y,
+                    node.sp.x,
+                    node.sp.y
+                    );
                 }
         },
 
@@ -231,8 +232,35 @@
 
             var jview = this.jm.view;
             var el = e.target || event.srcElement;
-            if(el.tagName.toLowerCase() != 'jmnode'){return;}
+
+            function tryCheckEl(ex) {
+                if(ex){
+                    return ex.tagName.toLowerCase() == 'jmnode'
+                }
+                return false;
+            }
+
+            if(!tryCheckEl(el)  ){
+                //filter
+                if(el.tagName.toLowerCase() == 'button')
+                    return;
+
+                //jquery dependency
+                el = $(el).parents("jmnode");
+                if(el.length>0){
+                    el = el[0];
+                }else {
+                    el=null;
+                }
+                if(!tryCheckEl(el)){
+                    return;
+                }
+            }
+
+            // console.log(el.tagName.toLowerCase());
+
             var nodeid = jview.get_binded_nodeid(el);
+
             if(!!nodeid){
                 var node = this.jm.get_node(nodeid);
                 if(!node.isroot){
