@@ -29,7 +29,7 @@
         /* custom1 theme */                                                      /* greensea 即是主题名 */
         jmnodes.theme-custom1 jmnode{overflow: visible;background-color: #F8F8F8;color:#606060;width: 250px;height: 37px;text-align: center;border: 2px solid #E0E0E0;vertical-align: middle;}       /* 节点样式 */
         /*jmnodes.theme-custom1 jmnode:hover{background-color: #4aa05b;}            !* 鼠标悬停的节点样式 *!*/
-        /*jmnodes.theme-custom1 jmnode.selected{background-color: blue;line-height: 50px;font-size: 30px;} !* 选中的节点样式 *!*/
+        jmnodes.theme-custom1 jmnode.selected{background-color: blue;} /* 选中的节点样式 */
         jmnodes.theme-custom1 jmnode.root{border: 2px solid #138472;}                                      /* 根节点样式 */
         jmnodes.theme-custom1 jmexpander{ color:#ffc2ea;display: none;}                                       /* 展开/关闭节点的控制点样式 */
         /*jmnodes.theme-custom1 jmexpander:hover{color:#4aa05b;}                                 !* 鼠标悬停展开/关闭节点的控制点样式 *!*/
@@ -253,9 +253,9 @@
         };
         var options = {
             container:'jsmind_container',// [必选] 容器的ID
-//            editable : false,       // 是否启用编辑
+            editable : false,       // 是否启用编辑
             editable : true,       // 是否启用编辑
-            draggable:true,   //ext 扩展
+//            draggable:true,   //ext 扩展
             mode :'side',           // 显示模式
 //            jsMind 现支持两种显示模式:
 //        full - 子节点动态分布在根节点两侧 [默认值]
@@ -292,31 +292,31 @@
                 pspace:0           // 节点收缩/展开控制器的尺寸
             },
             default_event_handle:{
-                enable_mousedown_handle:false,
-                enable_click_handle:false,
+                enable_mousedown_handle:true,
+                enable_click_handle:true,
                 enable_dblclick_handle:false
             },
-            shortcut:{
-                enable:true,        // 是否启用快捷键
-//                enable:false,        // 是否启用快捷键
-                //自定义按键
-                handles:{
-                    test:function(j,e){
-                        console.log(j);
-                    },
-                    addchild:function(j,e){
-                        console.log(e);
-                    },
-                    addbrother:function(j,e){
-                        console.log(e);
-                    }
-                },
-                mapping:{
-                    test:89 , //自定义按键
-                    addchild   : 68,    // <Insert>
-                    addbrother : 83    // <Enter>
-                }
-            }
+//            shortcut:{
+//                enable:true,        // 是否启用快捷键
+////                enable:false,        // 是否启用快捷键
+//                //自定义按键
+//                handles:{
+//                    test:function(j,e){
+//                        console.log(j);
+//                    },
+//                    addchild:function(j,e){
+//                        console.log(e);
+//                    },
+//                    addbrother:function(j,e){
+//                        console.log(e);
+//                    }
+//                },
+//                mapping:{
+//                    test:89 , //自定义按键
+//                    addchild   : 68,    // <Insert>
+//                    addbrother : 83    // <Enter>
+//                }
+//            }
         }
         //方法一
 //        _jm = jsMind.show(options,mind);
