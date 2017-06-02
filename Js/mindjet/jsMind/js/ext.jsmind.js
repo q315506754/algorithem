@@ -217,6 +217,7 @@
             }
             var nodeindex = idx || -1;
             var node = null;
+            direction = direction || jm.direction.right;//TODO
             if(parent_node.isroot){
                 var d = jm.direction.right;
                 if(isNaN(direction)){
@@ -654,7 +655,7 @@
             _extract_data:function(node_json){
                 var data = {};
                 for(var k in node_json){
-                    if(k == 'id' || k=='topic' || k=='parentid' || k=='isroot' || k=='direction' || k=='expanded'){
+                    if(k == 'id' || k=='topic' ||  k=='isroot' || k=='direction' || k=='expanded'){
                         continue;
                     }
                     data[k] = node_json[k];
@@ -1077,19 +1078,22 @@
                 }
             },
             merge:function(b,a){
-                for(var o in a){
-                    if(o in b){
-                        if(typeof b[o] === 'object' &&
-                            Object.prototype.toString.call(b[o]).toLowerCase() == '[object object]' &&
-                            !b[o].length){
-                            jm.util.json.merge(b[o], a[o]);
-                        }else{
-                            b[o] = a[o];
-                        }
-                    }else{
-                        b[o] = a[o];
-                    }
-                }
+                // try{
+                $.extend(b,a);
+                    // for(var o in a){
+                    //     if(o in b){
+                    //         if(typeof b[o] === 'object' &&
+                    //             Object.prototype.toString.call(b[o]).toLowerCase() == '[object object]' &&
+                    //             !b[o].length){
+                    //             jm.util.json.merge(b[o], a[o]);
+                    //         }else{
+                    //             b[o] = a[o];
+                    //         }
+                    //     }else{
+                    //         b[o] = a[o];
+                    //     }
+                    // }
+                // }catch (e){logger.error(e);}
                 return b;
             }
         },
@@ -1345,8 +1349,25 @@
         show : function(mind){
             this._reset();
             this._show(mind);
-        },
 
+            //save sort
+            for(var id in this.mind.nodes) {
+                var one = this.mind.nodes[id];
+
+                one.data.sort=this.get_sort(one);
+            }
+        },
+        get_sort:function (one) {
+            var op = one.parent;
+            if(op && op.children){
+                for(var i=0;i<op.children.length;i++) {
+                    if(op.children[i].id==one.id){
+                        return i+1;
+                    }
+                }
+            }
+            return 1;
+        },
         get_meta: function(){
             return {
                 name : this.mind.name,

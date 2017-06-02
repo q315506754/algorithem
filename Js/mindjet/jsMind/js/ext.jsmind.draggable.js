@@ -47,6 +47,7 @@
         this.hlookup_timer = 0;
         this.capture = false;
         this.moved = false;
+        this.prevClickTs = 0;
     };
 
     jsMind.draggable.prototype = {
@@ -140,6 +141,7 @@
 
             var direct = (sx + sw/2)>=root_x ?
                             jsMind.direction.right : jsMind.direction.left;
+            // console.log(`direct:${direct}`);
             var nodes = this.jm.mind.nodes;
             var node = null;
             var min_distance = Number.MAX_VALUE;
@@ -147,13 +149,16 @@
             var closest_node = null;
             var closest_p = null;
             var shadow_p = null;
+            var count=0;
             for(var nodeid in nodes){
                 var np,sp;
                 node = nodes[nodeid];
+
                 if(node.isroot || node.direction == direct){
                     if(node.id == this.active_node.id){
                         continue;
                     }
+                    count++;
                     ns = node.get_size();
                     nl = node.get_location();
                     if(direct == jsMind.direction.right){
@@ -175,6 +180,7 @@
                     }
                 }
             }
+            // console.log(count);
             var result_node = null;
             if(!!closest_node){
                 result_node = {
@@ -189,6 +195,7 @@
 
         lookup_close_node:function(){
             var node_data = this._lookup_close_node();
+            // console.log(node_data.node.id);
             if(!!node_data){
                 this._magnet_shadow(node_data);
                 this.target_node = node_data.node;
@@ -226,8 +233,15 @@
         },
 
         dragstart:function(e){
+            var curTs = new Date().getTime();
+            var prevTs = this.prevClickTs;
+            if(curTs-prevTs<options.lookup_delay){
+                this.capture=false;
+                return;
+            }
             if(!this.jm.get_draggable()){return;}
             if(this.capture){return;}
+
             this.active_node = null;
 
             var jview = this.jm.view;
@@ -242,7 +256,8 @@
 
             if(!tryCheckEl(el)  ){
                 //filter
-                if(el.tagName.toLowerCase() == 'button')
+                var tagName = el.tagName.toLowerCase();
+                if(tagName == 'button' || tagName == 'input')
                     return;
 
                 //jquery dependency
@@ -270,6 +285,8 @@
                     this.offset_y = (e.clientY || e.touches[0].clientY) - el.offsetTop;
                     this.client_hw = Math.floor(el.clientWidth/2);
                     this.client_hh = Math.floor(el.clientHeight/2);
+                    // console.log(`this.offset_x:${this.offset_x} this.offset_y:${this.offset_y}`);
+                    // console.log(`this.client_hw:${this.client_hw} this.client_hh:${this.client_hh}`);
                     if(this.hlookup_delay != 0){
                         $w.clearTimeout(this.hlookup_delay);
                     }
