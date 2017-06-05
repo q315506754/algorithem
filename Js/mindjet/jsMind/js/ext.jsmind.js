@@ -2779,6 +2779,8 @@
         this.opts = options;
         this.mapping = options.mapping;
         this.handles = options.handles;
+        this.blockingCode = options.blockingCode;
+        this.otherKeyCode = options.otherKeyCode;
         this._mapping = {};
     };
 
@@ -2796,9 +2798,25 @@
             this.handles['left'] = this.handle_left;
             this.handles['right'] = this.handle_right;
 
+            var addBindFunc = function (kc,hnd) {
+                if(typeof kc == "number"){
+                    //keycode->func
+                    this._mapping[kc] = this.handles[hnd];
+                }else {
+
+                }
+            }.bind(this);
+
             for(var handle in this.mapping){
                 if(!!this.mapping[handle] && (handle in this.handles)){
-                    this._mapping[this.mapping[handle]] = this.handles[handle];
+                    var keyCodes = this.mapping[handle];
+                    if(typeof keyCodes == "object"  && keyCodes instanceof Array){
+                        for(var i=0;i<keyCodes.length;i++) {
+                            addBindFunc(keyCodes[i],handle);
+                        }
+                    }else {
+                        addBindFunc(keyCodes,handle);
+                    }
                 }
             }
         },
@@ -2812,12 +2830,24 @@
         },
 
         handler : function(e){
+            if(!this.jm.get_selected_node()){return;}
             if(this.jm.view.is_editing()){return;}
+            if(this.blockingCode && this.blockingCode()){return;}
+
             var evt = e || event;
             if(!this.opts.enable){return true;}
             var kc = evt.keyCode;
+            //tab
+            if(kc==9){
+                evt.preventDefault();
+            }
+            // console.log(this._mapping);
             if(kc in this._mapping){
                 this._mapping[kc].call(this,this.jm,e);
+            }
+
+            if(!(kc in this._mapping) && this.otherKeyCode){
+                this.otherKeyCode.call(this,this.jm,e,kc);
             }
         },
 
@@ -2870,11 +2900,45 @@
             var selected_node = _jm.get_selected_node();
             if(!!selected_node){
                 var up_node = _jm.find_node_before(selected_node);
-                if(!up_node){
-                    var np = _jm.find_node_before(selected_node.parent);
-                    if(!!np && np.children.length > 0){
-                        up_node = np.children[np.children.length-1];
+                // console.log(up_node);
+                // console.log(selected_node.parent);
+                if(!up_node&&selected_node.parent){
+                    var getParentIter = function (node, stack) {
+                        if(!node){
+                            return;
+                        }
+                        var np = _jm.find_node_before(node);
+
+                        while(np){
+                            var t = getChildrenOfStack(np,stack);
+                            if(t)
+                                return t;
+
+                            np = _jm.find_node_before(np);
+                        }
+
+                        return getParentIter(node.parent,stack+1);
                     }
+                    var getChildrenOfStack=function (node,stack) {
+                        if(stack==1){
+                            if(node.children&&node.children.length>0){
+                                return node.children[node.children.length-1];
+                            }
+                            return null;
+                        }
+                        if(node.children&&node.children.length>0){
+                            for(var i=node.children.length-1;i>=0;i--){
+                                var cdOne=node.children[i];
+                                var dOne = getChildrenOfStack(cdOne,stack-1);
+                                if(dOne) {
+                                    return dOne;
+                                }
+                            }
+                        }
+                        return null;
+                    }
+
+                    up_node = getParentIter(selected_node.parent,1);
                 }
                 if(!!up_node){
                     _jm.select_node(up_node);
@@ -2889,11 +2953,43 @@
             var selected_node = _jm.get_selected_node();
             if(!!selected_node){
                 var down_node = _jm.find_node_after(selected_node);
-                if(!down_node){
-                    var np = _jm.find_node_after(selected_node.parent);
-                    if(!!np && np.children.length > 0){
-                        down_node = np.children[0];
+                if(!down_node&&selected_node.parent){
+                    var getParentIterRe = function (node, stack) {
+                        if(!node){
+                            return;
+                        }
+                        var np = _jm.find_node_after(node);
+
+                        while(np){
+                            var t = getChildrenOfStackRe(np,stack);
+                            if(t)
+                                return t;
+
+                            np = _jm.find_node_after(np);
+                        }
+
+                        return getParentIterRe(node.parent,stack+1);
                     }
+                    var getChildrenOfStackRe=function (node,stack) {
+                        if(stack==1){
+                            if(node.children&&node.children.length>0){
+                                return node.children[0];
+                            }
+                            return null;
+                        }
+                        if(node.children&&node.children.length>0){
+                            for(var i=0;i<node.children.length;i++){
+                                var cdOne=node.children[i];
+                                var dOne = getChildrenOfStackRe(cdOne,stack-1);
+                                if(dOne) {
+                                    return dOne;
+                                }
+                            }
+                        }
+                        return null;
+                    }
+
+                    down_node = getParentIterRe(selected_node.parent,1);
                 }
                 if(!!down_node){
                     _jm.select_node(down_node);
@@ -2933,6 +3029,23 @@
                 }else{
                     node = selected_node.parent;
                 }
+
+                if(!node && d===jm.direction.right){
+                    var np = selected_node.parent;
+                    if(!!np && np.children.length > 0){
+                        for(var i=0;i<np.children.length;i++){
+                            var npc = np.children[i];
+                            if(npc.id==selected_node.id)
+                                continue;
+
+                            if(npc.children&&npc.children.length>0){
+                                node=npc.children[0];
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if(!!node){
                     _jm.select_node(node);
                 }

@@ -18,25 +18,21 @@ grammar:
         var x = aaa as X
     lambda:
     sugar:
-         { c -> c in 'a'..'z' || c in 'A'..'Z'}
-    operator: see KoanTest.kt:100
-        operator fun invoke(): $className {}
-            $instance()
-        operator fun plus(b:Any):$className {}
-            $instance+Any
-        operator fun inc():MyDate {}
-            $instance++
-        operator fun unaryPlus() {}
-            +$instance
-        operator fun $className.times(number: Int):$className2 {}
-            $instance2 = $instance*5
-        override fun equals(other: Any?): Boolean {}
-                $instance ==|!= Any
-        override fun compareTo(other: MyDate): Int  (extends  Comparable<>)
-            $instance1 > | < | = | >= ... $instance2
-        operator fun $className.rangeTo(other: $className) {}
-            val $$instanceRange = $instance1..$instance2
-
+         exp:
+            { c -> c in 'a'..'z' || c in 'A'..'Z'}
+         function invocation:
+                 fun a(a:string,b:()->Unit)  can be invoked like: a("Hello"){ println("xxxxx")}
+         destruction:
+             val (ca,cb) = PairC(12,false)   ( or data class)
+                  operator fun component1(): K
+                  operator fun component2(): V
+                  p("${c2.component1()} ${c2.component2()}")
+              for ((key, value) in map) {
+                     println("key = $key, value = $value")
+              }
+         default value:
+              class Greeter(val name: String?="unkown") {...
+              fun test1(x: Any="asd"): Int {..
     class:
         extension:
             //public  not final
@@ -58,19 +54,24 @@ grammar:
                 class UserMap(val map: Map<String, Any?>) { val name: String by map
             set&get:
                 val isEmpty: Boolean get() = this.counter == 0
-    function invocation:
-        fun a(a:string,b:()->Unit)  can be invoked like: a("Hello"){ println("xxxxx")}
-    destruction:
-        val (ca,cb) = PairC(12,false)   ( or data class)
-             operator fun component1(): K
-             operator fun component2(): V
-             p("${c2.component1()} ${c2.component2()}")
-         for ((key, value) in map) {
-                println("key = $key, value = $value")
-         }
-    default value:
-        class Greeter(val name: String?="unkown") {...
-        fun test1(x: Any="asd"): Int {..
+        operator: see KoanTest.kt:100
+                operator fun invoke(): $className {}
+                    $instance()
+                operator fun plus(b:Any):$className {}
+                    $instance+Any
+                operator fun inc():MyDate {}
+                    $instance++
+                operator fun unaryPlus() {}
+                    +$instance
+                operator fun $className.times(number: Int):$className2 {}
+                    $instance2 = $instance*5
+                override fun equals(other: Any?): Boolean {}
+                        $instance ==|!= Any
+                override fun compareTo(other: MyDate): Int  (extends  Comparable<>)
+                    $instance1 > | < | = | >= ... $instance2
+                operator fun $className.rangeTo(other: $className) {}
+                    val $$instanceRange = $instance1..$instance2
+
     definition:
         function:
             common
@@ -89,7 +90,7 @@ grammar:
             fun <T> T.apply(block: T.() -> Unit): T { block(); return this }  function context
                  HashMap().apply({this.put("xx","yy")})
         package:
-            package xxx
+            package xxx  不一定目录路径
         variable:
             val a: Int = 1
             var x = 5
@@ -98,7 +99,7 @@ grammar:
         features:
             String template|Interpolation "$xx ${aa.bb} ${exp}"  reg:"""\d*"""
             null check: x?.invo1?.invo2     val x = y?.getX()?:3  (default value)
-            type auto cast:
+            type auto cast:if(xx is Ca) xx.caFunc()
 util:
     collection<T>:
         Iterable<T>:

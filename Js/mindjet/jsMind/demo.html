@@ -90,12 +90,87 @@
         var s = str==undefined?"":str;
         return "<div class='nodeText'><span class='idx'></span><span class='text'>"+s+"</span></div><input type='text' class='nodeTextInput'/><button class='deleteNode'>x</button><button class='addSiblingNode'>+</button><button class='addChildNode'>+</button>";
     }
+
+    var addSiblingNode = function (node) {
+        if(node.isroot){
+            return;
+        }
+        var newNode = _jm.insert_node_after(node, "node"+new Date().getTime(), createTopicHtml("sibling"), {})
+        recalculateData(newNode);
+
+        var sort =  _jm.get_sort(newNode);
+        console.log("sort");
+        console.log(sort);
+        console.log("pid");
+        console.log(newNode.parent.id)
+
+        focusNodeEdit(newNode);
+
+        return newNode;
+    }
+
+    var addChildNode = function (node) {
+        var newNode = _jm.add_node(node, "node"+new Date().getTime(), createTopicHtml("child"), {})
+        recalculateData(newNode);
+
+        var sort =  _jm.get_sort(newNode);
+        console.log("sort");
+        console.log(sort);
+        console.log("pid");
+        console.log(newNode.parent.id);
+
+        focusNodeEdit(newNode);
+        return newNode;
+    }
+
+    var removeNode = function (node) {
+        if(node.isroot){
+            return;
+        }
+        console.log(node.data);
+        var pid=node.data.parentid;
+        var st=node.data.sort;
+
+        _jm.remove_node(node);
+
+        var affectedData =  recalculateDataAfterSort(pid,st);
+
+        console.log("affectedData:");
+        console.log(affectedData);
+    }
+
+    var focusNodeEdit = function (node,append) {
+       var editInput = getEditDisplay(node);
+        if(!editInput)
+            return;
+        editInput.trigger("dblclick",append)
+    }
+    var getEditDisplay = function (node) {
+        var $node = getEditNode(node);
+        if($node){
+            return $node.find(".nodeText");
+        }
+    }
+    var getEditInput = function (node) {
+        var $node = getEditNode(node);
+        if($node){
+            return $node.find(".nodeTextInput");
+        }
+    }
+    var getEditNode = function (node) {
+        if(!node)
+            return;
+        var selector = "jmnode[nodeid='"+node.id+"']";
+        return $(selector);
+    }
+
     var recalculateData = function (node) {
         var newSort = _jm.get_sort(node);
         var parentChanged = node.data.parentid!=node.parent.id;
         node.data.parentid=node.parent.id;
         var sortChanged = node.data.sort!=newSort;
         node.data.sort=newSort;
+        node.index=newSort;
         var p = {};
         p.id=node.id;
         if(parentChanged) {
@@ -126,16 +201,19 @@
     }
 
     $(function () {
-//        console.log('$$$');
-        var count=0;
-        $(document).on("dblclick","jmnode .nodeText",function (e) {
+        $(document).on("dblclick","jmnode .nodeText",function (e,append) {
             e.stopPropagation();
             var node = getNode($(this));
-            console.log(node);
-            console.log(node.data.sort);
 
             var txt = $(this).text();
-            $(this).hide().next(".nodeTextInput").show().val(txt).select();
+            $(this).hide();
+
+            var val = getEditInput(node);
+            val.show().val(txt).focus();
+
+            if(append!=true){
+                val.select();
+            }
         });
 
         $(document).on("blur","jmnode .nodeTextInput",function (e) {
@@ -147,6 +225,13 @@
                 console.log('text changed to:'+newTxt);
             }
         });
+        $(document).on("keydown","jmnode .nodeTextInput",function (e) {
+            e.stopPropagation();
+            //enter
+            if(e.keyCode == 13){
+                $(this).blur();
+            }
+        });
 
 
         $(document).on("click","button.deleteNode",function (e) {
@@ -156,13 +241,7 @@
             console.log(node);
             console.log(node.data.sort);
 
-            var pid=node.data.parentid;
-            var st=node.data.sort;
-            _jm.remove_node(node);
-
-           var affectedData =  recalculateDataAfterSort(pid,st);
-            console.log("affectedData:");
-            console.log(affectedData);
+            removeNode(node);
         });
         $(document).on("click","button.addSiblingNode",function (e) {
             e.stopPropagation();
@@ -170,18 +249,9 @@
 
             var node = getNode($(this));
 
-            if(node.isroot){
-                return;
-            }
+            var newNode = addSiblingNode(node);
 
-            var newNode = _jm.insert_node_after(node, "node"+new Date().getTime(), createTopicHtml("sibling"+count++), {})
-            recalculateData(newNode);
-
-            var sort =  _jm.get_sort(newNode);
-            console.log("sort");
-            console.log(sort);
-            console.log("pid");
-            console.log(newNode.parent.id);
+       ;
         });
         $(document).on("click","button.addChildNode",function (e) {
             e.stopPropagation();
@@ -189,21 +259,11 @@
 
             var node = getNode($(this));
 
-            var newNode = _jm.add_node(node, "node"+new Date().getTime(), createTopicHtml("child"+count++), {})
-            recalculateData(newNode);
-
-           var sort =  _jm.get_sort(newNode);
-            console.log("sort");
-            console.log(sort);
-            console.log("pid");
-            console.log(newNode.parent.id);
+            var newNode = addChildNode(node);
         });
 
         if(_jm)
             _jm.add_event_listener(function (tp,data) {
-//                console.log(arguments);
-//                console.log(data);
-//                console.log(data.evt);
 
                 if(tp==jsMind.event_type.resize){
                     resizePainter();
@@ -253,9 +313,9 @@
         };
         var options = {
             container:'jsmind_container',// [必选] 容器的ID
-            editable : false,       // 是否启用编辑
+//            editable : false,       // 是否启用编辑
             editable : true,       // 是否启用编辑
-//            draggable:true,   //ext 扩展
+            draggable:true,   //ext 扩展
             mode :'side',           // 显示模式
 //            jsMind 现支持两种显示模式:
 //        full - 子节点动态分布在根节点两侧 [默认值]
@@ -296,27 +356,54 @@
                 enable_click_handle:true,
                 enable_dblclick_handle:false
             },
-//            shortcut:{
-//                enable:true,        // 是否启用快捷键
-////                enable:false,        // 是否启用快捷键
-//                //自定义按键
-//                handles:{
-//                    test:function(j,e){
+            shortcut:{
+                enable:true,        // 是否启用快捷键
+//                enable:false,        // 是否启用快捷键
+                blockingCode:function () {
+                    return $(".nodeTextInput:visible").length > 0
+                },
+                otherKeyCode:function (j,e,kc) {
+                    if((kc>=65&&kc<=90) || (kc>=48&&kc<=57)){
+                        e.preventDefault();
+                        console.log('otherKeyCode a-z 0-9');
+                        focusNodeEdit(_jm.get_selected_node(),true);
+                    }
+                },
+                //自定义按键
+                handles:{
+                    k_addchild:function(j,e){
+//                        console.log(e);
 //                        console.log(j);
-//                    },
-//                    addchild:function(j,e){
+                        addChildNode(_jm.get_selected_node());
+                    },
+                    k_addsibling:function(j,e){
 //                        console.log(e);
-//                    },
-//                    addbrother:function(j,e){
+//                        console.log(j);
+                        addSiblingNode(_jm.get_selected_node());
+                    },
+                    k_delete:function(j,e){
 //                        console.log(e);
-//                    }
-//                },
-//                mapping:{
-//                    test:89 , //自定义按键
-//                    addchild   : 68,    // <Insert>
-//                    addbrother : 83    // <Enter>
-//                }
-//            }
+//                        console.log(j);
+                        removeNode(_jm.get_selected_node());
+                    },
+                    k_edit:function(j,e){
+//                        console.log(e);
+//                        console.log(j);
+                        e.preventDefault();
+                        focusNodeEdit(_jm.get_selected_node());
+                    },
+                },
+                mapping:{
+                    k_addsibling : 13, // Enter
+                    k_delete : 46, // Delete
+                    k_addchild : [45,9], // Insert,Tab
+                    k_edit : 32, // Space
+                    left       : 37, // Left
+                    up         : 38, // Up
+                    right      : 39, // Right
+                    down       : 40, // Down
+                }
+            }
         }
         //方法一
 //        _jm = jsMind.show(options,mind);
