@@ -11,13 +11,23 @@ grammar:
             }
         loop:
             for(x in Iterable){x}  for(x in 1..100 step 2){x} (range, is Iterable)
+             for (i in 0..99) {
+             for (i in 0 until 99) {
             for (x in 9 downTo 0 step 3) {x}  (class kotlin.ranges.IntProgression)
             for(index in ArrayOrList.indices){index}
+            for ((k, v) in map) {
             while(exp){}
     cast:
         var x = aaa as X
     lambda:
     sugar:
+         nullable:
+            files?.size
+            files?.size ?: "empty"
+            val email = data["email"] ?: throw IllegalStateException("Email is missing!")
+            data?.let {
+                ... // execute this block if not null
+            }
          exp:
             { c -> c in 'a'..'z' || c in 'A'..'Z'}
          function invocation:

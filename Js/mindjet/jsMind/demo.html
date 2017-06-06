@@ -5,45 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>jsMind</title>
 
-    <!--[if IE]>
-    <script src="js/html5.js" type="text/javascript"></script>
-    <script type="text/javascript" src="js/excanvas.compiled.js"></script>
-    <![endif]-->
+    <!--&lt;!&ndash;[if IE]>-->
+    <!--<script src="js/html5.js" type="text/javascript"></script>-->
+    <!--<script type="text/javascript" src="js/excanvas.compiled.js"></script>-->
+    <!--<![endif]&ndash;&gt;-->
 
     <link type="text/css" rel="stylesheet" href="css/ext.jsmind.css" />
-    <style type="text/css">
-        #jsmind_container{
-            width:1200px;
-            height:800px;
-            /*min-width:1200px;*/
-            /*min-height:800px;*/
-            /*width:auto;*/
-            /*height:auto;*/
-            border:solid 1px #ccc;
-            /*background:#f4f4f4;*/
-            overflow: visible;
-            background:#fff;
-        }
-
-        /*jmnodes{overflow: visible}*/
-        /* custom1 theme */                                                      /* greensea 即是主题名 */
-        jmnodes.theme-custom1 jmnode{overflow: visible;background-color: #F8F8F8;color:#606060;width: 250px;height: 37px;text-align: center;border: 2px solid #E0E0E0;vertical-align: middle;}       /* 节点样式 */
-        /*jmnodes.theme-custom1 jmnode:hover{background-color: #4aa05b;}            !* 鼠标悬停的节点样式 *!*/
-        jmnodes.theme-custom1 jmnode.selected{background-color: blue;} /* 选中的节点样式 */
-        jmnodes.theme-custom1 jmnode.root{border: 2px solid #138472;}                                      /* 根节点样式 */
-        jmnodes.theme-custom1 jmexpander{ color:#ffc2ea;display: none;}                                       /* 展开/关闭节点的控制点样式 */
-        /*jmnodes.theme-custom1 jmexpander:hover{color:#4aa05b;}                                 !* 鼠标悬停展开/关闭节点的控制点样式 *!*/
-
-        jmnodes.theme-custom1 jmnode button{display: none;position: absolute;width: 20px;height: 20px;border-radius: 20px}
-        jmnodes.theme-custom1 jmnode button.deleteNode{top:-10px;right: -10px;background-color:red;color: white; }
-        jmnodes.theme-custom1 jmnode button.addChildNode{top:50%;right: -10px;background-color:#13816E;color: white;}
-        jmnodes.theme-custom1 jmnode button.addSiblingNode{bottom:-10px;right: 50%;background-color:#13816E;color: white;}
-        jmnodes.theme-custom1 jmnode:hover button{display: inline-block;}
-        jmnodes.theme-custom1 jmnode .nodeText{line-height: 37px;font-size: 17px;width: 100%;overflow: hidden}
-        jmnodes.theme-custom1 jmnode .nodeTextInput{line-height: 37px;font-size: 17px;width: 100%;display: none;}
-        jmnodes.theme-custom1 jmnode .nodeText .text{width: 250px;text-overflow: ellipsis;height: 100%}
-        jmnodes.theme-custom1 jmnode .nodeText .idx{display:block;margin-right: 2px;width: 200px;height: 100%}
-    </style>
+    <link type="text/css" rel="stylesheet" href="css/jsMindClient.css" />
 </head>
 <body>
 <div style="z-index: 100220">
@@ -66,383 +34,37 @@
 <script type="text/javascript" src="js/ext.jsmind.js"></script>
 <script type="text/javascript" src="js/ext.jsmind.draggable.js"></script>
 
-<script type="text/javascript" src="js/jsmind.shell.js"></script>
+<!--<script type="text/javascript" src="js/jsmind.shell.js"></script>-->
+<script type="text/javascript" src="js/jsMindClient.js"></script>
+
 <script type="text/javascript">
-    var _noop = function(){};
-    var console = (typeof console === 'undefined')?{
-        log:_noop, debug:_noop, error:_noop, warn:_noop, info:_noop
-    }:console;
-
-    var getNode = function($obj){
-        return _jm.get_node(getNodeId($obj))
-    }
-    var resizePainter = function(){
-        $("#jsmind_container").css({
-            "width":_jm.view.e_canvas.width+"px",
-            "height":_jm.view.e_canvas.height+"px"
-        });
-    }
-    var getNodeId = function($obj){
-        var $node = $obj.parents("jmnode")
-        return $node.attr("nodeid")
-    }
-    var createTopicHtml = function(str){
-        var s = str==undefined?"":str;
-        return "<div class='nodeText'><span class='idx'></span><span class='text'>"+s+"</span></div><input type='text' class='nodeTextInput'/><button class='deleteNode'>x</button><button class='addSiblingNode'>+</button><button class='addChildNode'>+</button>";
-    }
-
-    var addSiblingNode = function (node) {
-        if(node.isroot){
-            return;
-        }
-        var newNode = _jm.insert_node_after(node, "node"+new Date().getTime(), createTopicHtml("sibling"), {})
-        recalculateData(newNode);
-
-        var sort =  _jm.get_sort(newNode);
-        console.log("sort");
-        console.log(sort);
-        console.log("pid");
-        console.log(newNode.parent.id)
-
-        focusNodeEdit(newNode);
-
-        return newNode;
-    }
-
-    var addChildNode = function (node) {
-        var newNode = _jm.add_node(node, "node"+new Date().getTime(), createTopicHtml("child"), {})
-        recalculateData(newNode);
-
-        var sort =  _jm.get_sort(newNode);
-        console.log("sort");
-        console.log(sort);
-        console.log("pid");
-        console.log(newNode.parent.id);
-
-        focusNodeEdit(newNode);
-        return newNode;
-    }
-
-    var removeNode = function (node) {
-        if(node.isroot){
-            return;
-        }
-        console.log(node.data);
-        var pid=node.data.parentid;
-        var st=node.data.sort;
-
-        _jm.remove_node(node);
-
-        var affectedData =  recalculateDataAfterSort(pid,st);
-
-        console.log("affectedData:");
-        console.log(affectedData);
-    }
-
-    var focusNodeEdit = function (node,append) {
-       var editInput = getEditDisplay(node);
-        if(!editInput)
-            return;
-        editInput.trigger("dblclick",append)
-    }
-    var getEditDisplay = function (node) {
-        var $node = getEditNode(node);
-        if($node){
-            return $node.find(".nodeText");
-        }
-    }
-    var getEditInput = function (node) {
-        var $node = getEditNode(node);
-        if($node){
-            return $node.find(".nodeTextInput");
-        }
-    }
-    var getEditNode = function (node) {
-        if(!node)
-            return;
-        var selector = "jmnode[nodeid='"+node.id+"']";
-        return $(selector);
-    }
-
-    var recalculateData = function (node) {
-        var newSort = _jm.get_sort(node);
-        var parentChanged = node.data.parentid!=node.parent.id;
-        node.data.parentid=node.parent.id;
-        var sortChanged = node.data.sort!=newSort;
-        node.data.sort=newSort;
-        node.index=newSort;
-        var p = {};
-        p.id=node.id;
-        if(parentChanged) {
-            p.parentId=node.parent.id;
-        }
-        if(sortChanged) {
-            p.sort=newSort;
-        }
-        return parentChanged || sortChanged?p:null;
-    }
-    var recalculateDataAfterSort = function (parentId,sort) {
-        var ret = []
-        var parent = _jm.get_node(parentId);
-        if(parent.children){
-            for(var i=0;i<parent.children.length;i++) {
-                var cOne = parent.children[i];
-                if(cOne.data.sort<sort){
-                    continue;
-                }
-
-                var p =recalculateData(cOne);
-                if(p) {
-                    ret.push(p);
-                }
-            }
-        }
-        return ret;
-    }
 
     $(function () {
-        $(document).on("dblclick","jmnode .nodeText",function (e,append) {
-            e.stopPropagation();
-            var node = getNode($(this));
+        var dataArray=[
+            {"id":"root", "isroot":true, "topic":createTopicHtml("<艺术与审美>知识点")},
 
-            var txt = $(this).text();
-            $(this).hide();
+            {"id":"1", "parentid":"root", "topic":createTopicHtml("生活与艺术")},
+            {"id":"11", "parentid":"1", "topic":createTopicHtml("文学")},
+            {"id":"12", "parentid":"1", "topic":createTopicHtml("设计")},
+            {"id":"121", "parentid":"12", "topic":createTopicHtml("用户界面设计")},
+            {"id":"1211", "parentid":"121", "topic":createTopicHtml("UI设计")},
+            {"id":"1212", "parentid":"121", "topic":createTopicHtml("网页设计")},
+            {"id":"122", "parentid":"12", "topic":createTopicHtml("游戏设计")},
+            {"id":"123", "parentid":"12", "topic":createTopicHtml("交互设计")},
+            {"id":"124", "parentid":"12", "topic":createTopicHtml("服装设计")},
+            {"id":"13", "parentid":"1", "topic":createTopicHtml("建筑")},
 
-            var val = getEditInput(node);
-            val.show().val(txt).focus();
-
-            if(append!=true){
-                val.select();
-            }
-        });
-
-        $(document).on("blur","jmnode .nodeTextInput",function (e) {
-            e.stopPropagation();
-            var newTxt = $(this).val();
-            var oldTxt = $(this).prev(".nodeText").text();
-            $(this).hide().prev(".nodeText").show().text(newTxt);
-            if(oldTxt!=newTxt){
-                console.log('text changed to:'+newTxt);
-            }
-        });
-        $(document).on("keydown","jmnode .nodeTextInput",function (e) {
-            e.stopPropagation();
-            //enter
-            if(e.keyCode == 13){
-                $(this).blur();
-            }
-        });
-
-
-        $(document).on("click","button.deleteNode",function (e) {
-            e.stopPropagation();
-            console.log('deleteNode');
-            var node = getNode($(this));
-            console.log(node);
-            console.log(node.data.sort);
-
-            removeNode(node);
-        });
-        $(document).on("click","button.addSiblingNode",function (e) {
-            e.stopPropagation();
-            console.log('addSiblingNode');
-
-            var node = getNode($(this));
-
-            var newNode = addSiblingNode(node);
-
-       ;
-        });
-        $(document).on("click","button.addChildNode",function (e) {
-            e.stopPropagation();
-            console.log('addChildNode');
-
-            var node = getNode($(this));
-
-            var newNode = addChildNode(node);
-        });
-
-        if(_jm)
-            _jm.add_event_listener(function (tp,data) {
-
-                if(tp==jsMind.event_type.resize){
-                    resizePainter();
-                }
-
-                //拖动排序
-                if(data.evt=="move_node"){
-                    var node=_jm.get_node(data.node);
-//                    console.log(node.data.parentid);
-//                    console.log(node.parent.id);
-                    var oldPid=node.data.parentid;
-                    var oldSort=node.data.sort;
-                    var newPid=node.parent.id;
-                    var newSort = _jm.get_sort(node);
-
-                    var p = recalculateData(node);
-
-                    if(p){
-                       console.log("really move ..");
-
-                        console.log("thisChange:");
-                        console.log(p);
-
-                        var orgAffected = recalculateDataAfterSort(oldPid,oldSort);
-                        console.log("orgAffected:");
-                        console.log(orgAffected);
-
-                        var newAffected = recalculateDataAfterSort(newPid,newSort);
-                        console.log("newAffected:");
-                        console.log(newAffected);
-                    }
-                }
-            });
-    });
-
-    var _jm = null;
-    function load_jsmind(dataArray){
-        var mind = {
-            meta:{
-                name:'demo',
-                author:'hizzgdev@163.com',
-                version:'0.2'
-            },
-            format:'node_array',
-            //"node_tree"-mongo,   "node_array"-rdb,   "freemind"-xml,
-            data:dataArray
-        };
-        var options = {
-            container:'jsmind_container',// [必选] 容器的ID
-//            editable : false,       // 是否启用编辑
-            editable : true,       // 是否启用编辑
-            draggable:true,   //ext 扩展
-            mode :'side',           // 显示模式
-//            jsMind 现支持两种显示模式:
-//        full - 子节点动态分布在根节点两侧 [默认值]
-//        side - 子节点只分布在根节点右侧
-//            theme:'clouds',//自定义主题
-            theme:'custom1',
-            //可选项
-//            primary
-//            warning
-//            danger
-//            success
-//            info
-//            greensea
-//            nephrite
-//            belizehole
-//            wisteria
-//            asphalt
-//            orange
-//            pumpkin
-//            pomegranate
-//            clouds
-//            asbestos
-
-
-            view:{
-                hmargin:100,        // 思维导图距容器外框的最小水平距离
-                vmargin:50,         // 思维导图距容器外框的最小垂直距离
-                line_width:2,       // 思维导图线条的粗细
-                line_color:'#ececec'   // 思维导图线条的颜色
-            },
-            layout:{
-                hspace:50,          // 节点之间的水平间距
-                vspace:30,          // 节点之间的垂直间距
-                pspace:0           // 节点收缩/展开控制器的尺寸
-            },
-            default_event_handle:{
-                enable_mousedown_handle:true,
-                enable_click_handle:true,
-                enable_dblclick_handle:false
-            },
-            shortcut:{
-                enable:true,        // 是否启用快捷键
-//                enable:false,        // 是否启用快捷键
-                blockingCode:function () {
-                    return $(".nodeTextInput:visible").length > 0
-                },
-                otherKeyCode:function (j,e,kc) {
-                    if((kc>=65&&kc<=90) || (kc>=48&&kc<=57)){
-                        e.preventDefault();
-                        console.log('otherKeyCode a-z 0-9');
-                        focusNodeEdit(_jm.get_selected_node(),true);
-                    }
-                },
-                //自定义按键
-                handles:{
-                    k_addchild:function(j,e){
-//                        console.log(e);
-//                        console.log(j);
-                        addChildNode(_jm.get_selected_node());
-                    },
-                    k_addsibling:function(j,e){
-//                        console.log(e);
-//                        console.log(j);
-                        addSiblingNode(_jm.get_selected_node());
-                    },
-                    k_delete:function(j,e){
-//                        console.log(e);
-//                        console.log(j);
-                        removeNode(_jm.get_selected_node());
-                    },
-                    k_edit:function(j,e){
-//                        console.log(e);
-//                        console.log(j);
-                        e.preventDefault();
-                        focusNodeEdit(_jm.get_selected_node());
-                    },
-                },
-                mapping:{
-                    k_addsibling : 13, // Enter
-                    k_delete : 46, // Delete
-                    k_addchild : [45,9], // Insert,Tab
-                    k_edit : 32, // Space
-                    left       : 37, // Left
-                    up         : 38, // Up
-                    right      : 39, // Right
-                    down       : 40, // Down
-                }
-            }
-        }
-        //方法一
-//        _jm = jsMind.show(options,mind);
-
-        //方法二
-        _jm = new jsMind(options);
-        _jm.show(mind);
-
-        // jm.set_readonly(true);
-        // var mind_data = jm.get_data();
-        // alert(mind_data);
-
-        resizePainter();
-    }
-
-    var dataArray=[
-        {"id":"root", "isroot":true, "topic":createTopicHtml("<艺术与审美>知识点")},
-
-        {"id":"1", "parentid":"root", "topic":createTopicHtml("生活与艺术")},
-        {"id":"11", "parentid":"1", "topic":createTopicHtml("文学")},
-        {"id":"12", "parentid":"1", "topic":createTopicHtml("设计")},
-        {"id":"121", "parentid":"12", "topic":createTopicHtml("用户界面设计")},
-        {"id":"1211", "parentid":"121", "topic":createTopicHtml("UI设计")},
-        {"id":"1212", "parentid":"121", "topic":createTopicHtml("网页设计")},
-        {"id":"122", "parentid":"12", "topic":createTopicHtml("游戏设计")},
-        {"id":"123", "parentid":"12", "topic":createTopicHtml("交互设计")},
-        {"id":"124", "parentid":"12", "topic":createTopicHtml("服装设计")},
-        {"id":"13", "parentid":"1", "topic":createTopicHtml("建筑")},
-
-        {"id":"2", "parentid":"root", "topic":createTopicHtml("文化")},
-        {"id":"21", "parentid":"2", "topic":createTopicHtml("语言")},
-//        {"id":"211", "parentid":"21", "topic":createTopicHtml("aaaaaaaaaaaaaaaaaaaadddddddddddddddd发的所发生的")},
-        {"id":"211", "parentid":"21", "topic":createTopicHtml("汉语")},
-        {"id":"212", "parentid":"21", "topic":createTopicHtml("英语")},
+            {"id":"2", "parentid":"root", "topic":createTopicHtml("文化")},
+            {"id":"21", "parentid":"2", "topic":createTopicHtml("语言")},
+        {"id":"211", "parentid":"21", "topic":createTopicHtml("aaaaaaaa aaaaaaaaaaaad ddddddddddd dddd发 的所发 生的")},
+//            {"id":"211", "parentid":"21", "topic":createTopicHtml("汉语")},
+            {"id":"212", "parentid":"21", "topic":createTopicHtml("英语")},
 //                {"id":"sub22", "parentid":"sub2", "topic":createTopicHtml("aaaaa的所发生的")},
-        {"id":"2111", "parentid":"211", "topic":createTopicHtml("文言文")},
-    ]
+            {"id":"2111", "parentid":"211", "topic":createTopicHtml("文言文")},
+        ]
 
-    load_jsmind(dataArray);
+        load_jsmind(dataArray);
+    });
 </script>
 </body>
 </html>

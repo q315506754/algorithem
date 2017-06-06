@@ -1,0 +1,32 @@
+#jsmind_container{
+    width:1200px;
+    height:800px;
+    /*min-width:1200px;*/
+    /*min-height:800px;*/
+    /*width:auto;*/
+    /*height:auto;*/
+    border:solid 1px #ccc;
+    /*background:#f4f4f4;*/
+    overflow: visible;
+    background:#fff;
+}
+
+/*jmnodes{overflow: visible}*/
+/* custom1 theme */                                                      /* greensea 即是主题名 */
+jmnodes.theme-custom1 jmnode{overflow: visible;background-color: #F8F8F8;color:#606060;width: 250px;min-height: 37px;text-align: center;border: 2px solid #E0E0E0;vertical-align: middle;}       /* 节点样式 */
+/*jmnodes.theme-custom1 jmnode:hover{background-color: #4aa05b;}            !* 鼠标悬停的节点样式 *!*/
+jmnodes.theme-custom1 jmnode.selected{background-color: blue;} /* 选中的节点样式 */
+jmnodes.theme-custom1 jmnode.root{border: 2px solid #138472;}                                      /* 根节点样式 */
+jmnodes.theme-custom1 jmexpander{ color:#ffc2ea;display: none;}                                       /* 展开/关闭节点的控制点样式 */
+/*jmnodes.theme-custom1 jmexpander:hover{color:#4aa05b;}                                 !* 鼠标悬停展开/关闭节点的控制点样式 *!*/
+
+jmnodes.theme-custom1 jmnode button{display: none;position: absolute;width: 20px;height: 20px;border-radius: 20px}
+jmnodes.theme-custom1 jmnode button.deleteNode{top:-10px;right: -10px;background-color:red;color: white; }
+jmnodes.theme-custom1 jmnode button.addChildNode{top:50%;right: -10px;background-color:#13816E;color: white;}
+jmnodes.theme-custom1 jmnode button.addSiblingNode{bottom:-10px;right: 50%;background-color:#13816E;color: white;}
+jmnodes.theme-custom1 jmnode:hover button{display: inline-block;}
+
+jmnodes.theme-custom1 jmnode .nodeText{overflow:hidden;line-height: 37px;font-size: 17px;width: 100%;}
+jmnodes.theme-custom1 jmnode .nodeTextInput{line-height: 37px;font-size: 17px;width: 100%;display: none;}
+jmnodes.theme-custom1 jmnode .nodeText .text{width: 100%;display:inline-block;text-overflow: ellipsis;word-wrap: break-word;word-break: break-all;}
+/*jmnodes.theme-custom1 jmnode .nodeText .idx{display:block;margin-right: 2px;width: 200px;height: 100%}*/

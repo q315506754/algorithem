@@ -2840,6 +2840,8 @@
             //tab
             if(kc==9){
                 evt.preventDefault();
+                evt.stopPropagation();
+                console.log('kc==9');
             }
             // console.log(this._mapping);
             if(kc in this._mapping){
