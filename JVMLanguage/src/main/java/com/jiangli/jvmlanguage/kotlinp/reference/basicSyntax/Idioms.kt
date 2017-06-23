@@ -49,6 +49,7 @@ fun main(args: Array<String>) {
     }
 
     val b: Boolean? = null
+    //
     if (b == true) {
         println("b == true")
     } else {

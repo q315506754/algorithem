@@ -112,6 +112,11 @@ fun main(args: Array<String>) {
     val map = a.map { it }
     println(map)
 
+    println(9 downTo 0 )
+    for (x in 9 downTo 0 step 3) {
+        p(x)
+    }
+
     //Kotlin 中有一个专为 Android 开发量身打造的库，名为 anko，其中包含了许多可以简化开发的代码，其中就对线程进行了简化。
 //    val filter = map.filter { it % 2 == 0 }
 //    val filter = map.filter ( { y ->  y % 2 == 0 })

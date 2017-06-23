@@ -11,9 +11,9 @@ grammar:
             }
         loop:
             for(x in Iterable){x}  for(x in 1..100 step 2){x} (range, is Iterable)
-             for (i in 0..99) {
-             for (i in 0 until 99) {
-            for (x in 9 downTo 0 step 3) {x}  (class kotlin.ranges.IntProgression)
+             for (i in 0..99) { [0,99]
+             for (i in 0 until 99) { [0,99)=[0,98]
+            for (x in 9 downTo 0 step 3) {x} [9,0] (class kotlin.ranges.IntProgression) print(9 downTo 0 step 1)
             for(index in ArrayOrList.indices){index}
             for ((k, v) in map) {
             while(exp){}
