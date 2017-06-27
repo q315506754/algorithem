@@ -4,6 +4,15 @@ import java.math.BigDecimal
 import java.util.*
 
 fun main(args: Array<String>) {
+    val a = 1234567
+    val b = 1234567
+    println(a === b)
+    println(a == b)
+    val c = 123
+    val d = 123
+    println(c === d)
+    println(c == d)
+
     val dsk = desk{
         f(c_rice) //米饭
         f(c_vegetable) //蔬菜
