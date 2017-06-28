@@ -44,6 +44,16 @@ grammar:
               class Greeter(val name: String?="unkown") {...
               fun test1(x: Any="asd"): Int {..
     class:
+        nestedclass:
+            class Nested {
+        innerclass:
+            inner class Inner {
+        singleton:
+            object DefaultListener : MouseAdapter() {
+        companion:伴生对象
+            companion object Factory {
+        delegate:
+             class Derived(b: Base) : Base by b
         extension:
             //public  not final
             open class Base(p: Int) {}

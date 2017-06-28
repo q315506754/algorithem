@@ -52,14 +52,14 @@ internal fun demo(strs: Source<String>) {
  *
  * 消费者 in, 生产者 out! :-)
  */
-internal abstract class Comparable<in T> {
+internal abstract class MyComparable<in T> {
     abstract fun compareTo(other: T): Int
 }
 
-internal fun demo(x: Comparable<Number>) {
+internal fun demo(x: MyComparable<Number>) {
     x.compareTo(1.0) // 1.0 拥有类型 Double，它是 Number 的子类型
     // 因此，我们可以将 x 赋给类型为 Comparable <Double> 的变量
-    val y: Comparable<Double> = x // OK！
+    val y: MyComparable<Double> = x // OK！
 }
 
 
@@ -100,7 +100,7 @@ internal fun fill(dest: MyArray<in String>, value: String) {
     // ……
 }
 
-internal  fun test(){
+internal  fun test123(){
     val ints: MyArray<Int> = MyArray(3)
     val any = MyArray<Any>(3)
     copy(ints, any)
@@ -109,3 +109,80 @@ internal  fun test(){
     fill(strs,"sdfds")
 }
 
+/**
+ * 星投影
+ *
+ * 对于 Foo <out T>，其中 T 是一个具有上界 TUpper 的协变类型参数，Foo <*> 等价于 Foo <out TUpper>。 这意味着当 T 未知时，你可以安全地从 Foo <*> 读取 TUpper 的值。
+ * 对于 Foo <in T>，其中 T 是一个逆变类型参数，Foo <*> 等价于 Foo <in Nothing>。 这意味着当 T 未知时，没有什么可以以安全的方式写入 Foo <*>。
+ * 对于 Foo <T>，其中 T 是一个具有上界 TUpper 的不型变类型参数，Foo<*> 对于读取值时等价于 Foo<out TUpper> 而对于写值时等价于 Foo<in Nothing>。
+ */
+
+internal class  Fooo<T> {
+     fun nextT(): T {TODO()}
+     fun compareTo(other: T): Int {TODO()}
+}
+
+internal  fun test2(){
+//    val listOf = listOf("a", "b")
+//    List<>
+    val bb = Fooo<String>()
+//    bb.compareTo("") //ok
+
+    val cc:Fooo<*> = bb
+    val nextT = cc.nextT() //Any?
+//    cc.compareTo()  //Nothing
+//    cc.compareTo("")  //error
+}
+
+/**
+ * 泛型函数
+
+不仅类可以有类型参数。函数也可以有。类型参数要放在函数名称之前：
+ */
+
+
+internal fun <T> singletonList(item: T): List<T> {
+    TODO()
+}
+
+internal fun <T> T.basicToString() : String {  // 扩展函数
+    TODO()
+}
+
+val l = singletonList<Int>(1)
+//val l = singletonList(1)
+
+
+/**
+ * 泛型约束
+ *
+ */
+
+/**
+ *
+ * 上界
+
+最常见的约束类型是与 Java 的 extends 关键字对应的 上界：
+
+ */
+internal fun <T : MyComparable<T>> sort(list: List<T>) {
+    // ……
+}
+
+/**
+默认的上界（如果没有声明）是 Any?。在尖括号中只能指定一个上界。
+如果同一类型参数需要多个上界，我们需要一个单独的 where-子句：
+ *
+ */
+internal class CusCls:Comparable<CusCls>,Cloneable{
+    override fun compareTo(other: CusCls): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}
+internal fun <T> cloneWhenGreater(list: List<T>, threshold: T): List<T>
+        where T : Comparable<T>, T : Cloneable {
+    val map:List<T> = list.filter { it > threshold }.map { it }
+    return map
+}
+
+internal val l2 = cloneWhenGreater(listOf<CusCls>(),CusCls())

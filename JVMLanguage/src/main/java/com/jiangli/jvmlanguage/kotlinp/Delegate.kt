@@ -23,12 +23,31 @@ class Example {
  * to provide methods named getValue() and setValue() to be called.</p>
  */
 class Delegate() {
+    /**
+     * thisRef —— 必须与 属性所有者 类型（对于扩展属性——指被扩展的类型）相同或者是它的超类型，
+        property —— 必须是类型 KProperty<*> 或其超类型，
+     */
     operator fun getValue(thisRef: Any?, prop: KProperty<*>): String {
         return "$thisRef, thank you for delegating '${prop.name}'='${prop}' to me!"
     }
 
+    /**
+     * thisRef —— 同 getValue()，
+    property —— 同 getValue()，
+    new value —— 必须和属性同类型或者是它的超类型。
+     */
     operator fun setValue(thisRef: Any?, prop: KProperty<*>, value: String) {
         println("$value has been assigned to ${prop.name} in $thisRef")
+    }
+
+//    委托类可以实现包含所需 operator 方法的 ReadOnlyProperty 或 ReadWriteProperty 接口之一。 这俩接口是在 Kotlin 标准库中声明的：
+    internal interface ReadOnlyProperty<in R, out T> {
+        operator fun getValue(thisRef: R, property: KProperty<*>): T
+    }
+
+    internal interface ReadWriteProperty<in R, T> {
+        operator fun getValue(thisRef: R, property: KProperty<*>): T
+        operator fun setValue(thisRef: R, property: KProperty<*>, value: T)
     }
 }
 
@@ -53,6 +72,8 @@ class LazySample {
  * The handler gets called every time we assign to `name`, it has three parameters:
  * a property being assigned to, the old value and the new one. If you want to be able to veto
  * the assignment, use vetoable() instead of observable().
+ *
+ * 如果你想能够截获一个赋值并“否决”它，就使用 vetoable() 取代 observable()。 在属性被赋新值生效之前会调用传递给 vetoable 的处理程序。
  */
 class User {
     var name: String by Delegates.observable("no name") {

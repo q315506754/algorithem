@@ -88,6 +88,10 @@ class Derived() : Base() {
  */
 interface Foo {
     val count: Int
+
+    fun doSomething() {
+        println("doSomething...")
+    }
 }
 
 class Bar1(override val count: Int) : Foo
