@@ -43,6 +43,10 @@ grammar:
          default value:
               class Greeter(val name: String?="unkown") {...
               fun test1(x: Any="asd"): Int {..
+         instanceof:
+            if (obj is String) {
+            if (obj !is String) { // 与 !(obj is String) 相同
+
     class:
         nestedclass:
             class Nested {

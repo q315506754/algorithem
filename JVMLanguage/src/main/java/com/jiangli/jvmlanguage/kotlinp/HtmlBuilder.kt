@@ -27,6 +27,24 @@ fun main(args: Array<String>) {
     })
 }
 fun renderProductTable(): String {
+    //应该禁止下列调用
+    html{
+        table {
+            // 错误：外部接收者的成员
+//            table {
+//                table {
+//
+//                }
+//            }
+            this@html.table {
+                this@html.table {
+                    this@html.table {
+
+                    } // 可能
+                } // 可能
+            } // 可能
+        }
+    }
     return html {
         table {
             tr(getTitleColor()) {
@@ -66,6 +84,9 @@ fun getProducts() = listOf( Product2("cactus", 11.2, 13))
 fun getTitleColor() = "#b9c9fe"
 fun getCellColor(row: Int, column: Int) = if ((row + column) %2 == 0) "#dce4ff" else "#eff2ff"
 /////////////////////////////////
+@HtmlTagMarker
+//我们不必用 @HtmlTagMarker 标注 HTML 或 Head 类，因为它们的超类已标注过：
+//在添加了这个注解之后，Kotlin 编译器就知道哪些隐式接收者是同一个 DSL 的一部分，并且只允许调用最近层的接收者的成员：
 open class Tag(val name: String) {
     val children: MutableList<Tag> = ArrayList()
     val attributes: MutableList<Attribute> = ArrayList()
@@ -94,6 +115,12 @@ fun <T: Tag> Tag.doInit(tag: T, init: T.() -> Unit): T {
     children.add(tag)
     return tag
 }
+
+
+//请注意，@DslMarker 注解在 Kotlin 1.1 起才可用。
+@DslMarker
+annotation class HtmlTagMarker
+//如果一个注解类使用 @DslMarker 注解标注，那么该注解类称为 DSL 标记。
 
 class Html: Tag("html")
 class Table: Tag("table")
