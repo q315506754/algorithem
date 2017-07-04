@@ -52,14 +52,35 @@ public class FileUtil {
     }
 
     public static String getPrefix(File src) {
-        String name = src.getName();
+        return getPrefix(src.getName());
+    }
+    public static String getPrefix(String name) {
         return name.substring(0, name.lastIndexOf("."));
     }
     public static String getSuffix(File src) {
-        String name = src.getName();
+        return getSuffix(src.getName());
+    }
+    public static String getSuffix(String name) {
         return name.substring(name.lastIndexOf("."));
     }
-
+    public static File getNoDupfile(File src) {
+        String name = src.getName();
+        if (src.exists()) {
+            int i=2;
+    
+            while (true) {
+                String prefix = getPrefix(name)+"_"+i++;
+                String suffix = getSuffix(name);
+                String path = prefix+suffix;
+                File ret = new File(src.getParentFile(), path);
+                if (!ret.exists()) {
+                    return ret;
+                }
+            }
+        }
+        return null;
+    }
+    
     public static List<String> getFilePathFromDirPath(String dirPath) {
         List<String> paths = new LinkedList<>();
 
