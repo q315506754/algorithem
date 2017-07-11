@@ -31,6 +31,7 @@
         <module>Hadoop</module>
         <module>IO</module>
         <module>JDK</module>
+        <module>JMX</module>
         <module>JNI</module>
         <module>JVMLanguage</module>
         <module>KillGame</module>
@@ -51,6 +52,7 @@
         <module>SpringMVC</module>
         <module>Struts2</module>
         <module>Test</module>
+        <module>Thread</module>
         <module>WebCrawler</module>
         <module>WebCrawlerWeb</module>
         <module>WebSocket</module>
