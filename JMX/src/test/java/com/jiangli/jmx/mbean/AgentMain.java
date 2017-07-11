@@ -20,6 +20,8 @@ public class AgentMain {
           //create mbean and register mbean
           server.registerMBean(new Hello(), helloName);
           Thread.sleep(60*60*1000);
+
+        //http://www.cnblogs.com/dongguacai/p/5900507.html
     }
 
 }
