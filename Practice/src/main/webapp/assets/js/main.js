@@ -80,7 +80,7 @@ var vm = new Vue({
             maxOrder:-1,
             minOrder:-1,
             maxRedEnvelopeChosen:-1,
-            isVip:true,
+            isVip:false,
             merchantId:-1
         },
         redEnvelope:[]

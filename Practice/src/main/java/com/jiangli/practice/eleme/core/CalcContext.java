@@ -13,7 +13,7 @@ public class CalcContext {
     private Double extraMoneyForEachOrder =0d;
     private String  queryId;
     private Integer  merchantId;
-    private Boolean  isVip=true;
+    private Boolean  isVip=false;
     private List<Rule> redEnvelope;
     private Cart cart;
     private Integer  minOrder=1;
