@@ -55,4 +55,12 @@ public class StringTest {
             }
             System.out.println(a);
         }
+
+        @Test
+        public void test_aa() {
+            final String  lesson_key = String.format("course:lesson:%d:speakerids", null);
+            System.out.println(lesson_key);
+        }
+
+
 }
