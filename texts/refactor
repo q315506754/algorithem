@@ -22,10 +22,11 @@
 4.Inline Class.  Class ->  Method,Field
 5.Hide Delegate.  create Method for Method
 6.Remove Middle Man.  remove Method for Method
-7.Introduce Foreign Method. extend Method with Method
-8.Introduce Local Extension. extends or wrap a class
+7.Introduce Foreign Method. extend Method with Method 引入static函数，参数为类实例，该函数作为扩展
+8.Introduce Local Extension. extends or wrap a class  使用子类，并扩展一个函数；或者包装类，添加函数,能接受原类实例
 
 重新组织数据
+1.Self Encapsulate Field  field->method
 
 简化条件表达式
 

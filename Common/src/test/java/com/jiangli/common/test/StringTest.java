@@ -60,6 +60,10 @@ public class StringTest {
         public void test_aa() {
             final String  lesson_key = String.format("course:lesson:%d:speakerids", null);
             System.out.println(lesson_key);
+            System.out.println(String.format("course:lesson:%-30d:speakerids", 2314));
+
+            System.out.println(String.format("course:lesson:%030d:speakerids", 2314));
+            System.out.println(String.format("course:lesson:%+20d:speakerids", 2314));
         }
 
 

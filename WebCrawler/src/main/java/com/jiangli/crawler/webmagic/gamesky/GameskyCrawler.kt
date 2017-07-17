@@ -26,8 +26,8 @@ fun getContent(id: String): String {
     ret.append("""1/${content.maxPage}.${content.content}""")
 
     for(i in 2..content.maxPage){
-        val (_,cd_content, _) = getContentOfURL(CONTENT_URL(id, i))
-        ret.append("\r\n$i/${content.maxPage}.$cd_content")
+        val (url,cd_content, _) = getContentOfURL(CONTENT_URL(id, i))
+        ret.append("\r\n$i/${content.maxPage}.$cd_content $url")
     }
 
     return ret.toString()
