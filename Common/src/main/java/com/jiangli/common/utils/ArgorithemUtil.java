@@ -32,10 +32,16 @@ public class ArgorithemUtil {
     /**
      * 二进制中1的位数
      *
+     * a & a-1 去除最后一个1
      * @param a
      * @return
      */
     public static int numOf1InBinary(int a) {
-        return (a & a -1) == 0;
+        int c = 0;
+        while (a>0) {
+            a = a & a-1;
+            c++;
+        }
+        return c;
     }
 }

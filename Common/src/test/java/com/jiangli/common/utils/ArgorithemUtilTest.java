@@ -26,5 +26,11 @@ public class ArgorithemUtilTest {
         Assert.assertTrue(ArgorithemUtil.isPowerOf2(512));
         Assert.assertFalse(ArgorithemUtil.isPowerOf2(111));
     }
+    @Test
+    public void numOf1InBinary() throws Exception {
+        Assert.assertTrue(ArgorithemUtil.numOf1InBinary(0b1110)==3);
+        Assert.assertTrue(ArgorithemUtil.numOf1InBinary(0b1110001)==4);
+        Assert.assertTrue(ArgorithemUtil.numOf1InBinary(0b1010001)==3);
+    }
 
 }
