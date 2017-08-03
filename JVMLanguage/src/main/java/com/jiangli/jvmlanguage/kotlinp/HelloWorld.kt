@@ -6,6 +6,10 @@ import com.jiangli.jvmlanguage.javap.HelloWorld
  */
 
 fun main(args: Array<String>) {
+    val i1 = java.lang.Integer(1111)
+    val i2 = java.lang.Integer(1111)
+    println(i1==i2)
+    println(i1===i2)
         val user = HelloWorld()
 
     val message = user.javaClass
