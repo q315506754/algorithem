@@ -2,7 +2,6 @@ package com.jiangli.common.utils;
 
 import com.jiangli.common.exception.ServiceException;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -27,7 +26,7 @@ public class CommonUtil {
      * @author JiangLi CreateTime 2014-3-11 下午5:43:36
      */
     public static String nullToEmpty(Object obj) {
-        return obj == null ? "" : obj.toString();
+        return obj == null ? "" : obj.toString().trim();
     }
 
     public static <T> List<T> findAll(Class<T> cls) {
@@ -102,7 +101,7 @@ public class CommonUtil {
     }
 
     public static boolean isStringNull(String obj) {
-        return StringUtils.isEmpty(obj);
+        return nullToEmpty(obj).length()==0;
     }
 
     public static boolean isStringNotNull(String obj) {
