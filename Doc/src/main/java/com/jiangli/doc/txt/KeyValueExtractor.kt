@@ -249,12 +249,17 @@ fun main(args: Array<String>) {
 
     //
     val waiwang = getJDBCForWaiWang()
-    val targetDB = getJDBCForYanFa()
+//    val waiwang2C = getJDBCFor2CWaiWang()
+//    val targetDB = getJDBCForYanFa()
+    val targetDB = getJDBCForYuFa()
 
 
     val totalWonderVideos = LinkedHashMap<String, ArrayList<Lesson>>()
 
     val userName2UserId = HashMap<String, Int>() //外网
+//    特殊情况
+    userName2UserId.put("王加",160168971)
+
     val userId2TeacherId = HashMap<Int, Int>() //
     val userNameToInfoMap = LinkedHashMap<String,Map<String, ArrayList<String>>>()
 
@@ -283,7 +288,7 @@ fun main(args: Array<String>) {
             if(userId == -1)
                 error("找不到用户id for $excelTeaName, ${it.courseId}——${it.courseName} ,TBL_COURSE.TEACHER_NAME:$db_teacher,TBL_COURSE.MAJOR_SPEAKER:${tbl_mp["MAJOR_SPEAKER"]},TBL_USER.REAL_NAME:${db_username}")
 
-            userName2UserId.put(excelTeaName!!,userId)
+            userName2UserId.putIfAbsent(excelTeaName!!,userId)
         }
 
         //收集风采视频
@@ -450,6 +455,26 @@ fun main(args: Array<String>) {
             println(sql)
         }
     }
+
+    println("----------语录 TH_WONDER_VIDEO--------------")
+    //必须查外网
+    excel.rows.forEach {
+        val teacherName = it.name
+        var userId = userName2UserId.get(teacherName)?:-1
+        val teacherId = userId2TeacherId.get(userId)?:-1
+
+        it.listens.forEach {
+            val sql= "insert into db_teacher_home.TH_QUOTATIONS(TEACHER_ID,USER_ID,TITLE,RECORD_ID) values(" +
+                    "${teacherId}" +
+                    ",${userId}" +
+                    ",'${it.title}'" +
+                    ",${it.keyId}" +
+                    ");"
+
+            println(sql)
+        }
+//        println(wonderList)
+    }
 }
 
 private fun getJDBCForWaiWang(): JdbcTemplate {
@@ -465,10 +490,30 @@ private fun getJDBCForWaiWang(): JdbcTemplate {
     return jdbcTemplate
 }
 
+//倾听
+private fun getJDBCFor2CWaiWang(): JdbcTemplate {
+    val dataSource = BasicDataSource()
+    dataSource.driverClassName = "com.mysql.jdbc.Driver"
+    dataSource.url = "jdbc:mysql://121.196.228.36:3306" //外网
+    dataSource.username = "zwl"
+    dataSource.password = "ZwL@2016#push"
+    val jdbcTemplate = JdbcTemplate(dataSource)
+    return jdbcTemplate
+}
+
 private fun getJDBCForYanFa(): JdbcTemplate {
     val dataSource = BasicDataSource()
     dataSource.driverClassName = "com.mysql.jdbc.Driver"
     dataSource.url = "jdbc:mysql://192.168.9.223:3306"
+    dataSource.username = "root"
+    dataSource.password = "ablejava"
+    val jdbcTemplate = JdbcTemplate(dataSource)
+    return jdbcTemplate
+}
+private fun getJDBCForYuFa(): JdbcTemplate {
+    val dataSource = BasicDataSource()
+    dataSource.driverClassName = "com.mysql.jdbc.Driver"
+    dataSource.url = "jdbc:mysql://120.27.148.6:3306"
     dataSource.username = "root"
     dataSource.password = "ablejava"
     val jdbcTemplate = JdbcTemplate(dataSource)
