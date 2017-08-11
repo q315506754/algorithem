@@ -2,39 +2,41 @@ package com.jiangli.doc.txt
 
 import com.jiangli.common.utils.CommonUtil
 import com.jiangli.common.utils.PathUtil
-import org.apache.commons.dbcp.BasicDataSource
 import org.springframework.jdbc.core.ColumnMapRowMapper
-import org.springframework.jdbc.core.JdbcTemplate
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStreamReader
+import java.io.*
+import java.lang.Exception
+import java.util.*
 
 /**
  * Created by Jiangli on 2017/8/3.
  */
+@DslMarker
+annotation class Contex
 
-class Excel{
-    var rows =ArrayList<ExcelRow>()
+@Contex
+open class Base
+
+class Excel:Base(){
+    var rows = ArrayList<ExcelRow>()
 }
-class ExcelRow{
+class ExcelRow:Base(){
     var name:String?=null
     var courses=ArrayList<Course>()
     var listens=ArrayList<Listen>()
 }
 
-class Course{
+class Course:Base(){
      var courseId:Int? = null
      var courseName:String? = null
     var lessons=ArrayList<Lesson>()
 }
-class Lesson{
+class Lesson:Base(){
      var index:String? = null
      var videoId:Int? = null
      var courseId:Int? = null
 }
 
-class Listen{
+class Listen:Base(){
      var keyId:Int? = null
      var title:String? = null
 }
@@ -248,13 +250,22 @@ fun main(args: Array<String>) {
     val error:(Any) -> Unit = System.err::println
 
     //
-    val waiwang = getJDBCForWaiWang()
-//    val waiwang2C = getJDBCFor2CWaiWang()
-//    val targetDB = getJDBCForYanFa()
-    val targetDB = getJDBCForYuFa()
-
+    val waiwang = DB.getJDBCForWaiWang()
+//    val waiwang2C = DB.getJDBCFor2CWaiWang()
+//    val targetDB = DB.getJDBCForYanFa()
+    val targetDB = DB.getJDBCForYuFa()
+    val concernFile = File("C:\\Users\\DELL-13\\Desktop\\concerns.sql")
+    val ofw = BufferedWriter(OutputStreamWriter(FileOutputStream(concernFile)))
 
     val totalWonderVideos = LinkedHashMap<String, ArrayList<Lesson>>()
+
+    val sortMap = LinkedHashMap<String, Int>()
+    sortMap.put("冯玮", 1)
+    sortMap.put("葛剑雄", 2)
+    sortMap.put("吴焕加", 3)
+    sortMap.put("熊浩", 4)
+    sortMap.put("毛利华", 5)
+
 
     val userName2UserId = HashMap<String, Int>() //外网
 //    特殊情况
@@ -320,6 +331,7 @@ fun main(args: Array<String>) {
     val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\0803 教师端主页"
     val baseinfoPath = PathUtil.buildPath(base, "14.txt")
     val imginfoPath = PathUtil.buildPath(base, "img.txt")
+    val imgCarouselInfoPath = PathUtil.buildPath(base, "img方.txt")
 
 //    val file = File(baseinfoPath)
 //    println(file.absolutePath)
@@ -341,12 +353,28 @@ fun main(args: Array<String>) {
             map.put("背景图",it.value)
         }
     }
+    //合并轮播图  正方形
+    val imgCarList = parseTxt(File(imgCarouselInfoPath), ":")
+    imgCarList.forEach {
+        it.entries.forEach {
+            val map = userNameToInfoMap[it.key] as MutableMap
+            map.put("轮播图",it.value)
+        }
+    }
+
 
     //合并userId
     userName2UserId.entries.forEach {
         val map = userNameToInfoMap[it.key] as MutableMap
 
         map.put("用户ID", arrayListOf(it.value.toString()))
+    }
+
+    //合并userId
+    sortMap.entries.forEach {
+        val map = userNameToInfoMap[it.key] as MutableMap
+
+        map.put("排序", arrayListOf(it.value.toString()))
     }
 
 //    println(userNameToInfoMap)
@@ -356,13 +384,15 @@ fun main(args: Array<String>) {
 
     println("----------教师基本信息TH_TEACHER--------------")
     teacherBaseInfoList.forEach {
-        val sql= "insert into db_teacher_home.TH_TEACHER(NAME,USER_ID,SCHOOL,TITLE,ACADEMIC,IMG,SRC) values(" +
+        val sql= "insert into db_teacher_home.TH_TEACHER(NAME,USER_ID,SCHOOL,TITLE,ACADEMIC,IMG,CAROUSEL_IMG,SORT,SRC) values(" +
                 "'${it["姓名"]!![0]}'" +
                 ",${it.get("用户ID")?.get(0)?: "-1"}" +
                 ",'${it["学校"]!![0]}'" +
                 ",'${it["职称"]!![0]}'" +
                 ",'${it["学术方向"]!![0]}'" +
                 ",'${it.get("背景图")?.get(0)?: ""}'" +
+                ",'${it.get("轮播图")?.get(0)?: ""}'" +
+                ",${it.get("排序")?.get(0)?: "null"}" +
                 ",1" +
                 ");"
 
@@ -475,50 +505,57 @@ fun main(args: Array<String>) {
         }
 //        println(wonderList)
     }
+
+    println("----------关注 TH_CONCERN--------------")
+    println(concernFile)
+    //必须查外网
+    excel.rows.forEach {
+        val teacherName = it.name
+        var userId = userName2UserId.get(teacherName)?:-1
+        val teacherId = userId2TeacherId.get(userId)?:-1
+
+        it.courses.forEach {
+            val courseId = it.courseId
+
+            var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID = ${courseId}", ColumnMapRowMapper())
+            STUDENT_IDS.forEach {
+                val STUDENT_ID = it["STUDENT_ID"]
+
+                val sql= "insert into db_teacher_home.TH_CONCERN(USER_ID,BY_CONCERN_USER_ID,BY_CONCERN,CONCERN_SORUCE) values(" +
+                        "${STUDENT_ID}" +
+                        ",${userId}" +
+                        ",${teacherId}" +
+                        ",1" +
+                        ");"
+
+                ofw.write(sql)
+                ofw.write("\r\n")
+                ofw.flush()
+//                println(sql)
+            }
+        }
+//        println(wonderList)
+    }
+
+
+    println("----------更新 TH_TEACHER--------------")
+
+//    println(imgCarList)
+    imgCarList.forEach {
+        it.entries.forEach {
+            val teacherName = it.key
+            var userId = userName2UserId.get(teacherName)?:-1
+            val teacherId = userId2TeacherId.get(userId)?:-1
+//                val map = userNameToInfoMap[it.key] as MutableMap
+
+            val sql= "update db_teacher_home.TH_TEACHER set CAROUSEL_IMG='${it.value[0]}' where ID='${teacherId}';"
+
+                println(sql)
+        }
+    }
 }
 
-private fun getJDBCForWaiWang(): JdbcTemplate {
-    val dataSource = BasicDataSource()
-    dataSource.driverClassName = "com.mysql.jdbc.Driver"
-//    dataSource.url = "jdbc:mysql://192.168.9.223:3306"
-    dataSource.url = "jdbc:mysql://120.27.136.140:3306" //外网
-//    dataSource.username = "root"
-//    dataSource.password = "ablejava"
-    dataSource.username = "yanfa"
-    dataSource.password = "BaQWxiaA852;?;>|"
-    val jdbcTemplate = JdbcTemplate(dataSource)
-    return jdbcTemplate
-}
 
-//倾听
-private fun getJDBCFor2CWaiWang(): JdbcTemplate {
-    val dataSource = BasicDataSource()
-    dataSource.driverClassName = "com.mysql.jdbc.Driver"
-    dataSource.url = "jdbc:mysql://121.196.228.36:3306" //外网
-    dataSource.username = "zwl"
-    dataSource.password = "ZwL@2016#push"
-    val jdbcTemplate = JdbcTemplate(dataSource)
-    return jdbcTemplate
-}
-
-private fun getJDBCForYanFa(): JdbcTemplate {
-    val dataSource = BasicDataSource()
-    dataSource.driverClassName = "com.mysql.jdbc.Driver"
-    dataSource.url = "jdbc:mysql://192.168.9.223:3306"
-    dataSource.username = "root"
-    dataSource.password = "ablejava"
-    val jdbcTemplate = JdbcTemplate(dataSource)
-    return jdbcTemplate
-}
-private fun getJDBCForYuFa(): JdbcTemplate {
-    val dataSource = BasicDataSource()
-    dataSource.driverClassName = "com.mysql.jdbc.Driver"
-    dataSource.url = "jdbc:mysql://120.27.148.6:3306"
-    dataSource.username = "root"
-    dataSource.password = "ablejava"
-    val jdbcTemplate = JdbcTemplate(dataSource)
-    return jdbcTemplate
-}
 
 //js
 //$("#sinfo tr").each(function(i,e) {
