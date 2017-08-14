@@ -252,8 +252,11 @@ fun main(args: Array<String>) {
     //
     val waiwang = DB.getJDBCForWaiWang()
 //    val waiwang2C = DB.getJDBCFor2CWaiWang()
+
 //    val targetDB = DB.getJDBCForYanFa()
-    val targetDB = DB.getJDBCForYuFa()
+//    val targetDB = DB.getJDBCForYuFa()
+    val targetDB = DB.getJDBCForTHWaiWang()
+
     val concernFile = File("C:\\Users\\DELL-13\\Desktop\\concerns.sql")
     val ofw = BufferedWriter(OutputStreamWriter(FileOutputStream(concernFile)))
 
@@ -525,7 +528,7 @@ fun main(args: Array<String>) {
                         "${STUDENT_ID}" +
                         ",${userId}" +
                         ",${teacherId}" +
-                        ",1" +
+                        ",2" +
                         ");"
 
                 ofw.write(sql)

@@ -26,6 +26,17 @@ object DB{
 
         return ret
     }
+    fun getSrc1UserIdList( jdbc:JdbcTemplate): List<Long> {
+        val ret = mutableListOf<Long>()
+
+        val query = jdbc.query("select USER_ID from db_teacher_home.TH_TEACHER where src=1", ColumnMapRowMapper())
+        println(query)
+        query.forEach {
+            ret.add(it["USER_ID"].toString().toLong())
+        }
+
+        return ret
+    }
 
      fun getJDBCForWaiWang(): JdbcTemplate {
         val dataSource = BasicDataSource()
@@ -36,6 +47,15 @@ object DB{
 //    dataSource.password = "ablejava"
         dataSource.username = "yanfa"
         dataSource.password = "BaQWxiaA852;?;>|"
+        val jdbcTemplate = JdbcTemplate(dataSource)
+        return jdbcTemplate
+    }
+     fun getJDBCForTHWaiWang(): JdbcTemplate {
+        val dataSource = BasicDataSource()
+        dataSource.driverClassName = "com.mysql.jdbc.Driver"
+        dataSource.url = "jdbc:mysql://120.27.136.140:3306" //外网
+        dataSource.username = "jiangli"
+        dataSource.password = "JL@2017"
         val jdbcTemplate = JdbcTemplate(dataSource)
         return jdbcTemplate
     }
@@ -87,5 +107,11 @@ fun JedisPool.execute(action: (Jedis) -> Unit) {
     action(resource)
 
     resource.close()
+}
+
+fun Jedis.executeDel(k: String) {
+    del(k)
+
+    println("del $k")
 }
 
