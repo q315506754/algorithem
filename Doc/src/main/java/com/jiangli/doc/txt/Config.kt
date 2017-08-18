@@ -110,8 +110,9 @@ fun JedisPool.execute(action: (Jedis) -> Unit) {
 }
 
 fun Jedis.executeDel(k: String) {
-    del(k)
+    val del = del(k)
 
     println("del $k")
+//    println("del $k $del")
 }
 

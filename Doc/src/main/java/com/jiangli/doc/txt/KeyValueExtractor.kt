@@ -269,6 +269,8 @@ fun main(args: Array<String>) {
     sortMap.put("熊浩", 4)
     sortMap.put("毛利华", 5)
 
+    val courseIdMap = LinkedHashMap<String, List<Long>>()
+
 
     val userName2UserId = HashMap<String, Int>() //外网
 //    特殊情况
@@ -518,24 +520,43 @@ fun main(args: Array<String>) {
         val teacherId = userId2TeacherId.get(userId)?:-1
 
         it.courses.forEach {
-            val courseId = it.courseId
+            if (userId.toString()=="115730") {
+                val courseId = it.courseId
 
-            var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID = ${courseId}", ColumnMapRowMapper())
-            STUDENT_IDS.forEach {
-                val STUDENT_ID = it["STUDENT_ID"]
+                var  COURSE_IDS = waiwang.query("select DISTINCT( COURSE_ID)from db_G2S_OnlineSchool.V2_ASSISTANTS WHERE USER_ID=${userId} AND TYPE NOT in (4,5) AND IS_DELETE=0", ColumnMapRowMapper())
 
-                val sql= "insert into db_teacher_home.TH_CONCERN(USER_ID,BY_CONCERN_USER_ID,BY_CONCERN,CONCERN_SORUCE) values(" +
-                        "${STUDENT_ID}" +
-                        ",${userId}" +
-                        ",${teacherId}" +
-                        ",2" +
-                        ");"
+                var in_str = "("
+                COURSE_IDS.forEach {
+                    val COURSE_ID = it["COURSE_ID"]
+                    in_str = in_str + COURSE_ID +","
 
-                ofw.write(sql)
-                ofw.write("\r\n")
-                ofw.flush()
-//                println(sql)
+                }
+                in_str = in_str.substring(0,in_str.length - 1)
+                in_str = in_str  +")"
+
+                println("$teacherName $userId $in_str")
+//            var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID = ${courseId}", ColumnMapRowMapper())
+                var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID in ${in_str}", ColumnMapRowMapper())
+
+
+                STUDENT_IDS.forEach {
+                    val STUDENT_ID = it["STUDENT_ID"]
+
+                    val sql= "insert into db_teacher_home.TH_CONCERN(USER_ID,BY_CONCERN_USER_ID,BY_CONCERN,CONCERN_SORUCE) values(" +
+                            "${STUDENT_ID}" +
+                            ",${userId}" +
+                            ",${teacherId}" +
+                            ",2" +
+                            ");"
+
+                    ofw.write(sql)
+                    ofw.write("\r\n")
+                    ofw.flush()
+    //                println(sql)
+                }
             }
+
+
         }
 //        println(wonderList)
     }
