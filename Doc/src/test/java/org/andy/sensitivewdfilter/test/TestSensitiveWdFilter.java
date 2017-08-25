@@ -38,6 +38,7 @@ public class TestSensitiveWdFilter {
 		filter("lzsb！！！逗比");
 		filter("sb！！！lzsb~");
 		filter("你好，你是傻逼吗");
+		filter("猫@#￥@#￥则……&￥……东");
 	}
 
 	private void filter(String x) {
