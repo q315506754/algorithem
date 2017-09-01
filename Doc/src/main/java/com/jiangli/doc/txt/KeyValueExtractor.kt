@@ -519,9 +519,9 @@ fun main(args: Array<String>) {
         var userId = userName2UserId.get(teacherName)?:-1
         val teacherId = userId2TeacherId.get(userId)?:-1
 
-        it.courses.forEach {
+//        it.courses.forEach {
             if (userId.toString()=="115730") {
-                val courseId = it.courseId
+                val courseId = it.courses[0].courseId
 
                 var  COURSE_IDS = waiwang.query("select DISTINCT( COURSE_ID)from db_G2S_OnlineSchool.V2_ASSISTANTS WHERE USER_ID=${userId} AND TYPE NOT in (4,5) AND IS_DELETE=0", ColumnMapRowMapper())
 
@@ -557,7 +557,7 @@ fun main(args: Array<String>) {
             }
 
 
-        }
+//        }
 //        println(wonderList)
     }
 

@@ -2,6 +2,7 @@ package com.jiangli.common.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,6 +12,10 @@ import java.util.List;
  */
 public class ListTest {
     public static void main(String[] args) {
+//        List list22 = new ArrayList();
+        List list22 = new LinkedList();
+        System.out.println(list22.get(0));
+
         String sss = "12321sdgf";
         String sss2 = new String("12321sdgf");
         List<String> list = new ArrayList<>();

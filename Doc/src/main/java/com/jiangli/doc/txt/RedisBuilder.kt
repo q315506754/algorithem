@@ -11,11 +11,11 @@ package com.jiangli.doc.txt
 fun main(args: Array<String>) {
 //    println(System.currentTimeMillis())
 //    return
-    val pool = Redis.getYanfaPool()
-    val jdbc = DB.getJDBCForYanFa()
+//    val pool = Redis.getYanfaPool()
+//    val jdbc = DB.getJDBCForYanFa()
 
-//    val pool = Redis.getYufaPool()
-//    val jdbc = DB.getJDBCForYuFa()
+    val pool = Redis.getYufaPool()
+    val jdbc = DB.getJDBCForYuFa()
 
     //名师id列表
     val idList = DB.getSrc1IdList(jdbc)
@@ -33,19 +33,19 @@ fun main(args: Array<String>) {
 
         //12名师api缓存
 //        jedis.executeDel("th:openapi:teachers:remoteresult:src:1")
-//        jedis.executeDel("th:openapi:teachers:remoteresult:src:1:ts")
+        jedis.executeDel("th:openapi:teachers:remoteresult:src:1:ts")
 
 
         //映射缓存
-//        userIdList.forEach {
-////            jedis.executeDel("th:userid:to:teacherid:${it}") //教师单个缓存
-//
-//            jedis.executeDel("th:myConcernIds:${it}") //我关注的人ids
-//        }
+        userIdList.forEach {
+//            jedis.executeDel("th:userid:to:teacherid:${it}") //教师单个缓存
+
+            jedis.executeDel("th:myConcernIds:${it}") //我关注的人ids
+        }
 
 
         idList.forEach {
-//            jedis.executeDel("th:teacher:${it}") //教师单个缓存
+            jedis.executeDel("th:teacher:${it}") //教师单个缓存
 
 //            jedis.executeDel("th:byConcernIds:${it}") //被关注人的teacherId 缓存300个
             jedis.executeDel("th:byConcernNum:${it}") //被关注数量
