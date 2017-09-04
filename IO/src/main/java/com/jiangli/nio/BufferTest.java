@@ -15,6 +15,7 @@ public class BufferTest {
     static int i = 1;
     public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         ByteBuffer allocate = ByteBuffer.allocate(1024);
+//        ByteBuffer allocate = ByteBuffer.allocate(1);
         System.out.println(BeanUtils.describe(allocate));
 
         print(allocate);
