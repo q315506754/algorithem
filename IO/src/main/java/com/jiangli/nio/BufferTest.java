@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
  *         CreatedTime  2016/6/23 0023 15:36
  */
 public class BufferTest {
-
+    static int i = 1;
     public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         ByteBuffer allocate = ByteBuffer.allocate(1024);
         System.out.println(BeanUtils.describe(allocate));
@@ -40,7 +40,7 @@ public class BufferTest {
     }
 
     public static void print(ByteBuffer allocate) {
-        System.out.println("-----------------");
+        System.out.println("--------"+(i++)+"---------");
         System.out.println("position:"+allocate.position());
         System.out.println("limit:"+allocate.limit());
         System.out.println("capacity:"+allocate.capacity());

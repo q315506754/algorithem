@@ -35,6 +35,13 @@ public class NIOOperDemo {
         }
     }
 
+    public static void print(Buffer allocate) {
+        System.out.println("position:"+allocate.position());
+        System.out.println("limit:"+allocate.limit());
+        System.out.println("capacity:"+allocate.capacity());
+    }
+
+
     public void readByNIO(String file) {
         //第一步 获取通道
         FileInputStream fis = null;
@@ -57,8 +64,18 @@ public class NIOOperDemo {
                 channel.read(buffer);
 
                 Buffer bf = buffer.flip();
+
+                System.out.println("...bf...");
+                print(bf);
+                System.out.println("...bf...");
+                System.out.println("...buffer...");
+                print(buffer);
+                System.out.println("...buffer...");
+
                 System.out.println("limt:" + bf.limit());
                 countSize += bf.limit();
+                System.out.println("countSize:" + countSize);
+                System.out.println("size:" + size);
                 byte[] bt = buffer.array();
                 String strByBuffer = new String(bt, 0, bf.limit());
 //            System.out.println(strByBuffer);
