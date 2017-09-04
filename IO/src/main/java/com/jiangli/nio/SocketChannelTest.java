@@ -11,6 +11,8 @@ public class SocketChannelTest {
     public static void main(String[] args) throws Exception {
         //SocketChannel 两种创建方式
 
+        String s = "{\"recruitName\":\"[B170614B]Introduction to Psychology\",\"courseId\":2018920,\"type\":0,\"recruitId\":5763,\"courseName\":\"\"}";
+
         //1.打开一个SocketChannel并连接到互联网上的某台服务器。
         SocketChannel socketChannel = SocketChannel.open();
         InetSocketAddress address = new InetSocketAddress("www.mi.com", 80);
