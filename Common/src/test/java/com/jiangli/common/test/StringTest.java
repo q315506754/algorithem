@@ -38,6 +38,8 @@ public class StringTest {
 //预期大于 3，结果是 3
             System.out.println(ary.length);
             System.out.println(Arrays.toString(ary));
+
+            System.out.println("dsa \ud83d\ude02");
         }
         @Test
         public void test_ads22() {
