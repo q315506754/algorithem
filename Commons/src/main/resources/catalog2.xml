@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<catalog>
+    <chain name="LocaleChange">
+        <command
+                className="com.jiangli.commons.chain.CommandMove"/>
+        <command
+                className="com.jiangli.commons.chain.CommandStop"/>
+    </chain>
+    <command
+            name="check"
+            className="com.jiangli.commons.chain.CommandCheck"/>
+</catalog>

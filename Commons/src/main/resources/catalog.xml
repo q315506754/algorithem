@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<catalog>
+    <command
+            name="move"
+            className="com.jiangli.commons.chain.CommandMove"/>
+    <command
+            name="stop"
+            className="com.jiangli.commons.chain.CommandStop"/>
+</catalog>

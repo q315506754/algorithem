@@ -37,6 +37,12 @@
             <groupId>commons-chain</groupId>
             <artifactId>commons-chain</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

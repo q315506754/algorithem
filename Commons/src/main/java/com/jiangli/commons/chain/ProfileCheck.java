@@ -1,4 +1,4 @@
-package com.jiangli.commons;
+package com.jiangli.commons.chain;
 
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
