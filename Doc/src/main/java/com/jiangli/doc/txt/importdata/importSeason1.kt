@@ -1,85 +1,16 @@
-package com.jiangli.doc.txt
+package com.jiangli.doc.txt.importdata
 
-import com.jiangli.common.utils.CommonUtil
 import com.jiangli.common.utils.PathUtil
+import com.jiangli.doc.txt.DB
 import org.springframework.jdbc.core.ColumnMapRowMapper
-import java.io.*
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 import java.lang.Exception
 import java.util.*
 
-/**
- * Created by Jiangli on 2017/8/3.
- */
-@DslMarker
-annotation class Contex
-
-@Contex
-open class Base
-
-class Excel:Base(){
-    var rows = ArrayList<ExcelRow>()
-}
-class ExcelRow:Base(){
-    var name:String?=null
-    var courses=ArrayList<Course>()
-    var listens=ArrayList<Listen>()
-}
-
-class Course:Base(){
-     var courseId:Int? = null
-     var courseName:String? = null
-    var lessons=ArrayList<Lesson>()
-}
-class Lesson:Base(){
-     var index:String? = null
-     var videoId:Int? = null
-     var courseId:Int? = null
-}
-
-class Listen:Base(){
-     var keyId:Int? = null
-     var title:String? = null
-}
-
-//
-//fun <T: Tag> Tag.doInit(tag: T, init: T.() -> Unit): T {
-//    tag.init()
-//    children.add(tag)
-//    return tag
-//}
-
-fun excel(init: Excel.() -> Unit): Excel = Excel().apply(init)
-fun Excel.row(name:String,init : ExcelRow.() -> Unit){
-    val excelRow = ExcelRow()
-    excelRow.name=name
-    rows.add(excelRow)
-    excelRow.init()
-}
-fun ExcelRow.course(name:String,id:Int,init : Course.() -> Unit){
-    val cs = Course()
-    cs.courseName=name
-    cs.courseId=id
-    courses.add(cs)
-    cs.init()
-}
-fun ExcelRow.listen(title:String,keyId:Int,init : Listen.() -> Unit){
-    val cs = Listen()
-    cs.title=title
-    cs.keyId=keyId
-    listens.add(cs)
-    cs.init()
-}
-
-fun Course.lesson(name:String,id:Int,init: Lesson.() -> Unit ){
-    val cs = Lesson()
-    cs.index=name
-    cs.videoId=id
-    cs.courseId=courseId
-    lessons.add(cs)
-    cs.init()
-}
-
-val excel = excel {
+val excel_season1 = excel {
     row("冯玮") {
         course("过去一百年", 2015658) {
             lesson("3.3、中东和平进程 (尴尬握手迎来的和平“曙光”)", 233349) {}
@@ -247,6 +178,7 @@ val excel = excel {
 
 
 fun main(args: Array<String>) {
+    val excel  = excel_season1
     val error:(Any) -> Unit = System.err::println
 
     //
@@ -257,7 +189,7 @@ fun main(args: Array<String>) {
 //    val targetDB = DB.getJDBCForYuFa()
     val targetDB = DB.getJDBCForTHWaiWang()
 
-    val concernFile = File("C:\\Users\\DELL-13\\Desktop\\concerns.sql")
+    val concernFile = File("C:\\Users\\DELL-13\\Desktop\\concerns_s1.sql")
     val ofw = BufferedWriter(OutputStreamWriter(FileOutputStream(concernFile)))
 
     val totalWonderVideos = LinkedHashMap<String, ArrayList<Lesson>>()
@@ -592,63 +524,4 @@ fun main(args: Array<String>) {
 //    console.log(`${txt1}:${href}`)
 //});
 
-private fun parseTxt(file: File, split: String): ArrayList<Map<String, ArrayList<String>>> {
-    val isNotNull = CommonUtil::isStringNotNull
-    val isNull = CommonUtil::isStringNull
-    val n2E = CommonUtil::nullToEmpty
-    val bf = BufferedReader(InputStreamReader(FileInputStream(file), "gbk"))
-
-    val arrayList = ArrayList<Map<String, ArrayList<String>>>()
-    var m = LinkedHashMap<String, ArrayList<String>>()
-
-    var readLine = bf.readLine()
-    var prevKey: String? = null
-    while (readLine != null) {
-//        println(readLine)
-        val indexOf = readLine.indexOf(split)
-//        if (indexOf <1) {
-//            println("$readLine $indexOf")
-//            readLine = bf.readLine()
-//            continue
-//        }
-
-        val key = if (indexOf < 1) "" else n2E(readLine.substring(0, indexOf))
-        val value = if (indexOf < 1) "" else n2E(readLine.substring(indexOf + 1, readLine.length))
-
-//        println("$key -> $value")
-
-        if (isNotNull(key)) {
-            prevKey = key
-        }
-
-        if (isNotNull(value)) {
-
-        }
-
-        if (isNotNull(key) && isNotNull(value)) {
-            if(!m.containsKey(key)){
-            }else {
-                m = LinkedHashMap<String, ArrayList<String>>()
-            }
-
-            m.putIfAbsent(key, ArrayList())
-            val list = m[key]
-            list!!.add(n2E(value))
-
-        } else if (isNull(key) && isNotNull(readLine) && isNotNull(prevKey)) {
-            m.putIfAbsent(prevKey!!, ArrayList())
-            val list = m[prevKey]
-            list!!.add(n2E(readLine))
-        } else if (isNull(readLine)) {
-            if (!m.isEmpty()) arrayList.add(m)
-
-            m = LinkedHashMap<String, ArrayList<String>>()
-        }
-
-        readLine = bf.readLine()
-    }
-
-    arrayList.add(m)
-    return arrayList
-}
 
