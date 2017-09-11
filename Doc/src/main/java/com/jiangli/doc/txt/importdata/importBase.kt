@@ -4,6 +4,7 @@ import com.jiangli.common.utils.CommonUtil
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.txt.DB
 import org.springframework.jdbc.core.ColumnMapRowMapper
+import org.springframework.jdbc.core.JdbcTemplate
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -278,4 +279,27 @@ fun Course.lesson(name:String, id:Int, init: Lesson.() -> Unit ){
         }
     }
     return userNameToInfoMap
+}
+
+
+fun replaceLastSymbol(it: String): String {
+    var trim = it.trim()
+
+    val get = trim.get(trim.lastIndex)
+    if (get.toString() in arrayListOf("；","，","：","、","。",";",",",":",".")) {
+        trim = trim.substring(0,trim.lastIndex)
+    }
+
+    return trim
+}
+
+fun removeIfExist(targetDB: JdbcTemplate, table: String, field: String, teacherId: Int): Long {
+
+    val forObject = targetDB.queryForObject("SELECT count(*) as COUNT FROM db_teacher_home.$table WHERE $field = $teacherId AND IS_DELETED=0", ColumnMapRowMapper())
+    val i = forObject["COUNT"] as Long
+    if (i > 0) {
+//                 error("TH_PERSONAL_GLORY已存在 $userName $teacherId ,需要删除已存在的")
+        println("update  db_teacher_home.$table set IS_DELETED = 1 WHERE $field = $teacherId ;")
+    }
+    return i
 }

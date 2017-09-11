@@ -24,6 +24,7 @@ fun main(args: Array<String>) {
         println(jedis.smembers("cc:course:2021149:chapters:all"))
         println(jedis.smembers("cc:course:2021149:chapters"))
 
+        println(it.get("user:uuid:63e7c72c4efdb0bd6ea7ecf260fbef38"))
     }
 
 

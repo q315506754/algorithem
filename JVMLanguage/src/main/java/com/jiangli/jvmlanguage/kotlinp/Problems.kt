@@ -1,5 +1,8 @@
 package com.jiangli.jvmlanguage.kotlinp
 
+import java.text.SimpleDateFormat
+import java.util.*
+
 /**
  *
  *
@@ -155,6 +158,8 @@ fun main(args: Array<String>) {
 
     p(joinOptions(listOf("aaa","bbb","ccc")))
     p(joinOptions(listOf("yes", "no", "may be")))
+
+    println(SimpleDateFormat("yyyyMMddHH").format(Date()))
 }
 
 
