@@ -20,7 +20,8 @@ fun main(args: Array<String>) {
 //    val jdbc = DB.getJDBCForYanFa()
 
     val pool = Redis.getYufaPool()
-    val jdbc = DB.getJDBCForYuFa()
+//    val jdbc = DB.getJDBCForYuFa()
+    val jdbc =  DB.getJDBCForTHWaiWang()
 
     //名师id列表
     val idList = DB.getIdList(jdbc,2)
@@ -31,7 +32,7 @@ fun main(args: Array<String>) {
 
         //映射缓存
         userIdList.forEach {
-            jedis.executeDel("th:userid:to:teacherid:${it}") //教师单个缓存
+            jedis.executeDel("th:userid:to:teacherid:${it}") //userId映射缓存
 
             jedis.executeDel("th:myConcernIds:${it}") //我关注的人ids
         }

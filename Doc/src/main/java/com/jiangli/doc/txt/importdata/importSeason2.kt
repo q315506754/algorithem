@@ -267,8 +267,8 @@ fun main(args: Array<String>) {
 //    val waiwang2C = DB.getJDBCFor2CWaiWang()
 
 //    val targetDB = DB.getJDBCForYanFa()
-    val targetDB = DB.getJDBCForYuFa()
-//    val targetDB = DB.getJDBCForTHWaiWang()
+//    val targetDB = DB.getJDBCForYuFa()
+    val targetDB = DB.getJDBCForTHWaiWang()
 
 
 
@@ -396,8 +396,8 @@ fun main(args: Array<String>) {
     userName2UserId.entries.forEach {
         (userName, userId) ->
         val uuid = MD5.getMD5Str(userId.toString()+"zhihuishu").toLowerCase()
-        println("$userName $userId http://114.55.4.242:8280/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
-//        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+//        println("$userName $userId http://114.55.4.242:8280/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
     }
 
     //查询userId对应的teacherId
@@ -524,7 +524,7 @@ fun main(args: Array<String>) {
         }
 //        println(wonderList)
     }
-    return
+//    return
 
     println("##----------关注 TH_CONCERN--------------;")
     val concernFile = File("$base\\concerns_s2.sql")
