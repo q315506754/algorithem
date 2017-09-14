@@ -3,6 +3,7 @@ package com.jiangli.doc.txt.importdata
 import com.jiangli.common.utils.MD5
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.txt.DB
+import com.jiangli.doc.txt.excel.parseExcel
 import org.springframework.jdbc.core.ColumnMapRowMapper
 import java.io.BufferedWriter
 import java.io.File
@@ -255,26 +256,31 @@ val excel_season2 = excel {
 }
 
 
-private val s = "TH_PERSONAL_GLORY"
-
 fun main(args: Array<String>) {
-    val excel  = excel_season2
     val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页二期汇总"
+//    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0908.xlsx")))
+    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0914 .xlsx")))
 
 
-    //
-    val waiwang = DB.getJDBCForWaiWang()
-//    val waiwang2C = DB.getJDBCFor2CWaiWang()
+//        val CURRENT_ENV = Env.DEV
+//    val CURRENT_ENV = Env.YUFA
+    val CURRENT_ENV = Env.WAIWANG
 
-//    val targetDB = DB.getJDBCForYanFa()
-//    val targetDB = DB.getJDBCForYuFa()
-    val targetDB = DB.getJDBCForTHWaiWang()
+    val INSERT_CONCERN = false
+    val EXCEL_TXT_NAMES_SYNC = true  //若为false txt可能名称多余excel
 
 
+
+    val configMap = mutableMapOf<Env,Conf>()
+    configMap.put(Env.DEV,Conf(DB.getJDBCForYanFa(),"192.168.9.131"))
+    configMap.put(Env.YUFA,Conf(DB.getJDBCForYuFa(),"114.55.4.242:8280"))
+    configMap.put(Env.WAIWANG,Conf(DB.getJDBCForTHWaiWang(),"teacherhome.zhihuishu.com"))
+
+    val targetDB = configMap[CURRENT_ENV]!!.jdbc
+    val HOST = configMap[CURRENT_ENV]!!.host
 
 //    特殊情况
     val userId2TeacherId = HashMap<Int, Int>() //
-
 
     //张三 -> [{lesson1},{lesson2}]
     val totalWonderVideos = getWonderVideoList(excel)
@@ -289,7 +295,17 @@ fun main(args: Array<String>) {
 
 
     //张三 -> {baseInfo}
-    val userNameToInfoMap = getBaseInfoMap(base, "个人信息荣誉等等.txt")
+    var userNameToInfoMap = getBaseInfoMap(base, "个人信息荣誉等等.txt")
+    //同步excel的名字
+    if (EXCEL_TXT_NAMES_SYNC) {
+        val list = excel.rows.map { it.name }
+        val map = userNameToInfoMap.filter {
+            (k) ->
+            list.contains(k)
+        }
+        userNameToInfoMap = map as LinkedHashMap<String, Map<String, ArrayList<String>>>
+    }
+
     //合并userId
     mergeToBaseMap(userName2UserId, userNameToInfoMap, "用户ID")
 
@@ -387,7 +403,7 @@ fun main(args: Array<String>) {
     }
 
     ////////////////////////////////上面需先执行
-    println("##----------UserId转码--------------;")
+    println("##----------redis UserId转码--------------;")
     userName2UserId.entries.forEach {
         (userName, userId) ->
         val uuid = MD5.getMD5Str(userId.toString()+"zhihuishu").toLowerCase()
@@ -396,8 +412,8 @@ fun main(args: Array<String>) {
     userName2UserId.entries.forEach {
         (userName, userId) ->
         val uuid = MD5.getMD5Str(userId.toString()+"zhihuishu").toLowerCase()
-//        println("$userName $userId http://114.55.4.242:8280/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
-        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+        println("$userName $userId http://$HOST/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+//        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
     }
 
     //查询userId对应的teacherId
@@ -450,6 +466,7 @@ fun main(args: Array<String>) {
         removeIfExist(targetDB, "TH_WONDER_VIDEO", "TEACHER_ID", teacherId)
     }
 
+    val waiwang = DB.getJDBCForWaiWang()
     totalWonderVideos.entries.forEach {
         val teacherName = it.key
         var userId = userName2UserId.get(teacherName)?:-1
@@ -513,6 +530,7 @@ fun main(args: Array<String>) {
         removeIfExist(targetDB, "TH_QUOTATIONS", "TEACHER_ID", teacherId)
 
         it.listens.reversed().forEach {
+//        it.listens.forEach {
             val sql= "insert into db_teacher_home.TH_QUOTATIONS(TEACHER_ID,USER_ID,TITLE,RECORD_ID) values(" +
                     "${teacherId}" +
                     ",${userId}" +
@@ -526,64 +544,87 @@ fun main(args: Array<String>) {
     }
 //    return
 
-    println("##----------关注 TH_CONCERN--------------;")
-    val concernFile = File("$base\\concerns_s2.sql")
-    val ofw = BufferedWriter(OutputStreamWriter(FileOutputStream(concernFile)))
-    println(concernFile)
-    //必须查外网
-    excel.rows.forEach {
-        val teacherName = it.name
-        var userId = userName2UserId.get(teacherName)?:-1
-        val teacherId = userId2TeacherId.get(userId)?:-1
+    if (INSERT_CONCERN) {
+        println("##----------关注 TH_CONCERN--------------;")
+        val concernFile = File("$base\\concerns_s2.sql")
+        val ofw = BufferedWriter(OutputStreamWriter(FileOutputStream(concernFile)))
+        println(concernFile)
+        //必须查外网
+        excel.rows.forEach {
+            val teacherName = it.name
+            var userId = userName2UserId.get(teacherName)?:-1
+            val teacherId = userId2TeacherId.get(userId)?:-1
 
-        //先删除已存在的
-        val forObject = targetDB.queryForObject("SELECT count(*) as COUNT FROM db_teacher_home.TH_CONCERN WHERE BY_CONCERN = $teacherId AND CONCERN_SORUCE=2", ColumnMapRowMapper())
-        val i = forObject["COUNT"] as Long
-        if (i > 0) {
-//                 error("TH_PERSONAL_GLORY已存在 $userName $teacherId ,需要删除已存在的")
-            println("update  db_teacher_home.TH_CONCERN set IS_DELETED = 1 WHERE BY_CONCERN = $teacherId AND CONCERN_SORUCE=2 ;")
-        }
-//        return@forEach
+            //先删除已存在的
+            val forObject = targetDB.queryForObject("SELECT count(*) as COUNT FROM db_teacher_home.TH_CONCERN WHERE BY_CONCERN = $teacherId AND CONCERN_SORUCE=2", ColumnMapRowMapper())
+            val i = forObject["COUNT"] as Long
+            if (i > 0) {
+    //                 error("TH_PERSONAL_GLORY已存在 $userName $teacherId ,需要删除已存在的")
+                println("update  db_teacher_home.TH_CONCERN set IS_DELETED = 1 WHERE BY_CONCERN = $teacherId AND CONCERN_SORUCE=2 ;")
+            }
+    //        return@forEach
 
-//            if (userId.toString()=="115730") {
-                var  COURSE_IDS = waiwang.query("select DISTINCT( COURSE_ID)from db_G2S_OnlineSchool.V2_ASSISTANTS WHERE USER_ID=${userId} AND TYPE NOT in (4,5) AND IS_DELETE=0", ColumnMapRowMapper())
+    //            if (userId.toString()=="115730") {
+                    var  COURSE_IDS = waiwang.query("select DISTINCT( COURSE_ID)from db_G2S_OnlineSchool.V2_ASSISTANTS WHERE USER_ID=${userId} AND TYPE NOT in (4,5) AND IS_DELETE=0", ColumnMapRowMapper())
 
-                var in_str = "("
-                COURSE_IDS.forEach {
-                    val COURSE_ID = it["COURSE_ID"]
-                    in_str = in_str + COURSE_ID +","
+                    var in_str = "("
+                    COURSE_IDS.forEach {
+                        val COURSE_ID = it["COURSE_ID"]
+                        in_str = in_str + COURSE_ID +","
 
-                }
-                in_str = in_str.substring(0,in_str.length - 1)
-                in_str = in_str  +")"
+                    }
+                    in_str = in_str.substring(0,in_str.length - 1)
+                    in_str = in_str  +")"
 
-                println("$teacherName $userId $in_str")
-//            var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID = ${courseId}", ColumnMapRowMapper())
-                var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID in ${in_str}", ColumnMapRowMapper())
+                    println("$teacherName $userId $in_str")
+    //            var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID = ${courseId}", ColumnMapRowMapper())
+                    var  STUDENT_IDS = waiwang.query("select DISTINCT STUDENT_ID from db_G2S_OnlineSchool.STUDENT WHERE COURSE_ID in ${in_str}", ColumnMapRowMapper())
 
 
-                STUDENT_IDS.forEach {
-                    val STUDENT_ID = it["STUDENT_ID"]
+                    STUDENT_IDS.forEach {
+                        val STUDENT_ID = it["STUDENT_ID"]
 
-                    val sql= "insert into db_teacher_home.TH_CONCERN(USER_ID,BY_CONCERN_USER_ID,BY_CONCERN,CONCERN_SORUCE) values(" +
-                            "${STUDENT_ID}" +
-                            ",${userId}" +
-                            ",${teacherId}" +
-                            ",2" +
-                            ");"
+                        val sql= "insert into db_teacher_home.TH_CONCERN(USER_ID,BY_CONCERN_USER_ID,BY_CONCERN,CONCERN_SORUCE) values(" +
+                                "${STUDENT_ID}" +
+                                ",${userId}" +
+                                ",${teacherId}" +
+                                ",2" +
+                                ");"
 
-                    ofw.write(sql)
-                    ofw.write("\r\n")
-                    ofw.flush()
-    //                println(sql)
-                }
-//            }
+                        ofw.write(sql)
+                        ofw.write("\r\n")
+                        ofw.flush()
+        //                println(sql)
+                    }
+    //            }
+    }
 
     }
 
 
+    println("##----------REDIS--------------;")
+    val teacherIds = userId2TeacherId.values
+    val keys = arrayListOf<String>()
+    teacherIds.forEach {
+        keys.add("th:teacher:${it}") //教师单个缓存
+//            keys.add("th:byConcernIds:${it}") //被关注人的teacherId 缓存300个
+        keys.add("th:byConcernNum:${it}") //被关注数量
+        keys.add("th:personalGloryIds:${it}") //个人荣耀 列表
+        keys.add("th:wonderVideo:ids:${it}") //风采视频 列表
+        keys.add("th:quotations:ids:${it}") //我的语录 列表
+    }
+    delKeys(keys)
+
 }
 
+fun delKeys(list:List<String>){
+    val s = "del "+list.joinToString(" ","","",100,"") { s -> "$s" }
+    println(s)
+
+    if (list.size > 100) {
+        delKeys(list.subList(100,list.lastIndex))
+    }
+}
 
 
 //js

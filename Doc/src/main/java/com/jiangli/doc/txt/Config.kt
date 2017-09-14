@@ -131,8 +131,10 @@ fun JedisPool.execute(action: (Jedis) -> Unit) {
     resource.close()
 }
 
+val deleteCol = mutableListOf<String>()
 fun Jedis.executeDel(k: String) {
     val del = del(k)
+    deleteCol.add(k)
 
     println("del $k")
 //    println("del $k $del")

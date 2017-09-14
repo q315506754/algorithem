@@ -23,6 +23,13 @@ val error:(Any) -> Unit = System.err::println
 /**
  * Created by Jiangli on 2017/8/3.
  */
+enum class Env{
+    DEV,YUFA,WAIWANG
+}
+data class Conf(val jdbc:JdbcTemplate,val host:String){
+
+}
+
 @DslMarker
 annotation class Contex
 
@@ -252,16 +259,16 @@ fun Course.lesson(name:String, id:Int, init: Lesson.() -> Unit ){
 
  fun mergeToBaseMap(input: HashMap<String, Int>, targetMap: LinkedHashMap<String, Map<String, ArrayList<String>>>, s: String) {
     input.entries.forEach {
-        val map = targetMap[it.key] as MutableMap
+        val map = targetMap[it.key] as MutableMap?
 
-        map.put(s, arrayListOf(it.value.toString()))
+        map?.put(s, arrayListOf(it.value.toString()))
     }
 }
  fun mergeToBaseMap(input:ArrayList<Map<String, ArrayList<String>>>, targetMap: LinkedHashMap<String, Map<String, ArrayList<String>>>, s: String) {
     input.forEach {
         it.entries.forEach {
-            val map = targetMap[it.key] as MutableMap
-            map.put(s,it.value)
+            val map = targetMap[it.key] as MutableMap?
+            map?.put(s,it.value)
         }
     }
 }
