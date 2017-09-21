@@ -1,5 +1,7 @@
 package com.jiangli.jvmlanguage.kotlinp
 
+import java.util.*
+
 /**
  *
  *
@@ -165,6 +167,13 @@ fun main(args: Array<String>) {
         else ->null
     } }.forEach{
         println(it)
+    }
+
+    val line = "hmset user:1 name zlikun ctime \"2017-9-1 12:00:00\" utime \"2017-9-18 14:27:00\""
+    val tokenizer = StringTokenizer(line, " ")
+    tokenizer kktt ""
+    while (tokenizer.hasMoreTokens()) {
+        println(tokenizer.nextToken())
     }
 }
 fun doSth(status: Any):Any? {
