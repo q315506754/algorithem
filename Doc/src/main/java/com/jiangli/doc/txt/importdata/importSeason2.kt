@@ -256,8 +256,9 @@ val excel_season2 = excel {
 
 fun main(args: Array<String>) {
     val excel  = excel_season2
-    val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页二期汇总"
-
+//    val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页二期汇总"
+    val base = "C:\\Users\\Jiangli\\Desktop\\教师主页\\教师主页二期汇总"
+    PathUtil.ensurePath(base)
 
     //
     val waiwang = DB.getJDBCForWaiWang()
@@ -268,6 +269,10 @@ fun main(args: Array<String>) {
     val targetDB = DB.getJDBCForTHWaiWang()
 
     val concernFile = File("$base\\concerns_s2.sql")
+    if (!concernFile.exists()) {
+        concernFile.createNewFile()
+    }
+
     val ofw = BufferedWriter(OutputStreamWriter(FileOutputStream(concernFile)))
 
 
