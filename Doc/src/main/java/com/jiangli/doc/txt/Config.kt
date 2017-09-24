@@ -26,10 +26,32 @@ object DB{
 
         return ret
     }
+    fun getIdList( jdbc:JdbcTemplate,src:Int?=null): List<Int> {
+        val ret = mutableListOf<Int>()
+
+        val query = jdbc.query("select ID from db_teacher_home.TH_TEACHER ${if(src!=null) "where src=$src" else ""}", ColumnMapRowMapper())
+        println(query)
+        query.forEach {
+            ret.add(it["ID"].toString().toInt())
+        }
+
+        return ret
+    }
     fun getSrc1UserIdList( jdbc:JdbcTemplate): List<Long> {
         val ret = mutableListOf<Long>()
 
         val query = jdbc.query("select USER_ID from db_teacher_home.TH_TEACHER where src=1", ColumnMapRowMapper())
+        println(query)
+        query.forEach {
+            ret.add(it["USER_ID"].toString().toLong())
+        }
+
+        return ret
+    }
+    fun getUserIdList( jdbc:JdbcTemplate,src:Int?=null): List<Long> {
+        val ret = mutableListOf<Long>()
+
+        val query = jdbc.query("select USER_ID from db_teacher_home.TH_TEACHER  ${if(src!=null) "where src=$src" else ""}", ColumnMapRowMapper())
         println(query)
         query.forEach {
             ret.add(it["USER_ID"].toString().toLong())
@@ -109,8 +131,10 @@ fun JedisPool.execute(action: (Jedis) -> Unit) {
     resource.close()
 }
 
+val deleteCol = mutableListOf<String>()
 fun Jedis.executeDel(k: String) {
     val del = del(k)
+    deleteCol.add(k)
 
     println("del $k")
 //    println("del $k $del")

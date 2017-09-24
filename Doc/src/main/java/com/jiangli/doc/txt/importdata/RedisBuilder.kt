@@ -1,4 +1,9 @@
-package com.jiangli.doc.txt
+package com.jiangli.doc.txt.importdata
+
+import com.jiangli.doc.txt.DB
+import com.jiangli.doc.txt.Redis
+import com.jiangli.doc.txt.execute
+import com.jiangli.doc.txt.executeDel
 
 /**
  *
@@ -18,8 +23,8 @@ fun main(args: Array<String>) {
     val jdbc = DB.getJDBCForYuFa()
 
     //名师id列表
-    val idList = DB.getSrc1IdList(jdbc)
-    val userIdList = DB.getSrc1UserIdList(jdbc)
+    val idList = DB.getIdList(jdbc)
+    val userIdList = DB.getUserIdList(jdbc)
 
     pool.execute{
         val jedis = it
@@ -38,12 +43,13 @@ fun main(args: Array<String>) {
 
         //映射缓存
         userIdList.forEach {
-//            jedis.executeDel("th:userid:to:teacherid:${it}") //教师单个缓存
+            jedis.executeDel("th:userid:to:teacherid:${it}") //教师单个缓存
 
             jedis.executeDel("th:myConcernIds:${it}") //我关注的人ids
         }
 
 
+        //teacherId
         idList.forEach {
             jedis.executeDel("th:teacher:${it}") //教师单个缓存
 

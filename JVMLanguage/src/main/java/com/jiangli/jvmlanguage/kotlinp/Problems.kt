@@ -1,5 +1,9 @@
 package com.jiangli.jvmlanguage.kotlinp
 
+import com.jiangli.common.utils.MD5
+import java.text.SimpleDateFormat
+import java.util.*
+
 /**
  *
  *
@@ -155,6 +159,14 @@ fun main(args: Array<String>) {
 
     p(joinOptions(listOf("aaa","bbb","ccc")))
     p(joinOptions(listOf("yes", "no", "may be")))
+
+    println(SimpleDateFormat("yyyyMMddHH").format(Date()))
+    println(getPwd())
+}
+
+private fun getPwd(): String {
+    val dateStr = SimpleDateFormat("yyyyMMddHH").format(Date())
+    return MD5.getMD5Str(dateStr + "zhihuishuable-elec1232323").toLowerCase()
 }
 
 

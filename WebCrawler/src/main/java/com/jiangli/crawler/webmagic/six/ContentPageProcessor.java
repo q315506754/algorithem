@@ -72,6 +72,9 @@ public class ContentPageProcessor implements PageProcessor {
 //        System.out.println(is_table_page);
 //        System.out.println(is_detail_page);
 
+        html.$("").links().regex("").all();
+//        page.getHtml().select()
+
         if (is_table_page) {
             List<String> mainTable = html.xpath("//div[@class='mainbox threadlist']//tbody[@id]").all();
 //            System.out.println(mainTable);
