@@ -35,7 +35,7 @@
         <module>JDK</module>
         <module>JMX</module>
         <module>JNI</module>
-        <module>JVMLanguage</module>
+        <!--<module>JVMLanguage</module>-->
         <module>KillGame</module>
         <module>Log</module>
         <module>Lucene</module>
