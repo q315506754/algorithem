@@ -40,8 +40,8 @@
         <module>Log</module>
         <module>Lucene</module>
         <module>Maven</module>
-        <module>MavenPlugin</module>
-        <module>MavenPluginClient</module>
+        <!--<module>MavenPlugin</module>-->
+        <!--<module>MavenPluginClient</module>-->
         <module>Memory</module>
         <module>OSGI</module>
         <module>Practice</module>
