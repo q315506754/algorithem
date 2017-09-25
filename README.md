@@ -1,3 +1,4 @@
+[![Build Status运行状态](https://travis-ci.org/q315506754/algorithem.svg?branch=master)](https://travis-ci.org/q315506754/algorithem)
 # algorithe m< 和 &    &lt; 和 &amp;。  &copy;
 #段落、标题、区块代码
     1 > 2?
