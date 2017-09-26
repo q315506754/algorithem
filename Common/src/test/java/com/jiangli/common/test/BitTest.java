@@ -9,6 +9,7 @@ import org.junit.Test;
 public class BitTest {
     @Test
     public void test_aa() {
+
         int COUNT_BITS = Integer.SIZE - 3;
         int RUNNING    = -1 << COUNT_BITS;
         int SHUTDOWN   =  0 << COUNT_BITS;

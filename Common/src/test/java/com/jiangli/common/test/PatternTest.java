@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +36,14 @@ public class PatternTest {
         matcher.find();
         System.out.println(matcher.group());
 
+        Pattern pattern = Pattern.compile("\\s*[,]+\\s*");
+        System.out.println(Arrays.toString(pattern.split(" 111, 333")));
+        System.out.println( Arrays.toString(pattern.split(" [111, 333,23]")));
+
+        System.out.println(String.format("\n%s extension = (%<s)%s.getExtensionLoader(%s.class).getExtension(extName);",
+                "A", PatternTest.class.getSimpleName(), "A"));
+//        System.out.println(String.format("\n%s extension = (%>s)%s.getExtensionLoader(%s.class).getExtension(extName);",
+//                "A", PatternTest.class.getSimpleName(), "A"));
     }
 
 
