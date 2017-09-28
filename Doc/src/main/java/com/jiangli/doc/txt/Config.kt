@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.ColumnMapRowMapper
 import org.springframework.jdbc.core.JdbcTemplate
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
+import java.util.regex.Pattern
 
 /**
  *
@@ -33,6 +34,17 @@ object DB{
         println(query)
         query.forEach {
             ret.add(it["ID"].toString().toInt())
+        }
+
+        return ret
+    }
+    fun getTeacherList( jdbc:JdbcTemplate,src:Int?=null): List<Map<String,Any>> {
+        val ret = mutableListOf<Map<String,Any>>()
+
+        val query = jdbc.query("select * from db_teacher_home.TH_TEACHER ${if(src!=null) "where src=$src" else ""}", ColumnMapRowMapper())
+        println(query)
+        query.forEach {
+            ret.add(it)
         }
 
         return ret
@@ -138,5 +150,20 @@ fun Jedis.executeDel(k: String) {
 
     println("del $k")
 //    println("del $k $del")
+}
+
+fun Jedis.executeDelSplit(k: String) {
+    var s = k
+    if (s.startsWith("del")) {
+        s = s.substring(3)
+    }
+    s = s.trim()
+
+    val split = s.split(Pattern.compile("""\s+"""))
+    split.forEach{
+        del(it)
+
+        println("del $it")
+    }
 }
 

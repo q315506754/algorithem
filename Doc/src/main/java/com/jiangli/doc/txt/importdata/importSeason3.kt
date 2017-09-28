@@ -17,8 +17,8 @@ import java.util.*
 val excel_season3 = excel {
     row("黄天中") {
         course("职业生涯规划-体验式学习", 2015777) {
-            lesson("5.5.4 成为聆听者（Aha,Aha,哦，是么？）", 162145) {}
-            lesson("4.3.6 拥抱团队（前路被挡，你是选择开山还是选择绕道？）", 162117) {}
+            lesson("成为聆听者（Aha,Aha,哦，是么？）", 162145) {}
+            lesson("拥抱团队（前路被挡，你是选择开山还是选择绕道？）", 162117) {}
         }
         listen("前路被挡，你是选择开山还是选择绕道？", 402967) {}
         listen("信任的建立，为何源自于“舒适的接触”？", 402969) {}
@@ -36,11 +36,12 @@ fun main(args: Array<String>) {
     val excel  = excel_season3
 
 
-        val CURRENT_ENV = Env.DEV
-//    val CURRENT_ENV = Env.YUFA
+//        val CURRENT_ENV = Env.DEV
+    val CURRENT_ENV = Env.YUFA
 //    val CURRENT_ENV = Env.WAIWANG
 
-    val INSERT_CONCERN = false
+    val INSERT_CONCERN = false // 不导出关注sql
+//    val INSERT_CONCERN = true  // 导出关注sql
     val EXCEL_TXT_NAMES_SYNC = true  //若为false txt可能名称多余excel
 
 
@@ -121,7 +122,7 @@ fun main(args: Array<String>) {
             val s_BAK = "'${value.get("背景图")?.get(0) ?: ""}'"
             val s_CAROL = "'${value.get("轮播图")?.get(0) ?: ""}'"
             val s_SORT = value.get("排序")?.get(0) ?: "null"
-            val s_SRC = 2
+            val s_SRC = 1
             val s_STATUS = 1
 
             val insert_sql= "insert into db_teacher_home.TH_TEACHER(NAME,USER_ID,SCHOOL,TITLE,ACADEMIC,IMG,CAROUSEL_IMG,SORT,SRC,STATUS) values(" +
