@@ -30,6 +30,14 @@ data class Conf(val jdbc:JdbcTemplate,val host:String){
 
 }
 
+fun getConfig(): MutableMap<Env, Conf> {
+    val configMap = mutableMapOf<Env, Conf>()
+    configMap.put(Env.DEV, Conf(DB.getJDBCForYanFa(), "192.168.9.131"))
+    configMap.put(Env.YUFA, Conf(DB.getJDBCForYuFa(), "114.55.4.242:8280"))
+    configMap.put(Env.WAIWANG, Conf(DB.getJDBCForTHWaiWang(), "teacherhome.zhihuishu.com"))
+    return configMap
+}
+
 @DslMarker
 annotation class Contex
 
@@ -313,4 +321,13 @@ fun removeIfExist(targetDB: JdbcTemplate, table: String, field: String, teacherI
         println("update  db_teacher_home.$table set IS_DELETED = 1 WHERE $field = $teacherId ;")
     }
     return i
+}
+
+fun delKeysPage(list:List<String>){
+    val s = "del "+list.joinToString(" ","","",100,"") { s -> "$s" }
+    println(s)
+
+    if (list.size > 100) {
+        delKeysPage(list.subList(100,list.lastIndex))
+    }
 }

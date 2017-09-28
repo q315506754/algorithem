@@ -3,7 +3,6 @@ package com.jiangli.doc.txt.importdata
 import com.jiangli.common.utils.MD5
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.txt.DB
-import com.jiangli.doc.txt.excel.parseExcel
 import org.springframework.jdbc.core.ColumnMapRowMapper
 import java.io.BufferedWriter
 import java.io.File
@@ -15,259 +14,35 @@ import java.util.*
 /**
  * Created by Jiangli on 2017/8/3.
  */
-val excel_season2 = excel {
-    row("韩茂莉") {
-        course("中国历史地理", 2015584) {
-            lesson("史前文化的空间组合与地理选择", 224687) {}
-            lesson("“九州与四海=中国+夷狄”", 224743) {}
+val excel_season3 = excel {
+    row("黄天中") {
+        course("职业生涯规划-体验式学习", 2015777) {
+            lesson("5.5.4 成为聆听者（Aha,Aha,哦，是么？）", 162145) {}
+            lesson("4.3.6 拥抱团队（前路被挡，你是选择开山还是选择绕道？）", 162117) {}
         }
-        listen("郡县制不是始于秦朝？这和说好的不太一样！", 377933) {}
-        listen("起初人们是怎么想到畜牧的？", 377923) {}
-        listen("山河界线何以成为地方割据的保护伞？", 377959) {}
+        listen("前路被挡，你是选择开山还是选择绕道？", 402967) {}
+        listen("信任的建立，为何源自于“舒适的接触”？", 402969) {}
+
+        listen("聆听，是种更有艺术的“付出”", 402971) {}
+        listen("那些年，从错过的爱情里体验的沟通心理学", 402981) {}
+        listen("不经意被唤醒的潜意识，对你影响有多大", 402993) {}
     }
-    row("刘勇强") {
-        course("伟大的《红楼梦》", 2015488) {
-            lesson("对人物心理的精细把握与揭示", 233749) {}
-            lesson("言行失态和梦境反映人物潜意识", 233753) {}
-        }
-        listen("黛玉独特的“脸红”技能", 350383) {}
-        listen("“外面的形容”如何出卖你的内心想法", 350373) {}
-        listen("你真的读懂宝黛二人的心理了吗？", 350371) {}
-    }
-
-    row("丁宁") {
-        course("世界著名博物馆艺术经典", 2015487) {
-            lesson("扑朔迷离的《蒙娜丽莎》（蒙娜丽莎的眉毛去哪啦？）", 206189) {}
-            lesson("《米罗岛的维纳斯》的由来", 233469) {}
-        }
-        listen("我希望创造奇迹！", 357113) {}
-        listen("佛祖不开心", 375105) {}
-    }
-    row("徐凯文") {
-        course("大学生心理健康", 2015524) {
-            lesson("人有权决定自己的生死吗？（你以为你可以自杀么？）", 156867) {}
-            lesson("网络时代大学生的心理危机（危机四伏的网络时代）", 156871) {}
-        }
-        listen("该出手时就出手", 375099) {}
-        listen("是不是人人皆曰可杀便可杀？", 352907) {}
-        listen("危机的网络时代", 350369) {}
-    }
-    row("叶朗") {
-        course("艺术与审美", 2015490) {
-            lesson("什么是人生境界", 112468) {}
-            lesson("海伦·凯勒的故事", 111344) {}
-        }
-        listen("九百年前，北宋汴京城素面朝天的美", 385163) {}
-        listen("我们头顶上的灿烂星空，依然放射着神圣光芒", 385161) {}
-        listen("看见美，除了张开眼睛还要打开胸怀", 385159) {}
-    }
-
-    row("张荣明") {
-        course("中华国学", 2015601) {
-            lesson("商鞅与韩非", 177015) {}
-            lesson("奖惩严明与富国强兵", 177005) {}
-        }
-        listen("智慧也分三六九等", 383929) {}
-        listen("真人的世界是怎样的世界？", 383925) {}
-        listen("庄子的可爱，你get到了吗？", 383915) {}
-    }
-
-
-    row("龚克") {
-        course("生态文明", 2016543) {
-            lesson("从生态危机到生态文明", 234549) {}
-            lesson("历史地看问题", 234551) {}
-        }
-        listen("在自然面前，人类如何不颤抖？", 385037) {}
-    }
-
-
-    row("吴志成") {
-        course("生态文明", 2016543) {
-            lesson("什么是全球生态环境治理？", 234607) {}
-            lesson("谁来治理？", 234609) {}
-        }
-        listen("生态环境由谁拯救",385041 ) {}
-    }
-
-
-
-    row("余新忠") {
-        course("生态文明", 2016543) {
-            lesson("霍乱与卫生运动", 226777) {}
-            lesson("血吸虫病与血防运动", 234637) {}
-        }
-        listen("几场鼠疫，促进了近代中国的卫生建设", 385045) {}
-        listen("中国人和血吸虫的战斗史", 385051) {}
-    }
-
-
-
-
-    row("陈军") {
-        course("生态文明", 2016543) {
-            lesson("煤炭和石油的利用", 226805) {}
-            lesson("水电和海洋能的利用", 226809) {}
-        }
-        listen("减小代价缓解矛盾—资源节约与能源结构调整", 385059) {}
-        listen("智能电网中“削峰填谷”的储能技术", 385067) {}
-    }
-
-
-    row("孙红文") {
-        course("生态文明", 2016543) {
-            lesson("化学与环境", 234661) {}
-            lesson("有机污染物（上）", 234673) {}
-        }
-        listen("脆弱的环境圈层里，人类莫再踩着高跷起舞", 385069) {}
-        listen("被人类“忽视”了100余年的神奇惊喜", 385073) {}
-    }
-
-    row("杨光明") {
-        course("生态文明", 2016543) {
-            lesson("化学与人类是什么关系", 234687) {}
-            lesson("“化”说《天工开物》", 234689) {}
-        }
-        listen("绿色化学：彰显分子间和谐的“情感默契”", 385093) {}
-        listen("化学发展与环境的友好共存—解铃还须系人", 385097) {}
-    }
-
-    row("原新") {
-        course("生态文明", 2016543) {
-            lesson("人类的发展和文明的进程", 234691) {}
-            lesson("世界人口发展及人口环境关系认知的演进", 234697) {}
-        }
-        listen("认知的进步，是改变的前提", 385099) {}
-        listen("资源环境与人口发展间的紧张关系，该作何解", 385115) {}
-    }
-
-
-
-    row("史学瀛") {
-        course("生态文明", 2016543) {
-            lesson("保护优先原则", 226899) {}
-            lesson("综合治理原则", 234727) {}
-        }
-        listen("可持续发展与生态文明", 385119) {}
-        listen("由邻避现象和环境正义运动引发的思考", 385121) {}
-    }
-
-
-    row("包国章") {
-        course("人文视野中的生态学", 2015496) {
-            lesson("饮食文化与生态的关系", 88516) {}
-            lesson("人类社会的r,k-对策", 88544) {}
-        }
-        listen("是什么决定了生物的性取向？", 387399) {}
-        listen("即使是生物本能，恋爱也好处多多", 387387) {}
-        listen("男女对“性魅力”要求的差异究竟有多大？", 387393) {}
-    }
-
-
-    row("刘燕") {
-        course("奇异的仿生学", 2015507) {
-            lesson("鸟、昆虫与飞机", 182065) {}
-            lesson("鱼、海兽与潜艇", 182063) {}
-        }
-        listen("仿生导弹", 387379) {}
-        listen("红外夜视仪的“前世今生”", 387385) {}
-        listen("用呼吸图谱判断疾病", 387395) {}
-    }
-
-
-    row("王建华") {
-        course("汽车行走的艺术", 2015501) {
-            lesson("马的驯服", 218373) {}
-            lesson("瓦特变革", 221299) {}
-        }
-        listen("最初那个把电“关进笼子”的神奇容器", 387377) {}
-        listen("足以写进科学史的一条“青蛙腿”", 387383) {}
-    }
-
-
-    row("李芳菲") {
-        course("材料学概论", 2015576) {
-            lesson("金属晶体", 155947) {}
-            lesson("认识陶瓷", 155967) {}
-        }
-        listen("集“软硬”于一身的神奇“水玻璃”", 387389) {}
-        listen("小材料的“小秉性”，创造大世界的“大福音”", 387397) {}
-    }
-
-
-    row("胡远超") {
-        course("大学生心理健康", 2015524) {
-            lesson("学习策略：记忆策略", 158745) {}
-            lesson("职业生涯规划", 158789) {}
-        }
-        listen("乐观的哲学你参透了吗？", 383955) {}
-        listen("原来还有这种提升信心的操作！", 383941) {}
-        listen("希望是如何与资本扯上关系的？", 383943) {}
-    }
-
-
-    row("乔璐") {
-        course("服装色彩搭配", 2015608) {
-            lesson("认识色彩上", 163707) {}
-            lesson("服装色彩的调和", 163719) {}
-        }
-        listen("伴随一生的服饰搭配", 387375) {}
-        listen("四季服装搭配指南", 387365) {}
-    }
-
-
-    row("周洪涛") {
-        course("包装设计", 2018387) {
-            lesson("包装的发展（上）", 251279) {}
-            lesson("包装风格设计", 223663) {}
-        }
-        listen("电商带来的包装革命", 387391) {}
-        listen("包装设计10步走", 387363) {}
-    }
-
-
-
-    row("修娜") {
-        course("电子产品生产工艺", 2013260) {
-            lesson("电子产品的检验", 198725) {}
-            lesson("质量控制与品质保证", 198731) {}
-        }
-        listen("电子产品调试", 387373) {}
-        listen("电子产品故障排除", 387381) {}
-    }
-
-
-    row("王新艳") {
-        course("电子产品生产工艺", 2013260) {
-            lesson("实训室布局", 199967) {}
-            lesson("静电技术", 200019) {}
-        }
-    }
-
-
-    row("赵静") {
-        course("看美剧，学口语", 2015610) {
-            lesson("十二星座的奇妙故事 The fairy tale of twelve constellation", 232767) {}
-            lesson("教你如何不客气Daily  Expressions", 363473) {}
-        }
-    }
-
-
 }
 
-
 fun main(args: Array<String>) {
-    val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页二期汇总"
+    val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页三期汇总"
 //    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0908.xlsx")))
-    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0914 .xlsx")))
+//    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0914 .xlsx")))
+    val excel  = excel_season3
 
 
-//        val CURRENT_ENV = Env.DEV
+        val CURRENT_ENV = Env.DEV
 //    val CURRENT_ENV = Env.YUFA
-    val CURRENT_ENV = Env.WAIWANG
+//    val CURRENT_ENV = Env.WAIWANG
 
     val INSERT_CONCERN = false
     val EXCEL_TXT_NAMES_SYNC = true  //若为false txt可能名称多余excel
+
 
     val configMap = getConfig()
 
@@ -391,7 +166,7 @@ fun main(args: Array<String>) {
             }
 
 
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             error("$name 出现问题")
         }
@@ -401,12 +176,12 @@ fun main(args: Array<String>) {
     println("##----------redis UserId转码--------------;")
     userName2UserId.entries.forEach {
         (userName, userId) ->
-        val uuid = MD5.getMD5Str(userId.toString()+"zhihuishu").toLowerCase()
+        val uuid = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
         println("set user:uuid:$uuid $userId")
     }
     userName2UserId.entries.forEach {
         (userName, userId) ->
-        val uuid = MD5.getMD5Str(userId.toString()+"zhihuishu").toLowerCase()
+        val uuid = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
         println("$userName $userId http://$HOST/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
 //        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
     }
@@ -435,7 +210,7 @@ fun main(args: Array<String>) {
             val teacherId = userId2TeacherId.get(userId)?:-1
 
            //先删除已存在的
-           removeIfExist(targetDB, "TH_PERSONAL_GLORY", "TEACHER_ID", teacherId)
+        removeIfExist(targetDB, "TH_PERSONAL_GLORY", "TEACHER_ID", teacherId)
 
            //倒序
             map["个人荣誉"]?.reversed()?.forEach {
@@ -611,19 +386,5 @@ fun main(args: Array<String>) {
     delKeysPage(keys)
 
 }
-
-
-
-
-//js
-//$("#sinfo tr").each(function(i,e) {
-//   var $e = $(e);
-//    var txt1 = $e.find("td:eq(0)").text()
-//    txt1=txt1.substring(0,txt1.length-".jpg".length)
-////    txt1=txt1.replace(".jpg","")
-////    txt1=txt1.replace(".jpeg","")
-//    var href = $e.find("td a").attr("href")
-//    console.log(`${txt1}:${href}`)
-//});
 
 
