@@ -35,13 +35,13 @@
         <module>JDK</module>
         <module>JMX</module>
         <module>JNI</module>
-        <module>JVMLanguage</module>
+        <!--<module>JVMLanguage</module>-->
         <module>KillGame</module>
         <module>Log</module>
         <module>Lucene</module>
         <module>Maven</module>
-        <module>MavenPlugin</module>
-        <module>MavenPluginClient</module>
+        <!--<module>MavenPlugin</module>-->
+        <!--<module>MavenPluginClient</module>-->
         <module>Memory</module>
         <module>OSGI</module>
         <module>Practice</module>
@@ -261,11 +261,18 @@
                 <artifactId>commons-beanutils</artifactId>
                 <version>1.8.3</version>
             </dependency>
+            <!--<dependency>-->
+                <!--<groupId>commons-pool</groupId>-->
+                <!--<artifactId>commons-pool</artifactId>-->
+                <!--<version>2.4.2</version>-->
+            <!--</dependency>-->
+            <!-- https://mvnrepository.com/artifact/commons-pool/commons-pool -->
             <dependency>
                 <groupId>commons-pool</groupId>
                 <artifactId>commons-pool</artifactId>
-                <version>2.4.2</version>
+                <version>1.6</version>
             </dependency>
+
             <dependency>
                 <groupId>commons-chain</groupId>
                 <artifactId>commons-chain</artifactId>
