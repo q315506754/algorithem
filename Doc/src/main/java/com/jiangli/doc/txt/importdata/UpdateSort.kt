@@ -41,5 +41,6 @@ fun main(args: Array<String>) {
     println("##----------redis --------------;")
     val keys = arrayListOf<String>()
     keys.add("th:openapi:teachers:remoteresult:src:1:ts") //12名师
+    keys.add("th:openapi:teachers:remoteresult:src:1:lock") //12名师
     delKeysPage(keys)
 }

@@ -1,6 +1,5 @@
 package com.jiangli.doc.txt.importdata
 
-import com.jiangli.common.utils.MD5
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.txt.DB
 import org.springframework.jdbc.core.ColumnMapRowMapper
@@ -37,13 +36,15 @@ fun main(args: Array<String>) {
 
 
 //        val CURRENT_ENV = Env.DEV
-    val CURRENT_ENV = Env.YUFA
-//    val CURRENT_ENV = Env.WAIWANG
+//    val CURRENT_ENV = Env.YUFA
+    val CURRENT_ENV = Env.WAIWANG
 
     val INSERT_CONCERN = false // 不导出关注sql
 //    val INSERT_CONCERN = true  // 导出关注sql
     val EXCEL_TXT_NAMES_SYNC = true  //若为false txt可能名称多余excel
 
+
+    val TEACHER_SRC = 3
 
     val configMap = getConfig()
 
@@ -82,9 +83,9 @@ fun main(args: Array<String>) {
 
     //合并排序
     val sortMap = LinkedHashMap<String, Int>()
+    sortMap.put("黄天中", 3)
     //    sortMap.put("冯玮", 1)
 //    sortMap.put("葛剑雄", 2)
-//    sortMap.put("吴焕加", 3)
 //    sortMap.put("熊浩", 4)
 //    sortMap.put("毛利华", 5)
     mergeToBaseMap(sortMap, userNameToInfoMap, "排序")
@@ -122,7 +123,7 @@ fun main(args: Array<String>) {
             val s_BAK = "'${value.get("背景图")?.get(0) ?: ""}'"
             val s_CAROL = "'${value.get("轮播图")?.get(0) ?: ""}'"
             val s_SORT = value.get("排序")?.get(0) ?: "null"
-            val s_SRC = 1
+            val s_SRC = TEACHER_SRC
             val s_STATUS = 1
 
             val insert_sql= "insert into db_teacher_home.TH_TEACHER(NAME,USER_ID,SCHOOL,TITLE,ACADEMIC,IMG,CAROUSEL_IMG,SORT,SRC,STATUS) values(" +
@@ -174,19 +175,6 @@ fun main(args: Array<String>) {
     }
 
     ////////////////////////////////上面需先执行
-    println("##----------redis UserId转码--------------;")
-    userName2UserId.entries.forEach {
-        (userName, userId) ->
-        val uuid = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
-        println("set user:uuid:$uuid $userId")
-    }
-    userName2UserId.entries.forEach {
-        (userName, userId) ->
-        val uuid = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
-        println("$userName $userId http://$HOST/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
-//        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
-    }
-
     //查询userId对应的teacherId
     userName2UserId.entries.forEach {
         (userName, userId) ->
@@ -200,7 +188,7 @@ fun main(args: Array<String>) {
             error("$userName,$userId 对应0条TH_TEACHER记录")
         }
     }
-    println(userId2TeacherId)
+    println("##"+userId2TeacherId)
 
     //userId2TeacherId  依赖
     //userId2TeacherId  依赖
@@ -384,8 +372,26 @@ fun main(args: Array<String>) {
         keys.add("th:wonderVideo:ids:${it}") //风采视频 列表
         keys.add("th:quotations:ids:${it}") //我的语录 列表
     }
+    userId2TeacherId.keys.forEach {
+        keys.add("th:userid:to:teacherid:${it}") //教师单个缓存
+    }
     delKeysPage(keys)
 
+    println("##----------redis UserId转码--------------;")
+    userName2UserId.entries.forEach {
+        (userName, userId) ->
+        val uuid = uuidByUserId(userId)
+        println("set user:uuid:$uuid $userId")
+    }
+
+    userName2UserId.entries.forEach {
+        (userName, userId) ->
+        val uuid = uuidByUserId(userId)
+        println("$userName $userId $uuid http://$HOST/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+//        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+    }
 }
+
+
 
 

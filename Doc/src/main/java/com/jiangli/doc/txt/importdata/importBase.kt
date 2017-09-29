@@ -1,6 +1,7 @@
 package com.jiangli.doc.txt.importdata
 
 import com.jiangli.common.utils.CommonUtil
+import com.jiangli.common.utils.MD5
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.txt.DB
 import org.springframework.jdbc.core.ColumnMapRowMapper
@@ -324,10 +325,15 @@ fun removeIfExist(targetDB: JdbcTemplate, table: String, field: String, teacherI
 }
 
 fun delKeysPage(list:List<String>){
-    val s = "del "+list.joinToString(" ","","",100,"") { s -> "$s" }
+    operMultiKeysPage("del",list)
+}
+fun operMultiKeysPage(oper: String, list: List<String>){
+    val s = "$oper "+list.joinToString(" ","","",100,"") { s -> "$s" }
     println(s)
 
     if (list.size > 100) {
-        delKeysPage(list.subList(100,list.lastIndex))
+        operMultiKeysPage(oper, list.subList(100,list.lastIndex))
     }
 }
+
+fun uuidByUserId(userId: Int) = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
