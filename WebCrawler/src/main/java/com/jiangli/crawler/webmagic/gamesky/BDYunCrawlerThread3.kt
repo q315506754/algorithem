@@ -10,8 +10,6 @@ import us.codecraft.webmagic.processor.PageProcessor
 import us.codecraft.webmagic.selector.Selectable
 import java.net.URLEncoder
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 /**
  *
@@ -21,8 +19,8 @@ import java.util.concurrent.TimeUnit
  */
 fun main(args: Array<String>) {
     val keyWords = "战狼2 百度云"
-    val maxPage = 2
-//    val maxPage = 10
+//    val maxPage = 2
+    val maxPage = 20
     val urlFeature = "https://pan.baidu.com/s/[a-zA-Z0-9]*"
 
 
@@ -32,7 +30,6 @@ fun main(args: Array<String>) {
     val regex = urlFeature.toRegex()
     fun getUrl() = "https://www.baidu.com/s?wd=${URLEncoder.encode(keyWords, "utf8")}&&pn=$curIndex"
     val rs = mutableListOf<BDYunResult>()
-    val threadPool = Executors.newCachedThreadPool()
 
 //    val document = Jsoup.connect(url).get()
 //    println(document)
@@ -78,7 +75,7 @@ fun main(args: Array<String>) {
                 println("${cIdx + index + 1} / $totalRecords")
 
 //                threadPool.execute({
-                    Thread({
+                Thread({
                     var eachHtml: String? = null
                     try {
                         val document = Jsoup.connect(entryUrl).get()
@@ -132,27 +129,20 @@ fun main(args: Array<String>) {
                 }).start()
             }
 
-            countDownLatch.await(10,TimeUnit.SECONDS)
+            countDownLatch.await()
 
-//            curIndex+=pageSize
-//            if(curIndex < totalRecords) {
-//                page.addTargetRequest(getUrl())
-//            }
+            curIndex+=pageSize
+            if(curIndex < totalRecords) {
+                page.addTargetRequest(getUrl())
+            }
         }
     })
     .setDownloader(SeleniumDownloader())
-//    .addUrl(getUrl())
+    .addUrl(getUrl())
     .thread(10)
-//    .run()
+    .run()
 
-    while (curIndex < totalRecords) {
-        spider.addUrl(getUrl())
 
-        curIndex+=pageSize
-    }
-    spider.run()
-
-    println("results...")
     rs.forEachIndexed { index, bdYunResult ->
         println("${index + 1} $bdYunResult")
     }

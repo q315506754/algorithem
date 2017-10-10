@@ -21,8 +21,8 @@ import java.util.concurrent.Executors
  */
 fun main(args: Array<String>) {
     val keyWords = "战狼2 百度云"
-    val maxPage = 2
-//    val maxPage = 20
+//    val maxPage = 2
+    val maxPage = 20
     val urlFeature = "https://pan.baidu.com/s/[a-zA-Z0-9]*"
 
 
