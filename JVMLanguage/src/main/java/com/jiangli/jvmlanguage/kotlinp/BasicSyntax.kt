@@ -175,6 +175,14 @@ fun main(args: Array<String>) {
     while (tokenizer.hasMoreTokens()) {
         println(tokenizer.nextToken())
     }
+
+    (0..100 step 10).forEach {
+        println(it)
+    }
+    println("-------------")
+    (0 until 100 step 10).forEach {
+        println(it)
+    }
 }
 fun doSth(status: Any):Any? {
     when(status){
