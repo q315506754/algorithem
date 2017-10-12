@@ -1,0 +1,47 @@
+<html >
+<head>
+    <title>closure.html</title>
+    <meta charset="utf-8">
+    <link href="../common/assets/css/common.css" rel="stylesheet"/>
+</head>
+
+
+<body>
+proto.html
+
+</body>
+
+
+
+<script>
+    function DOG(name){
+        this.name = name;
+    }
+    DOG.prototype = { species : '犬科' };
+
+    var dogA = new DOG('大毛');
+    var dogB = new DOG('二毛');
+
+    console.log(dogA.species); // 犬科
+    console.log(dogB.species); // 犬科
+    DOG.prototype.species = '猫科';
+    console.log(dogA.species); // 猫科
+    console.log(dogB.species); // 猫科
+
+
+    function CAT(name){
+        this.name = name;
+    }
+    CAT.prototype = DOG.prototype;
+    var catA = new DOG('cca');
+    var catB = new DOG('ccb');
+    console.log(catA.species); // 猫科
+    console.log(catB.species); // 猫科
+    DOG.prototype.species = '喵咪科';
+    console.log(catA.species); // 喵咪科
+    console.log(catB.species); // 喵咪科
+    console.log(dogA.species); // 喵咪科
+    console.log(dogB.species); // 喵咪科
+</script>
+
+</html>

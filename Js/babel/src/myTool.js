@@ -337,7 +337,7 @@ string text line 2`);
     // 字符串中嵌入变量
     var name = "Bob", time = "today";
 
-    console.log( `Hello ${name}, how are you ${time}?`);
+    console.log( `Hello ${name}, hhow are you ${time}?`);
 
 
     var x = 1;
@@ -3464,7 +3464,7 @@ console.log('----------class-------------');
     console.log(Object.getPrototypeOf(A) === Function.prototype);//true
 }
 {
-    console.log('```a```');
+    console.log('```a````');
     class A extends Object {
         }
     console.log( A.__proto__ === Function.prototype);//false

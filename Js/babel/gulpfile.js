@@ -44,16 +44,18 @@ gulp.task('run', function (cb) {
 	});
 });
 
+
 gulp.task('watch', function (cb) {
     let gulpWatcher = gulp.watch(['src/**/*.js']);
 	
-			
     gulpWatcher.on('change', function (e) {
         if (e.type === 'changed' ) {
             console.log('changed');
+            let fileName = e.path.substring(e.path.lastIndexOf("\\")+1)
 			console.log(e);
-			
-			 exec("start babel-node src/myTool.js",function(err){
+			console.log(fileName);
+
+			 exec(`start babel-node src/${fileName}`,function(err){
 			 //exec("start babel_node run directly.bat\"",function(err){
 				//cb()
 			});

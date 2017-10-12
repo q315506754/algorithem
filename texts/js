@@ -55,8 +55,29 @@ Javascript语言特有的"链式作用域"结构（chain scope），子对象会
 1）由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。
 2）闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。
 
+
+
+http://www.cnblogs.com/c3gen/p/6170504.html
 【同步
 【异步
+Because even though setTimeout was called with a delay of zero, it's placed on a queue and scheduled to run at the next opportunity, not immediately. Currently executing code must complete before functions on the queue are executed, the resulting execution order may not be as expected.
+
+翻译一下 就是 因为即使setTimeout调用延迟为零，这是放置在一个队列和调度运行到下一个机会，没有立即。当前正在执行的代码必须在队列上的函数执行之前完成，由此产生的执行顺序可能不会像预期的那样。
+所以，可预料的结果是：直到在同一程序段中所有其余的代码执行结束后，超时才会发生。
+所以如果设置了超时，同时执行了需长时间运行的函数，那么在该函数执行完成之前，超时甚至都不会启动。
+实际上，异步函数，如setTimeout和setInterval，被压入了称之为Event Loop的队列。
+有点扯远，记住就是setTimeout和setInterval可以改变一个队列函数的执行顺序。
+
+JavaScript是单线程的。
+为了利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，但是子线程完全受主线程控制，且不得操作DOM。所以，这个新标准并没有改变JavaScript单线程的本质。
+于是，所有任务可以分成两种，一种是同步任务（synchronous），另一种是异步任务（asynchronous）。
+同步任务指的是，在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务；
+异步任务指的是，不进入主线程、而进入"任务队列"（task queue）的任务，只有"任务队列"通知主线程，某个异步任务可以执行了，该任务才会进入主线程执行。
+（1）所有同步任务都在主线程上执行，形成一个执行栈（execution context stack）。
+（2）主线程之外，还存在一个"任务队列"（task queue）。只要异步任务有了运行结果，就在"任务队列"之中放置一个事件。
+（3）一旦"执行栈"中的所有同步任务执行完毕，系统就会读取"任务队列"，看看里面有哪些事件。那些对应的异步任务，于是结束等待状态，进入执行栈，开始执行。
+（4）主线程不断重复上面的第三步。
+
 
 【call bind
 

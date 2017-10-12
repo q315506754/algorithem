@@ -136,3 +136,5 @@ CQO Chief Quality Officer 首席质量官
 
 RDC：Regional Distribution Center，区域分发中心
 RDC：Research and Development Center, 研发中心,也作"R&C"
+
+REPL:交互式解释器环境。R(read)、E(evaluate)、P(print)、L(loop) 输入值,(Read Eval Print Loop:交互式解释器)
