@@ -1,0 +1,150 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>智慧树选课平台_js</title>
+	</head>
+	
+	<body>
+	
+	<h1>课程列表</h1>
+	<div>
+
+		<div>
+			<span>过去一百年</span><br/>
+			<span>老师:冯伟</span><br/>
+			<span class="price">￥99.0</span><br/>
+			<button class="sub">-</button><span class="number">0</span><button class="add">+</button>
+		</div>
+
+		<br/><br/>
+
+		<div>
+			<span>在历史的坐标上解析日本</span><br/>
+			<span>老师:冯伟</span><br/>
+			<span class="price">￥299.0</span><br/>
+			<button class="sub">-</button><span  class="number">0</span><button class="add">+</button>
+		</div>
+
+		<br/><br/>
+		<div>
+			<span  id="totalPrice">总计:￥0</span><br/>
+			<button  id="buy">购买</button>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		//绑定  -  按钮的事件
+		var subButtons = document.getElementsByClassName("sub");
+		for(var i =0;i<subButtons.length;i++) {
+			var eachButton = subButtons[i];
+            eachButton.onclick = function () {
+				console.log('减按钮 click');
+
+				//第一步:将数量减少
+                var numberSpan = this.nextSibling;
+                console.log(numberSpan);
+
+                var numberStr = numberSpan.innerHTML;
+                console.log(numberStr);
+
+                var number = parseInt(numberStr);
+                console.log(number);
+
+                number = number - 1;
+
+                //第二步:将新值重新设置到页面上
+                numberSpan.innerHTML = number;
+
+                //第三步:重新计算总价格
+                reCalcTotalPrice();
+            }
+        }
+
+        //重新计算价格的方法
+        function reCalcTotalPrice() {
+		    console.log("---进入了计算总价格方法----");
+		    //第一步：定义一个总价格
+		    var totalPrice = 0;
+
+            var numberSpans = document.getElementsByClassName("number");
+            for(var i =0;i<numberSpans.length;i++) {
+                var numberSpan = numberSpans[i];
+
+                var numberStr = numberSpan.innerHTML;
+
+                var number = parseInt(numberStr);
+
+                var priceSpan = numberSpan.previousSibling.previousSibling.previousSibling.previousSibling;
+                console.log(priceSpan);
+
+                var priceStr = priceSpan.innerHTML;
+                console.log(priceStr);
+
+                var price = parseInt(priceStr.substring(1));
+                console.log(price);
+
+                //第二步：加入到总价格里
+                totalPrice = totalPrice + price * number;
+            }
+
+			//第三步：将新总价格重新设置到页面上
+            var totalPriceSpan = document.getElementById("totalPrice");
+            totalPriceSpan.innerHTML = "总计:￥"+ totalPrice;
+
+            console.log("---计算总价格方法完毕----");
+        }
+
+        //绑定  +  按钮的事件
+        var addButtons = document.getElementsByClassName("add");
+        for(var i =0;i<addButtons.length;i++) {
+            var eachButton = addButtons[i];
+            eachButton.onclick = function () {
+                console.log('加按钮 click');
+
+                //第一步:将数量增少
+                var numberSpan = this.previousSibling;
+                console.log(numberSpan);
+
+                var numberStr = numberSpan.innerHTML;
+                console.log(numberStr);
+
+                var number = parseInt(numberStr);
+                console.log(number);
+
+                number = number + 1;
+
+                //第二步:将新值重新设置到页面上
+                numberSpan.innerHTML = number;
+
+                //第三步:重新计算总价格
+                reCalcTotalPrice();
+            }
+        }
+
+        //绑定  购买  按钮的事件
+        var buyButton = document.getElementById("buy");
+
+        //方案一:直接跳转发送请求
+        buyButton.onclick = function () {
+			window.location.href="buy?items=1001-2,1002-4&userId=10"
+        }
+
+        //方案二:ajax发送请求给后台
+        buyButton.onclick = function () {
+            var obj = new XMLHttpRequest();
+            obj.open("POST", "buy", true);
+            obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  // 添加http头，发送信息至服务器时内容编码类型
+            obj.onreadystatechange = function() {
+                if (obj.readyState == 4) {
+                    if (obj.status == 200){
+                        alert("ajax请求成功 跳转至订单支付页");
+					} else {
+                        alert("ajax请求失败");
+					}
+				}
+            };
+            obj.send("items=1001-2,1002-4&userId=10");
+        }
+	</script>
+	</body>
+</html>

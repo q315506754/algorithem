@@ -1,0 +1,140 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>智慧树选课平台_jquery</title>
+	</head>
+	
+	<body>
+	
+	<h1>课程列表</h1>
+	<div>
+
+		<div>
+			<span>过去一百年</span><br/>
+			<span>老师:冯伟</span><br/>
+			<span class="price">￥99.0</span><br/>
+			<button class="sub">-</button><span class="number">0</span><button class="add">+</button>
+		</div>
+
+		<br/><br/>
+
+		<div>
+			<span>在历史的坐标上解析日本</span><br/>
+			<span>老师:冯伟</span><br/>
+			<span class="price">￥299.0</span><br/>
+			<button class="sub">-</button><span  class="number">0</span><button class="add">+</button>
+		</div>
+
+		<br/><br/>
+		<div>
+			<span  id="totalPrice">总计:￥0</span><br/>
+			<button  id="buy">购买</button>
+		</div>
+	</div>
+	
+	<!--引入jQuery库-->
+	<script src="js/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		//绑定  -  按钮的事件
+        $(".sub").click(function () {
+            console.log('减按钮 click');
+
+            //第一步:将数量减少
+            var numberSpan = $(this).next();
+            console.log(numberSpan);
+
+            var numberStr = numberSpan.text();
+            console.log(numberStr);
+
+            var number = parseInt(numberStr);
+            console.log(number);
+
+            number = number - 1;
+
+            //第二步:将新值重新设置到页面上
+            numberSpan.text(number);
+
+            //第三步:重新计算总价格
+            reCalcTotalPrice();
+        });
+
+        //重新计算价格的方法
+        function reCalcTotalPrice() {
+		    console.log("---进入了计算总价格方法----");
+		    //第一步：定义一个总价格
+		    var totalPrice = 0;
+
+            $(".number").each(function (idx, ele) {
+                var numberSpan = $(ele);
+
+                var numberStr = numberSpan.text();
+
+                var number = parseInt(numberStr);
+
+                var priceSpan = numberSpan.prev().prev().prev();
+                console.log(priceSpan);
+
+                var priceStr = priceSpan.text();
+                console.log(priceStr);
+
+                var price = parseInt(priceStr.substring(1));
+                console.log(price);
+
+                //第二步：加入到总价格里
+                totalPrice = totalPrice + price * number;
+            });
+
+			//第三步：将新总价格重新设置到页面上
+			$("#totalPrice").text("总计:￥"+ totalPrice);
+
+            console.log("---计算总价格方法完毕----");
+        }
+
+        //绑定  +  按钮的事件
+        $(".add").click(function () {
+            console.log('加按钮 click');
+
+            //第一步:将数量减少
+            var numberSpan = $(this).prev();
+            console.log(numberSpan);
+
+            var numberStr = numberSpan.text();
+            console.log(numberStr);
+
+            var number = parseInt(numberStr);
+            console.log(number);
+
+            number = number + 1;
+
+            //第二步:将新值重新设置到页面上
+            numberSpan.text(number);
+
+            //第三步:重新计算总价格
+            reCalcTotalPrice();
+        });
+
+        //绑定  购买  按钮的事件
+        var buyButton = $("#buy");
+
+        //方案一:直接跳转发送请求
+        buyButton.click(function () {
+            window.location.href="buy?items=1001-2,1002-4&userId=10"
+        });
+
+        //方案二:ajax发送请求给后台
+        buyButton.click(function () {
+            $.ajax({
+				url:"buy",
+				type:"post",
+				data:{items:"1001-2,1002-4",userId:"10"},
+				success:function () {
+                    alert("ajax请求成功 跳转至订单支付页");
+                },
+				error:function () {
+                    alert("ajax请求失败");
+                }
+			});
+        });
+	</script>
+	</body>
+</html>
