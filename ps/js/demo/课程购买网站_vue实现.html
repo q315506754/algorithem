@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>智慧树选课平台_vue</title>
+	</head>
+	
+	<body>
+	
+	<h1>课程列表</h1>
+	<div id="app">
+
+		<div  v-for="course in courseList">
+			<span> {{ course.name }}</span><br/>
+			<span>老师:{{ course.teacher }}</span><br/>
+			<span class="price">￥{{ course.price }}</span><br/>
+			<button class="sub"  v-on:click="sub(course)">-</button><span class="number">{{ course.number }}</span><button class="add" @click="add(course)">+</button>
+			<br/><br/>
+		</div>
+
+		<div>
+			<span  id="totalPrice">总计:￥{{totalPrice}}</span><br/>
+			<button  id="buy" @click="buyCourses">购买</button>
+		</div>
+	</div>
+	
+	<!--引入vue库-->
+	<script src="js/vue.js" type="text/javascript"></script>
+	<script>
+        new Vue({
+            el: '#app',
+            data: {
+                courseList:[
+                {
+                    name:"过去一百年",
+                    teacher:"冯伟",
+                    price:99.0,
+                    number:0,
+                },
+                {
+                    name:"在历史的坐标上解析日本",
+                    teacher:"冯伟",
+                    price:299.0,
+                    number:1
+                }
+                ],
+				totalPrice:0
+            },
+            methods: {
+                sub: function (item) {
+                    console.log(this);
+                    console.log(item);
+                    if(item.number > 0 ){
+                        item.number --;
+
+                        this.caculateTotalPrice();
+					}
+                },
+                add: function (item) {
+                    console.log(this);
+                    console.log(item);
+                    item.number ++;
+
+                    this.caculateTotalPrice();
+                },
+				caculateTotalPrice:function () {
+					console.log("------开始计算总价格----------");
+
+                    this.totalPrice = 0;
+
+                    for(var i = 0;i<this.courseList.length;i++) {
+                        var course = this.courseList[i];
+                        this.totalPrice += course.price * course.number;
+                    }
+                },
+                buyCourses:function () {
+                    //ajax
+                    var obj = new XMLHttpRequest();
+                    obj.open("POST", "buy", true);
+                    obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  // 添加http头，发送信息至服务器时内容编码类型
+                    obj.onreadystatechange = function() {
+                        if (obj.readyState == 4) {
+                            if (obj.status == 200){
+                                alert("ajax请求成功 跳转至订单支付页");
+                            } else {
+                                alert("ajax请求失败");
+                            }
+                        }
+                    };
+                    obj.send("items=1001-2,1002-4&userId=10");
+                }
+            }
+        }).caculateTotalPrice();
+	</script>
+	</body>
+</html>

@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>智慧树选课平台_jquery</title>
+		<title>智慧树选课平台_jquery_重构版</title>
 	</head>
 	
 	<body>
@@ -35,24 +35,37 @@
 	<!--引入jQuery库-->
 	<script src="js/jquery.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
+		//获取div下的text  转为int型 再传入回调函数里
+        function getNumberAndInvoke(div,cb,parser) {
+            var numberStr = div.text();
+
+            var number;
+            if(parser && typeof parser === "function"){
+                number =  parser(numberStr);
+			} else {
+                number = parseInt(numberStr);
+			}
+
+            cb(div,number);
+        }
+
+		//获取某个div下 class为number的元素显示的数值
+		function incNumberOfDiv(div,n) {
+
+            getNumberAndInvoke(div.find(".number"),function (ldiv,ln) {
+                //将新值重新设置到页面上
+                ldiv.text(ln+ n);
+            });
+
+        }
+
 		//绑定  -  按钮的事件
         $(".sub").click(function () {
             console.log('减按钮 click');
 
             //第一步:将数量减少
-            var numberSpan = $(this).next();
-            console.log(numberSpan);
-
-            var numberStr = numberSpan.text();
-            console.log(numberStr);
-
-            var number = parseInt(numberStr);
-            console.log(number);
-
-            number = number - 1;
-
             //第二步:将新值重新设置到页面上
-            numberSpan.text(number);
+            incNumberOfDiv($(this).parent(),-1);
 
             //第三步:重新计算总价格
             reCalcTotalPrice();
@@ -65,23 +78,13 @@
 		    var totalPrice = 0;
 
             $(".number").each(function (idx, ele) {
-                var numberSpan = $(ele);
-
-                var numberStr = numberSpan.text();
-
-                var number = parseInt(numberStr);
-
-                var priceSpan = numberSpan.prev().prev().prev();
-                console.log(priceSpan);
-
-                var priceStr = priceSpan.text();
-                console.log(priceStr);
-
-                var price = parseInt(priceStr.substring(1));
-                console.log(price);
-
-                //第二步：加入到总价格里
-                totalPrice = totalPrice + price * number;
+                getNumberAndInvoke($(ele),function (numberDiv,numberN) {
+                    getNumberAndInvoke(numberDiv.prev().prev().prev(),function (priceDiv,priceN) {
+                        totalPrice = totalPrice + numberN * priceN;
+                    },function (str) {
+						return parseInt(str.substring(1));
+                    });
+                });
             });
 
 			//第三步：将新总价格重新设置到页面上
@@ -95,19 +98,8 @@
             console.log('加按钮 click');
 
             //第一步:将数量增加
-            var numberSpan = $(this).prev();
-            console.log(numberSpan);
-
-            var numberStr = numberSpan.text();
-            console.log(numberStr);
-
-            var number = parseInt(numberStr);
-            console.log(number);
-
-            number = number + 1;
-
             //第二步:将新值重新设置到页面上
-            numberSpan.text(number);
+            incNumberOfDiv($(this).parent(),1);
 
             //第三步:重新计算总价格
             reCalcTotalPrice();
