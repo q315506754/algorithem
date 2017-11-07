@@ -1,0 +1,6 @@
+lessc mystyles.less
+lessc mystyles.less > target/styles.css
+
+
+-x compress
+--clean-css compress
