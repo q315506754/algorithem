@@ -1,0 +1,421 @@
+<html>
+<head>
+    <title>mvvm.html</title>
+    <meta charset="utf-8">
+</head>
+
+
+<body>
+<div id="app">
+    <h3>{{user.name}}</h3>
+    <input type="text" v-model="modelValue">
+    <p>{{modelValue}}</p>
+</div>
+<script>
+
+
+    //////////////////////////////////////
+
+    // 观察者构造函数
+    function Observer (value) {
+        this.value = value
+        this.walk(value)
+    }
+
+    // 递归调用，为对象绑定getter/setter
+    Observer.prototype.walk = function (obj) {
+        var keys = Object.keys(obj)
+        for (var i = 0, l = keys.length; i < l; i++) {
+            this.convert(keys[i], obj[keys[i]])
+        }
+    }
+
+    // 将属性转换为getter/setter
+    Observer.prototype.convert = function (key, val) {
+        defineReactive(this.value, key, val)
+    }
+
+    // 创建数据观察者实例
+    function observe (value) {
+        // 当值不存在或者不是对象类型时，不需要继续深入监听
+        if (!value || typeof value !== 'object') {
+            return
+        }
+        return new Observer(value)
+    }
+
+    // 定义对象属性的getter/setter
+    function defineReactive (obj, key, val) {
+        var property = Object.getOwnPropertyDescriptor(obj, key)
+        if (property && property.configurable === false) {
+            return
+        }
+
+        // 保存对象属性预先定义的getter/setter
+        var getter = property && property.get
+        var setter = property && property.set
+
+        var childOb = observe(val)
+        Object.defineProperty(obj, key, {
+            enumerable: true,
+            configurable: true,
+            get: function reactiveGetter () {
+                var value = getter ? getter.call(obj) : val
+                console.log("访问："+key)
+                return value
+            },
+            set: function reactiveSetter (newVal) {
+                var value = getter ? getter.call(obj) : val
+                if (newVal === value) {
+                    return
+                }
+                if (setter) {
+                    setter.call(obj, newVal)
+                } else {
+                    val = newVal
+                }
+                // 对新值进行监听
+                childOb = observe(newVal)
+                console.log('更新：' + key + ' = ' + newVal)
+            }
+        })
+    }
+
+    //////////////////////////////////////
+
+    // 实现继承
+    var extend = function(Child, Parent) {
+        // 拷贝Parent原型对象
+        Child.prototype = Object.create(Parent.prototype);
+        // 将Child构造函数赋值给Child的原型对象
+        Child.prototype.constructor = Child;
+    }
+
+    // 实例
+    var Parent = function () {
+        this.name = 'Parent';
+    }
+    Parent.prototype.getName = function () {
+        return this.name;
+    }
+    var Child = function () {
+        this.name = 'Child';
+    }
+    extend(Child, Parent);
+    var child = new Child();
+    console.log(child.getName())
+
+
+    //////////////////////////////////////
+    /**
+     * 观察者对象
+     */
+    function Watcher(vm, expOrFn, cb) {
+        this.vm = vm
+        this.cb = cb
+        this.depIds = {}
+        if (typeof expOrFn === 'function') {
+            this.getter = expOrFn
+        } else {
+            this.getter = this.parseExpression(expOrFn)
+        }
+        this.value = this.get()
+    }
+
+    /**
+     * 收集依赖
+     */
+    Watcher.prototype.get = function () {
+        // 当前订阅者(Watcher)读取被订阅数据的最新更新后的值时，通知订阅者管理员收集当前订阅者
+        Dep.target = this
+        // 触发getter，将自身添加到dep中
+        const value = this.getter.call(this.vm, this.vm)
+        // 依赖收集完成，置空，用于下一个Watcher使用
+        Dep.target = null
+        return value
+    }
+
+    Watcher.prototype.addDep = function (dep) {
+        if (!this.depIds.hasOwnProperty(dep.id)) {
+            dep.addSub(this)
+            this.depIds[dep.id] = dep
+        }
+    }
+
+    /**
+     * 依赖变动更新
+     *
+     * @param {Boolean} shallow
+     */
+    Watcher.prototype.update = function () {
+        this.run()
+    }
+
+    Watcher.prototype.run = function () {
+        var value = this.get()
+        if (value !== this.value) {
+            var oldValue = this.value
+            this.value = value
+            // 将newVal, oldVal挂载到MVVM实例上
+            this.cb.call(this.vm, value, oldValue)
+        }
+    }
+
+    Watcher.prototype.parseExpression = function (exp) {
+        if (/[^\w.$]/.test(exp)) {
+            return
+        }
+        var exps = exp.split('.')
+
+        return function(obj) {
+            for (var i = 0, len = exps.length; i < len; i++) {
+                if (!obj) return
+                obj = obj[exps[i]]
+            }
+            return obj
+        }
+    }
+
+    //////////////////////////////////////
+    let uid = 0
+
+    function Dep() {
+        this.id = uid++
+        this.subs = []
+    }
+
+    Dep.target = null
+
+    /**
+     * 添加一个订阅者
+     *
+     * @param {Directive} sub
+     */
+    Dep.prototype.addSub = function (sub) {
+        this.subs.push(sub)
+    }
+
+    /**
+     * 移除一个订阅者
+     *
+     * @param {Directive} sub
+     */
+    Dep.prototype.removeSub = function (sub) {
+        let index = this.subs.indexOf(sub);
+        if (index !== -1) {
+            this.subs.splice(index, 1);
+        }
+    }
+
+    /**
+     * 将自身作为依赖添加到目标watcher
+     */
+    Dep.prototype.depend = function () {
+        Dep.target.addDep(this)
+    }
+
+    /**
+     * 通知数据变更
+     */
+    Dep.prototype.notify = function () {
+        var subs = toArray(this.subs)
+        // stablize the subscriber list first
+        for (var i = 0, l = subs.length; i < l; i++) {
+            // 执行订阅者的update更新函数
+            subs[i].update()
+        }
+    }
+
+
+    //////////////////////////////////////
+    function Compile(el, value) {
+        this.$vm = value
+        this.$el = this.isElementNode(el) ? el : document.querySelector(el)
+        if (this.$el) {
+            this.compileElement(this.$el)
+        }
+    }
+
+    Compile.prototype.compileElement = function (el) {
+        let self = this
+        let childNodes = el.childNodes
+
+        ;[].slice.call(childNodes).forEach(node => {
+            let text = node.textContent
+            let reg = /\{\{((?:.|\n)+?)\}\}/
+            // 处理element节点
+            if (self.isElementNode(node)) {
+                self.compile(node)
+            } else if (self.isTextNode(node) && reg.test(text)) { // 处理text节点
+                self.compileText(node, RegExp.$1.trim())
+            }
+            // 解析子节点包含的指令
+            if (node.childNodes && node.childNodes.length) {
+                self.compileElement(node)
+            }
+        })
+    }
+
+    Compile.prototype.compile = function (node) {
+        let nodeAttrs = node.attributes
+        let self = this
+
+        ;[].slice.call(nodeAttrs).forEach(attr => {
+            var attrName = attr.name
+            if (self.isDirective(attrName)) {
+                let exp = attr.value
+                let dir = attrName.substring(2)
+                if (self.isEventDirective(dir)) {
+                    compileUtil.eventHandler(node, self.$vm, exp, dir)
+                } else {
+                    compileUtil[dir] && compileUtil[dir](node, self.$vm, exp)
+                }
+                node.removeAttribute(attrName)
+            }
+        });
+    }
+
+    Compile.prototype.compileText = function (node, exp) {
+        compileUtil.text(node, this.$vm, exp);
+    }
+
+    Compile.prototype.isDirective = function (attr) {
+        return attr.indexOf('v-') === 0
+    }
+
+    Compile.prototype.isEventDirective = function (dir) {
+        return dir.indexOf('on') === 0;
+    }
+
+    Compile.prototype.isElementNode = function (node) {
+        return node.nodeType === 1
+    }
+
+    Compile.prototype.isTextNode = function (node) {
+        return node.nodeType === 3
+    }
+
+    // 指令处理集合
+    var compileUtil = {
+        text: function (node, vm, exp) {
+            this.bind(node, vm, exp, 'text')
+        },
+        html: function (node, vm, exp) {
+            this.bind(node, vm, exp, 'html')
+        },
+        model: function (node, vm, exp) {
+            this.bind(node, vm, exp, 'model')
+
+            let self = this, val = this._getVMVal(vm, exp)
+            node.addEventListener('input', function (e) {
+                var newValue = e.target.value
+                if (val === newValue) {
+                    return
+                }
+                self._setVMVal(vm, exp, newValue)
+                val = newValue
+            });
+        },
+        bind: function (node, vm, exp, dir) {
+            var updaterFn = updater[dir + 'Updater']
+            updaterFn && updaterFn(node, this._getVMVal(vm, exp))
+            new Watcher(vm, exp, function (value, oldValue) {
+                updaterFn && updaterFn(node, value, oldValue)
+            })
+        },
+        eventHandler: function (node, vm, exp, dir) {
+            var eventType = dir.split(':')[1],
+                fn = vm.$options.methods && vm.$options.methods[exp];
+
+            if (eventType && fn) {
+                node.addEventListener(eventType, fn.bind(vm), false);
+            }
+        },
+        _getVMVal: function (vm, exp) {
+            var val = vm
+            exp = exp.split('.')
+            exp.forEach(function (k) {
+                val = val[k]
+            })
+            return val
+        },
+        _setVMVal: function (vm, exp, value) {
+            var val = vm;
+            exp = exp.split('.')
+            exp.forEach(function (k, i) {
+                // 非最后一个key，更新val的值
+                if (i < exp.length - 1) {
+                    val = val[k]
+                } else {
+                    val[k] = value
+                }
+            })
+        }
+    }
+
+    var updater = {
+        textUpdater: function (node, value) {
+            node.textContent = typeof value == 'undefined' ? '' : value
+        },
+        htmlUpdater: function (node, value) {
+            node.innerHTML = typeof value == 'undefined' ? '' : value
+        },
+        modelUpdater: function (node, value, oldValue) {
+            node.value = typeof value == 'undefined' ? '' : value
+        }
+    }
+
+    ///////////////////////////////////////////////////////////
+
+    /**
+     * @class 双向绑定类 MVVM
+     * @param {[type]} options [description]
+     */
+    function MVVM(options) {
+        this.$options = options || {}
+        // 简化了对data的处理
+        let data = this._data = this.$options.data
+        // 监听数据
+        observe(data)
+        new Compile(options.el || document.body, this)
+    }
+
+    MVVM.prototype.$watch = function (expOrFn, cb) {
+        new Watcher(this, expOrFn, cb)
+    }
+
+    MVVM.prototype._proxy = function (key) {
+        Object.defineProperty(this, key, {
+            configurable: true,
+            enumerable: true,
+            get: () => this._data[key],
+            set: (val) => {
+                this._data[key] = val
+            }
+        })
+    }
+
+
+
+    let vm = new MVVM({
+        el: '#app',
+        data: {
+            modelValue: '',
+            user: {
+                name: 'zhaomenghuan',
+                age: '24'
+            },
+            address: {
+                city: 'beijing'
+            },
+            skills: ['JavaScript', 'Node.js', 'html5']
+        }
+    })
+
+    vm.$watch('modelValue', val => console.log(`watch modelValue ：${val}`))
+</script>
+
+
+</body>
+
+</html>

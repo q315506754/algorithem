@@ -84,6 +84,16 @@ object DB{
         val jdbcTemplate = JdbcTemplate(dataSource)
         return jdbcTemplate
     }
+     fun getWendaJDBCForWaiWang(): JdbcTemplate {
+        val dataSource = BasicDataSource()
+        dataSource.driverClassName = "com.mysql.jdbc.Driver"
+        dataSource.url = "jdbc:mysql://118.178.128.52:3306" //外网
+        dataSource.username = "jinx"
+        dataSource.password = "jinx@2017"
+        val jdbcTemplate = JdbcTemplate(dataSource)
+        return jdbcTemplate
+    }
+
      fun getJDBCForTHWaiWang(): JdbcTemplate {
         val dataSource = BasicDataSource()
         dataSource.driverClassName = "com.mysql.jdbc.Driver"
