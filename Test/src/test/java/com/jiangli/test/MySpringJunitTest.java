@@ -3,6 +3,7 @@ package com.jiangli.test;
 import com.jiangli.junit.spring.RepeatFixedDuration;
 import com.jiangli.junit.spring.RepeatFixedTimes;
 import com.jiangli.junit.spring.StatisticsJunitRunner;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.lang.reflect.Method;
 
 /**
  * @author Jiangli
@@ -24,6 +27,8 @@ public class MySpringJunitTest implements ApplicationContextAware {
 
     private static Logger logger = LoggerFactory.getLogger(MySpringJunitTest.class);
     private ApplicationContext applicationContext;
+    private A obj;
+    private Method aMethod;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -34,6 +39,45 @@ public class MySpringJunitTest implements ApplicationContextAware {
     @Test
     public void func() {
         logger.debug(applicationContext.toString());
+    }
+
+    class A {
+        int a;
+
+        public int getA() {
+            return a;
+        }
+    }
+
+    @Before
+    public void bf() {
+        obj = new A();
+        try {
+            aMethod = obj.getClass().getDeclaredMethod("getA", new Class[]{});
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @RepeatFixedDuration(6000)
+    @Test
+    public void testget() {
+//        logger.debug(applicationContext.toString());
+        int a = obj.getA();
+        System.out.println(a);
+    }
+
+    @RepeatFixedDuration(6000)
+    @Test
+    public void testreflection() {
+//        logger.debug(applicationContext.toString());
+        try {
+            Object invoke = aMethod.invoke(obj);
+            System.out.println(invoke);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
