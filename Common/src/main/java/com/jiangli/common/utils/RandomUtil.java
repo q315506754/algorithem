@@ -29,6 +29,20 @@ public class RandomUtil {
         }
         return Long.parseLong(sb.toString());
     }
+    public  static String getRandomString(int length){
+        StringBuilder sb = new StringBuilder();
+        if (length>0) {
+            length--;
+            sb.append(getRandomNum(1,9));
+
+            while (length-->0) {
+                sb.append(getRandomNum(0,9));
+            }
+        }else {
+            sb.append("0");
+        }
+        return sb.toString();
+    }
     public  static int getRandomNum(){
         return getRandomNum(0,9);
     }

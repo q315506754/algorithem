@@ -1,6 +1,8 @@
 package com.jiangli.doc.txt.wenda
 
 import com.jiangli.doc.txt.DB
+import com.jiangli.doc.txt.Redis
+import com.jiangli.doc.txt.execute
 import com.jiangli.doc.txt.importdata.delKeysPage
 import com.jiangli.doc.txt.importdata.queryDistinct
 import org.springframework.jdbc.core.JdbcTemplate
@@ -15,7 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 
 fun main(args: Array<String>) {
 
-//    val pool = Redis.getYanfaPool()
+    val pool = Redis.getYanfaPool()
 //    val pool = Redis.getYufaPool()
 //    val jdbc = DB.getJDBCForYanFa()
     val jdbc = DB.getWendaJDBCForWaiWang()
@@ -27,12 +29,18 @@ fun main(args: Array<String>) {
 // update ZHS_BBS.QA_COMMENT set IS_DELETED = 1 where IS_DELETED=0;
 // update ZHS_BBS.QA_OPERATION set IS_DELETED = 1 where IS_DELETED=0 AND OPERATION_TYPE=2;
 
+
+//     update ZHS_BBS.QA_QUESTION set IS_DELETED = 0 where IS_DELETED=1;
+// update ZHS_BBS.QA_ANSWER set IS_DELETED = 0 where IS_DELETED=1;
+// update ZHS_BBS.QA_COMMENT set IS_DELETED = 0 where IS_DELETED=1;
+// update ZHS_BBS.QA_OPERATION set IS_DELETED = 0 where IS_DELETED=1 AND OPERATION_TYPE=2;
+
     val ANCESTOR_COURSE_ID = queryDistinct(jdbc, " ZHS_BBS.QA_QUESTION", "ANCESTOR_COURSE_ID")
     println(ANCESTOR_COURSE_ID)
     val RECRUIT_ID = queryDistinct(jdbc, " ZHS_BBS.QA_QUESTION", "RECRUIT_ID")
     println(RECRUIT_ID)
     val userSet = getTotalUserId(jdbc)
-    println(userSet)
+//    println(userSet)
 
     val keys = arrayListOf<String>()
 
@@ -60,12 +68,16 @@ fun main(args: Array<String>) {
     delKeysPage(keys)
 
 
-//    pool.execute {
-//        val redis = it
-//        keys.forEach {
-//            redis.del(it)
-//        }
-//    }
+    pool.execute {
+        val redis = it
+//        val pipelined = redis.pipelined()
+
+        keys.forEach {
+            redis.del(it)
+//            pipelined.del(it)
+        }
+//        pipelined.syncAndReturnAll()
+    }
 }
 
 

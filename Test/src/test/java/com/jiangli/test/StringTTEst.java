@@ -3,6 +3,10 @@ package com.jiangli.test;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author Administrator
  *
@@ -22,5 +26,25 @@ public class StringTTEst {
         String s2 = a+b+c+d;
         Assert.assertTrue(true);
     }
+
+    @Test
+    public void test_() {
+        Map<Long,Object> map = new LinkedHashMap<>();
+        map.put(1111L, new Object());
+        map.put(1112L, new Object());
+//        for (Long aLong : map.keySet()) {
+//            map.remove(aLong);
+//        }
+        Iterator<Map.Entry<Long, Object>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+//        for (Map.Entry<Long, Object> entry : map.entrySet()) {
+//
+//        }
+        System.out.println(map);
+    }
+
 
 }
