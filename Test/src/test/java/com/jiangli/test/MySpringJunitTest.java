@@ -95,6 +95,36 @@ public class MySpringJunitTest implements ApplicationContextAware {
     }
     @RepeatFixedDuration()
     @Test
+    public void func_stream_iter() {
+        list100Arr.stream().forEach(o -> {
+
+        });
+    }
+    @RepeatFixedDuration()
+    @Test
+    public void func_stream_iter3() {
+        list100Arr.parallelStream().forEach(o -> {
+
+        });
+    }
+
+    @RepeatFixedDuration()
+    @Test
+    public void func_stream_iter2() {
+        list100Linked.stream().forEach(o -> {
+
+        });
+    }
+    @RepeatFixedDuration()
+    @Test
+    public void func_stream_iter4() {
+        list100Linked.parallelStream().forEach(o -> {
+
+        });
+    }
+
+    @RepeatFixedDuration()
+    @Test
     public void func_listiterarr_l_2() {
         for (Object o : list100Arr) {
             for (Object o2 : list100Arr) {

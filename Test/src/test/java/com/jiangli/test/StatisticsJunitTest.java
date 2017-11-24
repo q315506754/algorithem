@@ -154,6 +154,29 @@ public class StatisticsJunitTest {
         }
     }
 
+    private void execute(Runnable cmd) {
+
+    }
+
+    @RepeatFixedDuration
+    @Test
+    public void func_call_1() {
+        execute(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+
+    @RepeatFixedDuration
+    @Test
+    public void func_call_2() {
+        execute(() -> {
+
+        });
+    }
+
     @RepeatFixedDuration
     @Test
     public void func_io() {
