@@ -9,6 +9,26 @@ import java.util.*
  * @date 2017/5/8 18:31
  */
 fun main(args: Array<String>) {
+    (0..3).forEach {
+        x -> print(x)
+    }
+    (0..3).forEach ({ x -> print(x)})
+    (0..16).forEach {
+        x->
+        (0..16).forEach {
+            y -> print("($x,$y) ")
+        }
+        println("")
+    }
+    println()
+    (0..16).forEach {
+        x-> run {
+            (0..16).forEach {
+                y -> print("($x,$y) ")
+            }
+        }
+    }
+    println()
     val language = "tt"
 
     println(when (language) {
