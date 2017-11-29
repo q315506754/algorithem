@@ -18,7 +18,8 @@ import java.util.List;
  */
 public class HttpClientLib {
     public static void main(String[] args) throws Exception {
-        String url = "https://api.github.com/repos/OpenFeign/feign/contributors";
+//        String url = "https://api.github.com/repos/OpenFeign/feign/contributors";
+        String url = "http://wxpayjl.zhihuishu.com/notify/receiver";
 //        String url = "https://www.baidu.com/";
 //        String url = "http://api.github.com/repos/OpenFeign/feign/contributors";
 

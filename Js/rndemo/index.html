@@ -1,0 +1,89 @@
+<html>
+<head>
+    <title>rndemo</title>
+    <meta charset="utf8"/>
+    <link href="../common/assets/css/common.css" rel="stylesheet"/>
+</head>
+
+
+<body>
+<div id="example"></div>
+
+
+<script src="../common/assets/js/react/react.js" type="text/javascript"></script>
+<script src="../common/assets/js/react/react-dom.js" type="text/javascript"></script>
+<script src="../common/assets/js/react/browser.min.js" type="text/javascript"></script>
+
+<script type="text/babel">
+    var HelloMessage = React.createClass({
+        getInitialState: function() {
+            return {liked: false , clickCount: 0};
+        },
+
+        //react.js:3631 Warning: Failed prop type:
+        // The prop `title` is marked as required in `HelloMessage`,
+        // but its value is `undefined`. in HelloMessage
+        propTypes: {
+//            title: React.PropTypes.string.isRequired,
+
+
+        },
+        getDefaultProps: function() {
+            return {
+                aaa: 'AAA',
+                bbb: 'BBB',
+                ccc: 'CCC',
+            };
+        },
+        handleClick: function(event) {
+            this.setState({liked: !this.state.liked ,clickCount: this.state.clickCount + 1});
+        },
+        render: function() {
+            var text = this.state.liked ? '喜欢' : '不喜欢';
+
+            return ( //括号必须在这一行 否则报错
+                <div>
+                     <h1>Hello {this.props.name}</h1>
+                    <Name name={this.props.name} />
+                    <Link site={this.props.site} />
+                    <p onClick={this.handleClick}>
+                        你<b>{text}</b>我。点我切换状态。 点击次数为: {this.state.clickCount}
+                    </p>
+                    <span>{this.props.aaa} {this.props.bbb} {this.props.ccc} </span>
+                </div>);
+//            return (
+//             <div>
+//                <Name name={this.props.name} />
+//                <Link site={this.props.site} />
+//            </div>);
+//            return <h1>Hello {this.props.name}</h1>;
+        }
+    });
+
+    var Name = React.createClass({
+        render: function() {
+            return (
+                    <h1>{this.props.name}</h1>
+            );
+        }
+    });
+
+    var Link = React.createClass({
+        render: function() {
+            return (
+                    <a href={this.props.site}>
+                        {this.props.site}
+                    </a>
+            );
+        }
+    });
+
+    ReactDOM.render(
+        <HelloMessage name="Runoob" site="http://www.runoob.com" />,
+        document.getElementById('example')
+    );
+</script>
+
+</body>
+
+</html>

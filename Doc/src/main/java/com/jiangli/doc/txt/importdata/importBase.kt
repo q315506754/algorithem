@@ -325,15 +325,33 @@ fun removeIfExist(targetDB: JdbcTemplate, table: String, field: String, teacherI
 }
 
 fun delKeysPage(list:List<String>){
-    operMultiKeysPage("del",list)
+    operMultiKeysPage("del", list, 100)
 }
-fun operMultiKeysPage(oper: String, list: List<String>){
-    val s = "$oper "+list.joinToString(" ","","",100,"") { s -> "$s" }
+fun operMultiKeysPage(oper: String, list: List<String>, pageSize: Int){
+    val s = "$oper "+list.joinToString(" ","","", pageSize,"") { s -> "$s" }
     println(s)
 
-    if (list.size > 100) {
-        operMultiKeysPage(oper, list.subList(100,list.lastIndex))
+    if (list.size > pageSize) {
+        operMultiKeysPage(oper, list.subList(pageSize,list.lastIndex), pageSize)
     }
 }
 
 fun uuidByUserId(userId: Int) = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
+
+fun queryDistinct(jdbc: JdbcTemplate,table:String,prop:String): ArrayList<String> {
+    val query = jdbc.query("select distinct $prop from $table", ColumnMapRowMapper())
+
+    val list = getPropOfColumnMap(query, "$prop")
+    return list
+}
+
+fun getPropOfColumnMap(query: MutableList<MutableMap<String, Any?>>, str:String): ArrayList<String> {
+    val list = arrayListOf<String>()
+    query.forEach {
+        it[str]?.let {
+            val prop = it.toString()
+            list.add(prop)
+        }
+    }
+    return list
+}

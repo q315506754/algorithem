@@ -2,6 +2,10 @@ package com.jiangli.common.test;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by Jiangli on 2017/4/20.
  */
@@ -25,5 +29,14 @@ public class SystemTest {
         System.out.printf("%s",s);//"d"表示输出字符串。
         System.out.printf("输出一个浮点数：%f，一个整数：%d，一个字符串：%s",d,i,s);//可以输出多个变量，注意顺序。
         System.out.printf("字符串：%2$s，%1$d的十六进制数：%1$#x",i,s);//"X$"表示第几个变量。
+        System.getProperties().keySet().forEach(o -> System.out.println(o+" = " +System.getProperty(o.toString())));
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("aa", null);
+        System.out.println(map);
+
+        List ret = new ArrayList(3);
+        ret.add(1,"sss");
+        ret.add(1,"sass");
+        System.out.println(ret);
     }
 }
