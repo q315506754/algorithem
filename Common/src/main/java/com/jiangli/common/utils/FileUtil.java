@@ -14,6 +14,20 @@ import java.util.List;
  */
 public class FileUtil {
     public static String SYSTEM_DELIMETER="\r\n";
+    public static void processVisit(File src, FileStringProcesser processer) {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(src)));
+            String line=null;
+
+            while ((line = br.readLine()) != null) {
+                processer.process(line);
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static File process(File src, FileStringProcesser processer) {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(src)));
@@ -82,6 +96,9 @@ public class FileUtil {
     }
     
     public static List<String> getFilePathFromDirPath(String dirPath) {
+        return getFilePathFromDirPath(dirPath,false);
+    }
+    public static List<String> getFilePathFromDirPath(String dirPath,boolean includeChildren) {
         List<String> paths = new LinkedList<>();
 
         File dir = new File(dirPath);
@@ -89,6 +106,9 @@ public class FileUtil {
         for (File file : files) {
             if (file.isFile()) {
                 paths.add(file.getPath());
+            }
+            else if(file.isDirectory() && includeChildren){
+                paths.addAll(getFilePathFromDirPath(file.getPath(),true));
             }
         }
         return paths;
