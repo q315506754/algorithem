@@ -6,5 +6,5 @@ console.log('page 2 invoked');
 ArrayUtil.a("page2");
 
 $(function () {
-    console.log('page 2 jquery loaded..');
+    console.log('page 2 2jquery loaded..');
 });

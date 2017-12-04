@@ -67,7 +67,7 @@ module.exports = {
        }),
        new CleanWebpackPlugin(['target'], {
        }),
-    new webpack.BannerPlugin("Copyright Jiangli."),//在这个数组中new一个就可以了
+    new webpack.BannerPlugin("!Copyright Jiangli.!"),//在这个数组中new一个就可以了
     new webpack.HotModuleReplacementPlugin()//热加载插件
   ],
 
