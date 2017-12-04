@@ -1,0 +1,1 @@
+babel src/myTool.js -o target/111.js

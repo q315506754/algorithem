@@ -1,0 +1,19 @@
+{
+  "name": "mochatest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ctest": "mocha --compilers js:babel-core/register"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "mochawesome": "^3.0.0",
+    "babel-core": "~6.2.1",
+    "babel-preset-es2015": "~6.1.18"
+  }
+}
