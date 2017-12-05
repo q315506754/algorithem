@@ -6,7 +6,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin'); // 删除文件
 
 module.exports = {
-  devtool: 'source-map',//配置生成Source Maps，选择合适的选项
+  // devtool: 'source-map',//配置生成Source Maps，选择合适的选项
+  devtool: 'eval-source-map',//配置生成Source Maps，选择合适的选项
   // entry:  __dirname + "/src/main.js",//已多次提及的唯一入口文件
   entry:  {
       main:  __dirname + "/src/main.js",
