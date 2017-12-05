@@ -128,6 +128,18 @@ public class PathUtil {
             e.printStackTrace();
         }
     }
+    public static void ensureFilePath(String path){
+        try {
+            if (path.indexOf(".") > 0) {
+                String substring = path.substring(0, path.lastIndexOf(System.getProperty("file.separator")));
+                ensurePath(substring);
+            } else {
+                ensurePath(path);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static String getProjectPathStr(String project) {
         return  getProjectPath(project).getProjectBasePath();

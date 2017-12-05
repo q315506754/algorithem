@@ -1,0 +1,33 @@
+{
+  "name": "lodashtest",
+  "version": "1.0.0",
+  "description": "my babel",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "babel src -d target",
+    "start": "babel-node src/index"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-cache": "^0.4.6",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-jshint": "^2.0.4",
+    "gulp-livereload": "^3.8.1",
+    "gulp-notify": "^3.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^2.1.1",
+    "gulp-uglify": "^2.1.2",
+    "lodash": "^4.17.4"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0"
+  }
+}

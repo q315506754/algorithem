@@ -23,5 +23,5 @@ $(function () {
 console.log($);
 
 
-console.log('asdasdasasdsa');
+console.log('1231xxx2312啊');
 console.log(document);

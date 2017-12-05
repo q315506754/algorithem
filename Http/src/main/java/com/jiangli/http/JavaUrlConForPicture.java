@@ -15,6 +15,7 @@ public class JavaUrlConForPicture {
     private static String proxyHost = null;
     private static Integer proxyPort = null;
 
+
     private static URLConnection openConnection(URL localURL) throws IOException {
         URLConnection connection;
         if (proxyHost != null && proxyPort != null) {
@@ -27,6 +28,11 @@ public class JavaUrlConForPicture {
     }
 
     public static void main(String[] args) throws Exception {
+        try {
+            throw new NullPointerException();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String url = "https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=0fc9b8c7261f95cab2f89ae4a87e145b/1c950a7b02087bf49212ea50f1d3572c10dfcf89.jpg";
         File out = new File("C:\\Users\\Public\\Desktop\\xx.jpg");
         URL localURL = new URL(url);

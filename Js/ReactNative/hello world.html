@@ -1,0 +1,112 @@
+<html>
+<head>
+    <title>hello world.html</title>
+
+    <meta charset="utf8"/>
+    <link href="../common/assets/css/common.css" rel="stylesheet"/>
+
+</head>
+
+
+<body>
+hello world.html
+
+<div id="container">
+</div>
+
+</body>
+
+<div id="example"></div>
+
+
+<script src="../common/assets/js/react/react.js" type="text/javascript"></script>
+<script src="../common/assets/js/react/react-dom.js" type="text/javascript"></script>
+<script src="../common/assets/js/react/browser.min.js" type="text/javascript"></script>
+<!--<script src="../common/assets/js/react/babel.min.js" type="text/javascript"></script>-->
+<!--<%&#45;&#45;<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>&#45;&#45;%>-->
+
+
+<script type="text/babel">
+    ReactDOM.render(
+            <h1>Hello, world!</h1>,
+        document.getElementById('example')
+    );
+
+    ReactDOM.render(
+            <div>
+                <h1>菜鸟教程</h1>
+                <h2>欢迎学习 React</h2>
+                <p data-myattribute = "somevalue">这是一个很不错的 JavaScript 库!</p>
+            </div>
+        ,
+        document.getElementById('example')
+    );
+    ReactDOM.render(
+            <div>
+                <h1>{1+1}</h1>
+            </div>
+        ,
+        document.getElementById('example')
+    );
+
+    var i = 2;
+    ReactDOM.render(
+            <div>
+                <h1>{i == 1 ? 'True!' : 'False'}</h1>
+            </div>
+        ,
+        document.getElementById('example')
+    );
+
+    var myStyle = {
+        fontSize: 100,
+        color: '#FF0000'
+    };
+    ReactDOM.render(
+            <h1 style = {myStyle}>菜鸟教程</h1>,
+        document.getElementById('example')
+    );
+
+    ReactDOM.render(
+            <h1 style = {{
+                fontSize: 100,
+                color: 'green'
+            }}>菜鸟教程</h1>,
+        document.getElementById('example')
+    );
+
+    ReactDOM.render(
+            <div>
+                <h1>菜鸟教程</h1>
+                {/*注释...*/}
+            </div>,
+        document.getElementById('example')
+    );
+
+
+    var arr = [
+        <h1>菜鸟教程</h1>,
+        <h2>学的不仅是技术，更是梦想！</h2>,
+    ];
+    ReactDOM.render(
+            <div>{arr}</div>,
+        document.getElementById('example')
+    );
+
+
+//    var obj = {
+//        a:11111111111,
+//        b:22222222,
+//    };
+//    ReactDOM.render(
+//            <div>{obj}</div>,
+//        document.getElementById('example')
+//    );
+    var MyComponent = React.createClass({render:function () {
+        return <h2>ahahahhaa</h2>
+    }});
+    var myElement = <MyComponent someProperty={true} />;
+    ReactDOM.render(myElement, document.getElementById('example'));
+</script>
+
+</html>
