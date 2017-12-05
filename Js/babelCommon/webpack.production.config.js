@@ -58,7 +58,7 @@ module.exports = {
        name: "commons",
        // (the commons chunk name)
 
-       filename: "commons.js",
+       filename: "js/commons.js",
        // (the filename of the commons chunk)
 
        // minChunks: 3,
@@ -88,12 +88,12 @@ module.exports = {
        }),
     new webpack.BannerPlugin("Copyright Jiangli(product).")//在这个数组中new一个就可以了
 	,
- //   new webpack.optimize.OccurenceOrderPlugin(),
+   // new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: false
         },
-        // sourceMap: true,//这里的soucemap 不能少，可以在线上生成soucemap文件，便于调试
+        sourceMap: true,//这里的soucemap 不能少，可以在线上生成soucemap文件，便于调试
         mangle: true
     }),
 	new ExtractTextPlugin("css/[name].css")

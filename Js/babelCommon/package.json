@@ -8,7 +8,7 @@
     "build": "babel src -d target",
     "start": "babel-node src/index",
     "ctest": "mocha --compilers js:babel-core/register",
-    "wp-build-dev": "webpack",
+    "wp-build-dev": "webpack  --progress",
     "wp-build-pro": "webpack --config ./webpack.production.config.js --progress",
     "wp-server": "webpack-dev-server --progress"
   },
