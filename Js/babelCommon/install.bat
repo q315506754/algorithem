@@ -1,0 +1,2 @@
+call cnpm install
+pause
