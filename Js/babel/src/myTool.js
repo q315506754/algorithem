@@ -3203,12 +3203,25 @@ console.log('----------class-------------')
   console.log(Object.keys(Point.prototype))// []
 
   console.log(Object.getOwnPropertyNames(Point.prototype))
-// ["constructor","toString"]
+// ["constructor","toString", 'toValue']
 
   let a = Object.create(null)
-  console.log(a)
-    // console.log(Object.create());
+  console.log(a) //{}
+
+    console.log(Object.create(Point.prototype)); //_Point2 {}
+    console.log(Object.keys(Object.create(Point.prototype))); //[]
+    console.log(Object.getOwnPropertyNames(Object.create(Point.prototype))); //[]
+    console.log(Object.create(Point));//[]
+    console.log(Object.keys(Object.create(Point))); //_Point2 {}
+    console.log(Object.getOwnPropertyNames(Object.create(Point))); //_Point2 {}
+    console.log(Object.create(class Un{
+        constructor (x, y) {
+            this.x = x
+            this.y = y
+        }
+    }));//Function {}
 }
+console.log('----------class 2-------------')
 {
     // 与ES5一样，实例的属性除非显式定义在其本身（即定义在this对象上），否则都是定义在原型上（即定义在class上）。
     // 定义类
@@ -3225,12 +3238,12 @@ console.log('----------class-------------')
 
   var point = new Point(2, 3)
 
-  point.toString() // (2, 3)
+  console.log(point.toString() )// (2, 3)
 
-  point.hasOwnProperty('x') // true
-  point.hasOwnProperty('y') // true
-  point.hasOwnProperty('toString') // false
-  point.__proto__.hasOwnProperty('toString') // true
+  console.log(point.hasOwnProperty('x') )// true
+  console.log(point.hasOwnProperty('y') )// true
+  console.log(point.hasOwnProperty('toString')) // false
+  console.log(point.__proto__.hasOwnProperty('toString')) // true
   console.log(point.__proto__ === Point.prototype.constructor)// false
   console.log(point.__proto__ === Point)// false
   console.log(Point.prototype.constructor === Point)// true
@@ -3308,6 +3321,7 @@ console.log('----------class-------------')
     // 有调用super之后，才可以使用this关键字，否则会报错。这是因为子类实例的构建，是基于对父类实例加工，只有super方法才能返回父类实例。
 
 }
+console.log('----------class 3-------------')
 {
   class A {
     }
@@ -3315,6 +3329,12 @@ console.log('----------class-------------')
   class B extends A {
     }
 
+  console.log(A.__proto__ ) // [Function]
+  console.log(A.prototype) // A {}
+  console.log(A.prototype.__proto__) // {}
+  console.log(B.__proto__ ) // [Function: A]
+  console.log(B.prototype) // B {}
+  console.log(new B().__proto__) // B {}
   console.log(B.__proto__ === A) // true
   console.log(B.prototype.__proto__ === A.prototype) // true
   console.log(B.prototype === B.__proto__) // false
@@ -3336,9 +3356,14 @@ console.log('----------class-------------')
     // 作为一个构造函数，子类（B）的原型（prototype属性）是父类的实例。   B.prototype.__proto__ = A.prototype;
 
 //     Object.create(A.prototype);
-// // 等同于
-//     B.prototype.__proto__ = A.prototype;
+    var C = Object.create(A.prototype);
+  console.log(C);//A {}
+  console.log(C.prototype);//undefined
+  console.log(C.__proto__);//A {}
+  console.log(typeof  C);//object
+  console.log(new A());//A {}
 }
+console.log('----------class 4-------------')
 {
   class Point {
     constructor (x, y) {
@@ -3362,7 +3387,10 @@ console.log('----------class-------------')
     }
 
   let a = Object.create(Point.prototype)
-  console.log(a)
+  console.log(a) //_Point4 {}
+  console.log(Point.prototype) //_Point4 {}
+  console.log(Point.__proto__) //[Function]
+  console.log(Point.__proto__===Object) //false
   console.log(Object.keys(a))// []
   console.log(Object.keys(new Point(1, 2)))// [ 'x', 'y' ]
   console.log(Object.keys(new Point2()))// []
@@ -3370,6 +3398,7 @@ console.log('----------class-------------')
 
   a.b()// bbb
 }
+console.log('----------class 5-------------')
 {
     // class B extends A  只要是一个有prototype属性的函数，就能被B继承。
 
@@ -3398,7 +3427,8 @@ console.log('----------class-------------')
   class C extends null {
     constructor () {
       super()
-      return Object.create(null)
+      // return Object.create(null)
+      return this
     }
     }
 
@@ -3406,6 +3436,15 @@ console.log('----------class-------------')
   console.log(Object.getPrototypeOf(A) === Function)// false
   console.log(Object.getPrototypeOf(A) === Object)// false
   console.log(Object.getPrototypeOf(A) === Function.prototype)// true
+  console.log(Object.getPrototypeOf(new A()) === A.prototype)// true
+  console.log(Object.getPrototypeOf(new A()))// _A2 {}
+  console.log(A.prototype.__proto__)// {}
+
+
+  console.log(C.prototype.__proto__)// undefined
+  console.log(Object.getPrototypeOf(new C()))// _C {}
+  console.log(C.prototype)// _C {}
+  console.log(Object.create(null))// {}
 }
 {
   console.log('```a````')
@@ -3415,13 +3454,15 @@ console.log('----------class-------------')
   console.log(Object.getPrototypeOf(A) === Function)// false
   console.log(A.__proto__ === Object)// true
   console.log(Object.getPrototypeOf(A) === Object)// true
+    console.log(A.__proto__ === Function.prototype) // false
+    console.log(A.prototype.__proto__ === Object.prototype)// true
 }
 {
   class A {
     constructor () {
+      console.log(A.name)
       console.log(new.target)
       console.log(typeof new.target)
-            // console.log(Object.keys(new.target));
     }
     }
   class B extends A {
@@ -3429,9 +3470,10 @@ console.log('----------class-------------')
       super()
     }
     }
-  new A() // A
-  new B() // B
+  new A() // A  _A4 [Function: _A4]  function
+  new B() // B _A4  undefined  undefined
 }
+console.log('```BBBBBBBBBBBBB````')
 {
     // 由于super指向父类的原型对象，所以定义在父类实例上的方法或属性，是无法通过super调用的。
     // ES6 规定，通过super调用父类的方法时，super会绑定子类的this。
@@ -3444,6 +3486,8 @@ console.log('----------class-------------')
   class B extends A {
     constructor () {
       super()
+        console.log(this.x) // 1
+
       this.x = 2
       super.x = 3
       console.log(super.x) // undefined
@@ -3485,4 +3529,65 @@ console.log('----------class-------------')
 
     // 22
   console.log(sleepsSum)
+}
+{
+  class A{
+    constructor(){
+      this.a = 'a'
+    }
+  }
+
+  class B extends A {
+      constructor(){
+          super();
+          this.b = 'bb'
+      }
+  }
+  class C extends B {
+      constructor() {
+          super();
+          this.c = 'ccc'
+      }
+  }
+
+  console.log(C.__proto__ == B);//true
+  console.log(C.prototype.__proto__ == B.prototype);//true
+  console.log(new C());//_C2 { a: 'a', b: 'bb', c: 'ccc' }
+    console.log(Object.hasOwnProperty("c"));//false
+    console.log(new C().hasOwnProperty("c"));//true
+    console.log(new C().hasOwnProperty("b"));//true
+    console.log(new B().hasOwnProperty("c"));//false
+    console.log(new B().hasOwnProperty("b"));//true
+    var c = new C()
+    Object.defineProperty(c,"d",{ value: 'dddd' })
+    console.log(c);//_C2 { a: 'a', b: 'bb', c: 'ccc' }
+    console.log(c.hasOwnProperty("d"));//true
+    console.log(c.d);//dddd
+}
+
+console.log('--------------extension--------------');
+{
+  function A() {
+    this.a = 'a'
+
+      this.f = function () {
+          console.log('f invoked');
+      }
+  }
+    A.prototype._a = '_a';
+    A.prototype._fa = function () {
+        console.log('_fa invoked.');
+    };
+
+  function B() {
+    this.b = 'bb'
+  }
+
+  B.prototype.__proto__ = A.prototype;
+    let bIns = new B();
+    console.log(bIns);//_B5 { b: 'bb' }
+  console.log(bIns.a);//undefined
+  console.log(bIns._a);//_a
+    // bIns.f();//bIns.f is not a function
+    bIns._fa();
 }

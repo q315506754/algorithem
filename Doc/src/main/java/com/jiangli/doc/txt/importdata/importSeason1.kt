@@ -513,15 +513,20 @@ fun main(args: Array<String>) {
 
 
 
-//js
-//$("#sinfo tr").each(function(i,e) {
-//   var $e = $(e);
-//    var txt1 = $e.find("td:eq(0)").text()
-//    txt1=txt1.substring(0,txt1.length-".jpg".length)
-////    txt1=txt1.replace(".jpg","")
-////    txt1=txt1.replace(".jpeg","")
-//    var href = $e.find("td a").attr("href")
-//    console.log(`${txt1}:${href}`)
-//});
+//js 内部上传组件
+/**
+
+$("#sinfo tr").each(function(i,e) {
+var $e = $(e);
+var txt1 = $e.find("td:eq(0)").text()
+txt1=txt1.substring(0,txt1.length-".jpg".length)
+//    txt1=txt1.replace(".jpg","")
+//    txt1=txt1.replace(".jpeg","")
+var href = $e.find("td a").attr("href")
+console.log(`${txt1}:${href}`)
+});
+
+ ***/
+
 
 

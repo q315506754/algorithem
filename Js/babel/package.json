@@ -5,7 +5,8 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "build": "babel src -d target"
+    "build": "babel src -d target",
+    "babelnode": "babel-node src/myTool.js"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

@@ -32,6 +32,16 @@ module.exports = {
         test: /\.json$/,
         loader: "json-loader"
       },
+
+        ///// 编译前
+        // function(t) { return t.default; }
+        //// 编译后
+        // function(t) { return t["default"]; }
+        {
+            test: /.js$/,
+            enforce: 'post', // post-loader处理
+            loader: 'es3ify-loader'
+        },
 	   {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -40,6 +50,7 @@ module.exports = {
          // presets: ['es2015','react']
        // }
       },
+
       {
         test: /\.css$/,
         // loader: 'style-loader!css-loader?modules'//添加对样式表的处理 注：感叹号的作用在于使同一文件能够使用不同类型的loader

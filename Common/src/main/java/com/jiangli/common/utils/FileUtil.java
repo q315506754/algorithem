@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author Jiangli
@@ -109,6 +110,26 @@ public class FileUtil {
             }
             else if(file.isDirectory() && includeChildren){
                 paths.addAll(getFilePathFromDirPath(file.getPath(),true));
+            }
+        }
+        return paths;
+    }
+    public static List<File> getFilesFromDirPath(String dirPath, Predicate<File> filePredicate) {
+        List<File> paths = new LinkedList<>();
+
+        File dir = new File(dirPath);
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.isFile()) {
+                boolean collect  =true;
+                if (filePredicate != null) {
+                    collect = filePredicate.test(file);
+                }
+                if(collect)
+                    paths.add(file);
+            }
+            else if(file.isDirectory()){
+                paths.addAll(getFilesFromDirPath(file.getPath(),filePredicate));
             }
         }
         return paths;

@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src -d target",
+    "build-browser": "babel src -d target",
+    "browserify-process": "browserify src -o target/bundle.js",
     "start": "babel-node src/index",
     "ctest": "mocha --compilers js:babel-core/register",
     "wp-build-dev": "webpack  --progress",
@@ -20,11 +22,19 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-react-transform": "^2.0.2",
     "babel-polyfill": "^6.23.0",
-    "babel-preset-es2015": "~6.1.18",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-loose": "^8.0.0",
+    "babel-preset-es2015-loose-ie8": "^0.0.4",
+    "babel-preset-latest": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "babelify": "^8.0.0",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.17",
+    "console-polyfill": "^0.3.0",
     "css-loader": "^0.28.7",
+    "es3ify-loader": "^0.2.0",
+    "es5-shim": "^4.5.9",
+    "es6-promise": "^4.1.1",
     "extract-text-webpack-plugin": "^2.1.2",
     "html-webpack-plugin": "^2.30.1",
     "jquery": "^3.2.1",
@@ -40,5 +50,17 @@
     "webpack": "^2.7.0",
     "webpack-dev-server": "^2.9.5"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
+  }
 }
