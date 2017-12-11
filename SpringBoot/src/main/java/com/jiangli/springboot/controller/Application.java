@@ -10,6 +10,21 @@ import java.util.Arrays;
 
 /**
  *
+ *  @SpringBootApplication = @Configuration + @EnableAutoConfiguration + @ComponentScan
+ *
+ *
+ *  @Configuration : enables @Bean
+ *  @EnableAutoConfiguration : auto-detect
+                     *          tomcat-embedded.jar -> TomcatEmbeddedServletContainerFactory
+                     *          excludeName | spring.autoconfigure.exclude
+                     *          default package of {@code @Entity} classes -> place it in a root package so that all sub-packages and classes can be searched.
+ *  @ComponentScan : <context:component-scan>
+ *
+ *
+ * @WebAppConfiguration: ApplicationContext is WebApplicationContext
+ *
+ * @ContextConfiguration: where to load
+ *
  * @SpringBootApplication is a convenience annotation that adds all of the following:
  * @Configuration tags the class as a source of bean definitions for the application context.
  @EnableAutoConfiguration tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings.

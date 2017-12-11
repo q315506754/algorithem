@@ -64,7 +64,8 @@ public class SecurityMain   {
 //        or AnnotationConfigApplicationContext
 
         SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken("user", "N/A",
+//                .setAuthentication(new UsernamePasswordAuthenticationToken("user", "N/A",
+                .setAuthentication(new UsernamePasswordAuthenticationToken("user", "1234",
                         AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")));
         try {
             System.out.println(this.service.secure());

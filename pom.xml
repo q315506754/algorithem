@@ -51,6 +51,7 @@
         <module>Sort</module>
         <module>Spring</module>
         <module>SpringBoot</module>
+        <module>SpringBoot-Batch</module>
         <module>SpringMVC</module>
         <module>Struts2</module>
         <module>Test</module>
