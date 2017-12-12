@@ -12,7 +12,7 @@ JAX-RPC(Java API for XML-based RPC)
 JAX-RS(Java API for RESTful Web Services),JAVA EE6 引入的一个新技术
 SAML(Security Assertion Markup Language) 安全声明标记语言
 WebRTC（Web Real-Time Communication）网页实时通信 支持网页浏览器进行实时语音对话或视频对话的技术
-
+LDAP(Lightweight Directory Access Protocol) LDAP是轻量目录访问协议
 
 RSS(Really Simple Syndication)真正简易联合
 
@@ -78,6 +78,7 @@ ROM (Read-Only Memory)只读存储器
 PROM (Programmable Read-Only Memory)可编程只读存储器
 EPROM (Erasable Programmable Read-Only Memory)可擦可编程只读存储器
 EEPROM (Electrically Erasable Programmable Read-Only Memory)电可擦可编程只读存储器
+
 
 
 
