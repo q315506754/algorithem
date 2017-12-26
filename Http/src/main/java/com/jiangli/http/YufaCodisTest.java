@@ -23,24 +23,25 @@ public class YufaCodisTest {
 
 //        System.out.println(list);
 
-//        System.out.println( codis.execute("hgetall qa:question:hash:1083"));
+        System.out.println( codis.execute("del th:openapi:teachers:remoteresult:src:1 th:openapi:teachers:remoteresult:src:lock "));
 //        System.out.println( codis.execute("hgetall qa:question:hash:3123"));
+
         //12名师api缓存
-        System.out.println( codis.execute("del " +
-                "th:openapi:teachers:remoteresult:src:1 " +
-                "th:openapi:teachers:remoteresult:src:1:lock " +
-                //黄天中
-//                "th:webcontroller:teacher:courseIdsStudyCount:171 " +
-//                "th:webcontroller:teacher:courseIdsStudyCount:171:lock " +
-//                "th:webcontroller:teacher:courseIdsStudyTotalCount:171 " +
-//                "th:webcontroller:teacher:courseIdsStudyTotalCount:171:lock " +
-                //于海
-                "th:webcontroller:teacher:courseIdsStudyCount:29 " +
-                "th:webcontroller:teacher:courseIdsStudyCount:29:lock " +
-                "th:webcontroller:teacher:courseIdsStudyTotalCount:29 " +
-                "th:webcontroller:teacher:courseIdsStudyTotalCount:29:lock "
-                )
-        );
+//        System.out.println( codis.execute("del " +
+//                "th:openapi:teachers:remoteresult:src:1 " +
+//                "th:openapi:teachers:remoteresult:src:1:lock " +
+//                //黄天中
+////                "th:webcontroller:teacher:courseIdsStudyCount:171 " +
+////                "th:webcontroller:teacher:courseIdsStudyCount:171:lock " +
+////                "th:webcontroller:teacher:courseIdsStudyTotalCount:171 " +
+////                "th:webcontroller:teacher:courseIdsStudyTotalCount:171:lock " +
+//                //于海
+//                "th:webcontroller:teacher:courseIdsStudyCount:29 " +
+//                "th:webcontroller:teacher:courseIdsStudyCount:29:lock " +
+//                "th:webcontroller:teacher:courseIdsStudyTotalCount:29 " +
+//                "th:webcontroller:teacher:courseIdsStudyTotalCount:29:lock "
+//                )
+//        );
 
 
     }

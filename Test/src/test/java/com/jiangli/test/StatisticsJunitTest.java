@@ -63,7 +63,7 @@ public class StatisticsJunitTest {
         sb.append(instance.get(Calendar.YEAR));
         sb.append(instance.get(Calendar.MONTH)+1);
         sb.append(instance.get(Calendar.DATE));
-        String s = sb.toString();
+        //String s = sb.toString();
 //        System.out.println(s);
     }
 

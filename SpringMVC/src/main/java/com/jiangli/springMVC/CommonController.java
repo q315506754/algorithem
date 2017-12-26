@@ -47,6 +47,12 @@ public class CommonController {
     }
 
 
+    class A{
+        void print() {
+            System.out.println("absdf");
+        }
+    }
+
     /**
      * http://localhost:8081/rmi.go
      *
@@ -59,8 +65,11 @@ public class CommonController {
     @ResponseBody
     String rmi(String id, HttpServletRequest request) {
         Object guguday = WebUtils.getSessionAttribute(request, "guguday");
-        logger.debug("guguday is:{}",guguday);
+        logger.debug("guguda9999999999啊 is:{}",guguday);
 
+//        new org.apache.commons.mail.HtmlEmail();
+        new A().print();
+        new B().func();
         try {
             logger.debug("servletContext {}", servletContext);
             logger.debug("web getSessionId {}", WebUtils.getSessionId(request));
