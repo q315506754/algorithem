@@ -67,6 +67,11 @@ public class CommonController {
         Object guguday = WebUtils.getSessionAttribute(request, "guguday");
         logger.debug("guguda222988882228啊 is:{}",guguday);
 
+        int[] values = {1, 2, 3};
+        boolean b = false;
+
+        //values.
+        //guguday.
 //        new org.apache.commons.mail.HtmlEmail();
         new A().print();
         new B().func();

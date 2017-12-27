@@ -12,11 +12,19 @@ import java.util.Date;
  *         CreatedTime  2016/6/12 0012 16:46
  */
 public class DateUtilTest {
+    static int a = 1;
+    public void func2() {
+        System.out.println("aaa");
+        a++;
+        a++;
+    }
+
     @Test
     public void func() {
+        func2();
+        System.out.println(a);
         Date date = new Date();
         System.out.println(DateUtil.getDate_YYYY_MM_DD(date.getTime()));
-
         Calendar instance = Calendar.getInstance();
         instance.set(Calendar.DATE,1);
         instance.set(Calendar.HOUR_OF_DAY,0);
