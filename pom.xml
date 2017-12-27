@@ -7,7 +7,7 @@
     <groupId>com.jiangli.AlgorithemProject</groupId>
     <artifactId>AlgorithemProject-parent</artifactId>
     <packaging>pom</packaging>
-    <version>${com.provider-version}</version>
+    <version>9.9.6</version>
 
 
     <name>AlgorithemProject-parent</name>
@@ -609,6 +609,27 @@
                             <delimiter>${*}</delimiter>
                         </delimiters>
                         <useDefaultDelimiters>false</useDefaultDelimiters>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat6-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <port>8080</port>
+                        <path>/</path>
+                        <uriEncoding>UTF-8</uriEncoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <port>8080</port>
+                        <path>/</path>
+                        <uriEncoding>UTF-8</uriEncoding>
                     </configuration>
                 </plugin>
             </plugins>

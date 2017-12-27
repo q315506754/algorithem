@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.jiangli.AlgorithemProject</groupId>
         <artifactId>AlgorithemProject-parent</artifactId>
-        <version>${com.provider-version}</version>
+        <version>9.9.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jiangli.AlgorithemProject</groupId>
@@ -23,7 +23,19 @@
         <dependency>
             <groupId>com.jiangli.AlgorithemProject</groupId>
             <artifactId>Common</artifactId>
+            <version>${com.provider-version}</version>
         </dependency>
+
+        <!-- json -->
+        <!--<dependency>-->
+            <!--<groupId>net.sf.json-lib</groupId>-->
+            <!--<artifactId>json-lib</artifactId>-->
+            <!--<classifier>jdk15</classifier>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-api</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -79,10 +91,17 @@
             <!--<version>2.1.0</version>-->
         <!--</dependency>-->
 
+        <!--<dependency>-->
+            <!--<groupId>org.apache.commons</groupId>-->
+            <!--<artifactId>commons-email</artifactId>-->
+            <!--<version>1.2</version>-->
+        <!--</dependency>-->
+
+
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-email</artifactId>
-            <version>1.2</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -132,6 +151,15 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat6-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
             </plugin>
         </plugins>
 

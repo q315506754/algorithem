@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.jiangli.AlgorithemProject</groupId>
         <artifactId>AlgorithemProject-parent</artifactId>
-        <version>${com.provider-version}</version>
+        <version>9.9.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jiangli.AlgorithemProject</groupId>
@@ -198,6 +198,15 @@
     <build>
         <finalName>SeparateSystem</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat6-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+            </plugin>
+
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>

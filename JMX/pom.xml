@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.jiangli.AlgorithemProject</groupId>
         <artifactId>AlgorithemProject-parent</artifactId>
-        <version>${com.provider-version}</version>
+        <version>9.9.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jiangli.AlgorithemProject</groupId>

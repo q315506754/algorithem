@@ -65,7 +65,7 @@ public class CommonController {
     @ResponseBody
     String rmi(String id, HttpServletRequest request) {
         Object guguday = WebUtils.getSessionAttribute(request, "guguday");
-        logger.debug("guguda9999999999啊 is:{}",guguday);
+        logger.debug("guguda222988882228啊 is:{}",guguday);
 
 //        new org.apache.commons.mail.HtmlEmail();
         new A().print();
