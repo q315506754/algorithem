@@ -42,18 +42,21 @@ public class MyThreadJunitRunner extends BlockJUnit4ClassRunner {
                 System.out.println("threadNum:"+threadNum);
                 threadNum = threadNum < 1?1:threadNum;
 
-                CountDownLatch latch = new CountDownLatch(threadNum);
+                final CountDownLatch latch = new CountDownLatch(threadNum);
 
                 while (threadNum-->0) {
-                    executorService.execute(()->{
-                        System.out.println(""+Thread.currentThread());
-                        try {
-                            fTestMethod.invokeExplosively(fTarget);
-                        } catch (Throwable throwable) {
-                            throwable.printStackTrace();
+                    executorService.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("" + Thread.currentThread());
+                            try {
+                                fTestMethod.invokeExplosively(fTarget);
+                            } catch (Throwable throwable) {
+                                throwable.printStackTrace();
 
-                        } finally {
-                            latch.countDown();
+                            } finally {
+                                latch.countDown();
+                            }
                         }
                     });
                 }

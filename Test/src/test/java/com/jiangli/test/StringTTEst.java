@@ -29,7 +29,7 @@ public class StringTTEst {
 
     @Test
     public void test_() {
-        Map<Long,Object> map = new LinkedHashMap<>();
+        Map<Long,Object> map = new LinkedHashMap<Long, Object>();
         map.put(1111L, new Object());
         map.put(1112L, new Object());
 //        for (Long aLong : map.keySet()) {

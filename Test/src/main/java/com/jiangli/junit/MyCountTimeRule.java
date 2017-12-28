@@ -11,7 +11,7 @@ import org.junit.runners.model.Statement;
 public class MyCountTimeRule implements TestRule {
 
     @Override
-    public Statement apply(Statement base, Description description) {
+    public Statement apply(final Statement base, Description description) {
 
         return new Statement(){
             @Override

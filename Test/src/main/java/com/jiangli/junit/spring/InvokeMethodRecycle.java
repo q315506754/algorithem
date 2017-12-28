@@ -89,7 +89,7 @@ public class InvokeMethodRecycle extends Statement {
 		}
 	}
 
-	private void executeFixedDuration(InvokeContext invokeContext, DataCollector model, ExecutorService threadPool) throws Throwable {
+	private void executeFixedDuration(final InvokeContext invokeContext,final DataCollector model,final ExecutorService threadPool) throws Throwable {
 		if (invokeContext.getInvokeMode() == InvokeMode.FIXED_DURATION){
 			model.setPlanCost(invokeContext.getFixedDuration().value());
 
@@ -97,7 +97,7 @@ public class InvokeMethodRecycle extends Statement {
 			final long START_TS = model.getStartTs();
 			//多线程
 			if (invokeContext.isMultiThread()){
-				AtomicLong times = new AtomicLong(0);
+				final AtomicLong times = new AtomicLong(0);
 
 				final CountDownLatch countDownLatch = new CountDownLatch(invokeContext.getThreadNum());
 				final Object waitLock = new Object();
@@ -158,15 +158,15 @@ public class InvokeMethodRecycle extends Statement {
 		}
 	}
 
-	private void executeFixedTimes(InvokeContext invokeContext, DataCollector model, ExecutorService threadPool) throws Throwable {
+	private void executeFixedTimes(final InvokeContext invokeContext,final DataCollector model,final ExecutorService threadPool) throws Throwable {
 		if (invokeContext.getInvokeMode() == InvokeMode.FIXED_TIMES) {
 			model.setTotalTimes(invokeContext.getFixedTimes().value());
 
-			long MAX_TIMES = model.getTotalTimes();
+			final long MAX_TIMES = model.getTotalTimes();
 
 			//多线程
 			if (invokeContext.isMultiThread()){
-				AtomicLong times = new AtomicLong(0);
+				final AtomicLong times = new AtomicLong(0);
 
 				final CountDownLatch countDownLatch = new CountDownLatch(invokeContext.getThreadNum());
 				final CountDownLatch waitLock = new CountDownLatch(1);
