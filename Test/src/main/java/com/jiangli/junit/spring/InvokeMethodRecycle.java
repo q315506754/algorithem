@@ -35,9 +35,12 @@ public class InvokeMethodRecycle extends Statement {
 		RepeatFixedTimes fixedTimes = fTestMethod.getAnnotation(RepeatFixedTimes.class);
 		RepeatFixedDuration fixedDuration = fTestMethod.getAnnotation(RepeatFixedDuration.class);
 
-		DataHandler dataHandler = getDataHandler();
 
+		//首先分组
 		GroupInvoker[] groupInvokers = getGroupInvokers();
+
+		//数据收集器
+		DataHandler dataHandler = getDataHandler();
 
 		for (GroupInvoker groupInvoker : groupInvokers) {
 			InvokeContext context = new InvokeContext(groupInvoker);

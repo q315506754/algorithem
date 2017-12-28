@@ -23,9 +23,9 @@ public class GroupInvoker extends Statement {
     @Override
     public void evaluate() throws Throwable {
         if (params != null && params.length > 0) {
-            fTestMethod.invokeExplosively(fTarget, params);
+            fTestMethod.invokeExplosively(getfTarget(), getParams());
         } else {
-            fTestMethod.invokeExplosively(fTarget);
+            fTestMethod.invokeExplosively(getfTarget());
         }
     }
 

@@ -3,6 +3,8 @@ package com.jiangli.test;
 import com.jiangli.junit.spring.RepeatFixedDuration;
 import com.jiangli.junit.spring.RepeatFixedTimes;
 import com.jiangli.junit.spring.StatisticsJunitRunner;
+import com.jiangli.junit.spring.data.handler.PrintNothingDataHandler;
+import com.jiangli.junit.spring.data.handler.ResultsCollector;
 import com.jiangli.junit.spring.group.AvailableGroup;
 import com.jiangli.junit.spring.group.InvokerGroup;
 import org.junit.Assert;
@@ -133,11 +135,26 @@ public class StatisticsJunitTest {
         //System.out.println(str);
     }
 
+
+
     @RepeatFixedDuration(thread = 10)
     @InvokerGroup(value = AvailableGroup.FIXED_LENGTH_STRING,params = {"100","500"})
     @Test
     public void sdfft_6(String str) {
         //System.out.println(str);
+    }
+
+    @InvokerGroup(value = AvailableGroup.FIXED_LENGTH_STRING,params = {"100","500"})
+    @Test
+    public void sdfft_7(String str) {
+        System.out.println(str);
+    }
+
+    @ResultsCollector(PrintNothingDataHandler.class)
+    @InvokerGroup(value = AvailableGroup.FIXED_LENGTH_STRING,params = {"100","500"})
+    @Test
+    public void sdfft_8(String str) {
+        System.out.println(str);
     }
 
     @RepeatFixedDuration
