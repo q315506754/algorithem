@@ -1,17 +1,23 @@
 package com.jiangli.test;
 
 import com.jiangli.junit.spring.RepeatFixedDuration;
+import com.jiangli.junit.spring.RepeatFixedTimes;
 import com.jiangli.junit.spring.StatisticsJunitRunner;
+import com.jiangli.junit.spring.group.AvailableGroup;
+import com.jiangli.junit.spring.group.InvokerGroup;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Administrator
@@ -22,12 +28,48 @@ import java.util.Date;
 public class StatisticsJunitTest {
     double collec=1024;
     final int TIMES=100;
+     int n=100;
+     AtomicInteger N=new AtomicInteger(0);
     private Class<Object> aClass = Object.class;
 
     @RepeatFixedDuration
     @Test
     public void xxNew() {
         new Object();
+    }
+
+    @RepeatFixedTimes(thread = 10,value = 1000000)
+    @Test
+    public void xxNewT() {
+        new Object();
+    }
+    @RepeatFixedTimes(thread = 1,value = 1000000)
+    @Test
+    public void xxNewT2() {
+        new Object();
+    }
+
+    @RepeatFixedDuration(value = 5000,thread = 10)
+    @Test
+    public void xxNewTh() {
+        new Object();
+    }
+    @RepeatFixedDuration(value = 5000,thread = 50)
+    @Test
+    public void xxNewTh2() {
+        new Object();
+    }
+
+    @RepeatFixedDuration
+    @Test
+    public void xxPP() {
+        n++;
+    }
+
+    @RepeatFixedDuration
+    @Test
+    public void xxPP2() {
+        N.incrementAndGet();
     }
 
     @RepeatFixedDuration
@@ -48,9 +90,66 @@ public class StatisticsJunitTest {
        Calendar.getInstance().getTimeInMillis();
     }
 
+    //781407
     @RepeatFixedDuration
     @Test
     public void sdff() {
+        String yyyymmdd = new SimpleDateFormat("YYYYMMdd").format(new Date());
+//        System.out.println(yyyymmdd);
+    }
+
+    //2713923
+    @RepeatFixedDuration(value = 5000,thread = 50)
+    @Test
+    public void sdff22() {
+        String yyyymmdd = new SimpleDateFormat("YYYYMMdd").format(new Date());
+//        System.out.println(yyyymmdd);
+    }
+
+    @RepeatFixedTimes(thread = 1,value = 10000000)
+    @Test
+    public void sdfft_1() {
+        String yyyymmdd = new SimpleDateFormat("YYYYMMdd").format(new Date());
+//        System.out.println(yyyymmdd);
+    }
+    @RepeatFixedTimes(thread = 10,value = 10000000)
+    @Test
+    public void sdfft_2() {
+        String yyyymmdd = new SimpleDateFormat("YYYYMMdd").format(new Date());
+//        System.out.println(yyyymmdd);
+    }
+
+    @RepeatFixedTimes(value = 1000)
+    @InvokerGroup(value = AvailableGroup.FIXED_LENGTH_STRING,params = {"100","500"})
+    @Test
+    public void sdfft_3(String str) {
+        //System.out.println(str);
+    }
+
+    @RepeatFixedDuration
+    @InvokerGroup(value = AvailableGroup.FIXED_LENGTH_STRING,params = {"100","500"})
+    @Test
+    public void sdfft_5(String str) {
+        //System.out.println(str);
+    }
+
+    @RepeatFixedDuration(thread = 10)
+    @InvokerGroup(value = AvailableGroup.FIXED_LENGTH_STRING,params = {"100","500"})
+    @Test
+    public void sdfft_6(String str) {
+        //System.out.println(str);
+    }
+
+    @RepeatFixedDuration
+    @InvokerGroup(value = AvailableGroup.FIXED_LENGTH_STRING,params = {"100"})
+    @Test
+    public void sdfft_4(String str) {
+        System.out.println(str);
+    }
+
+    @RepeatFixedDuration(thread = 10)
+    @Test
+    public void sdff33() {
         String yyyymmdd = new SimpleDateFormat("YYYYMMdd").format(new Date());
 //        System.out.println(yyyymmdd);
     }

@@ -17,4 +17,5 @@ import java.lang.annotation.Target;
 public @interface RepeatFixedTimes {
     int value() default 1;//单位 次数
     boolean printDetail() default false; //打印每一次执行结果
+    int thread() default 1; //并发线程数
 }

@@ -16,4 +16,5 @@ import java.lang.annotation.Target;
 public @interface RepeatFixedDuration {
     int value() default 5000; //单位 ms
     boolean printDetail() default false; //打印每一次执行结果
+    int thread() default 1; //并发线程数
 }

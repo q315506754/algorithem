@@ -4,7 +4,7 @@ package com.jiangli.junit.spring.data;
  * @author Jiangli
  * @date 2017/12/28 10:28
  */
-public class SingleThreadStatisticModel implements DataCollector{
+public class StatisticModel implements DataCollector{
     private long totalTimes=1;
     private long planCost=0;
 

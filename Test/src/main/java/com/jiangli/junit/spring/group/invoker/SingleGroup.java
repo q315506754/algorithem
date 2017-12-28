@@ -1,6 +1,6 @@
-package com.jiangli.junit.spring.group;
+package com.jiangli.junit.spring.group.invoker;
 
-import com.jiangli.junit.spring.group.invoker.GroupInvoker;
+import com.jiangli.junit.spring.group.CommonGroup;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
