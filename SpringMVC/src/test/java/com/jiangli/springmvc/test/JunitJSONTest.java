@@ -1,4 +1,4 @@
-package com.jiangli.common.test;
+package com.jiangli.springmvc.test;
 
 import com.jiangli.junit.spring.RepeatFixedTimes;
 import com.jiangli.junit.spring.StatisticsSpringJunitRunner;
@@ -15,9 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
  *         CreatedTime  2016/4/26 0026 17:21
  */
 @RunWith(StatisticsSpringJunitRunner.class)
-@ContextConfiguration(locations = {"classpath*:applicationContext.xml"})
-public class JSONTest {
-    private static Logger logger = LoggerFactory.getLogger(JSONTest.class);
+@ContextConfiguration(locations = {"classpath*:test/applicationContext.xml"})
+public class JunitJSONTest {
+    private static Logger logger = LoggerFactory.getLogger(JunitJSONTest.class);
 
     @Test
     public void func() {

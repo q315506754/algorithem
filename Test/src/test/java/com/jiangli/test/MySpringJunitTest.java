@@ -1,6 +1,5 @@
 package com.jiangli.test;
 
-import com.jiangli.common.utils.RandomUtil;
 import com.jiangli.junit.spring.RepeatFixedDuration;
 import com.jiangli.junit.spring.RepeatFixedTimes;
 import com.jiangli.junit.spring.StatisticsSpringJunitRunner;
@@ -210,8 +209,8 @@ public class MySpringJunitTest implements ApplicationContextAware {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        str128 = RandomUtil.getRandomString(128);
-        str1024 = RandomUtil.getRandomString(1024);
+        //str128 = RandomUtil.getRandomString(128);
+        //str1024 = RandomUtil.getRandomString(1024);
         list100Arr = new ArrayList<>();
         list100Linked = new LinkedList<>();
         int i = 100;

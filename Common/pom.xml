@@ -134,6 +134,12 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.jiangli.AlgorithemProject</groupId>
+            <artifactId>Test</artifactId>
+            <version>${com.provider-version}</version>
+        </dependency>
     </dependencies>
 
 

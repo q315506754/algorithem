@@ -18,9 +18,41 @@
         <resources.dir>src\main\resources\props</resources.dir>
     </properties>
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>com.jiangli.AlgorithemProject</groupId>-->
+            <!--<artifactId>Common</artifactId>-->
+        <!--</dependency>-->
+
+        <!-- json -->
         <dependency>
-            <groupId>com.jiangli.AlgorithemProject</groupId>
-            <artifactId>Common</artifactId>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <classifier>jdk15</classifier>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
         </dependency>
 
         <dependency>
