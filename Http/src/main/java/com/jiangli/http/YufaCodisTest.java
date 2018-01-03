@@ -23,7 +23,12 @@ public class YufaCodisTest {
 
 //        System.out.println(list);
 
-        System.out.println( codis.execute("del th:openapi:teachers:remoteresult:src:1 th:openapi:teachers:remoteresult:src:lock "));
+
+        //课程缓存
+        System.out.println( codis.execute("del cc:course:2024738"));
+
+
+        //System.out.println( codis.execute("del th:openapi:teachers:remoteresult:src:1 th:openapi:teachers:remoteresult:src:lock "));
 //        System.out.println( codis.execute("hgetall qa:question:hash:3123"));
 
         //12名师api缓存
