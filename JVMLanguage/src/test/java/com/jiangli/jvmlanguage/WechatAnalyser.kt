@@ -1,10 +1,18 @@
 package com.jiangli.jvmlanguage
 
-import com.jiangli.jvmlanguage.Consts.pixelFactor
+import com.jiangli.jvmlanguage.Consts.minPress
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import javax.imageio.ImageIO
+
+fun main(args: Array<String>) {
+    val dirpath = "C:\\Users\\DELL-13\\Desktop\\temppic"
+
+    File(dirpath).listFiles().forEach {
+        analyse(it)
+    }
+}
 
 
 fun analyse(file:String): Int {
@@ -29,25 +37,37 @@ fun analyse(file:File): Int {
     //标记-小人中心点
     sourceImage.setRGB(manPoint.x,manPoint.y,MARK_COLOR)
 
-
     //精准白点中心点
-    val accuratePoint = getAccuratePoint(HEIGHT, WIDTH, sourceImage)
+    var targetPoint = getAccuratePoint(HEIGHT, WIDTH, sourceImage)
 
-//        val output = ByteArrayOutputStream()
 
-    if (accuratePoint.valid()) {
+    if (targetPoint.valid()) {
         println("[Mode]目标白点模式")
         //标记-精准白点中心点
-        sourceImage.setRGB(accuratePoint.x,accuratePoint.y,MARK_COLOR)
+        sourceImage.setRGB(targetPoint.x,targetPoint.y,MARK_COLOR)
 
-        paintLine(sourceImage, accuratePoint,manPoint, MARK_COLOR)
+        paintLine(sourceImage, targetPoint,manPoint, MARK_COLOR)
+    } else {
+        targetPoint = getGeometryPoint(manPoint, WIDTH, HEIGHT, sourceImage)
 
-        val distance = accuratePoint.distance(manPoint)
-        pressts = (distance * pixelFactor).toInt()
-        println("distance: $distance")
-        println("presstime: $pressts")
+        if (!targetPoint.valid()) {
+            println("[Mode]所有模式均不可用")
+            return pressts
+        }
+
+        println("[Mode]几何分析模式")
+
+        //标记-几何中心点
+        sourceImage.setRGB(targetPoint.x,targetPoint.y,MARK_COLOR)
+
+        paintLine(sourceImage, targetPoint,manPoint, MARK_COLOR)
     }
 
+
+    val distance = targetPoint.distance(manPoint)
+    pressts = (distance * Consts.pixelFactor).toInt()
+    println("distance: $distance")
+    println("presstime: $pressts")
 
     //output
     File(file.parent + "\\rs").mkdirs()
@@ -61,16 +81,18 @@ fun analyse(file:File): Int {
     output.flush()
     output.close()
 
-    println("----------------------------------")
 
+
+    if (pressts < minPress) {
+        pressts = minPress
+        println("---------按压时间修正为:$minPress------------")
+    }
+
+    println("----------------------------------")
     return pressts
 }
 
-fun main(args: Array<String>) {
-    val dirpath = "C:\\Users\\DELL-13\\Desktop\\temppic"
 
-    File(dirpath).listFiles().forEach {
-        analyse(it)
-    }
-}
+
+
 

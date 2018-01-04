@@ -1,7 +1,10 @@
 package com.jiangli.jvmlanguage
 
+import com.jiangli.jvmlanguage.Consts.height
+import com.jiangli.jvmlanguage.Consts.width
 import java.awt.image.BufferedImage
 import java.io.File
+import java.util.*
 
 /**
  *
@@ -18,16 +21,19 @@ object Consts{
     var height:Int = 1920
     var startScanY:Int = 550
 
-    var pixelFactor = 1.429
-    var rulerFactor = 700.0/33
+    val pixelFactor = 1.441
+    val rulerFactor = 700.0/33
+    val minPress = 200
+    val randomSleep = 2345..4567
+    val randomJump = minPress..1000
 
     //小人配置
-    var manStartColor = RGB(54,58,99)
-    var manEndColor = RGB(58,58,102)
-    var manOffsetY=11
+    val manStartColor = RGB(54,58,99)
+    val manEndColor = RGB(58,58,102)
+    val manOffsetY=11
 
     //精准白圈配置
-    var accuratePointColor = RGB(245,245,245)
+    val accuratePointColor = RGB(245,245,245)
 
 
     fun rule(dbl:String):Int {
@@ -97,7 +103,8 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage): Point
 
     fun colorPrecisionCheck(posX:Int, posY:Int) =  (sourceImage.getRGB(posX, posY).toRGB() - Consts.accuratePointColor).error() < 1
 
-    for (posY in Consts.startScanY until HEIGHT) {
+
+    for (posY in HEIGHT/3 until HEIGHT*2/3) {
         var b = false
 
         var t_accStart = -1
@@ -136,8 +143,7 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage): Point
 
                 //中间连续为白色
                 if (cons) {
-                    println("const $t_accStart,$t_accEnd,${t_accEnd-t_accStart},$t_accY")
-
+//                    println("const $t_accStart,$t_accEnd,${t_accEnd-t_accStart},$t_accY")
 
                     accStart = t_accStart
                     accEnd = t_accEnd
@@ -155,7 +161,7 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage): Point
     accY = (accY + disSame/2)
     println("!!!y修正后 $accY")
 
-    println("!!!精准白椭圆端点 $accStart,$accY $accEnd,$accY")
+    println("!!!白椭圆端点 $accStart,$accY $accEnd,$accY")
 
 //    paintLine(sourceImage, Point(accStart + 1, accY), Point(accEnd - 1, accY), MARK_COLOR)
 
@@ -167,7 +173,7 @@ fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
     var manEnd = -1
     var manY = -1
 
-    for (posY in HEIGHT - 1 downTo Consts.startScanY) {
+    for (posY in HEIGHT - 1 downTo HEIGHT/3) {
         var b = false
 
         for (posX in 0 until WIDTH) {
@@ -198,7 +204,72 @@ fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
     return Point(((manEnd + manStart) / 2),manY-Consts.manOffsetY)
 }
 
-fun screenshot(output:String?="C:/Users/Jiangli/Desktop"): String {
+fun getGeometryPoint(manPoint: Point, WIDTH: Int, HEIGHT: Int, sourceImage: BufferedImage): Point {
+    var scanXStart: Int
+    var scanXEnd: Int
+    if (manPoint.x < WIDTH / 2) {
+        scanXStart = manPoint.x
+        scanXEnd = WIDTH - 1
+    } else {
+        scanXStart = 0
+        scanXEnd = manPoint.x
+    }
+
+    var boardSum: Int = 0
+    var boardC: Int = 0
+    var boardX: Int = -1
+    var boardY: Int = -1
+    for (y in HEIGHT / 3..HEIGHT * 2 / 3) {
+        val firstPointOfLine = sourceImage.getRGB(0, y).toRGB()
+        var b = false
+
+
+        for (x in scanXStart..scanXEnd) {
+            //修掉脑袋比下一个小格子还高的情况的 bug
+            if (Math.abs(x - manPoint.x) < 80) {
+                continue
+            }
+
+            //和纯色差距过大
+            if ((sourceImage.getRGB(x, y).toRGB() - firstPointOfLine).error() > 10) {
+                boardSum += x
+                boardC += 1
+                b = true
+            }
+        }
+
+        if (b) {
+            boardY = y
+            break
+        }
+    }
+
+    if (boardC > 0) {
+        boardX = boardSum / boardC
+    }
+
+    val pointTop = Point(boardX, boardY)
+    val pointTopColor = sourceImage.getRGB(pointTop.x, pointTop.y).toRGB()
+    println("顶点: $pointTop")
+
+    val pointMiddle = Point(boardX, 0)
+    for (y in (boardY + 274) downTo boardY) {
+        if ((sourceImage.getRGB(boardX, y).toRGB() - pointTopColor).error() < 10) {
+            pointMiddle.y = (boardY + y) / 2
+            break
+        }
+    }
+    println("中点: $pointMiddle")
+
+//    //标记-顶点
+    sourceImage.setRGB(pointTop.x, pointTop.y, MARK_COLOR)
+//    //标记-中点
+//    sourceImage.setRGB(pointMiddle.x, pointMiddle.y, MARK_COLOR)
+
+    return pointMiddle
+}
+
+fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
     val mobileShotPath = "/sdcard/temp"
     val mobileShotName = "screen.png"
     val currentTimeMillis = System.currentTimeMillis()
@@ -206,11 +277,12 @@ fun screenshot(output:String?="C:/Users/Jiangli/Desktop"): String {
 //    Runtime.getRuntime().exec("adb shell rm -r $mobileShotPath")
 //    Runtime.getRuntime().exec("adb shell mkdir -r $mobileShotPath")
     val absName = "$mobileShotPath/$currentTimeMillis-$mobileShotName"
-//    println(absName)
 
     //需要等待一会
-    Runtime.getRuntime().exec("adb shell screencap $absName")
-    Thread.sleep(1000)
+    val process1 = Runtime.getRuntime().exec("adb shell screencap -p $absName")
+    val millis1 = System.currentTimeMillis()
+    process1.waitFor()
+    println("截图耗时:${System.currentTimeMillis()-millis1} ms")
 
 
     val outputAbsPath = "$output\\$currentTimeMillis-$mobileShotName"
@@ -222,12 +294,20 @@ fun screenshot(output:String?="C:/Users/Jiangli/Desktop"): String {
     //拉至本地
     val outputCmd = "adb pull $absName $outputAbsPath"
     println(outputCmd)
-    Runtime.getRuntime().exec(outputCmd)
-    Thread.sleep(1000)
-
-    //分析 计算出按键时长
-
-    //等待特殊板块奖分时间 3s
+    val process = Runtime.getRuntime().exec(outputCmd)
+    val millis2 = System.currentTimeMillis()
+    process.waitFor()
+    println("pull本地耗时:${System.currentTimeMillis()-millis2} ms")
 
     return outputAbsPath
+}
+
+fun rnd(pg:IntProgression): Int {
+    return pg.first+Random().nextInt(pg.last-pg.first)
+}
+
+fun rndTapPoint(): Point {
+    val x = Consts.width / 2
+    val y = Consts.height * 3 / 4
+    return Point(rnd((x-width/8)..(x+width/8)), rnd((y-height/8)..(y+height/8)))
 }

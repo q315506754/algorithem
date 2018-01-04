@@ -20,6 +20,8 @@ fun main(args: Array<String>) {
 
             val presstime = analyse(screenshot)
 
+            //最小跳跃时间
+
             if (presstime > 0) {
                 //按键跳跃
                 Runtime.getRuntime().exec("adb shell input swipe 250  250 250 250 ${presstime}")
@@ -42,10 +44,4 @@ fun main(args: Array<String>) {
         }
     }
 
-    // adb shell screencap /sdcard/temp/screen.png
-    // adb pull /sdcard/temp/screen.png C:/Users/Jiangli/Desktop/screen.png
-    // adb shell rm -f /sdcard/temp/screen.png
-    // adb shell rm -f /sdcard/temp
-//    input swipe 250  250 250 250 859
-//    input tap 50 250 500
 }
