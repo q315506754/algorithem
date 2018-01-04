@@ -8,7 +8,8 @@ import java.io.InputStreamReader
 fun main(args: Array<String>) {
     val reader = BufferedReader(InputStreamReader(System.`in`))
 
-    val dirpath = "C:\\Users\\DELL-13\\Desktop\\temppic"
+//    val dirpath = "C:\\Users\\DELL-13\\Desktop\\temppic"
+    val dirpath = "C:\\Users\\Jiangli\\Desktop\\temppic"
 
     try {
         while (true) {
