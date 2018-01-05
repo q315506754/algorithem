@@ -1,20 +1,14 @@
 package com.jiangli.jvmlanguage
 
+import com.jiangli.jvmlanguage.Consts.analysePath
 import com.jiangli.jvmlanguage.Consts.randomJump
 import com.jiangli.jvmlanguage.Consts.randomSleep
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 fun main(args: Array<String>) {
-    val reader = BufferedReader(InputStreamReader(System.`in`))
-
-//    val dirpath = "C:\\Users\\DELL-13\\Desktop\\temppic"
-    val dirpath = "C:\\Users\\Jiangli\\Desktop\\temppic"
-
     try {
         while (true) {
             //截图分析
-            val screenshot = screenshot(dirpath)
+            val screenshot = screenshot(analysePath)
 
             var presstime = analyse(screenshot)
 
@@ -28,7 +22,7 @@ fun main(args: Array<String>) {
             val tapPoint = rndTapPoint()
 
             //按键跳跃
-            val cmd = "adb shell input swipe ${tapPoint.x}  ${tapPoint.y} ${tapPoint.x} ${tapPoint.y} $presstime"
+            val cmd = "${Consts.adbPath}adb shell input swipe ${tapPoint.x}  ${tapPoint.y} ${tapPoint.x} ${tapPoint.y} $presstime"
             println("执行指令:  $cmd")
 
             Runtime.getRuntime().exec(cmd)

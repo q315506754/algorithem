@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
             println("${readLine.toDouble()} -> $ps")
 
             //按键跳跃
-            Runtime.getRuntime().exec("adb shell input swipe 250  250 250 250 ${ps}")
+            Runtime.getRuntime().exec("${Consts.adbPath}adb shell input swipe 250  250 250 250 ${ps}")
 
             //等待跳跃动画
 //            Thread.sleep(1000)

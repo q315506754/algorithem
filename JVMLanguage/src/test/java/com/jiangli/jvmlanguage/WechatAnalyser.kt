@@ -1,5 +1,6 @@
 package com.jiangli.jvmlanguage
 
+import com.jiangli.jvmlanguage.Consts.analysePath
 import com.jiangli.jvmlanguage.Consts.minPress
 import java.io.File
 import java.io.FileInputStream
@@ -7,9 +8,7 @@ import java.io.FileOutputStream
 import javax.imageio.ImageIO
 
 fun main(args: Array<String>) {
-    val dirpath = "C:\\Users\\DELL-13\\Desktop\\temppic"
-
-    File(dirpath).listFiles().forEach {
+    File(analysePath).listFiles().forEach {
         analyse(it)
     }
 }

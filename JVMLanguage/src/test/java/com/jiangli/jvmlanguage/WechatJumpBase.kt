@@ -1,5 +1,6 @@
 package com.jiangli.jvmlanguage
 
+import com.jiangli.jvmlanguage.Consts.adbPath
 import com.jiangli.jvmlanguage.Consts.height
 import com.jiangli.jvmlanguage.Consts.width
 import java.awt.image.BufferedImage
@@ -17,24 +18,38 @@ import java.util.*
 val MARK_COLOR:Int = RGB(255,0,0).toInt()
 
 object Consts{
+    //根据机型调整
     var width:Int = 1080
     var height:Int = 1920
-    var startScanY:Int = 550
 
+    //(PC依赖)
+    var adbPath:String = ""
+    var analysePath:String = "C:\\Users\\DELL-13\\Desktop\\temppic"
+//    var analysePath:String = "C:\\Users\\Jiangli\\Desktop\\temppic"
+
+    //像素系数(尺寸依赖)
     val pixelFactor = 1.441
+    //尺量系数(尺寸依赖)
     val rulerFactor = 700.0/33
+
+    //最小按压时长  ms
     val minPress = 200
+
+    //自动跳跃模式随机等待时长 ms
     val randomSleep = 2345..4567
+
+    //无法识别模式时随机跳跃时长 ms
     val randomJump = minPress..1000
 
     //小人配置
     val manStartColor = RGB(54,58,99)
     val manEndColor = RGB(58,58,102)
+
+    //旗子距离底部像素(尺寸依赖)
     val manOffsetY=11
 
-    //精准白圈配置
+    //白色目标点颜色判别
     val accuratePointColor = RGB(245,245,245)
-
 
     fun rule(dbl:String):Int {
         return rule(dbl.toDouble())
@@ -74,6 +89,9 @@ data class Point(var x:Int=0,var y:Int=0) {
 }
 
 fun paintLine(img:BufferedImage,pfrom:Point,pto:Point,rgb:Int=0) {
+    if (!(pfrom.valid() && pto.valid())) {
+        return
+    }
     if (pto.x == pfrom.x) {
         (Math.min(pfrom.y,pto.y)..Math.max(pfrom.y,pto.y)).forEach {
             img.setRGB(pto.x,it,rgb)
@@ -270,6 +288,15 @@ fun getGeometryPoint(manPoint: Point, WIDTH: Int, HEIGHT: Int, sourceImage: Buff
 }
 
 fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
+    val ouputDir = File(output)
+    if (!ouputDir.exists()) {
+        ouputDir.mkdirs()
+    }
+    if (!ouputDir.isDirectory) {
+        return ""
+    }
+
+
     val mobileShotPath = "/sdcard/temp"
     val mobileShotName = "screen.png"
     val currentTimeMillis = System.currentTimeMillis()
@@ -279,7 +306,7 @@ fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
     val absName = "$mobileShotPath/$currentTimeMillis-$mobileShotName"
 
     //需要等待一会
-    val process1 = Runtime.getRuntime().exec("adb shell screencap -p $absName")
+    val process1 = Runtime.getRuntime().exec("${adbPath}adb shell screencap -p $absName")
     val millis1 = System.currentTimeMillis()
     process1.waitFor()
     println("截图耗时:${System.currentTimeMillis()-millis1} ms")
@@ -292,7 +319,7 @@ fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
     }
 
     //拉至本地
-    val outputCmd = "adb pull $absName $outputAbsPath"
+    val outputCmd = "${adbPath}adb pull $absName $outputAbsPath"
     println(outputCmd)
     val process = Runtime.getRuntime().exec(outputCmd)
     val millis2 = System.currentTimeMillis()
