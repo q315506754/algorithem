@@ -8,11 +8,72 @@ import java.io.FileOutputStream
 import javax.imageio.ImageIO
 
 fun main(args: Array<String>) {
+    analyseAll()
+}
+
+
+fun analyseAll() {
     File(analysePath).listFiles().forEach {
         analyse(it)
     }
 }
 
+fun analyseClear() {
+    File(Consts.analysePath).listFiles().forEach {
+//        println(it)
+        if (it.isDirectory) {
+            it.deleteRecursively()
+        } else {
+            if (it.name.matches(Regex("""\d+-screen\.png"""))) {
+                println("remove $it")
+
+                it.delete()
+            }
+        }
+    }
+}
+
+fun analyseRetain(retainFile:String?=null) {
+    File(Consts.analysePath).listFiles().forEach {
+//        println(it)
+        if (it.isDirectory) {
+        } else {
+            if (it.name.matches(Regex("""\d+-screen\.png"""))) {
+                if (retainFile == null || it.absolutePath == retainFile) {
+                    val newFile = File(it.parent, "retained-${System.currentTimeMillis()}-${rnd(1..999)}.png")
+                    println("rename $it -> $newFile")
+
+                    //1515113465457-screen
+                    println(it.renameTo(newFile))
+//                    copyFile(it,newFile)
+
+                }
+            }
+        }
+    }
+}
+
+@Throws(Exception::class)
+fun copyFile(src: File, dest: File) {
+    if(!dest.exists()){
+        dest.createNewFile()
+    }
+
+    val length = 2097152
+    val `in` = FileInputStream(src)
+    val out = FileOutputStream(dest)
+    val buffer = ByteArray(length)
+    while (true) {
+        val ins = `in`.read(buffer)
+        if (ins == -1) {
+            `in`.close()
+            out.flush()
+            out.close()
+            return
+        } else
+            out.write(buffer, 0, ins)
+    }
+}
 
 fun analyse(file:String): Int {
     return analyse(File(file))
@@ -23,7 +84,10 @@ fun analyse(file:File): Int {
         return pressts
     }
 
-    val sourceImage = ImageIO.read(FileInputStream(file))
+    val inputStream = FileInputStream(file)
+    val sourceImage = ImageIO.read(inputStream)
+    inputStream.close()
+
 //        println(sourceImage)
     println("input:"+file)
 
@@ -37,7 +101,7 @@ fun analyse(file:File): Int {
     sourceImage.setRGB(manPoint.x,manPoint.y,MARK_COLOR)
 
     //精准白点中心点
-    var targetPoint = getAccuratePoint(HEIGHT, WIDTH, sourceImage)
+    var targetPoint = getAccuratePoint(HEIGHT, WIDTH, sourceImage,manPoint)
 
 
     if (targetPoint.valid()) {
@@ -79,7 +143,6 @@ fun analyse(file:File): Int {
     ImageIO.write(sourceImage, "png", output)
     output.flush()
     output.close()
-
 
 
     if (pressts < minPress) {

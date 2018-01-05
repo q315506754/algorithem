@@ -1,8 +1,11 @@
 package com.jiangli.jvmlanguage
 
 import com.jiangli.jvmlanguage.Consts.analysePath
+import com.jiangli.jvmlanguage.Consts.clearMobilePics
 import com.jiangli.jvmlanguage.Consts.randomJump
 import com.jiangli.jvmlanguage.Consts.randomSleep
+import com.jiangli.jvmlanguage.Consts.remainFailedPics
+import com.jiangli.jvmlanguage.GlobalContext.screenshotFilePath
 
 fun main(args: Array<String>) {
     try {
@@ -37,5 +40,27 @@ fun main(args: Array<String>) {
         }
     } catch (e: Exception) {
         e.printStackTrace()
+
+        if (clearMobilePics) {
+            println("开始移除手机临时文件夹...")
+        }
+        if (remainFailedPics) {
+            println("开始PC临时文件夹...")
+
+            var lastPath:String? = when(GlobalContext.screenshotFilePath.size){
+                0 -> null
+                1 -> screenshotFilePath[0]
+                else -> screenshotFilePath[screenshotFilePath.lastIndex-1]
+            }
+
+            lastPath?.let {
+                println("最后截图: $it")
+
+                analyseRetain(it)
+                analyseClear()
+                println("重新分析全部...")
+                analyseAll()
+            }
+        }
     }
 }

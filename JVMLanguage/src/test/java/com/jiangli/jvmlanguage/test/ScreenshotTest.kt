@@ -1,6 +1,7 @@
-package com.jiangli.jvmlanguage
+package com.jiangli.jvmlanguage.test
 
 import com.jiangli.jvmlanguage.Consts.analysePath
+import com.jiangli.jvmlanguage.screenshot
 
 /**
  *

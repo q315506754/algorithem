@@ -3,6 +3,7 @@ package com.jiangli.jvmlanguage
 import com.jiangli.jvmlanguage.Consts.adbPath
 import com.jiangli.jvmlanguage.Consts.height
 import com.jiangli.jvmlanguage.Consts.width
+import com.jiangli.jvmlanguage.GlobalContext.screenshotFilePath
 import java.awt.image.BufferedImage
 import java.io.File
 import java.util.*
@@ -17,10 +18,15 @@ import java.util.*
 
 val MARK_COLOR:Int = RGB(255,0,0).toInt()
 
-object Consts{
+object GlobalContext{
+    var lastScreenshotFilePath:String? = null
+    var screenshotFilePath: MutableList<String> = mutableListOf<String>()
+}
+ object Consts{
     //根据机型调整
     var width:Int = 1080
     var height:Int = 1920
+
 
     //(PC依赖)
     var adbPath:String = ""
@@ -50,6 +56,11 @@ object Consts{
 
     //白色目标点颜色判别
     val accuratePointColor = RGB(245,245,245)
+
+     //异常结束后清除手机快照
+     val clearMobilePics = true
+     //异常结束后只保留识别失败的图片
+     val remainFailedPics = true
 
     fun rule(dbl:String):Int {
         return rule(dbl.toDouble())
@@ -89,9 +100,6 @@ data class Point(var x:Int=0,var y:Int=0) {
 }
 
 fun paintLine(img:BufferedImage,pfrom:Point,pto:Point,rgb:Int=0) {
-    if (!(pfrom.valid() && pto.valid())) {
-        return
-    }
     if (pto.x == pfrom.x) {
         (Math.min(pfrom.y,pto.y)..Math.max(pfrom.y,pto.y)).forEach {
             img.setRGB(pto.x,it,rgb)
@@ -113,7 +121,7 @@ fun paintLine(img:BufferedImage,pfrom:Point,pto:Point,rgb:Int=0) {
     }
 }
 
-fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage): Point {
+fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage, manPoint: Point): Point {
     var accStart = -1
     var accEnd = -1
     var accY = -1
@@ -122,13 +130,23 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage): Point
     fun colorPrecisionCheck(posX:Int, posY:Int) =  (sourceImage.getRGB(posX, posY).toRGB() - Consts.accuratePointColor).error() < 1
 
 
-    for (posY in HEIGHT/3 until HEIGHT*2/3) {
+    var scanXStart: Int
+    var scanXEnd: Int
+    if (manPoint.x < WIDTH / 2) {
+        scanXStart = manPoint.x
+        scanXEnd = WIDTH - 1
+    } else {
+        scanXStart = 0
+        scanXEnd = manPoint.x
+    }
+
+    for (posY in HEIGHT/3 until manPoint.y) {
         var b = false
 
         var t_accStart = -1
         var t_accEnd = -1
         var t_accY = -1
-        for (posX in 0 until WIDTH) {
+        for (posX in scanXStart until scanXEnd) {
             if (colorPrecisionCheck(posX, posY)) {
 //                    println(sourceImage.getRGB(it,posY).toRGB())
                 t_accStart = posX
@@ -139,7 +157,7 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage): Point
         }
 
         if (b) {
-            for (posX in WIDTH - 1 downTo 0) {
+            for (posX in scanXEnd downTo scanXStart) {
                 if (colorPrecisionCheck(posX, posY)) {
                     t_accEnd = posX
                     break
@@ -191,10 +209,10 @@ fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
     var manEnd = -1
     var manY = -1
 
-    for (posY in HEIGHT - 1 downTo HEIGHT/3) {
+    for (posY in HEIGHT*2/3 downTo HEIGHT/3) {
         var b = false
 
-        for (posX in 0 until WIDTH) {
+        for (posX in WIDTH/8 until WIDTH) {
             if ((sourceImage.getRGB(posX, posY).toRGB() - Consts.manStartColor).error() < 4) {
 //                    println(sourceImage.getRGB(it,posY).toRGB())
                 manStart = posX
@@ -205,7 +223,7 @@ fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
         }
 
         if (b) {
-            for (posX in WIDTH - 1 downTo 0) {
+            for (posX in WIDTH*7/8 downTo 0) {
                 if ((sourceImage.getRGB(posX, posY).toRGB() - Consts.manEndColor).error() < 4) {
                     manEnd = posX
                     break
@@ -313,10 +331,14 @@ fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
 
 
     val outputAbsPath = "$output\\$currentTimeMillis-$mobileShotName"
-    File(outputAbsPath).let {
+    val file = File(outputAbsPath)
+    file.let {
         if (it.exists())
             it.delete()
     }
+    //保存全局变量
+    GlobalContext.lastScreenshotFilePath = outputAbsPath
+    screenshotFilePath.add(outputAbsPath)
 
     //拉至本地
     val outputCmd = "${adbPath}adb pull $absName $outputAbsPath"
@@ -325,6 +347,7 @@ fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
     val millis2 = System.currentTimeMillis()
     process.waitFor()
     println("pull本地耗时:${System.currentTimeMillis()-millis2} ms")
+
 
     return outputAbsPath
 }
