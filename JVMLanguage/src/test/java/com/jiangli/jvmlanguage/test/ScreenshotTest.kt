@@ -1,6 +1,7 @@
 package com.jiangli.jvmlanguage.test
 
 import com.jiangli.jvmlanguage.Consts.analysePath
+import com.jiangli.jvmlanguage.log
 import com.jiangli.jvmlanguage.screenshot
 
 /**
@@ -11,5 +12,5 @@ import com.jiangli.jvmlanguage.screenshot
  */
 fun main(args: Array<String>) {
     val screenshot = screenshot(analysePath)
-    println(screenshot)
+    log(screenshot)
 }

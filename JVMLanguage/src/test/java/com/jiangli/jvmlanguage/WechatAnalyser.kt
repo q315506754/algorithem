@@ -20,12 +20,12 @@ fun analyseAll() {
 
 fun analyseClear() {
     File(Consts.analysePath).listFiles().forEach {
-//        println(it)
+//        log(it)
         if (it.isDirectory) {
             it.deleteRecursively()
         } else {
             if (it.name.matches(Regex("""\d+-screen\.png"""))) {
-                println("remove $it")
+                log("remove $it")
 
                 it.delete()
             }
@@ -35,16 +35,16 @@ fun analyseClear() {
 
 fun analyseRetain(retainFile:String?=null) {
     File(Consts.analysePath).listFiles().forEach {
-//        println(it)
+//        log(it)
         if (it.isDirectory) {
         } else {
             if (it.name.matches(Regex("""\d+-screen\.png"""))) {
                 if (retainFile == null || it.absolutePath == retainFile) {
                     val newFile = File(it.parent, "retained-${System.currentTimeMillis()}-${rnd(1..999)}.png")
-                    println("rename $it -> $newFile")
+                    log("rename $it -> $newFile")
 
                     //1515113465457-screen
-                    println(it.renameTo(newFile))
+                    log(it.renameTo(newFile))
 //                    copyFile(it,newFile)
 
                 }
@@ -88,8 +88,8 @@ fun analyse(file:File): Int {
     val sourceImage = ImageIO.read(inputStream)
     inputStream.close()
 
-//        println(sourceImage)
-    println("input:"+file)
+//        log(sourceImage)
+    log("input:"+file)
 
     val WIDTH = sourceImage.width
     val HEIGHT = sourceImage.height
@@ -105,7 +105,7 @@ fun analyse(file:File): Int {
 
 
     if (targetPoint.valid()) {
-        println("[Mode]目标白点模式")
+        log("[Mode]目标白点模式")
         //标记-精准白点中心点
         sourceImage.setRGB(targetPoint.x,targetPoint.y,MARK_COLOR)
 
@@ -114,11 +114,11 @@ fun analyse(file:File): Int {
         targetPoint = getGeometryPoint(manPoint, WIDTH, HEIGHT, sourceImage)
 
         if (!targetPoint.valid()) {
-            println("[Mode]所有模式均不可用")
+            log("[Mode]所有模式均不可用")
             return pressts
         }
 
-        println("[Mode]几何分析模式")
+        log("[Mode]几何分析模式")
 
         //标记-几何中心点
         sourceImage.setRGB(targetPoint.x,targetPoint.y,MARK_COLOR)
@@ -129,8 +129,8 @@ fun analyse(file:File): Int {
 
     val distance = targetPoint.distance(manPoint)
     pressts = (distance * Consts.pixelFactor).toInt()
-    println("distance: $distance")
-    println("presstime: $pressts")
+    log("distance: $distance")
+    log("presstime: $pressts")
 
     //output
     File(file.parent + "\\rs").mkdirs()
@@ -138,7 +138,7 @@ fun analyse(file:File): Int {
     if (!file.exists()) {
         file.createNewFile()
     }
-    println("output:"+file)
+    log("output:"+file)
     val output = FileOutputStream(file)
     ImageIO.write(sourceImage, "png", output)
     output.flush()
@@ -147,10 +147,10 @@ fun analyse(file:File): Int {
 
     if (pressts < minPress) {
         pressts = minPress
-        println("---------按压时间修正为:$minPress------------")
+        log("---------按压时间修正为:$minPress------------")
     }
 
-    println("----------------------------------")
+    log("----------------------------------")
     return pressts
 }
 

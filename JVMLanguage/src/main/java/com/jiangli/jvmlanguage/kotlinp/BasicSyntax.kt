@@ -147,6 +147,13 @@ fun main(args: Array<String>) {
 
     SingleInstance.doSth()
 
+    val readLine = ""
+    when {
+        readLine.startsWith("-") -> {}
+        readLine.startsWith("+") -> {}
+        readLine.startsWith("=") -> {}
+    }
+
 //    val ins =  SingleInstance() // compile error
 
 

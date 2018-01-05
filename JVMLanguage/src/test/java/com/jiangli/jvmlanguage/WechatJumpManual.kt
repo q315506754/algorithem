@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
 
     while (true) {
         try {
-            println("按键跳跃.")
+            log("按键跳跃.")
             //截图分析
             val screenshot = screenshot(analysePath)
 
@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
                 //按键跳跃
                 Runtime.getRuntime().exec("${Consts.adbPath}adb shell input swipe 250  250 250 250 ${presstime}")
             } else {
-                println("请输入距离手动执行....")
+                log("请输入距离手动执行....")
 
                 val dis = reader.readLine()
 
@@ -34,9 +34,9 @@ fun main(args: Array<String>) {
             //等待跳跃动画
 //            Thread.sleep(1000)
 
-            println("--------------------------------")
+            log("--------------------------------")
         } catch (e: Exception) {
-            println("error ,re-input")
+            log("error ,re-input")
             e.printStackTrace()
         }
     }

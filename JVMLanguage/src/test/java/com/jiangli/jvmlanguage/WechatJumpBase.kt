@@ -18,23 +18,24 @@ import java.util.*
 
 val MARK_COLOR:Int = RGB(255,0,0).toInt()
 
+
 object GlobalContext{
     var lastScreenshotFilePath:String? = null
     var screenshotFilePath: MutableList<String> = mutableListOf<String>()
+    var print=true
 }
  object Consts{
     //根据机型调整
     var width:Int = 1080
     var height:Int = 1920
 
-
     //(PC依赖)
     var adbPath:String = ""
-    var analysePath:String = "C:\\Users\\DELL-13\\Desktop\\temppic"
-//    var analysePath:String = "C:\\Users\\Jiangli\\Desktop\\temppic"
+//    var analysePath:String = "C:\\Users\\DELL-13\\Desktop\\temppic"
+    var analysePath:String = "C:\\Users\\Jiangli\\Desktop\\temppic"
 
     //像素系数(尺寸依赖)
-    val pixelFactor = 1.441
+    var pixelFactor:Double = 1.451
     //尺量系数(尺寸依赖)
     val rulerFactor = 700.0/33
 
@@ -42,7 +43,7 @@ object GlobalContext{
     val minPress = 200
 
     //自动跳跃模式随机等待时长 ms
-    val randomSleep = 2345..4567
+    val randomSleep = 2888..4888
 
     //无法识别模式时随机跳跃时长 ms
     val randomJump = minPress..1000
@@ -62,6 +63,9 @@ object GlobalContext{
      //异常结束后只保留识别失败的图片
      val remainFailedPics = true
 
+     //失败后重新开始
+     val cycleLearningMode = true
+
     fun rule(dbl:String):Int {
         return rule(dbl.toDouble())
     }
@@ -69,7 +73,13 @@ object GlobalContext{
         return (dbl * rulerFactor).toInt()
     }
 }
-
+fun log(x: Any?): Unit {
+    if (Thread.currentThread().name=="main" && GlobalContext.print) {
+        println(x)
+    } else if (Thread.currentThread().name!="main"){
+        println(x)
+    }
+}
 data class RGB(var r:Int=0,var g:Int=0,var b:Int=0) {
     fun toInt():Int{
         return b + (g shl 8) + (r shl 16)
@@ -148,7 +158,7 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage, manPoi
         var t_accY = -1
         for (posX in scanXStart until scanXEnd) {
             if (colorPrecisionCheck(posX, posY)) {
-//                    println(sourceImage.getRGB(it,posY).toRGB())
+//                    log(sourceImage.getRGB(it,posY).toRGB())
                 t_accStart = posX
                 t_accY = posY
                 b = true
@@ -179,7 +189,7 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage, manPoi
 
                 //中间连续为白色
                 if (cons) {
-//                    println("const $t_accStart,$t_accEnd,${t_accEnd-t_accStart},$t_accY")
+//                    log("const $t_accStart,$t_accEnd,${t_accEnd-t_accStart},$t_accY")
 
                     accStart = t_accStart
                     accEnd = t_accEnd
@@ -193,11 +203,11 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage, manPoi
         }
 
     }
-    println("!!!y修正前 $accY")
+    log("!!!y修正前 $accY")
     accY = (accY + disSame/2)
-    println("!!!y修正后 $accY")
+    log("!!!y修正后 $accY")
 
-    println("!!!白椭圆端点 $accStart,$accY $accEnd,$accY")
+    log("!!!白椭圆端点 $accStart,$accY $accEnd,$accY")
 
 //    paintLine(sourceImage, Point(accStart + 1, accY), Point(accEnd - 1, accY), MARK_COLOR)
 
@@ -214,7 +224,7 @@ fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
 
         for (posX in WIDTH/8 until WIDTH) {
             if ((sourceImage.getRGB(posX, posY).toRGB() - Consts.manStartColor).error() < 4) {
-//                    println(sourceImage.getRGB(it,posY).toRGB())
+//                    log(sourceImage.getRGB(it,posY).toRGB())
                 manStart = posX
                 manY = posY
                 b = true
@@ -233,7 +243,7 @@ fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
         }
 
     }
-    println("!!!小人端点 $manStart,$manY $manEnd,$manY")
+    log("!!!小人端点 $manStart,$manY $manEnd,$manY")
 
     paintLine(sourceImage, Point(manStart + 1, manY), Point(manEnd - 1, manY), MARK_COLOR)
 
@@ -286,7 +296,7 @@ fun getGeometryPoint(manPoint: Point, WIDTH: Int, HEIGHT: Int, sourceImage: Buff
 
     val pointTop = Point(boardX, boardY)
     val pointTopColor = sourceImage.getRGB(pointTop.x, pointTop.y).toRGB()
-    println("顶点: $pointTop")
+    log("顶点: $pointTop")
 
     val pointMiddle = Point(boardX, 0)
     for (y in (boardY + 274) downTo boardY) {
@@ -295,7 +305,7 @@ fun getGeometryPoint(manPoint: Point, WIDTH: Int, HEIGHT: Int, sourceImage: Buff
             break
         }
     }
-    println("中点: $pointMiddle")
+    log("中点: $pointMiddle")
 
 //    //标记-顶点
     sourceImage.setRGB(pointTop.x, pointTop.y, MARK_COLOR)
@@ -327,7 +337,7 @@ fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
     val process1 = Runtime.getRuntime().exec("${adbPath}adb shell screencap -p $absName")
     val millis1 = System.currentTimeMillis()
     process1.waitFor()
-    println("截图耗时:${System.currentTimeMillis()-millis1} ms")
+    log("截图耗时:${System.currentTimeMillis()-millis1} ms")
 
 
     val outputAbsPath = "$output\\$currentTimeMillis-$mobileShotName"
@@ -342,11 +352,11 @@ fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {
 
     //拉至本地
     val outputCmd = "${adbPath}adb pull $absName $outputAbsPath"
-    println(outputCmd)
+    log(outputCmd)
     val process = Runtime.getRuntime().exec(outputCmd)
     val millis2 = System.currentTimeMillis()
     process.waitFor()
-    println("pull本地耗时:${System.currentTimeMillis()-millis2} ms")
+    log("pull本地耗时:${System.currentTimeMillis()-millis2} ms")
 
 
     return outputAbsPath
@@ -360,4 +370,10 @@ fun rndTapPoint(): Point {
     val x = Consts.width / 2
     val y = Consts.height * 3 / 4
     return Point(rnd((x-width/8)..(x+width/8)), rnd((y-height/8)..(y+height/8)))
+}
+
+fun clearMobileTempDir() {
+    log("正在清理手机文件夹...")
+    val process = Runtime.getRuntime().exec("${adbPath}adb shell rm -f /sdcard/temp/*")
+    process.waitFor()
 }

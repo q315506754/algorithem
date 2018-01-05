@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
             val readLine = reader.readLine()
 
             val ps = rule(readLine)
-            println("${readLine.toDouble()} -> $ps")
+            log("${readLine.toDouble()} -> $ps")
 
             //按键跳跃
             Runtime.getRuntime().exec("${Consts.adbPath}adb shell input swipe 250  250 250 250 ${ps}")
@@ -21,9 +21,9 @@ fun main(args: Array<String>) {
             //等待跳跃动画
 //            Thread.sleep(1000)
 
-            println("--------------------------------")
+            log("--------------------------------")
         } catch (e: Exception) {
-            println("error ,re-input")
+            log("error ,re-input")
             e.printStackTrace()
         }
     }
@@ -32,6 +32,7 @@ fun main(args: Array<String>) {
     // adb pull /sdcard/temp/screen.png C:/Users/Jiangli/Desktop/screen.png
     // adb shell rm -f /sdcard/temp/screen.png
     // adb shell rm -f /sdcard/temp
+    // adb shell rm -f /sdcard/temp/*
 //    input swipe 250  250 250 250 859
 //    input tap 50 250 500
 }
