@@ -29,8 +29,9 @@ class CmdThread : Runnable{
                 kFunction?.run() //执行
 
                 //special cmd
+                //kotlin 1.1 compilation error  -=
                 when {
-                    readLine.startsWith("-") -> pixelFactor = pixelFactor - readLine.substring(1).toDouble()
+                    readLine.startsWith("-") -> pixelFactor = pixelFactor - (readLine.substring(1).toDouble())
                     readLine.startsWith("+") -> pixelFactor = pixelFactor + readLine.substring(1).toDouble()
                     readLine.startsWith("=") -> pixelFactor=(readLine.substring(1).toDouble())
                 }

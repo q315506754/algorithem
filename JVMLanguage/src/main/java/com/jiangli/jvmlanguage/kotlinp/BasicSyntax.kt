@@ -210,6 +210,14 @@ fun main(args: Array<String>) {
     (0 until 100 step 10).forEach {
         println(it)
     }
+
+    (1000..10000 step 10).forEach {
+        if (it==2000) {
+            return@forEach
+        }
+        println(it)
+    }
+    println("end..")
 }
 fun doSth(status: Any):Any? {
     when(status){

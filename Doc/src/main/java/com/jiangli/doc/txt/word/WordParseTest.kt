@@ -1,4 +1,4 @@
-package com.jiangli.doc.txt.excel
+package com.jiangli.doc.txt.word
 
 import com.jiangli.common.utils.FileUtil
 import com.jiangli.common.utils.PathUtil
@@ -34,8 +34,7 @@ private  fun  processWordOfDir(dir:String) {
     }.forEach {
         val collector = StringBuilder()
         collector.append("\"\"\n")
-        processWord(it, collector){
-            t, line ->
+        processWord(it, collector) { t, line ->
             if (line.isNotEmpty()) {
                 t.append("+ \"<p class='fz18'>$line</p>\"\n")
             }

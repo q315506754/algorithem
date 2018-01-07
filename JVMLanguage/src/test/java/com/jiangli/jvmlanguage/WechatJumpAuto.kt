@@ -16,6 +16,7 @@ var loopTimes = 999999
 
 fun main(args: Array<String>) {
     clearMobileTempDir()
+    analyseClear()
 
     //输入线程
     Thread(CmdThread()).start()
@@ -81,6 +82,9 @@ fun main(args: Array<String>) {
             }
 
             log("循环开始...剩余 ${--loopTimes} 次")
+            if (loopTimes<0) {
+                return
+            }
             //若为学习模式,继续
             Thread.sleep(2000)
 

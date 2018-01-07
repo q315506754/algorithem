@@ -2,6 +2,7 @@ package com.jiangli.jvmlanguage
 
 import com.jiangli.jvmlanguage.Consts.adbPath
 import com.jiangli.jvmlanguage.Consts.height
+import com.jiangli.jvmlanguage.Consts.whiteDiameter
 import com.jiangli.jvmlanguage.Consts.width
 import com.jiangli.jvmlanguage.GlobalContext.screenshotFilePath
 import java.awt.image.BufferedImage
@@ -18,6 +19,9 @@ import java.util.*
 
 val MARK_COLOR:Int = RGB(255,0,0).toInt()
 
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Mode(val desp: String)
 
 object GlobalContext{
     var lastScreenshotFilePath:String? = null
@@ -36,14 +40,20 @@ object GlobalContext{
 
     //像素系数(尺寸依赖)
     var pixelFactor:Double = 1.451
+//    var pixelFactor:Double = 1.392
     //尺量系数(尺寸依赖)
     val rulerFactor = 700.0/33
+
+     //分析顺序
+     //先几何 后白点
+//     val seq = arrayListOf(::getGeometryPoint, ::getAccuratePoint)
+     val seq = arrayListOf(::getAccuratePoint, ::getGeometryPoint)
 
     //最小按压时长  ms
     val minPress = 200
 
     //自动跳跃模式随机等待时长 ms
-    val randomSleep = 2888..4888
+    val randomSleep = 2345..4567
 
     //无法识别模式时随机跳跃时长 ms
     val randomJump = minPress..1000
@@ -53,7 +63,9 @@ object GlobalContext{
     val manEndColor = RGB(58,58,102)
 
     //旗子距离底部像素(尺寸依赖)
-    val manOffsetY=11
+    val manOffsetY=10
+//    val manOffsetY=20
+    val whiteDiameter=35..40
 
     //白色目标点颜色判别
     val accuratePointColor = RGB(245,245,245)
@@ -73,6 +85,7 @@ object GlobalContext{
         return (dbl * rulerFactor).toInt()
     }
 }
+
 fun log(x: Any?): Unit {
     if (Thread.currentThread().name=="main" && GlobalContext.print) {
         println(x)
@@ -131,7 +144,8 @@ fun paintLine(img:BufferedImage,pfrom:Point,pto:Point,rgb:Int=0) {
     }
 }
 
-fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage, manPoint: Point): Point {
+@Mode("寻找白点模式")
+fun getAccuratePoint(manPoint: Point,WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
     var accStart = -1
     var accEnd = -1
     var accY = -1
@@ -189,7 +203,7 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage, manPoi
 
                 //中间连续为白色
                 if (cons) {
-//                    log("const $t_accStart,$t_accEnd,${t_accEnd-t_accStart},$t_accY")
+//                    log("找到距离 $t_accStart,$t_accEnd,${t_accEnd-t_accStart},$t_accY")
 
                     accStart = t_accStart
                     accEnd = t_accEnd
@@ -203,15 +217,21 @@ fun getAccuratePoint(HEIGHT: Int, WIDTH: Int, sourceImage: BufferedImage, manPoi
         }
 
     }
-    log("!!!y修正前 $accY")
+//    log("!!!y修正前 $accY")
     accY = (accY + disSame/2)
-    log("!!!y修正后 $accY")
+//    log("!!!y修正后 $accY")
 
-    log("!!!白椭圆端点 $accStart,$accY $accEnd,$accY")
+    val diameter = accEnd - accStart
+    log("!!!白点端点 ($accStart,$accY) - ($accEnd,$accY)  直径($diameter)")
 
 //    paintLine(sourceImage, Point(accStart + 1, accY), Point(accEnd - 1, accY), MARK_COLOR)
 
-    return Point(((accStart + accEnd) / 2),accY)
+    return if (whiteDiameter.contains(diameter)) {
+        Point(((accStart + accEnd) / 2),accY)
+    } else {
+        log("!!!白点可能找错,使用下一种模式分析")
+        Point(-1,-1)
+    }
 }
 
 fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
@@ -243,14 +263,17 @@ fun getManPoint(WIDTH: Int,HEIGHT: Int,  sourceImage: BufferedImage): Point {
         }
 
     }
-    log("!!!小人端点 $manStart,$manY $manEnd,$manY")
+    val width = manEnd - manStart
+    log("!!!小人端点 ($manStart,$manY) ($manEnd,$manY) 底长($width)")
 
     paintLine(sourceImage, Point(manStart + 1, manY), Point(manEnd - 1, manY), MARK_COLOR)
 
     return Point(((manEnd + manStart) / 2),manY-Consts.manOffsetY)
 }
 
+@Mode("几何寻点模式")
 fun getGeometryPoint(manPoint: Point, WIDTH: Int, HEIGHT: Int, sourceImage: BufferedImage): Point {
+
     var scanXStart: Int
     var scanXEnd: Int
     if (manPoint.x < WIDTH / 2) {
@@ -296,23 +319,67 @@ fun getGeometryPoint(manPoint: Point, WIDTH: Int, HEIGHT: Int, sourceImage: Buff
 
     val pointTop = Point(boardX, boardY)
     val pointTopColor = sourceImage.getRGB(pointTop.x, pointTop.y).toRGB()
-    log("顶点: $pointTop")
+    log("几何顶点: $pointTop")
 
-    val pointMiddle = Point(boardX, 0)
-    for (y in (boardY + 274) downTo boardY) {
-        if ((sourceImage.getRGB(boardX, y).toRGB() - pointTopColor).error() < 10) {
-            pointMiddle.y = (boardY + y) / 2
+    //寻找底点
+    val pointBottom = Point(boardX, 0)
+
+    //纯色矩阵-面中最下面一点周围3像素范围内刚好为3色
+    var lastY = pointTop.y
+    for (y in boardY..(boardY + 274)) {
+        lastY = y
+        if (sourceImage.getRGB(boardX, y).toRGB() != pointTopColor) {
             break
         }
     }
-    log("中点: $pointMiddle")
+    if(sourceImage.rangeColorsOfPoint(boardX,lastY,3) == 3){
+        log("!!三色矩阵找到底点....")
+        pointBottom.y = lastY
+    } else {
+        //通用-底部往上寻相同色
+        for (y in (boardY + 274) downTo boardY) {
+            if ((sourceImage.getRGB(boardX, y).toRGB() - pointTopColor).error() < 10) {
+                log("!!通用模式找到底点....")
+                pointBottom.y = y
+                break
+            }
+        }
+    }
+    
+
+    log("几何底点: $pointBottom")
+
+    val pointMiddle = Point(boardX, 0)
+    pointMiddle.y = (pointTop.y + pointBottom.y) / 2
+    val distance = pointMiddle.distance(pointTop)
+    log("几何中点: $pointMiddle 距顶点距离:$distance")
+
+    //间距过小 很可能算错 修正
+    //此时可能方块过大
+    if (distance<10) {
+        pointMiddle.y = pointTop.y +100
+        log("中点可能算错 ..尝试修正为:$pointMiddle")
+    }
 
 //    //标记-顶点
     sourceImage.setRGB(pointTop.x, pointTop.y, MARK_COLOR)
+//    //标记-底点
+    sourceImage.setRGB(pointBottom.x, pointBottom.y, MARK_COLOR)
+
 //    //标记-中点
 //    sourceImage.setRGB(pointMiddle.x, pointMiddle.y, MARK_COLOR)
 
     return pointMiddle
+}
+
+fun BufferedImage.rangeColorsOfPoint(boardX: Int, lastY: Int, radius: Int): Int {
+    val setOf = mutableSetOf<Int>()
+    for (x in (boardX-radius)..(boardX+radius)) {
+        for (y in (lastY-radius)..(lastY+radius)) {
+            setOf.add(getRGB(x, y))
+        }
+    }
+    return setOf.size
 }
 
 fun screenshot(output:String?="C:\\Users\\Jiangli\\Desktop"): String {

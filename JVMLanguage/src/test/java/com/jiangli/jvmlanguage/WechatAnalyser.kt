@@ -2,10 +2,12 @@ package com.jiangli.jvmlanguage
 
 import com.jiangli.jvmlanguage.Consts.analysePath
 import com.jiangli.jvmlanguage.Consts.minPress
+import com.jiangli.jvmlanguage.Consts.seq
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import javax.imageio.ImageIO
+import kotlin.reflect.full.findAnnotation
 
 fun main(args: Array<String>) {
     analyseAll()
@@ -88,7 +90,6 @@ fun analyse(file:File): Int {
     val sourceImage = ImageIO.read(inputStream)
     inputStream.close()
 
-//        log(sourceImage)
     log("input:"+file)
 
     val WIDTH = sourceImage.width
@@ -101,29 +102,33 @@ fun analyse(file:File): Int {
     sourceImage.setRGB(manPoint.x,manPoint.y,MARK_COLOR)
 
     //精准白点中心点
-    var targetPoint = getAccuratePoint(HEIGHT, WIDTH, sourceImage,manPoint)
+    var targetPoint:Point?=null
+
+    //依次执行，直至找到目标点
+    for (func in seq) {
+        val point = func.invoke(manPoint, WIDTH, HEIGHT, sourceImage)
+        val mode = func.findAnnotation<Mode>()
+
+        if (point.valid()) {
+            targetPoint = point
+
+            mode?.let {
+                log("[Mode]${mode.desp}模式")
+            }
+            log("目标点: ${targetPoint}")
+            break
+        }
+    }
 
 
-    if (targetPoint.valid()) {
-        log("[Mode]目标白点模式")
+    if (targetPoint!=null && targetPoint.valid()) {
         //标记-精准白点中心点
         sourceImage.setRGB(targetPoint.x,targetPoint.y,MARK_COLOR)
 
         paintLine(sourceImage, targetPoint,manPoint, MARK_COLOR)
     } else {
-        targetPoint = getGeometryPoint(manPoint, WIDTH, HEIGHT, sourceImage)
-
-        if (!targetPoint.valid()) {
-            log("[Mode]所有模式均不可用")
-            return pressts
-        }
-
-        log("[Mode]几何分析模式")
-
-        //标记-几何中心点
-        sourceImage.setRGB(targetPoint.x,targetPoint.y,MARK_COLOR)
-
-        paintLine(sourceImage, targetPoint,manPoint, MARK_COLOR)
+        log("[Mode]所有模式均不可用")
+        return pressts
     }
 
 
