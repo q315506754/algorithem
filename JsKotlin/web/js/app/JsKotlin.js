@@ -5,10 +5,10 @@ var JsKotlin = function (_, Kotlin) {
   'use strict';
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   function main(args) {
-    println('Hello ggggg world!!!!````');
+    println('Hello ggggghhh world!!!!````');
   }
   _.main_kand9s$ = main;
-  Kotlin.defineModule('JsKotlin', _);
   main([]);
+  Kotlin.defineModule('JsKotlin', _);
   return _;
 }(typeof JsKotlin === 'undefined' ? {} : JsKotlin, kotlin);
