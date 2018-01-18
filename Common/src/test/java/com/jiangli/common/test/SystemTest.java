@@ -36,7 +36,10 @@ public class SystemTest {
 
         List ret = new ArrayList(3);
         ret.add(1,"sss");
-        ret.add(1,"sass");
+        //ret.add(1,"sass");
         System.out.println(ret);
+
+        Integer j = 2147483647;
+        System.out.println(j);
     }
 }
