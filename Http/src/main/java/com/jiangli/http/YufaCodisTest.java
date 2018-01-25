@@ -25,7 +25,8 @@ public class YufaCodisTest {
 
 
         //课程缓存
-        System.out.println( codis.execute("del cc:course:2024738"));
+        //System.out.println( codis.execute("del cc:course:2024738"));
+        System.out.println( codis.execute("zrange qa:operation:myQuestioninfo:170753158:3 0 -1"));
 
 
         //System.out.println( codis.execute("del th:openapi:teachers:remoteresult:src:1 th:openapi:teachers:remoteresult:src:lock "));

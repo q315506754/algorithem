@@ -35,7 +35,7 @@ public class SystemTest {
         System.out.println(map);
 
         List ret = new ArrayList(3);
-        ret.add(1,"sss");
+        //ret.add(1,"sss");
         //ret.add(1,"sass");
         System.out.println(ret);
 
