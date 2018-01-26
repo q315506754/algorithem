@@ -13,6 +13,7 @@ public class AnnoTest {
         System.out.println(hints1.value().length);  // 2
         MulAnno[] hints2 = Person.class.getAnnotationsByType(MulAnno.class);
         System.out.println(hints2.length);          // 2
+        //Runnable aNew = FactoryTest::new;
     }
 
 }
