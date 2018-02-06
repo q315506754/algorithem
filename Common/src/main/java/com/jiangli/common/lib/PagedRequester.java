@@ -8,6 +8,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ *
+ * 分页请求工具
+ *
  * producer:->List<T> 生产者列表
  * srcIdAggregator:T->ID 生产者id提取器
  * requestHandler:List<ID>->Iterable<RS>  请求执行者

@@ -10,6 +10,8 @@ import java.util.function.Function;
 
 /**
  *
+ * 同步比对工具
+ *
  * src 一般为open dto
  *
  * dest 一般为数据库dto
