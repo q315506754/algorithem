@@ -14,7 +14,7 @@ public class ListTest {
     public static void main(String[] args) {
 //        List list22 = new ArrayList();
         List list22 = new LinkedList();
-        System.out.println(list22.get(0));
+        //System.out.println(list22.get(0));
 
         String sss = "12321sdgf";
         String sss2 = new String("12321sdgf");
@@ -54,6 +54,15 @@ public class ListTest {
         arrList.set(2, "modified");
         System.out.println(arrList);
         System.out.println("after:"+Arrays.toString(params));
+        //List<String> strings = Arrays.asList("aaa", "bbb");
+        //List<String> strings = new ArrayList<>();
+        List<String> strings = new LinkedList<>();
+        strings.add("aaaa");
+        //strings.add("bbbb");
+        //strings.add(0,"ccc");
+        strings.add(1,"ddd");
+        //strings.add(2,"eee");
+        System.out.println(strings);
     }
 
 }
