@@ -8,9 +8,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- *
- * 分页请求工具
- *
  * producer:->List<T> 生产者列表
  * srcIdAggregator:T->ID 生产者id提取器
  * requestHandler:List<ID>->Iterable<RS>  请求执行者
@@ -91,7 +88,7 @@ public class PagedRequester {
         }
     }
 
-    public static Supplier<Integer> intSupplier(Supplier<String> stringSupplier) {
+    public static Supplier<Integer> intSupplier( Supplier<String> stringSupplier) {
         String s = stringSupplier.get();
         return () -> getInt(s);
     }
@@ -100,7 +97,17 @@ public class PagedRequester {
         Integer ret1 = null;
         if (s != null) {
             try {
-            ret1 = Integer.parseInt(s);
+                ret1 = Integer.parseInt(s);
+            } catch (Exception e) {
+            }
+        }
+        return ret1;
+    }
+    public static Integer getInt(Long s) {
+        Integer ret1 = null;
+        if (s != null) {
+            try {
+                ret1 = s.intValue();
             } catch (Exception e) {
             }
         }
@@ -114,7 +121,7 @@ public class PagedRequester {
         return stringSupplier.andThen(PagedRequester::getLong);
     }
 
-    public static Supplier<Long> longSupplier(Supplier<String> stringSupplier) {
+    public static Supplier<Long> longSupplier( Supplier<String> stringSupplier) {
         String s = stringSupplier.get();
         return () -> getLong(s);
     }
@@ -151,6 +158,27 @@ public class PagedRequester {
                 , resultHandler
         );
     }
+
+    public static <T, ID, RS> RequestResult<ID> processListSeqOne(
+            T producer,
+            Function<T, ID> srcIdAggregator,
+            Function<ID, RS> requestHandler,
+            BiConsumer<RS, T> resultHandler
+    ) {
+
+        return processBatchListSequential(
+                1
+                , () -> Collections.singletonList(producer)
+                , srcIdAggregator
+                , idList -> {
+                    List<RS> ret = new ArrayList<>();
+                    idList.forEach(o -> ret.add(requestHandler.apply(o)));
+                    return ret;
+                }
+                , resultHandler
+        );
+    }
+
     public static <T, ID,MID, MRS> RequestResult<ID> processMapOne(
             T producer,
             Function<T, ID> srcIdAggregator,
@@ -191,7 +219,7 @@ public class PagedRequester {
                 producer,
                 srcIdAggregator,
                 (idBulk, idListMap) -> {
-                    Map<MID, MRS> resultBulk = requestHandler.apply(idBulk);
+                    Map<MID, MRS>   resultBulk = requestHandler.apply(idBulk);
 
                     if (resultBulk != null) {
                         resultBulk.forEach((mid, mrs) -> {
@@ -214,7 +242,7 @@ public class PagedRequester {
             int pageSize,
             Supplier<List<T>> producer,
             Function<T, ID> srcIdAggregator,
-           BiConsumer<List<ID>,Map<ID, List<T>>> handler
+            BiConsumer<List<ID>,Map<ID, List<T>>> handler
     ) {
         RequestResult<ID> ret = new RequestResult<ID>();
         if (producer == null) {
@@ -230,6 +258,9 @@ public class PagedRequester {
         List<ID> idList = new ArrayList<>(list.size());
         RecordableHashMap<ID, List<T>> idTMap = new RecordableHashMap<>();
         for (T t : list) {
+            if (t == null) {
+                continue;
+            }
             ID id = srcIdAggregator.apply(t);
             if (id != null && !idList.contains(id)) {
                 idList.add(id);
@@ -332,12 +363,12 @@ public class PagedRequester {
 
                     for (RS rs : resultBulk) {
                         //if (rs != null) {
-                            ID rId = idBulk.get(n);
-                            List<T> tList = idListMap.get(rId);
-                            if (tList != null) {
-                                //rs @Nullable
-                                tList.forEach(t -> resultHandler.accept(rs, t));
-                            }
+                        ID rId = idBulk.get(n);
+                        List<T> tList = idListMap.get(rId);
+                        if (tList != null) {
+                            //rs @Nullable
+                            tList.forEach(t -> resultHandler.accept(rs, t));
+                        }
                         //}
                         n++;
                     }

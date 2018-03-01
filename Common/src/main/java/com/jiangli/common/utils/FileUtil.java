@@ -29,6 +29,9 @@ public class FileUtil {
         }
     }
 
+    //public static void processVisit(File src, FileStringProcesser processer) {
+    //
+    //}
     public static File process(File src, FileStringProcesser processer) {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(src)));
@@ -65,6 +68,7 @@ public class FileUtil {
 
         return  src;
     }
+
 
     public static String getPrefix(File src) {
         return getPrefix(src.getName());

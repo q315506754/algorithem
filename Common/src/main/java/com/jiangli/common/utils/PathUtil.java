@@ -31,6 +31,18 @@ public class PathUtil {
         }
         return null;
     }
+    public static String getSRCFileRelative(Class cls, String fileName) {
+        try {
+            String s = getSRC_JAVA_Path(cls);
+
+            String path = getClsParentPath(cls)+PATH_DELIMETER+fileName;
+
+            return buildPath(s,false,path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public static URI getClassFileURI(Class cls, String fileName) {
         try {
             return cls.getClassLoader().getResource(fileName).toURI();
@@ -98,6 +110,10 @@ public class PathUtil {
 //        System.out.println(name);
         name = name.replaceAll("\\.",PATH_DELIMETER+PATH_DELIMETER);
         return name;
+    }
+    public static String getClsParentPath(Class cls) {
+        String s = convertClsToFilePath(cls);
+        return s.substring(0,s.lastIndexOf(PATH_DELIMETER));
     }
 
     public static String buildPath(String basePath,boolean ensurePath,String... child) {

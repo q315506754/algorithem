@@ -1,0 +1,11 @@
+db_aries_operation.TBL_DAILY_PUSH
+字段	命名	类型	备注
+标题	TITLE	Varchar(50)
+封面	IMG	Varchar(500)
+链接	LINK	Varchar(500)
+预定推送时间	PUSH_TIME	timestamp
+是否推送	IS_PUSH	tinyint  0未发布 1已发布	默认0
+文章类型	TYPE	tinyint  1图文 2视频 3音频
+状态	STATUS	tinyint  0待发布 1已发布	默认0
+阅读次数	TIMES_READ	int(11)	默认0
+分享次数	TIMES_SHARED	int(11)	默认0
