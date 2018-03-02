@@ -11,15 +11,30 @@ val IMPORT_MAPPER = arrayListOf("java.util.List","org.apache.ibatis.annotations.
 val IMPORT_SERVICE = arrayListOf("java.util.List")
 val IMPORT_OPENAPI = arrayListOf("java.util.List")
 
+val IMPORT_SERVICE_IMPL = arrayListOf("java.util.List","org.springframework.beans.factory.annotation.Autowired")
+val IMPORT_OPENAPI_IMPL = arrayListOf("java.util.List","org.springframework.beans.factory.annotation.Autowired")
+
 
 val SPACE = "    "
 
+fun pend(list: MutableList<String>, vararg str: String):List<String> {
+    str.forEach {
+        list.add(it)
+    }
+    return list
+}
+fun autowiredField(clsName: String):String {
+    val varName = nameToCamel(clsName)
 
-fun generateCls(desc:String,clsName:String,fields:List<JavaField>?,extraField:List<String>?= arrayListOf(),implClses:List<String>?= arrayListOf()):String {
+    return "@Autowired\r\n${SPACE}private $clsName $varName"
+}
+
+fun generateCls(pkg:String,desc:String,clsName:String,fields:List<JavaField>?,extraImports:List<String>?= arrayListOf(),extraField:List<String>?= arrayListOf(),implClses:List<String>?= arrayListOf()):String {
     val fieldList =  StringBuilder()
     val importList = StringBuilder()
     val implClsList = StringBuilder()
-    val imported = hashSetOf<String>()
+    val methodsList = StringBuilder()
+    val totalImport = mutableSetOf<String>()
 
     extraField?.forEach {
         fieldList.append("${SPACE}${it}${if (it.isNotEmpty()) ";" else ""}\r\n")
@@ -29,11 +44,13 @@ fun generateCls(desc:String,clsName:String,fields:List<JavaField>?,extraField:Li
         fieldList.append("${SPACE}private ${it.fieldCls} ${it.fieldName};//${it.remark}\r\n")
 
         it.fieldClsImport?.let {
-            if (!imported.contains(it)) {
-                importList.append("import $it;\r\n")
-                imported.add(it)
-            }
+            totalImport.add(it)
         }
+    }
+
+    extraImports?.forEach { totalImport.add(it) }
+    totalImport.forEach {
+        importList.append("import $it;\r\n")
     }
 
     implClses?.let {
@@ -49,7 +66,19 @@ fun generateCls(desc:String,clsName:String,fields:List<JavaField>?,extraField:Li
         }
     }
 
+
+    //getter & setter
+    fields?.let {
+
+    }
+
+    //toString
+    fields?.let {
+
+    }
+
     return """
+package $pkg;
 $importList
 
 /**
@@ -70,7 +99,7 @@ fun appendEnter(sb:StringBuilder) {
     sb.append("${SPACE}\r\n")
 }
 
-fun generateInterface(desc:String,clsName:String,useWrap:Boolean?=false,objName:String,extraImports:List<String>?= arrayListOf(),extraAnnos:List<String>?= arrayListOf(),implClses:List<String>?= arrayListOf()):String {
+fun generateInterface(pkg:String,desc:String,clsName:String,useWrap:Boolean?=false,objName:String,extraImports:List<String>?= arrayListOf(),extraAnnos:List<String>?= arrayListOf(),implClses:List<String>?= arrayListOf()):String {
     val annoList =  StringBuilder()
     val importList = StringBuilder()
     val methodsList =  StringBuilder()
@@ -127,6 +156,7 @@ fun generateInterface(desc:String,clsName:String,useWrap:Boolean?=false,objName:
     }
 
     return """
+package $pkg;
 $importList
 
 /**
@@ -142,8 +172,23 @@ fun generateMapperXml(tableName:String,pkg:String,javaName:String,fields:List<Ja
     val includes = fields.joinToString(",\r\n") { javaField -> SPACE +SPACE + javaField.columnName }
     val variableName = nameToCamel(javaName)
 
-    return """
-<?xml version="1.0" encoding="UTF-8"?>
+    val idField = fields.first { it.isPk }.fieldName
+    val idColumn = fields.first { it.isPk }.columnName
+
+    val updateList = StringBuilder()
+    fields.filter { !it.isPk } .forEach {
+        updateList.append("\r\n$SPACE$SPACE$SPACE<if test=\"${it.fieldName} != null\">${it.columnName}= #{${it.fieldName}}, </if>")
+    }
+
+    val saveColList = StringBuilder()
+    val saveValList = StringBuilder()
+    fields.filter { !it.isPk } .forEach {
+        saveColList.append("\r\n$SPACE$SPACE$SPACE<if test=\"${it.fieldName} != null\">${it.columnName}, </if>")
+        saveValList.append("\r\n$SPACE$SPACE$SPACE<if test=\"${it.fieldName} != null\">#{${it.fieldName}}, </if>")
+    }
+
+
+    return """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${pkg}.mapper.${javaName}Mapper">
@@ -170,43 +215,22 @@ $includes
             <if test="deletePerson != null">DELETE_PERSON = #{deletePerson}, </if>
             IS_DELETED = 1
         </set>
-        WHERE ID=#{id} AND IS_DELETED=0
+        WHERE $idColumn=#{$idField} AND IS_DELETED=0
     </update>
 
     <!-- 修改 -->
     <update id="update" parameterType="${pkg}.model.${javaName}">
         UPDATE $tableName
-        <set>
-            <if test="title != null">TITLE = #{title}, </if>
-            <if test="videoId != null">VIDEO_ID = #{videoId},</if>
-            <if test="audioId != null">AUDIO_ID = #{audioId},</if>
+        <set>$updateList
             UPDATE_TIME = CURRENT_TIMESTAMP
         </set>
-        WHERE ID=#{id} AND IS_DELETED=0
+        WHERE $idColumn=#{$idField} AND IS_DELETED=0
     </update>
 
     <!-- 保存 -->
-    <insert id="save" parameterType="${pkg}.model.${javaName}" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO $tableName(
-        <if test="parentId != null">PARENT_ID, </if>
-        <if test="isTailNode != null">IS_TAIL_NODE,</if>
-        <if test="createPerson != null">CREATE_PERSON,</if>
-        <if test="videoId != null">VIDEO_ID,</if>
-        <if test="audioId != null">AUDIO_ID,</if>
-        SORT,
-        TITLE,
-        LAYER,
-        COURSE_ID
-        ) values (
-        <if test="parentId != null">#{parentId},</if>
-        <if test="isTailNode != null">#{isTailNode},</if>
-        <if test="createPerson != null">#{createPerson},</if>
-        <if test="videoId != null">#{videoId},</if>
-        <if test="audioId != null">#{audioId},</if>
-        #{sort},
-        #{title},
-        #{layer},
-        #{courseId}
+    <insert id="save" parameterType="${pkg}.model.${javaName}" keyProperty="$idField" useGeneratedKeys="true">
+        INSERT INTO $tableName($saveColList
+        ) values ($saveValList
         )
     </insert>
 </mapper>

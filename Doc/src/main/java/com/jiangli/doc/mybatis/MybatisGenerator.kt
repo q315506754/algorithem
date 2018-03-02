@@ -1,5 +1,6 @@
 package com.jiangli.doc.mybatis
 
+import com.jiangli.common.utils.FileUtil
 import com.jiangli.common.utils.PathUtil
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
@@ -80,16 +81,18 @@ fun generateFile(body:String, vararg path:String) {
 
 fun main(args: Array<String>) {
 //    val TBL_NAME = "TBL_OPEN_ADVERTISEMENT"
+    val PKG="com.zhihuishu.aries.operation"
+    val DATABASE = "db_aries_operation"
     val TBL_NAME = "TBL_DAILY_PUSH"
     val JAVA_NAME = "DailyPush"
     val DESC = "每日推送"
-    val DATABASE = "db_aries_operation"
+
     val OUTPUTPATH = "C:\\Users\\DELL-13\\Desktop\\outpath"
-    val pkg="com.zhihuishu.aries.operation"
+    val DB_URL = "jdbc:mysql://192.168.222.8:3306?user=root&password=ablejava"
 
     //fixed
     Class.forName("com.mysql.jdbc.Driver")
-    val connection = DriverManager.getConnection("jdbc:mysql://192.168.222.8:3306?user=root&password=ablejava")
+    val connection = DriverManager.getConnection(DB_URL)
 
     val metaData = connection.metaData
 
@@ -119,30 +122,49 @@ fun main(args: Array<String>) {
     val pkColName = pkRs.getString("COLUMN_NAME")
     list.filter { it.columnName==pkColName }.forEach { it.isPk=true }
 //    println(pkColName)
-
 //    println(list)
+
+    //remove
+    FileUtil.deleteUnderDir(OUTPUTPATH)
 
     //pojo
     val modelName = JAVA_NAME
-    generateFile(generateCls("$DESC model", modelName,list),OUTPUTPATH,"dao","$modelName.java")
+    val modelPkg = "${PKG}.model"
+    val modelCls = "$modelPkg.$modelName"
+    generateFile(generateCls(modelPkg,"$DESC model", modelName,list),OUTPUTPATH,"model","$modelName.java")
     val dtoName = "${JAVA_NAME}Dto"
-    generateFile(generateCls("$DESC dto", dtoName,list),OUTPUTPATH,"service","$dtoName.java")
+    val dtoPkg = "${PKG}.dto"
+    val dtoCls = "$dtoPkg.$dtoName"
+    generateFile(generateCls(dtoPkg,"$DESC dto", dtoName,list),OUTPUTPATH,"dto","$dtoName.java")
     val openDtoName = "${JAVA_NAME}OpenDto"
-    generateFile(generateCls("$DESC open dto", openDtoName,list, FIELD_SERIAL, IMPL_SERIAL),OUTPUTPATH,"openapi","$openDtoName.java")
+    val openDtoPkg = "${PKG}.openapi.dto"
+    val openDtoCls = "$openDtoPkg.$openDtoName"
+    generateFile(generateCls(openDtoPkg,"$DESC open dto", openDtoName,list, null,FIELD_SERIAL, IMPL_SERIAL),OUTPUTPATH,"openapi","dto","$openDtoName.java")
 
     //interface
     //mapper
-    generateFile(generateInterface(DESC,"${JAVA_NAME}Mapper",false,modelName,IMPORT_MAPPER, ANNO_MAPPER),OUTPUTPATH,"dao","${JAVA_NAME}Mapper.java")
+    val mapperClsName = "${JAVA_NAME}Mapper"
+    val mapperPkg = "${PKG}.mapper"
+    val mapperCls = "$mapperPkg.$mapperClsName"
+    generateFile(generateInterface(mapperPkg,DESC, mapperClsName,false,modelName,pend(IMPORT_MAPPER,modelCls), ANNO_MAPPER),OUTPUTPATH,"mapper","$mapperClsName.java")
     //service
-    generateFile(generateInterface(DESC,"${JAVA_NAME}Service",true,dtoName,IMPORT_SERVICE),OUTPUTPATH,"service","${JAVA_NAME}Service.java")
+    val serviceClsName = "${JAVA_NAME}Service"
+    val servicePkg = "${PKG}.service"
+    val serviceCls = "$servicePkg.$serviceClsName"
+    generateFile(generateInterface(servicePkg,DESC, serviceClsName,true,dtoName,pend(IMPORT_SERVICE,dtoCls)),OUTPUTPATH,"service","$serviceClsName.java")
     //openapi
-    generateFile(generateInterface(DESC,"${JAVA_NAME}OpenService",true,openDtoName,IMPORT_SERVICE),OUTPUTPATH,"openapi","${JAVA_NAME}OpenService.java")
+    val openServiceName = "${JAVA_NAME}OpenService"
+    val openapiPkg = "${PKG}.openapi"
+    val openapiCls = "$openapiPkg.$openServiceName"
+    generateFile(generateInterface(openapiPkg,DESC, openServiceName,true,openDtoName,pend(IMPORT_OPENAPI,openDtoCls)),OUTPUTPATH,"openapi","$openServiceName.java")
 
     //impl
     //dao
-    println(generateMapperXml(TBL_NAME,pkg,JAVA_NAME,list))
+    generateFile(generateMapperXml(TBL_NAME,PKG,JAVA_NAME,list),OUTPUTPATH,"${JAVA_NAME.toLowerCase()}.xml")
     //service
-    generateFile(generateCls("$DESC Service实现", "${JAVA_NAME}ServiceImpl",null,null, arrayListOf("${JAVA_NAME}Service")),OUTPUTPATH,"service","${JAVA_NAME}ServiceImpl.java")
+    val serviceImplPkg = "${PKG}.service.impl"
+    generateFile(generateCls(serviceImplPkg,"$DESC Service实现", "${serviceClsName}Impl",null,pend(IMPORT_SERVICE_IMPL,serviceCls,dtoCls,mapperCls), pend(mutableListOf(),autowiredField(mapperClsName)), arrayListOf(serviceClsName)),OUTPUTPATH,"service","impl","${serviceClsName}Impl.java")
     //openapi
-    generateFile(generateCls("$DESC OpenService实现", "${JAVA_NAME}OpenServiceImpl",null,null, arrayListOf("${JAVA_NAME}OpenService")),OUTPUTPATH,"openapi","${JAVA_NAME}OpenServiceImpl.java")
+    val openserviceImplPkg = "${PKG}.openapi.impl"
+    generateFile(generateCls(openserviceImplPkg,"$DESC OpenService实现", "${openServiceName}Impl",null,pend(IMPORT_OPENAPI_IMPL,openapiCls,openDtoCls,serviceCls),pend(mutableListOf(),autowiredField(serviceClsName)), arrayListOf(openServiceName)),OUTPUTPATH,"openapi","impl","${openServiceName}Impl.java")
 }

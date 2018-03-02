@@ -194,5 +194,23 @@ public class FileUtil {
         return count;
 
     }
+    public static int deleteUnderDir(String dirPath) {
+        File dir = new File(dirPath);
+        int count = 0;
+        if (dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    count+=deleteUnderDir(file.getAbsolutePath());
+                    file.delete();
+                } else {
+                    file.delete();
+                    count++;
+                }
+            }
+        }
+        return count;
+
+    }
 
 }
