@@ -15,7 +15,12 @@ fun main(args: Array<String>) {
     val OUTPUTPATH = "C:\\Users\\Jiangli\\Desktop"
 
     File(OUTPUTPATH).listFiles().forEach {
-        println(it.name)
+//        println(it.name)
+
+        if (it.name.endsWith(").lnk")) {
+            println(it.name)
+        }
     }
+
 
 }
