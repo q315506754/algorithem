@@ -11,14 +11,16 @@ import java.io.File
 
 
 fun main(args: Array<String>) {
-//    val OUTPUTPATH = "C:\\Users\\DELL-13\\Desktop\\outpath"
-    val OUTPUTPATH = "C:\\Users\\Jiangli\\Desktop"
+    val OUTPUTPATH = "C:\\Users\\DELL-13\\Desktop"
+//    val OUTPUTPATH = "C:\\Users\\Jiangli\\Desktop"
 
     File(OUTPUTPATH).listFiles().forEach {
-//        println(it.name)
+        println(it.name)
 
-        if (it.name.endsWith(").lnk")) {
+        if (it.name.endsWith(").lnk") || it.name.endsWith(").url")) {
             println(it.name)
+
+            it.delete()
         }
     }
 
