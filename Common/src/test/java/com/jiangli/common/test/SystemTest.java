@@ -2,7 +2,9 @@ package com.jiangli.common.test;
 
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,5 +43,21 @@ public class SystemTest {
 
         Integer j = 2147483647;
         System.out.println(j);
+
+        System.out.println(System.currentTimeMillis());
+        System.out.println(System.currentTimeMillis()/1000);
+        long l = System.currentTimeMillis();
+        Long l2 = System.currentTimeMillis();
+        l /= 1000;
+        l2 /= 1000;
+        System.out.println(l);
+        System.out.println(l2);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(new Date()));
+        sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(new Date()));
+        sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+        System.out.println(sdf.format(new Date()));
     }
 }

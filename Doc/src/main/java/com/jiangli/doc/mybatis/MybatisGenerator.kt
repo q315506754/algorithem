@@ -39,6 +39,7 @@ fun calcField( f:JavaField) {
     f.fieldCls = when (columType.trim()) {
         "INT" -> "Long"
         "TINYINT" -> "Integer"
+        "SMALLINT" -> "Integer"
         "VARCHAR" -> "String"
         "TIMESTAMP" -> "Date"
         else -> throw Exception("未识别的type $columType")
