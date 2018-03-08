@@ -18,12 +18,14 @@ public class RSACryptography {
           
         //获取公钥，并以base64格式打印出来  
         PublicKey publicKey=keyPair.getPublic();
-        System.out.println("公钥："+new String(Base64.getEncoder().encode(publicKey.getEncoded())));
-          
-        //获取私钥，并以base64格式打印出来  
+        System.out.println("公钥 base64："+new String(Base64.getEncoder().encode(publicKey.getEncoded())));
+        System.out.println("公钥 hex："+ CipherBase.bytesToHexString(publicKey.getEncoded()));
+
+        //获取私钥，并以base64格式打印出来
         PrivateKey privateKey=keyPair.getPrivate();
-        System.out.println("私钥："+new String(Base64.getEncoder().encode(privateKey.getEncoded())));  
-          
+        System.out.println("私钥 base64："+new String(Base64.getEncoder().encode(privateKey.getEncoded())));
+        System.out.println("私钥 hex："+ CipherBase.bytesToHexString(privateKey.getEncoded()));
+
         //公钥加密  
         byte[] encryptedBytes=encrypt(data.getBytes(), publicKey);    
         System.out.println("加密后："+new String(encryptedBytes));  
