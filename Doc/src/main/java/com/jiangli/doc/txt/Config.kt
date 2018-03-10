@@ -133,6 +133,16 @@ object DB{
         val jdbcTemplate = JdbcTemplate(dataSource)
         return jdbcTemplate
     }
+
+    fun getQAJDBCForWaiwang(): JdbcTemplate {
+        val dataSource = BasicDataSource()
+        dataSource.driverClassName = "com.mysql.jdbc.Driver"
+        dataSource.url = "jdbc:mysql://118.178.128.52:3306"
+        dataSource.username = "jinx"
+        dataSource.password = "jinx@2017"
+        val jdbcTemplate = JdbcTemplate(dataSource)
+        return jdbcTemplate
+    }
 }
 
 

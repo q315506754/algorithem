@@ -18,11 +18,11 @@ public class ExceptionTest {
     private static Logger logger = LoggerFactory.getLogger(ExceptionTest.class);
 
     @Test
-    public void funcD() {
+    public void func1() {
         logger.debug("logger ok:");
         try {
             try {
-                funcC();
+                func2();
             } catch (Exception e) {
                 throw new UnsupportedOperationException(e);
             }
@@ -31,22 +31,22 @@ public class ExceptionTest {
         }
     }
 
-    public void funcX() {
+    public void func5() {
         throw new NullPointerException("A Exception!");
     }
-    public void funcA() {
-        funcX();
+    public void func4() {
+        func5();
     }
-    public void funcB() {
+    public void func3() {
         try {
-            funcA();
+            func4();
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
-    public void funcC() {
+    public void func2() {
         try {
-            funcB();
+            func3();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
