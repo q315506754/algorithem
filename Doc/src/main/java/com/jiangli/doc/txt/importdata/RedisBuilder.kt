@@ -36,7 +36,7 @@ fun main(args: Array<String>) {
 
 //        println(smembers)
 
-        //12名师api缓存
+        //12名师api缓存 名师列表
 //        jedis.executeDel("th:openapi:teachers:remoteresult:src:1")
         jedis.executeDel("th:openapi:teachers:remoteresult:src:1:ts")
 
