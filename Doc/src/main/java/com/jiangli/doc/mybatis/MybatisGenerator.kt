@@ -82,11 +82,17 @@ fun generateFile(body:String, vararg path:String) {
 
 fun main(args: Array<String>) {
 //    val TBL_NAME = "TBL_OPEN_ADVERTISEMENT"
-    val PKG="com.zhihuishu.aries.operation"
-    val DATABASE = "db_aries_operation"
-    val TBL_NAME = "TBL_DAILY_PUSH"
-    val JAVA_NAME = "DailyPush"
-    val DESC = "每日推送"
+//    val PKG="com.zhihuishu.aries.operation"
+//    val DATABASE = "db_aries_operation"
+//    val TBL_NAME = "TBL_DAILY_PUSH"
+//    val JAVA_NAME = "DailyPush"
+//    val DESC = "每日推送"
+
+    val PKG="com.zhihuishu.aries.course"
+    val DATABASE = "db_aries_course"
+    val TBL_NAME = "TBL_RELEVANCE_COURSE"
+    val JAVA_NAME = "CourseRelevance"
+    val DESC = "课程权限"
 
     val OUTPUTPATH = "C:\\Users\\DELL-13\\Desktop\\outpath"
     val DB_URL = "jdbc:mysql://192.168.222.8:3306?user=root&password=ablejava"
