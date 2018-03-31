@@ -63,6 +63,11 @@ public class ListTest {
         strings.add(1,"ddd");
         //strings.add(2,"eee");
         System.out.println(strings);
+
+        //strings = strings.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        //strings=strings.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        System.out.println(strings);
+
     }
 
 }

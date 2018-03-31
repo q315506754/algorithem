@@ -1,7 +1,10 @@
 package com.jiangli.jdk.v1_8;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Jiangli
@@ -43,6 +46,33 @@ public class MapTest {
 //        map.merge(9, null, (value, newValue) -> value.concat(newValue));
 //        map.merge(9, "concat", (value, newValue) -> null);
         System.out.println(map.get(9));                // val9concat
+
+        List<A> objects = Arrays.asList();
+        Map<Integer, List<A>> collect = objects.stream().collect(Collectors.groupingBy(A::getA));
+        System.out.println(collect);
+        System.out.println(collect.getClass());
     }
 
+    class A {
+        int a;
+        int b;
+
+        public int getA() {
+            return a;
+        }
+
+        public A setA(int a) {
+            this.a = a;
+            return this;
+        }
+
+        public int getB() {
+            return b;
+        }
+
+        public A setB(int b) {
+            this.b = b;
+            return this;
+        }
+    }
 }

@@ -42,6 +42,7 @@ fun calcField( f:JavaField) {
         "SMALLINT" -> "Integer"
         "VARCHAR" -> "String"
         "TIMESTAMP" -> "Date"
+        "DATETIME" -> "Date"
         else -> throw Exception("未识别的type $columType")
     }
     f.fieldClsImport = when (columType) {
@@ -88,11 +89,17 @@ fun main(args: Array<String>) {
 //    val JAVA_NAME = "DailyPush"
 //    val DESC = "每日推送"
 
-    val PKG="com.zhihuishu.aries.course"
-    val DATABASE = "db_aries_course"
-    val TBL_NAME = "TBL_RELEVANCE_COURSE"
-    val JAVA_NAME = "CourseRelevance"
-    val DESC = "课程权限"
+//    val PKG="com.zhihuishu.aries.course"
+//    val DATABASE = "db_aries_course"
+//    val TBL_NAME = "TBL_RELEVANCE_COURSE"
+//    val JAVA_NAME = "CourseRelevance"
+//    val DESC = "课程权限"
+
+    val PKG="com.zhihuishu.aries.run"
+    val DATABASE = "db_aries_run"
+    val TBL_NAME = "TBL_RECRUIT"
+    val JAVA_NAME = "Recruit"
+    val DESC = "招生(班次)表"
 
     val OUTPUTPATH = "C:\\Users\\DELL-13\\Desktop\\outpath"
     val DB_URL = "jdbc:mysql://192.168.222.8:3306?user=root&password=ablejava"
