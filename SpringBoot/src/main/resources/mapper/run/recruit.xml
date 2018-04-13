@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiangli.springboot.mapper.RecruitMapper">
+
+    <!-- 表字段 -->
+    <sql id="fields">
+        RECRUIT_ID,
+        COURSE_ID,
+        START_TIME,
+        END_TIME,
+        VALID_TIME,
+        IS_DELETED,
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_PERSON,
+        DELETE_PERSON,
+        SORT
+    </sql>
+
+    <!-- 查列表 -->
+    <select id="listByCourseId" resultType="com.jiangli.springboot.model.Recruit">
+        SELECT <include refid="fields"/>  FROM TBL_RECRUIT WHERE IS_DELETED=0  AND COURSE_ID = #{courseId}
+        ORDER BY START_TIME DESC,RECRUIT_ID DESC
+    </select>
+
+    <select id="listNotFinished"  resultType="com.jiangli.springboot.model.Recruit">
+        SELECT <include refid="fields"/>  FROM TBL_RECRUIT WHERE IS_DELETED=0
+        AND NOW() &lt; END_TIME
+        ORDER BY START_TIME DESC,RECRUIT_ID DESC
+    </select>
+
+    <!-- 查列表所有记录 -->
+    <select id="listAll" resultType="com.jiangli.springboot.model.Recruit">
+        SELECT <include refid="fields"/>  FROM TBL_RECRUIT WHERE IS_DELETED=0
+        ORDER BY START_TIME DESC,RECRUIT_ID DESC
+    </select>
+
+    <select id="listOfIds" resultType="com.jiangli.springboot.model.Recruit">
+        SELECT <include refid="fields"/>  FROM TBL_RECRUIT WHERE IS_DELETED=0
+        AND RECRUIT_ID in
+        <foreach collection="recruitIds" index="index" item="item"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY START_TIME DESC,RECRUIT_ID DESC
+    </select>
+
+    <!-- 查单个 -->
+    <select id="get"  resultType="com.jiangli.springboot.model.Recruit">
+        SELECT <include refid="fields"/>  FROM TBL_RECRUIT WHERE IS_DELETED=0  AND RECRUIT_ID = #{recruitId}
+    </select>
+
+    <!-- 删除 -->
+    <update id="delete" parameterType="com.jiangli.springboot.model.Recruit">
+        UPDATE TBL_RECRUIT
+        <set>
+            <if test="deletePerson != null">DELETE_PERSON = #{deletePerson}, </if>
+            IS_DELETED = 1
+        </set>
+        WHERE RECRUIT_ID=#{recruitId} AND IS_DELETED=0
+    </update>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="com.jiangli.springboot.model.Recruit">
+        UPDATE TBL_RECRUIT
+        <set>
+            <if test="startTime != null">START_TIME= #{startTime}, </if>
+            <if test="endTime != null">END_TIME= #{endTime}, </if>
+            <if test="validTime != null">VALID_TIME= #{validTime}, </if>
+            UPDATE_TIME = CURRENT_TIMESTAMP
+        </set>
+        WHERE RECRUIT_ID=#{recruitId} AND IS_DELETED=0
+    </update>
+
+    <!-- 保存 -->
+    <insert id="save" parameterType="com.jiangli.springboot.model.Recruit" keyProperty="recruitId" useGeneratedKeys="true">
+        INSERT INTO TBL_RECRUIT(
+            <if test="startTime != null">START_TIME, </if>
+            <if test="endTime != null">END_TIME, </if>
+            <if test="validTime != null">VALID_TIME, </if>
+            <if test="isDeleted != null">IS_DELETED, </if>
+            <if test="createPerson != null">CREATE_PERSON, </if>
+            COURSE_ID
+        ) values (
+            <if test="startTime != null">#{startTime}, </if>
+            <if test="endTime != null">#{endTime}, </if>
+            <if test="validTime != null">#{validTime}, </if>
+            <if test="isDeleted != null">#{isDeleted}, </if>
+            <if test="createPerson != null">#{createPerson}, </if>
+          #{courseId}
+        )
+    </insert>
+</mapper>

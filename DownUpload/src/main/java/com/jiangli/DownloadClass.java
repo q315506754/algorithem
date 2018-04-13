@@ -17,24 +17,45 @@ import java.net.URLEncoder;
  * @date 2017/4/7 17:30
  */
 public class DownloadClass {
-    public void downloadPic(final String url, HttpServletRequest request, HttpServletResponse response) {
-//        String displayName = "asd打算犯法的事asd.jpg";
-        String displayName = url.substring(url.lastIndexOf("/")+1);
+    public static final  String  exportDisplayName="导入教程模板";
+    public static final  String  exportExcelNameTemplate="《%s》错误模板%s";
+
+    public void downloadExcel(HttpServletRequest request, HttpServletResponse response, Long courseId) {
+        //文字转码
+        String displayName = getDisplayNameForBrowser(request, exportDisplayName) + ".xlsx";
+
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + displayName);
 
 
+    }
+
+    public String getDisplayNameForBrowser(HttpServletRequest request,String name){
+        String displayName=name;
         //文字转码
         try {
             String userAgent = request.getHeader("User-Agent");
             boolean isIE = (userAgent != null) && (userAgent.toLowerCase().indexOf("msie") != -1);
+
             if (isIE) {
                 displayName = URLEncoder.encode(displayName, "UTF-8");
                 displayName = "\"" + displayName + "\"";
             } else {
                 displayName = new String(displayName.getBytes("UTF-8"), "ISO8859-1");
             }
+            return displayName;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return displayName;
+    }
+
+    public void downloadPic(final String url, HttpServletRequest request, HttpServletResponse response) {
+//        String displayName = "asd打算犯法的事asd.jpg";
+        String displayName = url.substring(url.lastIndexOf("/")+1);
+
+        //文字转码
+         displayName = getDisplayNameForBrowser(request, displayName);
 
         response.setContentType("image/*;charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment;filename=" + displayName);
