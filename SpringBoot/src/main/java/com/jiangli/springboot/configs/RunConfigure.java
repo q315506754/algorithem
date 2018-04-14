@@ -1,6 +1,7 @@
 package com.jiangli.springboot.configs;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportAware;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -21,10 +24,19 @@ import javax.sql.DataSource;
  * @LastModifiedBy:
  */
 @Configuration
-public class RunConfigure {
+public class RunConfigure implements ImportAware {
 
     public RunConfigure() {
         System.out.println("RunConfigureRunConfigureRunConfigure");
+    }
+
+    @Override
+    public void setImportMetadata(AnnotationMetadata importMetadata) {
+        try {
+            System.out.println("RunConfigure.setImportMetadata:"+ BeanUtils.describe(importMetadata));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

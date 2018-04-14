@@ -1,0 +1,7 @@
+和游戏 onresult
+爱游戏 cn/egame/terminal/paysdk/EgamePay  pay()
+MM游戏 onbillingfinish
+支付宝 9000 （状态=成功）
+微信支付 支付失败 支付成功 respCode respMsg weixin
+
+锁网 46000 移动 001联通 003电信 （搜索代码） 统一支付方式

@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
@@ -21,7 +22,8 @@ import javax.sql.DataSource;
         "classpath:temp/jdbc.properties"
         ,"classpath:temp/mysql.properties"
 })
-public class ConfigTest {
+@Import(RunConfigure.class)
+public class ConfigTest  {
 
     public static void main(String[] args) {
         SpringApplication.run(ConfigTest.class, args);
@@ -47,6 +49,11 @@ public class ConfigTest {
     @Autowired
     private DbDto2 dbDto2;
 
+    @Autowired
+    //@Lazy
+    private DbDto3 dbDto3;//可以运行 加了Lazy注解
+
+
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
@@ -55,6 +62,14 @@ public class ConfigTest {
             //System.out.println(BeanUtils.describe(dateSourceRun));
             System.out.println(dbDto);
             System.out.println(dbDto2);
+            System.out.println(dbDto3);//
+
+            //加了Lazy
+            //        class com.jiangli.springboot.configs.DbDto3$$EnhancerBySpringCGLIB$$d62767c2
+            //不加
+            //class com.jiangli.springboot.configs.DbDto3
+            System.out.println(dbDto3.getClass());//
+
         };
     }
 

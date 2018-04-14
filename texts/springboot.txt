@@ -1,0 +1,69 @@
+sprint-context.jar org.springframework.context.annotation
+
+core:
+@interface Conditional
+    Class<? extends Condition>[] value();
+interface Condition 非级联影响
+    boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata);
+ConfigurationCondition extends Condition
+
+@Scope default ConfigurableBeanFactory#SCOPE_SINGLETON SCOPE_SINGLETON
+proxyMode
+
+@Role 未注解时 认为BeanDefinition#ROLE_APPLICATION
+int value();
+ * @see BeanDefinition#ROLE_APPLICATION bd是应用的一部分，通常由用户定义
+ * @see BeanDefinition#ROLE_INFRASTRUCTURE 有一定的重要性，但全局配置搜索时不一定要考虑
+ * @see BeanDefinition#ROLE_SUPPORT 内部框架bd，对前端透明
+
+@Primary
+多个候选bean时 标注了它的将生效
+
+@Profile  影响@Configuration定义的组，Import
+String[] value();  逻辑组
+编程式 ConfigurableEnvironment#setActiveProfiles
+声明式 AbstractEnvironment#ACTIVE_PROFILES_PROPERTY_NAME spring.profiles.active
+Servlet context parameter web.xml
+通过@ActiveProfiles
+<beans profile="p1,p2">  p1&p2
+@Profile({"p1", "!p2"}) p1&!p2
+
+@Import
+类<import/> 引入一或多个Configuration类
+
+@ImportResource
+类<import/>
+ending in .groovy -> org.springframework.beans.factory.groovy.GroovyBeanDefinitionReader GroovyBeanDefinitionReader
+org.springframework.beans.factory.xml.XmlBeanDefinitionReader XmlBeanDefinitionReader
+
+@Lazy
+可标在@Configuration级联处理
+另一种语境
+Autowired
+javax.inject.Inject
+此时没有候选也不会在启动报错
+但会使用代理技术
+比如，未使用lazy时：
+class com.jiangli.springboot.configs.DbDto3
+使用之后，class变为：
+ class com.jiangli.springboot.configs.DbDto3$$EnhancerBySpringCGLIB$$d62767c2
+
+
+@ImportAware
+标注了@Configuration的若是被其它类用@Import导入，则会监听到事件，并可以获得引入它的那个类的信息
+
+@EnableMBeanExport
+类<context:mbean-export/>
+导出所有容器中的MBean，同时还有标注了@ManagedResource的bean
+
+@EnableLoadTimeWeaving
+
+--------------------------------------------------------------------------------
+spring-beans.jar org.springframework.beans.factory
+@Aware   没有定义任何方法
+特性由子接口定义
+
+
+
+
+
