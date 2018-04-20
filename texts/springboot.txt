@@ -1,7 +1,39 @@
 sprint-context.jar org.springframework.context.annotation
 
 core:
-@interface Conditional
+
+@Bean
+
+
+@Component
+启用方式
+1、<context:component-scan/>
+2、@ComponentScan("com.acme.app.services")
+
+@Configuration
+启用方式
+1、AnnotationConfigApplicationContext、AnnotationConfigWebApplicationContext
+    AnnotationConfigApplicationContext ctx =
+        new AnnotationConfigApplicationContext();
+     ctx.register(AppConfig.class);
+     ctx.refresh();
+2、xml <context:annotation-config/>
+它的使用有一些限制，
+1、标注类不能声明为final
+2、类不能为方法内部匿名类
+3、内部类必须是static型
+4、必须有个默认构造函数且构造函数参数无法使用@Autowired
+
+
+org.springframework.test.context.@ContextConfiguration(classes={AppConfig.class, DatabaseConfig.class})
+
+
+
+@PropertySource("classpath:/com/acme/app.properties")
+
+@Value("${bean.name}")
+
+@Conditional
     Class<? extends Condition>[] value();
 interface Condition 非级联影响
     boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata);
@@ -19,6 +51,7 @@ int value();
 @Primary
 多个候选bean时 标注了它的将生效
 
+
 @Profile  影响@Configuration定义的组，Import
 String[] value();  逻辑组
 编程式 ConfigurableEnvironment#setActiveProfiles
@@ -32,15 +65,16 @@ Servlet context parameter web.xml
 类<import/> 引入一或多个Configuration类
 
 @ImportResource
-类<import/>
+类<import/> 能导入xml文件 使得springboot像以前的配置一样使用
 ending in .groovy -> org.springframework.beans.factory.groovy.GroovyBeanDefinitionReader GroovyBeanDefinitionReader
 org.springframework.beans.factory.xml.XmlBeanDefinitionReader XmlBeanDefinitionReader
+
 
 @Lazy
 可标在@Configuration级联处理
 另一种语境
 Autowired
-javax.inject.Inject
+javax.inject.@Inject
 此时没有候选也不会在启动报错
 但会使用代理技术
 比如，未使用lazy时：
@@ -51,12 +85,46 @@ class com.jiangli.springboot.configs.DbDto3
 
 @ImportAware
 标注了@Configuration的若是被其它类用@Import导入，则会监听到事件，并可以获得引入它的那个类的信息
+void setImportMetadata(AnnotationMetadata importMetadata);
 
+-----------------------------------Enable---------------------------------------------
+----org.springframework.scheduling.annotation----
+@EnableAsync
+
+@EnableScheduling
+
+----org.springframework.transaction.annotation----
+@EnableTransactionManagement
+
+----org.springframework.web.servlet.config.annotation----
+@EnableWebMvc
+
+----org.springframework.context.annotation----
 @EnableMBeanExport
 类<context:mbean-export/>
 导出所有容器中的MBean，同时还有标注了@ManagedResource的bean
 
-@EnableLoadTimeWeaving
+org.springframework.context.annotation.@EnableLoadTimeWeaving  beanName:loadTimeWeaver
+类<context:load-time-weaver>
+默认DefaultContextLoadTimeWeaver，标了@ 的可以实现LoadTimeWeavingConfigurer接口实现getLoadTimeWeaver方法返回LoadTimeWeaver
+-org.springframework.instrument.classloading.LoadTimeWeaver
+主要方法void addTransformer(ClassFileTransformer transformer); 用来添加ClassFileTransformer
+-java.lang.instrument.ClassFileTransformer
+将字节码（字节数组）转换（替换）成新的字节数组
+转换过程在字节码验证和jvm加载前
+byte[]
+    transform(  ClassLoader         loader,
+                String              className,
+                Class<?>            classBeingRedefined,
+                ProtectionDomain    protectionDomain,
+                byte[]              classfileBuffer)
+        throws IllegalClassFormatException;
+
+org.springframework.context.annotation.@EnableAspectJAutoProxy
+类<aop:aspectj-autoproxy>
+使得org.aspectj.lang.annotation.@Aspect(aspectjweaver-1.7.3.jar)
+jdk 接口型代理 proxyTargetClass = false
+CGLIB 子类型代理 proxyTargetClass = true
 
 --------------------------------------------------------------------------------
 spring-beans.jar org.springframework.beans.factory

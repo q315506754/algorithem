@@ -267,6 +267,8 @@ public class BeanCopyTest {
         }
     }
 
+    //springcopy
+    //conversion
     @Test
     public void testCommit2() {
         A orgA = new A();

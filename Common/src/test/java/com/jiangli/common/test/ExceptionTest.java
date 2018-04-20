@@ -18,6 +18,27 @@ public class ExceptionTest {
     private static Logger logger = LoggerFactory.getLogger(ExceptionTest.class);
 
     @Test
+    public void funcError() {
+        logger.debug("logger ok:");
+        try {
+           throw new Error("adsd");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("over.");
+    }
+    @Test
+    public void funcError2() {
+        logger.debug("logger ok:");
+        try {
+           throw new Exception("adsd");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("over.");
+    }
+
+    @Test
     public void func1() {
         logger.debug("logger ok:");
         try {
