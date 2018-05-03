@@ -4,8 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jiangli
@@ -42,5 +44,26 @@ public class MapTest {
             System.out.println(mp.keySet());
             System.out.println(mp.values());
         }
+
+        @Test
+        public void test_generic() {
+    //            Map<String, Integer> mp = new HashMap<>();
+            Map<? super String, ? extends Number> mp = new LinkedHashMap<String,Integer>();
+            Number eeee = mp.get("eeee");
+            //mp.put(new Object(),null); //error
+            mp.put(new String(),null);
+            Set<? super String> objects = mp.keySet();
+            for (Object object : objects) {
+
+            }
+            Collection<? extends Number> values = mp.values();
+            for (Number value : values) {
+
+            }
+            System.out.println(mp);
+            System.out.println(mp.keySet());
+            System.out.println(mp.values());
+        }
+
 
 }

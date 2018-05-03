@@ -2,7 +2,6 @@ package com.jiangli.jdk.v1_8;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,6 +12,13 @@ import java.util.stream.Stream;
  */
 public class StreamTest {
     public static void main(String[] args) {
+        Stream.of("one", "two", "three", "four")
+                .filter(e -> e.length() > 3)
+                .peek(e -> System.out.println("Filtered value: " + e))
+                .map(String::toUpperCase)
+                .peek(e -> System.out.println("Mapped value: " + e))
+                .collect(Collectors.toList());
+
         List<String> stringCollection = new ArrayList<>();
         stringCollection.add("ddd2");
         stringCollection.add("aaa2");
@@ -28,6 +34,10 @@ public class StreamTest {
 
         stream.filter((s) -> s.startsWith("a"))
                 .forEach(System.out::println);
+
+        //Exception in thread "main" java.lang.IllegalStateException: stream has already been operated upon or closed
+        stream.forEach(s -> {});
+
 
         System.out.println("------------sort-------------");
         stringCollection.stream().sorted()
