@@ -30,3 +30,33 @@
     #理解模块,包,文件的分离与合并
 
 
+programming
+------------------------
+base:
+IO
+type string,int,double   cast
+calculate =+-x/%^`
+process,if,while,  interruption
+comment
+downgrade reflect native
+
+
+feature:
+capsulate function class enum struct union package
+extends  implement
+dynamic abstract,overrides,generic
+
+
+architecture:
+data structure:collection
+stream
+threads synchronization
+horizonal ,operation cross language
+
+
+real
+----------------------
+base:
+unit pronounce hear write read
+words pronounce  hear write read
+sentence pronounce  hear write read

@@ -1,6 +1,5 @@
 package com.jiangli.doc.txt.importdata
 
-import com.jiangli.common.utils.MD5
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.txt.DB
 import com.jiangli.doc.txt.excel.parseExcel
@@ -17,17 +16,18 @@ import java.util.*
  */
 
 fun main(args: Array<String>) {
-    val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页二期汇总"
+    val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页四期汇总"
 //    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0908.xlsx")))
-    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0914 .xlsx")))
+    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页ID汇总.xlsx")))
 
 
-//        val CURRENT_ENV = Env.DEV
+        val CURRENT_ENV = Env.DEV
 //    val CURRENT_ENV = Env.YUFA
-    val CURRENT_ENV = Env.WAIWANG
+//    val CURRENT_ENV = Env.WAIWANG
 
-    val INSERT_CONCERN = false
-    val EXCEL_TXT_NAMES_SYNC = true  //若为false txt可能名称多余excel
+//    val INSERT_CONCERN = false
+    val INSERT_CONCERN = true
+    val EXCEL_TXT_NAMES_SYNC = true  //若为false txt可能名称多于excel
 
     val configMap = getConfig()
 
@@ -50,7 +50,7 @@ fun main(args: Array<String>) {
 
 
     //张三 -> {baseInfo}
-    var userNameToInfoMap = getBaseInfoMap(base, "个人信息荣誉等等.txt")
+    var userNameToInfoMap = getBaseInfoMap(base, "中国海洋大学老师个人信息荣誉等.txt")
     //同步excel的名字
     if (EXCEL_TXT_NAMES_SYNC) {
         val list = excel.rows.map { it.name }
@@ -75,11 +75,11 @@ fun main(args: Array<String>) {
 
 
     //合并背景图
-    val imgList = parseTxt(File(PathUtil.buildPath(base, "教师背景图片.txt")), "：")
+    val imgList = parseTxt(File(PathUtil.buildPath(base, "教师图片.txt")), "：")
     mergeToBaseMap(imgList, userNameToInfoMap, "背景图")
 
     //合并背景图
-    val imgCarList = parseTxt(File(PathUtil.buildPath(base, "教师背景图片(方形).txt")), "：")
+    val imgCarList = parseTxt(File(PathUtil.buildPath(base, "教师图片（方形）.txt")), "：")
     mergeToBaseMap(imgCarList, userNameToInfoMap, "轮播图")
 
 
@@ -91,6 +91,7 @@ fun main(args: Array<String>) {
     }
     println(userNameToInfoMap)
 
+    val s_SRC = 4
 
     println("----------教师基本信息TH_TEACHER--------------")
     userNameToInfoMap.forEach {
@@ -106,7 +107,7 @@ fun main(args: Array<String>) {
             val s_BAK = "'${value.get("背景图")?.get(0) ?: ""}'"
             val s_CAROL = "'${value.get("轮播图")?.get(0) ?: ""}'"
             val s_SORT = value.get("排序")?.get(0) ?: "null"
-            val s_SRC = 2
+
             val s_STATUS = 1
 
             val insert_sql= "insert into db_teacher_home.TH_TEACHER(NAME,USER_ID,SCHOOL,TITLE,ACADEMIC,IMG,CAROUSEL_IMG,SORT,SRC,STATUS) values(" +
@@ -161,14 +162,14 @@ fun main(args: Array<String>) {
     println("##----------redis UserId转码--------------;")
     userName2UserId.entries.forEach {
         (userName, userId) ->
-        val uuid = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
+        val uuid = convertUUID(userId)
         println("set user:uuid:$uuid $userId")
     }
     userName2UserId.entries.forEach {
         (userName, userId) ->
-        val uuid = MD5.getMD5Str(userId.toString() + "zhihuishu").toLowerCase()
-        println("$userName $userId http://$HOST/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
-//        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+        val uuid =  convertUUID(userId)
+//        println("$userName $userId http://$HOST/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
+        println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
     }
 
     //查询userId对应的teacherId
@@ -239,20 +240,38 @@ fun main(args: Array<String>) {
 
             //节
             try {
-                when (arrl) {
-                    2 -> {
-                        var  lOrLv_mp = waiwang.queryForObject("select ID as LESSON_ID from db_G2S_OnlineSchool.CC_LESSON WHERE COURSE_ID = ${it.courseId} AND VIDEO_ID=$videoId", ColumnMapRowMapper())
-                        LESSON_ID = lOrLv_mp["LESSON_ID"].toString().toInt()
-                    }
-                    3 -> {
-                        var  lOrLv_mp = waiwang.queryForObject("select ID as SMALL_LESSON_ID ,LESSON_ID  from db_G2S_OnlineSchool.CC_LESSON_VIDEO  WHERE COURSE_ID = ${it.courseId} AND VIDEO_ID=$videoId", ColumnMapRowMapper())
-                        LESSON_ID = lOrLv_mp["LESSON_ID"].toString().toInt()
-                        SMALL_LESSON_ID = lOrLv_mp["SMALL_LESSON_ID"].toString().toInt()
-                    }
-                    else -> {
-//                        println("#未知序号 $chapterIndex 数组长度:$arrl")
+                var  lOrLv_mp = waiwang.query("select ID as SMALL_LESSON_ID ,LESSON_ID  from db_G2S_OnlineSchool.CC_LESSON_VIDEO  WHERE COURSE_ID = ${it.courseId} AND VIDEO_ID=$videoId", ColumnMapRowMapper())
+//                println(lOrLv_mp)
+                if (lOrLv_mp.isNotEmpty()) {
+                    LESSON_ID = lOrLv_mp[0]["LESSON_ID"].toString().toInt()
+                    SMALL_LESSON_ID = lOrLv_mp[0]["SMALL_LESSON_ID"].toString().toInt()
+                } else {
+                    lOrLv_mp = waiwang.query("select ID as LESSON_ID from db_G2S_OnlineSchool.CC_LESSON WHERE COURSE_ID = ${it.courseId} AND VIDEO_ID=$videoId", ColumnMapRowMapper())
+//                    println(lOrLv_mp)
+
+                    if (lOrLv_mp.isNotEmpty()) {
+                        LESSON_ID = lOrLv_mp[0]["LESSON_ID"].toString().toInt()
+                    } else {
+                        error("#未知LESSON_ID,SMALL_LESSON_ID, COURSE_ID=${it.courseId} VIDEO_ID=$videoId")
                     }
                 }
+
+//                LESSON_ID = lOrLv_mp["LESSON_ID"].toString().toInt()
+
+//                when (arrl) {
+//                    2 -> {
+//                        var  lOrLv_mp = waiwang.queryForObject("select ID as LESSON_ID from db_G2S_OnlineSchool.CC_LESSON WHERE COURSE_ID = ${it.courseId} AND VIDEO_ID=$videoId", ColumnMapRowMapper())
+//                        LESSON_ID = lOrLv_mp["LESSON_ID"].toString().toInt()
+//                    }
+//                    3 -> {
+//                        var  lOrLv_mp = waiwang.queryForObject("select ID as SMALL_LESSON_ID ,LESSON_ID  from db_G2S_OnlineSchool.CC_LESSON_VIDEO  WHERE COURSE_ID = ${it.courseId} AND VIDEO_ID=$videoId", ColumnMapRowMapper())
+//                        LESSON_ID = lOrLv_mp["LESSON_ID"].toString().toInt()
+//                        SMALL_LESSON_ID = lOrLv_mp["SMALL_LESSON_ID"].toString().toInt()
+//                    }
+//                    else -> {
+////                        println("#未知序号 $chapterIndex 数组长度:$arrl")
+//                    }
+//                }
             } catch(e: Exception) {
                 e.printStackTrace()
 
@@ -370,4 +389,7 @@ fun main(args: Array<String>) {
     }
     delKeysPage(keys)
 
+    //名师缓存
+    println("del th:openapi:teachers:remoteresult:src:1:ts")
+    println("update TH_TEACHER set SRC=1 where SRC=$s_SRC;")
 }

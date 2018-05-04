@@ -91,12 +91,15 @@ fun parseExcel(file:File):Excel {
 fun getString(sheet: XSSFSheet, rIdx:Int, cIdx:Int):String {
     val row = sheet.getRow(rIdx)
     val cell = row.getCell(cIdx)
-    val cellValue = getCellValue(cell)
-    println("$rIdx,$cIdx = $cellValue")
-    return cellValue
+    if (cell!=null) {
+        val cellValue = getCellValue(cell)
+        println("$rIdx,$cIdx = $cellValue")
+        return cellValue
+    }
+    return ""
 }
 
-fun getCellValue( cell: Cell):String{
+fun getCellValue(cell: Cell):String{
 
     if(cell == null) return "";
 
