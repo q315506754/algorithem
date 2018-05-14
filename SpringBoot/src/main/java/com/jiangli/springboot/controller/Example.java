@@ -1,36 +1,41 @@
 package com.jiangli.springboot.controller;
 
+import com.jiangli.springboot.configs.RunConfigure;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
-import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 
 //@SpringBootApplication = as follows
-@EnableAutoConfiguration
+//@EnableAutoConfiguration
 @ComponentScan
 @Configuration
-//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})  -Dspring.autoconfigure.exclude
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+// -Dspring.autoconfigure.exclude
+@PropertySource({
+        "classpath:temp/jdbc.properties"
+        ,"classpath:temp/mysql.properties"
+})
+@Import(RunConfigure.class)
 public class Example implements ApplicationContextAware{
     private ApplicationContext applicationContext;
 
@@ -86,7 +91,20 @@ public class Example implements ApplicationContextAware{
 //    http://localhost:8080
     @RequestMapping("/")
     @CrossOrigin
-    String home() {
+    String home(HttpServletRequest request) {
+        //AnnotationConfigEmbeddedWebApplicationContext
+//        or AnnotationConfigApplicationContext
+        System.out.println(Thread.currentThread());
+        System.out.println(request);
+        return "Hello World!Example~"+applicationContext;
+    }
+
+    //http://localhost:8080/home2
+    @RequestMapping("/home2")
+    @CrossOrigin
+    String home2(HttpServletRequest request) {
+        System.out.println(Thread.currentThread());
+        System.out.println(request);
         //AnnotationConfigEmbeddedWebApplicationContext
 //        or AnnotationConfigApplicationContext
         return "Hello World!Example~"+applicationContext;

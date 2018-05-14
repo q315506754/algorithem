@@ -58,6 +58,36 @@ class KotlinController{
 
         return "execute..." + java.lang.String.valueOf("ddd")
     }
+
+    //http://localhost:8080/kotlin/home1
+    @RequestMapping("/home1")
+    internal fun home(request: HttpServletRequest): String {
+        //AnnotationConfigEmbeddedWebApplicationContext
+        //        or AnnotationConfigApplicationContext
+        println(Thread.currentThread())
+        println(request)
+        return "Hello World!Example~"
+    }
+
+    //http://localhost:8080/kotlin/home2
+    @RequestMapping("/home2")
+    internal fun home2(request: HttpServletRequest): String {
+        println(Thread.currentThread())
+        println(request)
+        //AnnotationConfigEmbeddedWebApplicationContext
+        //        or AnnotationConfigApplicationContext
+        return "Hello World!Example~"
+    }
+
+    //http://localhost:8080/kotlin/home3
+    @RequestMapping("/home3")
+    internal fun home3(request: HttpServletRequest): String {
+        println(Thread.currentThread())
+        println(request)
+        //AnnotationConfigEmbeddedWebApplicationContext
+        //        or AnnotationConfigApplicationContext
+        return "Hello World!Example~"
+    }
 }
 
 //class B{}
