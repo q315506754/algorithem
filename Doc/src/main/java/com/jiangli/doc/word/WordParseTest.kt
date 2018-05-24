@@ -25,7 +25,8 @@ import java.util.*
  */
 
 fun main(args: Array<String>) {
-    val base = "C:\\Users\\DELL-13\\Desktop\\aires cr 文档\\aa"
+//    val base = "C:\\Users\\DELL-13\\Desktop\\aires cr 文档\\aa"
+    val base = "C:\\Users\\Jiangli\\Desktop\\新建文件夹\\aa"
     val file = File(PathUtil.buildPath(base, "2.4.4-2.4.6（朱伊枫）.docx"))
     println(file.exists())
 
