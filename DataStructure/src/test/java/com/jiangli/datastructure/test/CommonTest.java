@@ -41,6 +41,31 @@ public class CommonTest extends BaseTest {
 
     }
 
+    @Test
+    public void test_4() {
+        String[] a = new String[10];
+        for (int i = 0; i < 10; i++) {
+            a[i] = i + "";
+        }
+        System.out.println(Arrays.toString(a));
+
+        //System.arraycopy(a,2,a,0,8);
+        //arraycopy(a,2,a,0,8);
+        //System.arraycopy(a,0,a,2,8);
+        System.arraycopy(a,0,a,1,8);
+        //arraycopy(a,0,a,1,8);
+        System.out.println(Arrays.toString(a));
+    }
+
+    public void arraycopy(String[] src,  int  srcPos,
+                          String[] dest, int destPos,
+                          int length) {
+        for (int i = 0; i < length; i++) {
+            dest[destPos+i] = src[srcPos+i];
+        }
+
+    }
+
 
 
 
