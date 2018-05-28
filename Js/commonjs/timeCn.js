@@ -23,7 +23,7 @@ function timeCn(seconds) {
             started = true;
         }
 
-        if(started) {
+        if(started || (!started && i == retArr.length-1)) {
             var str = one < 10 && padZero[i] ? "0" : "";
             ret = ret + str + one + unit[i];
         }
