@@ -22,6 +22,11 @@
             <groupId>com.jiangli.AlgorithemProject</groupId>
             <artifactId>Common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jiangli.AlgorithemProject</groupId>
+            <artifactId>Test</artifactId>
+            <version>${com.provider-version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -32,6 +37,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>

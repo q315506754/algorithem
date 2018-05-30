@@ -1,4 +1,4 @@
-package com.jiangli.http;
+package com.jiangli.common.utils;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -15,7 +15,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -155,7 +154,6 @@ public class YufaCodis {
         return number;
     }
 
-    @NotNull
     private BasicHttpContext generateContext() {
         // Generate BASIC scheme object and stick it to the execution context
         BasicScheme basicAuth = new BasicScheme();
