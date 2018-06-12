@@ -16,7 +16,7 @@
 
     <properties>
         <resources.dir>src\main\resources\props</resources.dir>
-        <kotlin.version>1.1.2-2</kotlin.version>
+        <kotlin.version>1.1.4-3</kotlin.version>
     </properties>
 
     <dependencies>
@@ -53,6 +53,13 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+
+        <!--kotlin x-->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+            <version>0.18</version>
         </dependency>
 
 

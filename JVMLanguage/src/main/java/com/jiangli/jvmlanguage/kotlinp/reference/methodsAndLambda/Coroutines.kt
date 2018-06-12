@@ -22,9 +22,11 @@ suspend fun doSomething(foo: Foo) {
 
 }
 
-fun <T> async(block: suspend () -> T) {}
+
 
 fun test(x: Any): Unit {
+     fun <T> async(block: suspend () -> T) {}
+
     async {
         doSomething(object: Foo {
             override val count: Int

@@ -10,8 +10,7 @@ public class ThreadJoinTest {
             public void run() {
                 try {
                     while (true) {
-                        System.out.println("111111111");
-                        System.out.println(Thread.currentThread().getName());
+                        System.out.println(Thread.currentThread().getName()+" sub thread print...");
                         Thread.sleep(500);
                     }
                 } catch (InterruptedException e) {
