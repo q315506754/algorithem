@@ -20,6 +20,12 @@ public class CommonTest extends BaseTest {
     }
 
     @Test
+    public void test_cmp() {
+        System.out.println("TRUE".equalsIgnoreCase("tRuE"));
+    }
+
+
+    @Test
     public void test_2() {
         System.out.println(1 >>> 1);
         System.out.println(2 >>> 1);
