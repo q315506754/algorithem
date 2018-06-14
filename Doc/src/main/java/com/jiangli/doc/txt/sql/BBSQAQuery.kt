@@ -78,8 +78,25 @@ GROUP BY COMMENT_USER_ID;
             )
 
     writeMapToExcel(ouputFile, exconfig, mergeMapList)
+
+}
+fun < T> iterToPair(list:Iterable<T>): List<Pair< T, T>> {
+    val ret = mutableListOf<Pair< T, T>>()
+    list.forEach {
+        ret.add(it to it)
+    }
+    return ret
 }
 
+fun extractMapListKeys( list:List<MutableMap<String, Any>>):Set<String> {
+    val ret = mutableSetOf<String>()
+    list.forEach {
+        mp->mp.forEach { t, u ->
+            ret.add(t)
+        }
+    }
+    return ret
+}
 fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>, mergeMapList: List<MutableMap<String, Any>>) {
     val file = File(ouputFile)
     if (!file.exists()) {

@@ -16,17 +16,17 @@ import java.util.*
  */
 
 fun main(args: Array<String>) {
-    val base = "C:\\Users\\DELL-13\\Desktop\\codeReview\\教师主页\\教师主页四期汇总"
+    val base = "C:\\工作\\项目\\教师主页\\教师主页四期汇总"
 //    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0908.xlsx")))
     val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页ID汇总.xlsx")))
 
 
-        val CURRENT_ENV = Env.DEV
+//        val CURRENT_ENV = Env.DEV
 //    val CURRENT_ENV = Env.YUFA
-//    val CURRENT_ENV = Env.WAIWANG
+    val CURRENT_ENV = Env.WAIWANG
 
-//    val INSERT_CONCERN = false
-    val INSERT_CONCERN = true
+    val INSERT_CONCERN = false
+//    val INSERT_CONCERN = true
     val EXCEL_TXT_NAMES_SYNC = true  //若为false txt可能名称多于excel
 
     val configMap = getConfig()
@@ -390,6 +390,6 @@ fun main(args: Array<String>) {
     delKeysPage(keys)
 
     //名师缓存
-    println("del th:openapi:teachers:remoteresult:src:1:ts")
-    println("update TH_TEACHER set SRC=1 where SRC=$s_SRC;")
+//    println("del th:openapi:teachers:remoteresult:src:1:ts")
+//    println("update TH_TEACHER set SRC=1 where SRC=$s_SRC;")
 }

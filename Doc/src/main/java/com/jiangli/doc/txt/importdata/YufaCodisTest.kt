@@ -12,7 +12,7 @@ import com.jiangli.common.utils.YufaCodis
 fun main(args: Array<String>) {
     val codis = YufaCodis()
 //    "courseId", "name", "type", "turnType"
-//    codis.execute("hgetall cc:course:2019316")
+    codis.execute("hgetall cc:course:2019316")
 //    codis.execute("hgetall g:base:video:68419")
-    codis.execute("hgetall g:base:video:556007")
+//    codis.execute("hgetall g:base:video:556007")
 }
