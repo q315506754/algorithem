@@ -7,7 +7,7 @@ import java.util.concurrent.locks.LockSupport;
  * @date 2018/5/24 22:02
  */
 public class ThreadMain {
-    public static void main(String[] args) {
+    public  static void main(String[] args) {
 
         Thread.dumpStack();
         Thread thread = new Thread(() -> {
