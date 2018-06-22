@@ -109,6 +109,14 @@ public class PicRecombination {
         return times;
     }
 
+    private static void weight(int[][] input, int[][] output,int layer) {
+
+    }
+
+    private static void calWeight(int[][] input, int[][] output,int layer) {
+
+    }
+
     //iteration move
     private static void move1(int[][] input, int[][] output) {
         int times=0;
@@ -133,23 +141,31 @@ public class PicRecombination {
 
     //weight move
     private static void move2(int[][] input, int[][] output) {
+        int MAX_W = weight(output, output);
+
         int times=0;
+
+
         for (int i = 0; i < output.length; i++) {
             for (int j = 0; j < output[i].length; j++) {
                 int v = output[i][j];
 
+                weight(input,output,3);
                 Point find = find(input, v);
 
-                //move
+                //try move
                 if (i!=find.x || j!=find.y) {
+
                     swap(input,find,new Point(i,j));
                     times++;
                 }
 
             }
+
             System.out.println();
         }
         System.out.println("total times:"+times);
     }
+
 
 }

@@ -39,6 +39,13 @@ fun main(args: Array<String>) {
 //    }
 
 }
+fun readExcel(path:String) {
+    val file = File(path)
+    val ret = Excel()
+    val workbook = XSSFWorkbook(FileInputStream(file))
+    val page1 = workbook.getSheetAt(0)
+
+}
 
 fun parseExcel(file:File):Excel {
     val ret = Excel()
@@ -93,7 +100,7 @@ fun getString(sheet: XSSFSheet, rIdx:Int, cIdx:Int):String {
     val cell = row.getCell(cIdx)
     if (cell!=null) {
         val cellValue = getCellValue(cell)
-        println("$rIdx,$cIdx = $cellValue")
+//        println("$rIdx,$cIdx = $cellValue")
         return cellValue
     }
     return ""

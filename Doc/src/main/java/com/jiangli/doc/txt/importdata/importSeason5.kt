@@ -16,14 +16,14 @@ import java.util.*
  */
 
 fun main(args: Array<String>) {
-    val base = "C:\\工作\\项目\\教师主页\\教师主页四期汇总"
+    val base = "C:\\工作\\项目\\教师主页\\教师主页五期汇总"
 //    val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页 ID 汇总0908.xlsx")))
     val excel  = parseExcel(File(PathUtil.buildPath(base, "教师主页ID汇总.xlsx")))
-
+    val s_SRC = 5
 
 //        val CURRENT_ENV = Env.DEV
-    val CURRENT_ENV = Env.YUFA
-//    val CURRENT_ENV = Env.WAIWANG
+//    val CURRENT_ENV = Env.YUFA
+    val CURRENT_ENV = Env.WAIWANG
 
 //    val INSERT_CONCERN = false
     val INSERT_CONCERN = true
@@ -91,7 +91,7 @@ fun main(args: Array<String>) {
     }
     println(userNameToInfoMap)
 
-    val s_SRC = 4
+
 
     println("----------教师基本信息TH_TEACHER--------------")
     userNameToInfoMap.forEach {

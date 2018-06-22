@@ -125,8 +125,15 @@ public class CommonTest extends BaseTest {
 
 
     @Test
-    public void test_8() {
+    public void test_8()
+    {
         System.out.println(2323/0);
+    }
+
+    @Test
+    public void test_9() {
+        System.out.println(null instanceof Object);
+        System.out.println(null instanceof String);
     }
 
 
