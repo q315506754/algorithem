@@ -67,4 +67,16 @@ public class ClassUtil {
     public static String bytesToString(byte[] bytes,int start,int len){
         return new String(bytes,start,len);
     }
+
+    public static void main(String[] args) throws ClassNotFoundException {
+        //Package pkg = Package.getSystemPackage("org.springframework.beans.factory.annotation");
+        //Package pkg = getPackage(pkgname);
+        //Resource res = ucp.getResource(path, false);
+        //Class<?> aClass = Thread.currentThread().getContextClassLoader().loadClass("org.springframework.beans.factory.annotation.Autowired");
+        Class<?> aClass = Thread.currentThread().getContextClassLoader().loadClass("com.jiangli.common.lib.Ck");
+        Package aPackage = aClass.getPackage();
+
+        System.out.println(aPackage);
+        System.out.println(aPackage.isSealed());
+    }
 }

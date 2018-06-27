@@ -20,7 +20,8 @@ fun main(args: Array<String>) {
         if (rowIdx>0 && cellIdx ==courseIdx) {
             println(cellValue)
 
-            val url = """http://armystudy.zhihuishu.com/armystudy/militaryDetail?userId=37&courseId=$cellValue&ts=1528853470&token=5aeb66e2"""
+//            val url = """http://armystudy.zhihuishu.com/armystudy/militaryDetail?userId=37&courseId=$cellValue&ts=1528853470&token=5aeb66e2"""
+            val url = """http://armystudy.zhihuishu.com/armystudy/militaryDetail?userId=37&courseId=$cellValue&ts=1528854470&token=5aeb66e2"""
 
             val createCell = row?.createCell(linkIdx)
             createCell?.setCellValue(url)
