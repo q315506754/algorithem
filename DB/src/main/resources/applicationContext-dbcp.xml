@@ -9,8 +9,10 @@
         >
     <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
+        <!--<property name="connectionInitSqls" value="set names utf8mb4;" />-->
+
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://192.168.222.8:3306" />
+        <property name="url" value="jdbc:mysql://192.168.222.8:3306/G2S_USER" />
         <!--<property name="url" value="jdbc:mysql://localhost:3306/test" />-->
         <property name="username" value="root" />
         <property name="password" value="ablejava" />

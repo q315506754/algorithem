@@ -8,5 +8,6 @@ package com.jiangli.doc.txt.importdata
  */
 fun main(args: Array<String>) {
     println(convertUUID("VvM1r7zX"))
+    println(convertUUID("yGAJXoxK"))
     println(convertUUID(123213))
 }

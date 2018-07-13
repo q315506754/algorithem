@@ -87,6 +87,25 @@ public class JarFileTest {
             }
         }
     }
+    @Test
+    public void test_2_1() throws IOException {
+        Enumeration<URL> e =  ClassLoader.getSystemResources("META-INF/spring.schemas");
+        while (e.hasMoreElements()) {
+            URL url = e.nextElement();
+            System.out.println(url);
+        }
+    }
+
+    @Test
+    public void test_2_2() throws IOException {
+        System.out.println(ClassLoader.getSystemClassLoader());
+        System.out.println(Thread.currentThread().getContextClassLoader());
+        System.out.println(Thread.class.getClassLoader());
+        System.out.println(Ck.class.getClassLoader());
+        System.out.println(Ck.class.getResource("Describer.class"));
+        //System.out.println(Ck.class.getResource("/Describer.class"));
+        System.out.println(Ck.class.getResource("/com/jiangli/common/lib/Describer.class"));
+    }
 
     @Test
     public void test_3() throws IOException {
