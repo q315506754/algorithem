@@ -153,5 +153,42 @@
 
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <!--<includes>-->
+                        <!--<include>com/jiangli/hadoop/**/**</include>-->
+                    <!--</includes>-->
+                    <!--<excludes>-->
+                        <!--&lt;!&ndash;不打对外接口&ndash;&gt;-->
+                        <!--&lt;!&ndash;<exclude>com/bingdian/dubboservice/project/restful/**</exclude>&ndash;&gt;-->
+                    <!--</excludes>-->
+                    <archive>
+                        <manifest>
+                            <!--<addClasspath>true</addClasspath>-->
+                            <!--<mainClass>com.jiangli.hadoop.EarthQuakesPerDayJob</mainClass>-->
+                            <!--<-->
+                            <!--<Sealed>true</Sealed>-->
+                        </manifest>
+                        <manifestEntries>
+                            <!--<compile-jdk>-->
+                                <!--${jdkforthismodule}-->
+                            <!--</compile-jdk>-->
+                            <!--<s-->
+                            <!--<-->
+                            <!--<Name>com/jiangli/common/exception</Name>-->
+                            <!--<Sealed>true</Sealed>-->
+
+                            <Name>com/jiangli/common/lib</Name>
+                            <Sealed>true</Sealed>
+
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

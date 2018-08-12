@@ -1,5 +1,7 @@
 package com.jiangli.http;
 
+import com.jiangli.common.utils.YufaCodis;
+
 /**
  * @author Jiangli
  * @date 2017/11/22 20:48

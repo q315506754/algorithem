@@ -33,7 +33,7 @@
 programming
 ------------------------
 base:
-IO
+IO gui
 type string,int,double   cast
 calculate =+-x/%^`
 process,if,while,  interruption
@@ -57,6 +57,7 @@ horizonal ,operation cross language
 real
 ----------------------
 base:
+io
 unit pronounce hear write read
 words pronounce  hear write read
 sentence pronounce  hear write read

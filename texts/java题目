@@ -1,0 +1,153 @@
+language
+-java
+    ide
+        用过哪些，区别，优缺点，装过什么插件
+    语法
+        System.out.println((Object) null); 出现什么异常？
+        System.out.println(null +""); 出现什么异常？
+        float x = 123.0; 是否能编译通过，什么提示
+        jdk1.8有些什么新特性？方法引用，lambda，stream，optional
+        注解如何定义，如何使用
+        泛型中的super,extend使用起来有何差异
+    高级
+        对线程安全的理解？怎么实现
+        ClassLoader是怎么加载一个类的，为什么要这么做
+    io
+        怎么用io流读取文本文件输出到控制台
+        如何把对象序列化为字节
+        io，nio，aio
+    反射
+
+    集合
+        集合框架，map属于collection吗，queue跟dequeue，举出几种来
+        HashMap和LinkedHashMap
+        遍历的时候怎么删除某个元素？会出现什么问题？
+        为什么会产生ConcurrentModification
+    线程
+        怎么创建和运行一个线程
+        sleep wait有什么区别？分别使线程进入什么状态？
+        线程有哪些状态？NEW,BLOCKED,WAITING,TIMED_WAITING,TERMINATED
+        怎么创建一个线程池，有什么参数可以设置，用线程池有什么好处
+        ThreadLocal是什么，有何作用？
+    jvm
+        内存区域如何划分？
+        java如何把string加入常量池
+        如何确定对象是否要回收？
+        垃圾收集算法有哪些?
+        参数如何设置老年代大小？
+    字节码&反编译
+        java的string拼接代码在反编译之后变成什么样？
+        for each循环在反编译后是什么样子？情况分为数组和Iterable
+    web
+        session cookie的区别
+    spring
+        获得bean的方式有哪些？1.	@Autowired / @Resource，2.	获得applicationContext，调用getBean API，3.	xml里面<property><constructor-arg>
+        @Autowired与@Resource的区别？包不同spring-beans，javax；装配方式不同
+    spring jdbc
+        事务传播行为有哪几种
+        事务隔离级别
+    spring mvc
+        它是如何实现的
+    spring boot
+    定时器
+        定时任务用的什么，xxl-job，quartz，spring boot，、
+    其它
+        有没有写过工具给大家使用，或者自己比较满意的代码
+-kotlin
+-scala
+-groovy
+-js
+    jquery
+        跟js有什么区别
+        ajax如何进行同步，异步请求
+        ajax原理
+        是否写过插件
+    语法
+        闭包
+        es6
+    node js
+    vue
+    angular
+-python
+-c
+-c++
+
+设计模式&重构
+    servlet中，Filter使用的是什么模式
+
+算法、逻辑
+
+
+network:
+-osi七层网络模型
+-tcp
+    握手协议过程
+-http
+    协议过程
+-https
+    协议过程
+
+
+中间件
+-dubbo
+    dubbo admin有什么用
+-mq
+
+-搜索引擎
+--elastic search
+--lucene
+
+db：
+-mysql
+    innodb和myisam引擎区别
+    sql怎么优化
+    分库分表思路
+
+-mybatis
+    ＭyBatis 中#与$的区别  #方式能够很大程度防止sql注入。$方式无法防止Sql注入。
+
+-redis
+    类型
+        String，HashMap，List，Set，SortedSet
+    用来做过什么
+    缓存穿透
+    雪崩效应
+    如何设置某个key失效，缓存失效后
+    sentinel机制是什么？
+-hadoop
+-spark
+-webstorm
+
+scm：
+-版本管理
+    用svn，还是git，什么客户端工具
+
+-maven：
+    maven打jar和war通过哪个配置区分
+    引用一个依赖时，需要的3个配置项分别是什么，对应的文件路径和文件名分别是什么
+    执行maven deploy命令时，前面会经过哪些阶段？valid，compile，test，package，verify，install
+
+deploy：
+-jenkins
+    用来做过什么
+
+-linux
+    nohup，spring boot jar
+    查看进程，杀死进程命令
+    实时查看文本文件内容
+
+
+theory:
+-分布式
+    cap原则：
+        一个分布式系统里面，节点组成的网络本来应该是连通的。然而可能因为一些故障，使得有些节点之间不连通了，整个网络就分成了几块区域。数据就散布在了这些不连通的区域中。这就叫分区。当你一个数据项只在一个节点中保存，那么分区出现后，和这个节点不连通的部分就访问不到这个数据了。这时分区就是无法容忍的。提高分区容忍性的办法就是一个数据项复制到多个节点上，那么出现分区之后，这一数据项就可能分布到各个区里。容忍性就提高了。然而，要把数据复制到多个节点，就会带来一致性的问题，就是多个节点上面的数据可能是不一致的。要保证一致，每次写操作就都要等待全部节点写成功，而这等待又会带来可用性的问题。总的来说就是，数据存在的节点越多，分区容忍性越高，但要复制更新的数据就越多，一致性就越难保证。为了保证一致性，更新所有节点数据所需要的时间就越长，可用性就会降低。
+-分布式事务
+
+
+加分项
+    看过有关书籍
+    熟练阅读英文文档
+    stackoverflow有账号
+    拥有自己的博客
+    github有账号
+    github项目有过pr

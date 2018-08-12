@@ -17,6 +17,11 @@
         <property name="basePackage" value="com.jiangli"/>
     </bean>
 
+    <bean id="helloFactory" class="com.jiangli.db.spring.HelloFactory">
+    </bean>
+    <!--<bean id="myFactoryClsFBean"  class="com.jiangli.db.spring.MyFactoryClsFBean">-->
+    <!--</bean>-->
+
     <!-- 自动扫描，多个包以 逗号分隔 -->
     <context:component-scan base-package="com.jiangli"/>
 

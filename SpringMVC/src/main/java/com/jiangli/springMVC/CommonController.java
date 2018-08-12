@@ -53,6 +53,26 @@ public class CommonController {
         }
     }
 
+    //http://localhost:8080/home1
+    @RequestMapping("/home1")
+    String home(HttpServletRequest request) {
+        //AnnotationConfigEmbeddedWebApplicationContext
+//        or AnnotationConfigApplicationContext
+        System.out.println(Thread.currentThread());
+        System.out.println(request);
+        return "Hello World!Example~";
+    }
+
+    //http://localhost:8080/home2
+    @RequestMapping("/home2")
+    String home2(HttpServletRequest request) {
+        System.out.println(Thread.currentThread());
+        System.out.println(request);
+        //AnnotationConfigEmbeddedWebApplicationContext
+//        or AnnotationConfigApplicationContext
+        return "Hello World!Example~";
+    }
+
     /**
      * http://localhost:8081/rmi.go
      *

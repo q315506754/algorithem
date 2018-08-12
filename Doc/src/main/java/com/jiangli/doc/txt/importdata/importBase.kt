@@ -137,17 +137,17 @@ fun Course.lesson(name:String, id:Int, init: Lesson.() -> Unit ){
                  val tbl_mp = waiwang.queryForObject("select NAME,MAJOR_SPEAKER,TEACHER_NAME from db_G2S_OnlineSchool.TBL_COURSE WHERE COURSE_ID=" + it.courseId, ColumnMapRowMapper())
      //            println(tbl_mp)
 
-                 val db_teacher = tbl_mp["TEACHER_NAME"] as String
-
                  userId = tbl_mp["MAJOR_SPEAKER"] as Int
 
+//                 user first
                  val user_mp = waiwang.queryForObject("select REAL_NAME from db_G2S_OnlineSchool.TBL_USER WHERE ID=" + userId, ColumnMapRowMapper())
                  val db_username = user_mp["REAL_NAME"] as String
                  if (db_username != excelTeaName) {
                      userId = -1
                  }
 
-                 if (userId == -1){
+                 //V2_ASSISTANTS second
+                 if ( userId == -1){
                      val v2_userIds = waiwang.query("select DISTINCT va.USER_ID  from db_G2S_OnlineSchool.V2_ASSISTANTS va LEFT JOIN db_G2S_OnlineSchool.TBL_USER u ON va.USER_ID = u.ID WHERE COURSE_ID=${it.courseId} AND IS_DELETE = 0 AND u.REAL_NAME = '$excelTeaName'" , ColumnMapRowMapper())
                      if (v2_userIds.size > 1) {
                          error("V2_ASSISTANTS 定位到了多个用户id  $v2_userIds for $excelTeaName")
@@ -159,6 +159,7 @@ fun Course.lesson(name:String, id:Int, init: Lesson.() -> Unit ){
                      }
                  }
 
+                 val db_teacher = tbl_mp["TEACHER_NAME"] as String?
                  if (userId == -1)
                      error("无法定位用户id for $excelTeaName, ${it.courseId}——${it.courseName} ,TBL_COURSE.TEACHER_NAME:$db_teacher,TBL_COURSE.MAJOR_SPEAKER:${tbl_mp["MAJOR_SPEAKER"]},TBL_USER.REAL_NAME:${db_username}")
 

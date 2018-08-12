@@ -49,6 +49,7 @@ CSR(Certificate Signing Request)数字证书签发申请
 
 MES (Manufacturing Execution System)（制造企业生产过程执行管理系统）,(Manufacturing Execution System Association，MESA)对MES所下的定义
 SCM（Supply chain management，SCM）即供应链管理
+SCM（Software configuration management , or just plain CM) 软件配置管理(SCM)是指通过执行版本控制、变更控制的规程，以及使用合适的配置管理软件，来保证所有配置项的完整性和可跟踪性。
 ERP(Enterprise Resource Planning )系统是企业资源计划的简称
 MRP(Material Requirement Planning，MRP）物料需求计划
 WMS(Warehouse Management System) 是仓库管理系统

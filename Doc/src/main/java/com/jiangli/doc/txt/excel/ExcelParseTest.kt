@@ -39,6 +39,13 @@ fun main(args: Array<String>) {
 //    }
 
 }
+fun readExcel(path:String) {
+    val file = File(path)
+    val ret = Excel()
+    val workbook = XSSFWorkbook(FileInputStream(file))
+    val page1 = workbook.getSheetAt(0)
+
+}
 
 fun parseExcel(file:File):Excel {
     val ret = Excel()
@@ -59,7 +66,7 @@ fun parseExcel(file:File):Excel {
             val courseId = getString(page1,firstRow,2)
             ret.row(username,{
                 course(courseName,courseId.toInt()){
-                    println("    章节:")
+//                    println("    章节:")
                     for (i in firstRow..lastRow) {
                         val chapterName = getString(page1,i,3)
                         val videoId = getString(page1,i,4)
@@ -70,7 +77,7 @@ fun parseExcel(file:File):Excel {
                     }
                 }
 
-                println("    倾听:")
+//                println("    倾听:")
                 for (i in firstRow..lastRow) {
                     val listenName = getString(page1,i,6)
                     val audioId = getString(page1,i,7)
@@ -80,7 +87,7 @@ fun parseExcel(file:File):Excel {
                 }
             })
 
-            println("---------------------------------")
+//            println("---------------------------------")
         }
 
 //        println("$firstRow,$firstColumn -> $lastRow,$lastColumn   ${getString(page1,firstRow,firstColumn)}")
@@ -93,7 +100,7 @@ fun getString(sheet: XSSFSheet, rIdx:Int, cIdx:Int):String {
     val cell = row.getCell(cIdx)
     if (cell!=null) {
         val cellValue = getCellValue(cell)
-        println("$rIdx,$cIdx = $cellValue")
+//        println("$rIdx,$cIdx = $cellValue")
         return cellValue
     }
     return ""

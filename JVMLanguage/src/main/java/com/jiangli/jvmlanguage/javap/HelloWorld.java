@@ -8,9 +8,9 @@ public class HelloWorld {
     private String name;
     public String age;
 
-    public static void main(String[] args) {
-        System.out.println("invoked");
-    }
+    //public static void main(String[] args) {
+    //    System.out.println("invoked");
+    //}
 
     public String getName() {
         System.out.println("getName");
@@ -20,5 +20,12 @@ public class HelloWorld {
     public void setName(String name) {
         System.out.println("setName");
         this.name = name;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(null+"");
+        Object s = null;
+        System.out.println(s+"");
+
     }
 }

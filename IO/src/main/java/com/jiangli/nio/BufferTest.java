@@ -3,7 +3,6 @@ package com.jiangli.nio;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 /**
@@ -33,7 +32,15 @@ public class BufferTest {
         allocate.reset();
         print(allocate);
 
-        Buffer flip = allocate.flip();
+        ByteBuffer flip = (ByteBuffer) allocate.flip();
+        print(allocate);
+
+        System.out.println(flip.get());
+        System.out.println(flip.get());
+        System.out.println(flip.get());
+        print(allocate);//6
+
+        flip = (ByteBuffer)allocate.flip();
         print(allocate);
 
         System.out.println("sss:"+new String(((ByteBuffer)flip).array(),0,flip.limit())+":eee");
