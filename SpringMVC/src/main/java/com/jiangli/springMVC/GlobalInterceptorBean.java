@@ -27,7 +27,7 @@ public class GlobalInterceptorBean extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.debug("preHandle {}", "before");
-        WebUtils.setSessionAttribute(request,"guguday","xiaojixiaoji");
+        WebUtils.setSessionAttribute(request,"guguday","xiaoj11111ixiaoji");
         HttpSession session = request.getSession();
 //        request.s
         logger.debug("servletContext {}", servletContext);
@@ -52,6 +52,7 @@ public class GlobalInterceptorBean extends HandlerInterceptorAdapter {
         Map<String, Object> javax = WebUtils.getParametersStartingWith(request, "javax");
         logger.debug("web getParametersStartingWith javax:{}", javax);
 
+        "sdsd";
 //      http://localhost:8080/rmi?_pageIndex5
         int pageIndex = WebUtils.getTargetPage(request, "_pageIndex", 1);
         logger.debug("web getTargetPage pageIndex:{}", pageIndex);

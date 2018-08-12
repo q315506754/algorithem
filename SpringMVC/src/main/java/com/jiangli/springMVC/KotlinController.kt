@@ -23,7 +23,7 @@ class KotlinController{
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     constructor(){
-        logger.debug("KotlinController constructor!!!")
+        logger.debug("KotliyyyxnController constructor!!!")
     }
 
     @Autowired

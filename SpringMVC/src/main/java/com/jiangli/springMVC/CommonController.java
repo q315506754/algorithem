@@ -65,7 +65,7 @@ public class CommonController {
     @ResponseBody
     String rmi(String id, HttpServletRequest request) {
         Object guguday = WebUtils.getSessionAttribute(request, "guguday");
-        logger.debug("guguda222988882228啊 is:{}",guguday);
+        logger.debug("guguda4444444啊 is:{}",guguday);
 
         int[] values = {1, 2, 3};
         boolean b = false;

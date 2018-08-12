@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class B implements Serializable {
 
     public void func() {
-        System.out.println("bb啊啊地方b水电费第三方bbb的萨菲是否bxxxx");
+        System.out.println("bb啊啊地方b水1111电费第三方bbb的萨菲是否bxxxx");
     }
 
 }
