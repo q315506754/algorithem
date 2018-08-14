@@ -59,7 +59,9 @@ fun main(args: Array<String>) {
 
     //你需要使用展开运算符 * 来传递 IntArray：
 //    目前无法传递 null 给一个声明为可变参数的方法。
-    javaObj.removeIndicesVarArg(*array)
+    javaObj.removeIndicesVarArg(*array,3)
+//    javaObj.removeIndicesVarArg(null)
+//    mutableListOf(array)
 
 
     println(File("").absolutePath)

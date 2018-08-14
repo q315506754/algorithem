@@ -149,6 +149,14 @@ fun extractMapListKeys( list:List<MutableMap<String, Any>>):Set<String> {
     }
     return ret
 }
+fun writeMapToExcel(ouputFile: String, mergeMapList: List<MutableMap<String, Any>>) {
+    val ret = arrayListOf<Pair<String, String>>()
+    mergeMapList[0].forEach {entry ->
+        ret.add(entry.key to entry.key)
+    }
+    writeMapToExcel(ouputFile,ret,mergeMapList)
+}
+
 fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>, mergeMapList: List<MutableMap<String, Any>>) {
     val file = File(ouputFile)
     if (!file.exists()) {
@@ -171,10 +179,10 @@ fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>
 
     mergeMapList.forEach { mp ->
         val curRow = page1.createRow(rowIdx++)
-        mp.forEach { t, u ->
-            if (nameToIdx[t] != null) {
-                val c = curRow.createCell(nameToIdx[t]!!)
-                c.setCellValue(u?.toString())
+        mp.forEach { entry ->
+            if (nameToIdx[entry.key] != null) {
+                val c = curRow.createCell(nameToIdx[entry.key]!!)
+                c.setCellValue(entry.value?.toString())
             }
         }
     }

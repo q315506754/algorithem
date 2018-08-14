@@ -235,6 +235,8 @@ public class RSAUtil {
         System.out.println("公钥 base64：" + keyToBase64(publicKey));
         System.out.println("公钥 hex："+ keyToHex(publicKey));
 
+
+
         //获取私钥，并以base64格式打印出来
         PrivateKey privateKey=keyPair.getPrivate();
         System.out.println("私钥 base64：" + keyToBase64(privateKey));

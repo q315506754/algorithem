@@ -7,7 +7,7 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-4.0.xsd"
         >
-    <context:component-scan base-package="com.jiangli"/>
+    <context:component-scan base-package="com.jianglixx"/>
 
   
     <!--<context:property-placeholder location="props/*"  />-->
