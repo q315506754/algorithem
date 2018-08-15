@@ -7,7 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.AbstractRefreshableConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.GenericTypeResolver;
+import org.springframework.core.ResolvableType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -38,13 +43,30 @@ public class SpringTest implements ApplicationContextAware {
         logger.debug(applicationContext.toString());
     }
 
+
+    static class ABC implements ApplicationContextInitializer<AbstractRefreshableConfigApplicationContext> {
+        @Override
+        public void initialize(AbstractRefreshableConfigApplicationContext applicationContext) {
+
+        }
+    }
+
+    @Test
+    public void func3() {
+        Class<?> aClass = GenericTypeResolver.resolveTypeArgument(ABC.class, ApplicationContextInitializer.class);
+        System.out.println(aClass);
+        ResolvableType x = ResolvableType.forClass(ABC.class);
+        System.out.println(x);
+        System.out.println(x.as(ApplicationContextInitializer.class));
+        System.out.println(x.as(ConfigurableApplicationContext.class));
+    }
+
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"classpath*:applicationContext.xml"});
         String[] beanDefinitionNames = context.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
             System.out.println(beanDefinitionName);
         }
-
     }
 
 }
