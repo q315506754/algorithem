@@ -1,5 +1,6 @@
 package com.jiangli.doc.sql
 
+import com.jiangli.common.utils.DateUtil
 import com.jiangli.doc.txt.sql.writeMapToExcel
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
@@ -18,7 +19,7 @@ fun main(args: Array<String>) {
     val jdbc = Ariesutil.getJDBC(env)
 
 
-    val outputpath="""C:\Users\Jiangli\Desktop\order.xlsx"""
+    val outputpath="""C:\Users\Jiangli\Desktop\order_${DateUtil.getCurrentDate_YMDHmsSS_f()}.xlsx"""
 
     val sql = """
 SELECT
@@ -71,8 +72,7 @@ FROM db_aries_pay_core.TBL_ORDER o
   LEFT JOIN db_aries_2c_course.tm_user_study_course tusc on tusc.COURSE_ID = c.COURSE_ID and tusc.USER_ID = o.USER_ID
 WHERE
   o.IS_DELETE=0
-  and o.STATUS=1
-  and u.IS_DELETED=0
+  #and o.STATUS=1
   and o.CREATE_TIME > '2018-08-11 11:00:00'
 ORDER BY o.CREATE_TIME DESC ;
 """.trimIndent()
