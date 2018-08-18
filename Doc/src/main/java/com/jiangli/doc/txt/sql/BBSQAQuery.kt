@@ -1,6 +1,10 @@
 package com.jiangli.doc.txt.sql
 
 import com.jiangli.doc.txt.DB
+import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.HorizontalAlignment
+import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.jdbc.core.ColumnMapRowMapper
 import java.io.File
@@ -165,17 +169,59 @@ fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>
 
     val workbook = XSSFWorkbook()
     val page1 = workbook.createSheet()
+//    冻结首行
+    page1.createFreezePane(0, 1, 0, 1)
 
     val row1 = page1.createRow(0)
+    //标题行应用行宽
+    row1.height=500
+//    val row1Style = workbook.createCellStyle()
+//    row1Style.setFillPattern(FillPatternType.BIG_SPOTS )
+//    row1Style.setFillBackgroundColor(IndexedColors.PINK.index)
+//    row1Style.setFillForegroundColor(IndexedColors.PINK.index)
+//    row1Style.fillForegroundColor= XSSFCellStyle.
     var rowIdx = 1
     val nameToIdx = mutableMapOf<String, Int>()
     exconfig.forEachIndexed { index, pair ->
         val c = row1.createCell(index)
+        val newStyle = workbook.createCellStyle()
+
+        newStyle.setWrapText(true)//自动换行
+        newStyle.setVerticalAlignment(VerticalAlignment.CENTER)//垂直居中
+        newStyle.setAlignment(HorizontalAlignment.LEFT)//水平居左
+
+        //设置新填充样式
+        newStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND)
+        newStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index)
+
+        //冻结首行
+        c.setCellStyle(newStyle)
+
+
         c.setCellValue(pair.second)
 
         nameToIdx.put(pair.first, index)
     }
 
+    //计算列宽度
+    val columnMaxWidth = mutableMapOf<String, Int>()
+    mergeMapList.forEach { mp ->
+        mp.forEach { entry ->
+            val cellValLen = calcColumnWidth(entry?.value?.toString())
+            val cellTitleLen = calcColumnWidth(entry?.key)
+
+            var length = Math.max(cellValLen, cellTitleLen)
+            length  = Math.min(10000,length)
+            columnMaxWidth.merge(entry.key,length,{ t, u ->
+                Math.max(t, u)
+            })
+        }
+    }
+
+    //应用列宽
+    columnMaxWidth.forEach {entry ->
+        page1.setColumnWidth(nameToIdx[entry.key]!!,entry.value)
+    }
 
     mergeMapList.forEach { mp ->
         val curRow = page1.createRow(rowIdx++)
@@ -189,6 +235,28 @@ fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>
 
     workbook.write(FileOutputStream(file))
 }
+fun calcColumnWidth(str:String?):Int {
+    val charWidthOfCn = 600 //中文
+    val charWidthOfOther = 300 //非中文
+    val (cnNum, otherNum) = analyzeStringLen(str)
+    return cnNum * charWidthOfCn + otherNum * charWidthOfOther
+}
+
+fun analyzeStringLen(str:String?):StrCount {
+    val strCount = StrCount(0,0)
+    str?.forEach { c ->
+//        println("$c ${c.toInt()}")
+
+        if (c.toInt() < 10000) {
+            strCount.otherNum++
+        }else {
+            strCount.cnNum++
+        }
+    }
+    return strCount
+}
+
+data class StrCount(var cnNum:Int,var otherNum:Int){}
 
 fun makeupMapList(mergeMapList: List<MutableMap<String, Any>>, vararg pair: Pair<String, Any>) {
     mergeMapList.forEach {

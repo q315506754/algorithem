@@ -81,6 +81,9 @@ public class DateUtil {
     public static String getCurrentDate_YMDHmsSS() {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(new Date());
     }
+    public static String getCurrentDate_YMDHmsSS_f() {
+        return (new SimpleDateFormat("yyyy-MM-dd HH_mm_ss_SSS")).format(new Date());
+    }
 
     public static String getCurrentYearMonth() {
         return (new SimpleDateFormat("yyyyMM")).format(new Date());
