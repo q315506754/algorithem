@@ -8,6 +8,13 @@ package com.jiangli.doc.txt.importdata
  */
 fun main(args: Array<String>) {
     println(convertUUID("VvM1r7zX"))
-    println(convertUUID("yGAJXoxK"))
+    println(convertUUID("dDmekJNX"))
+//    println(convertUUID("yGAJXoxK"))
     println(convertUUID(123213))
+    println(convertUUID(123456))
+    println(convertUUID(182352254))
+    println(convertUUID(182352254))
+    println(convertUUID(18652840003))
+//    13918743268 123456
+//    18652840003 123456
 }
