@@ -7,10 +7,13 @@ package com.jiangli.doc.txt.importdata
  * @date 2018/6/6 13:34
  */
 fun main(args: Array<String>) {
+    println(convertUUID("V4e1RbYN"))
     println(convertUUID("VvM1r7zX"))
     println(convertUUID("dDmekJNX"))
+    println(convertUUID("VBRRrgOQ"))
+    println(convertUUID("V8Dpk·gLY"))
 //    println(convertUUID("yGAJXoxK"))
-    println(convertUUID(123213))
+    println(convertUUID(182352264))
     println(convertUUID(123456))
     println(convertUUID(182352254))
     println(convertUUID(182352254))
