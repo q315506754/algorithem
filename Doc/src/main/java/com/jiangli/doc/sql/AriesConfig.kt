@@ -47,7 +47,6 @@ object Ariesutil {
             return
         } else if (query.size > limit) {
             message = "$str 查到数量 > $limit 个"
-
         }
         query.forEach {
             println("$it")
@@ -83,14 +82,35 @@ object Ariesutil {
         throw Exception("没有足够的参数查询user")
     }
 
-    fun confirmUserId(jdbc: JdbcTemplate, uId: Long) {
+    fun confirmUserId(jdbc: JdbcTemplate, uId: Number) {
         val s = "SELECT ID,NAME,MOBILE,EMAIL,CREATE_TIME,PASSWORD FROM db_aries_user.TBL_USER WHERE ID = $uId and IS_DELETED = 0;"
         val query = jdbc.queryForObject(s, ColumnMapRowMapper())
         println("确认用户($uId):$query")
     }
+    fun confirm2CCourseId(jdbc: JdbcTemplate, courseId: Long) {
+        val s = "SELECT ID,NAME,MOBILE,EMAIL,CREATE_TIME,PASSWORD FROM db_aries_user.TBL_USER WHERE ID = $courseId and IS_DELETED = 0;"
+        val query = jdbc.queryForObject(s, ColumnMapRowMapper())
+        println("确认2c课程($courseId):$query")
+    }
 
     fun confirmUUID(jdbc: JdbcTemplate, uId: String) {
         confirmUserId(jdbc, convertUUID(uId))
+    }
+
+    fun injectTest(jdbc: JdbcTemplate, id:Any?, inf: NamedSimpleCachedTableQueryer): Map<String, Any?> {
+        val map = mutableMapOf<String, Any?>()
+
+        val oldField = inf.fields
+        inf.fields = "*"
+        val idName = inf.props[0]
+        map.put("$idName",id)
+        injectData(jdbc,map,inf)
+        inf.fields = oldField
+
+        val first = map.keys.filter { d -> d != idName }.first()
+
+//        println(map[first])
+        return map[first] as Map<String, Any?>
     }
 
     fun injectData(jdbc: JdbcTemplate, map: MutableMap<String, Any?>, vararg infs: DataQueryer) {

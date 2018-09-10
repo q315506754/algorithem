@@ -11,10 +11,13 @@ public class DatagramChannelTest {
     public static void main(String[] args) throws Exception {
         DatagramChannel channel = DatagramChannel.open();
         channel.socket().bind(new InetSocketAddress(9999));
+        //telnet localhost 9999
+        System.out.println("bind over..");
 
         ByteBuffer buf = ByteBuffer.allocate(48);
         buf.clear();
         channel.receive(buf);
+        System.out.println("receive..");
 
         int bytesSent = channel.send(buf, new InetSocketAddress("jenkov.com", 80));
 

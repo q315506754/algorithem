@@ -18,6 +18,17 @@ public class CommonTest extends BaseTest {
         System.out.println(Array.newInstance(Object.class, 3));
         System.out.println(Array.newInstance(String.class, 3));
     }
+    @Test
+    public void test_12() {
+        System.out.println(8 << 1);//x2
+        System.out.println(8 << 2);//x4
+        System.out.println(8 << 3);//x8
+        //[-54, -2, -70, -66]
+        System.out.println(Integer.toHexString(-54 & 0xff << 3));//
+        System.out.println(Integer.toHexString(-2 & 0xff << 2));//
+        System.out.println(Integer.toHexString(-70 & 0xff << 1));//
+        System.out.println(Integer.toHexString(-66 & 0xff << 0));//
+    }
 
     @Test
     public void test_cmp() {

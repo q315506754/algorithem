@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
 
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "", email = "")
 //    val userId = Ariesutil.getUserId(jdbc, name="武凌寒", mobile = "", email = "")
-//    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "13588708991", email = "")
+    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "18801113303", email = "")
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "", email = "pengjing@noahwm.com")
 
     //2b
@@ -25,7 +25,11 @@ fun main(args: Array<String>) {
 //    val userId =100007830
 
     //order
-    val userId =100007076
+//    val userId =100007076
+
+    //guest
+//    val userId =100011568
+//    val userId =100012344
 
     Ariesutil.confirmUserId(jdbc,userId.toLong())
     val map = Ariesutil.injectFromUserId(jdbc,userId.toLong())

@@ -102,7 +102,9 @@ public class NIOServer {
      * 启动服务端测试 
      * @throws IOException  
      */  
-    public static void main(String[] args) throws IOException {  
+    public static void main(String[] args) throws IOException {
+        //telnet localhost 8000
+        //chcp 65001
         NIOServer server = new NIOServer();  
         server.initServer(8000);  
         server.listen();  

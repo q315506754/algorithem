@@ -28,7 +28,7 @@ abstract class MultiIdQueryer(val props: Array<String>) : BaseDataQueryer() {
     }
 }
 
-abstract class SimpleCachedTableQueryer(props: Array<String>, val db:String, val fields:String?, val criteria:String?) : MultiIdQueryer(props) {
+abstract class SimpleCachedTableQueryer(props: Array<String>, val db:String, var fields:String?, val criteria:String?) : MultiIdQueryer(props) {
     val cache = mutableMapOf<String,Any?>()
 
     override fun query(jdbc: JdbcTemplate, params: Any?): List<MutableMap<String, Any?>> {
@@ -77,6 +77,7 @@ class UsersOrderQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})�
 class CompanyIdQueryer : NamedSimpleCachedTableQueryer("企业(${'$'}{params})详情",arrayOf("companyId","COMPANY_ID"),"db_aries_company.TBL_COMPANY","ID,NAME","ID=${'$'}{params} AND IS_DELETED=0 ")
 class CourseId2BQueryer : NamedSimpleCachedTableQueryer("2b课程(${'$'}{params})详情",arrayOf("courseId2B"),"db_aries_course.TBL_COURSE"," COURSE_NAME,CREATE_TIME,CREATE_PERSON,ORIGINAL_PRICE,CURRENT_PRICE","COURSE_ID=${'$'}{params} AND IS_DELETED=0 ")
 class CourseId2CQueryer : NamedSimpleCachedTableQueryer("2c课程(${'$'}{params})详情",arrayOf("courseId2C"),"db_aries_2c_course.TM_COURSE"," COURSE_NAME,COURSE_CREATED_AT,CREATE_USER,PRICE_YUAN,PRICE_ZHIGUO","COURSE_ID=${'$'}{params} AND IS_DELETED=0 ")
+class CourseName2CQueryer : NamedSimpleCachedTableQueryer("2c课程(${'$'}{params})详情",arrayOf("courseName2C"),"db_aries_2c_course.TM_COURSE"," COURSE_ID,COURSE_NAME,COURSE_CREATED_AT,CREATE_USER,PRICE_YUAN,PRICE_ZHIGUO","COURSE_NAME=${'$'}{params} AND IS_DELETED=0 ")
 class Recruit2BQueryer : NamedSimpleCachedTableQueryer("招生(${'$'}{params})详情",arrayOf("RECRUIT_ID"),"db_aries_run.TBL_RECRUIT"," RECRUIT_ID as recruitId,START_TIME,START_TIME,END_TIME,VALID_TIME,CREATE_PERSON","RECRUIT_ID=${'$'}{params} AND IS_DELETED=0 ")
 //class Class2BQueryer : NamedSimpleCachedTableQueryer("班级(${'$'}{params})详情",arrayOf("CLASS_ID"),"db_aries_run.TBL_CLASS"," CLASS_ID as classId,CLASS_NAME,COMPANY_ID,RECRUIT_ID,COURSE_ID as courseId2B,CREATE_TIME,CREATOR_ID","CLASS_ID=${'$'}{params} AND IS_DELETE=0 ")
 class Class2BQueryer : NamedSimpleCachedTableQueryer("班级(${'$'}{params})详情",arrayOf("CLASS_ID"),"db_aries_run.TBL_CLASS"," CLASS_ID as classId,CLASS_NAME,CREATE_TIME,CREATOR_ID","CLASS_ID=${'$'}{params} AND IS_DELETE=0 ")

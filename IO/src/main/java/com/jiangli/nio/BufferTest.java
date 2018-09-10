@@ -17,31 +17,42 @@ public class BufferTest {
 //        ByteBuffer allocate = ByteBuffer.allocate(1);
         System.out.println(BeanUtils.describe(allocate));
 
-        print(allocate);
+        print(allocate);//1
         allocate.put((byte)12);
         allocate.put((byte)12);
         allocate.put((byte)12);
-        print(allocate);
+        print(allocate);//2
 
         allocate.mark();
         allocate.put((byte) 23);
         allocate.put((byte) 34);
         allocate.put((byte)45);
-        print(allocate);
+        print(allocate);//3
 
         allocate.reset();
-        print(allocate);
+        print(allocate);//4
 
         ByteBuffer flip = (ByteBuffer) allocate.flip();
-        print(allocate);
+        print(allocate);//5
 
+        //read
         System.out.println(flip.get());
         System.out.println(flip.get());
         System.out.println(flip.get());
         print(allocate);//6
 
+
         flip = (ByteBuffer)allocate.flip();
-        print(allocate);
+        print(allocate);//7
+
+        //write
+        allocate.put((byte)12);
+        allocate.put((byte)13);
+        allocate.put((byte)14);
+        //java.nio.BufferOverflowException
+        //allocate.put((byte)15);
+        print(allocate);//8
+
 
         System.out.println("sss:"+new String(((ByteBuffer)flip).array(),0,flip.limit())+":eee");
 

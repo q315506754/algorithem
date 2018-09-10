@@ -1,4 +1,4 @@
-package com.jiangli.nio;
+package com.jiangli.aio;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -70,7 +70,7 @@ public class AsyncServerlChannelTest {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            System.out.println("服务器收到消息: " + expression);
+            System.out.println("服务器收到消息: " + expression + "  "+result);
             String calrResult = null;
 
             attachment.clear();
