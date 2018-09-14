@@ -28,6 +28,7 @@ public class TimeClientFix2 {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new TimeDecoderFix2(), new TimeClientHandler());
+                    //ch.pipeline().addLast(new TimeClientHandler(), new TimeDecoderFix2());
                 }
             });
             

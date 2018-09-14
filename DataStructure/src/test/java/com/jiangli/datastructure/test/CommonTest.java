@@ -18,6 +18,12 @@ public class CommonTest extends BaseTest {
         System.out.println(Array.newInstance(Object.class, 3));
         System.out.println(Array.newInstance(String.class, 3));
     }
+
+    @Test
+    public void test_34() {
+       System.out.println(Runtime.getRuntime().availableProcessors());
+    }
+
     @Test
     public void test_12() {
         System.out.println(8 << 1);//x2

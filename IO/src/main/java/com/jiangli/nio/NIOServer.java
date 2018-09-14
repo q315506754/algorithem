@@ -17,7 +17,8 @@ public class NIOServer {
     //通道管理器  
     private Selector selector;  
   
-    /** 
+    /**
+     * telnet localhost
      * 获得一个ServerSocket通道，并对该通道做一些初始化的工作 
      * @param port  绑定的端口号 
      * @throws IOException 

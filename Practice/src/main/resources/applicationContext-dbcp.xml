@@ -10,6 +10,6 @@
     <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
         <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
-        <property name="url" value="jdbc:derby:D:\algorithem\Practice\src\main\resources\db;create=true" />
+        <property name="url" value="jdbc:derby:C:\myprojects\algorithem\Practice\src\main\resources\db;create=true" />
     </bean>
 </beans>
