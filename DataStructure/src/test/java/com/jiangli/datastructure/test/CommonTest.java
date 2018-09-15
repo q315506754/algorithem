@@ -13,6 +13,14 @@ import java.util.List;
  */
 public class CommonTest extends BaseTest {
     @Test
+    public void test_11() {
+        System.out.println("Hello world!");
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("Hello world!");
+    }
+    @Test
     public void test_() {
         System.out.println(Object[].class.getComponentType());
         System.out.println(Array.newInstance(Object.class, 3));
