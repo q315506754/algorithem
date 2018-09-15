@@ -29,5 +29,6 @@ public class PipeTest {
          buf.clear();
         int bytesRead = sourceChannel.read(buf);
         System.out.println(bytesRead);
+        System.out.println(new String(buf.array()));
     }
 }

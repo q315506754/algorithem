@@ -10,9 +10,9 @@ public class AnnoTest {
         MulAnno hint = Person.class.getAnnotation(MulAnno.class);
         System.out.println(hint);                   // null
         MulAnnos hints1 = Person.class.getAnnotation(MulAnnos.class);
-        System.out.println(hints1.value().length);  // 2
+        System.out.println(hints1.value().length);  // 3
         MulAnno[] hints2 = Person.class.getAnnotationsByType(MulAnno.class);
-        System.out.println(hints2.length);          // 2
+        System.out.println(hints2.length);          // 3
         //Runnable aNew = FactoryTest::new;
     }
 

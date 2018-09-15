@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!--<encoder charset="UTF-8">-->
+		<!--<pattern>%d{HH:mm:ss} [%thread] %-5level %logger - %msg%n</pattern>-->
+		<!--</encoder>-->
+		<includeCallerData>true</includeCallerData>
+		<encoder charset="UTF-8">
+			<pattern>[%5level] %d{MM-dd HH:mm:ss.sss}  %replace(%caller{1}){'\t|Caller.{1}0\s*at|\r\n', ''} %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="OFF">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<logger name="com.zhihuishu.aries.web" level="ALL"/>
+	<logger name="org.springframework.web" level="INFO"/>
+	<!-- <logger name="com.zhihuishu" level="DEBUG"/>
+	<logger name="druid.sql" level="DEBUG"/>
+	<logger name="org.springframework.data.redis" level="DEBUG"/> -->
+
+</configuration>

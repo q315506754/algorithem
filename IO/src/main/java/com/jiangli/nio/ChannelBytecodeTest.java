@@ -35,6 +35,7 @@ public class ChannelBytecodeTest {
         System.out.println("totalread:"+read);
 
         print(magic_number);
+        System.out.println("----");
         print(minor_version);
         print(major_version);
         int print = print(constant_pool_count);
@@ -128,7 +129,7 @@ public class ChannelBytecodeTest {
         for (byte b : array) {
 //            System.out.println(b&0xff);
 //            System.out.println((int)b);
-            total += b & 0xff << (array.length - count++);
+            total += b & (0xff << (array.length - count++));
             System.out.print(Integer.toHexString(b&0xff));
 //            System.out.print(Integer.toHexString((int)b));
         }

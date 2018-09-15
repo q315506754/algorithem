@@ -17,7 +17,8 @@ public class NIOServer {
     //通道管理器  
     private Selector selector;  
   
-    /** 
+    /**
+     * telnet localhost
      * 获得一个ServerSocket通道，并对该通道做一些初始化的工作 
      * @param port  绑定的端口号 
      * @throws IOException 
@@ -102,7 +103,9 @@ public class NIOServer {
      * 启动服务端测试 
      * @throws IOException  
      */  
-    public static void main(String[] args) throws IOException {  
+    public static void main(String[] args) throws IOException {
+        //telnet localhost 8000
+        //chcp 65001
         NIOServer server = new NIOServer();  
         server.initServer(8000);  
         server.listen();  
