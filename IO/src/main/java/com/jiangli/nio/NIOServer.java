@@ -57,7 +57,7 @@ public class NIOServer {
             while (ite.hasNext()) {  
                 SelectionKey key = (SelectionKey) ite.next();  
                 // 删除已选的key,以防重复处理  
-                ite.remove();  
+                ite.remove();
                 // 客户端请求连接事件  
                 if (key.isAcceptable()) {  
                     ServerSocketChannel server = (ServerSocketChannel) key  
