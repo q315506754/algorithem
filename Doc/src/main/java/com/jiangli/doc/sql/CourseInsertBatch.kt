@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
     val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
     //课程名字 姓名 手机
-    val excelName = """副本 开课名单-0917"""
+    val excelName = """副本 开课名单-0917-下午"""
     val path = """C:\Users\Jiangli\Desktop\$excelName.xlsx"""
     var count = 0
     var suc_count = 0
