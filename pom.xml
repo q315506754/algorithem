@@ -38,6 +38,7 @@
         <module>JNI</module>
         <!--<module>JVMLanguage</module>-->
         <module>KillGame</module>
+        <module>Leetcode</module>
         <module>Log</module>
         <module>Lucene</module>
         <module>Maven</module>

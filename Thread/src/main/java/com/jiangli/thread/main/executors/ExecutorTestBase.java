@@ -11,6 +11,13 @@ import java.util.concurrent.Executors;
  * @date 2018/9/17 14:42
  */
 public class ExecutorTestBase {
+    public static void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     static class A implements Callable<Integer> {
         @Override

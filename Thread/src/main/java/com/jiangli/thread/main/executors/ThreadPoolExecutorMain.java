@@ -1,5 +1,7 @@
 package com.jiangli.thread.main.executors;
 
+import java.util.concurrent.locks.LockSupport;
+
 /**
  * @author Jiangli
  * @date 2018/9/17 17:06
@@ -34,6 +36,15 @@ public class ThreadPoolExecutorMain {
     //    ThreadPoolExecutor.DiscardPolicy 忽略任务
     //    ThreadPoolExecutor.DiscardOldestPolicy 丢弃队头任务，之后重试（可能反复执行）
 
+
+    //    newFixedThreadPool core=max=传入 ，线程一直存活，阻塞队列LinkedBlockingQueue
+    //    newSingleThreadExecutor core=max=1 ，线程一直存活，阻塞队列LinkedBlockingQueue
+    //    newCachedThreadPool core=0，池无界 ，线程,60s存活，阻塞队列SynchronousQueue
+    //    newScheduledThreadPool
+    //    newWorkStealingPool
+
+
+        LockSupport.park();
 
     }
 }
