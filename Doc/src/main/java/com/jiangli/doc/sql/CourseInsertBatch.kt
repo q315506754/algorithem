@@ -13,8 +13,14 @@ fun main(args: Array<String>) {
     val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
     //课程名字 姓名 手机
-    val excelName = """副本 开课名单-0919-下午"""
-    val path = """C:\Users\Jiangli\Desktop\$excelName.xlsx"""
+    val excelName = """副本 开课名单9.21下午"""
+//    val excelName = """副本 开课名单-0920-上午.xlsx"""
+
+    val endIndex = excelName.lastIndexOf(".xlsx")
+    val realExcelPrefix = excelName.substring(0, if(endIndex<0) excelName.length else endIndex)
+    println(realExcelPrefix)
+
+    val path = """C:\Users\Jiangli\Desktop\$realExcelPrefix.xlsx"""
     var count = 0
     var suc_count = 0
     var fail_count = 0

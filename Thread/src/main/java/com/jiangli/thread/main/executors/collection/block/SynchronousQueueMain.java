@@ -32,6 +32,8 @@ public class SynchronousQueueMain extends ExecutorTestBase {
             System.out.println("111");
             synchronousQueue.put("222");
             System.out.println("222");
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

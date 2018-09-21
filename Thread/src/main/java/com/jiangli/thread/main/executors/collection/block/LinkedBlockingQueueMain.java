@@ -36,6 +36,7 @@ public class LinkedBlockingQueueMain {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
 }
