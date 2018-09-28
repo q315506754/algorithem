@@ -4,7 +4,6 @@ import com.jiangli.common.utils.CommonUtil
 import com.jiangli.common.utils.MD5
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.txt.DB
-import org.hashids.Hashids
 import org.springframework.jdbc.core.ColumnMapRowMapper
 import org.springframework.jdbc.core.JdbcTemplate
 import java.io.BufferedReader
@@ -13,17 +12,7 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.util.*
 
-val hashids = Hashids("Able@2018#UserId2UUID", 8)
 val error:(Any) -> Unit = System.err::println
-fun convertUUID (l:Long):String {
-    return hashids.encode(l)
-}
-fun convertUUID (l:Int):String {
-    return convertUUID(l.toLong())
-}
-fun convertUUID (l:String):Long {
-    return hashids.decode(l)[0]
-}
 
 /**
  *

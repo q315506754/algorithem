@@ -1,5 +1,7 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries.goods
 
+import com.jiangli.doc.sql.helper.aries.Ariesutil
+import com.jiangli.doc.sql.helper.aries.Env
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
 /**

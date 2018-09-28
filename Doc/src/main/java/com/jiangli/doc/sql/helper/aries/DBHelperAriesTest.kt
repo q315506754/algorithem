@@ -1,4 +1,4 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries
 
 /**
  *

@@ -1,5 +1,7 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries.order
 
+import com.jiangli.doc.sql.helper.aries.Ariesutil
+import com.jiangli.doc.sql.helper.aries.Env
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
 /**
@@ -18,17 +20,17 @@ fun main(args: Array<String>) {
 //    val toId = Ariesutil.getUserId(jdbc,"","13766899939").toLong()
 //    val toId = Ariesutil.getUserId(jdbc,"","13910973030").toLong()
     val toId = 100012344
-    Ariesutil.confirmUserId(jdbc,toId)
+    Ariesutil.confirmUserId(jdbc, toId)
 
     val courseId=3
 
     //接收者
     Ariesutil.validateNum("确保接收者无2c购买记录", jdbc.query("""
 SELECT * from db_aries_2c_course.TM_USER_COURSE WHERE USER_ID=$toId AND COURSE_ID=$courseId AND IS_DELETED=0;
-    """.trimIndent(), ColumnMapRowMapper()),0)
+    """.trimIndent(), ColumnMapRowMapper()), 0)
     Ariesutil.validateNum("确保接收者无2c学习记录", jdbc.query("""
 SELECT * from db_aries_2c_course.TM_USER_STUDY_COURSE WHERE USER_ID=$toId AND COURSE_ID=$courseId AND IS_DELETED=0;
-    """.trimIndent(), ColumnMapRowMapper()),0)
+    """.trimIndent(), ColumnMapRowMapper()), 0)
 
 //    插入 购买权限
     println("""

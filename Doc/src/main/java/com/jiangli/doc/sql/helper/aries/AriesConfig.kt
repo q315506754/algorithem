@@ -1,5 +1,7 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries
 
+import com.jiangli.doc.sql.BaseConfig
+import com.jiangli.doc.sql.NamedSimpleCachedTableQueryer
 import org.apache.commons.dbcp.BasicDataSource
 import org.hashids.Hashids
 import org.springframework.jdbc.core.ColumnMapRowMapper
@@ -98,72 +100,15 @@ object Ariesutil {
     }
 
     fun injectTest(jdbc: JdbcTemplate, id:Any?, inf: NamedSimpleCachedTableQueryer): Map<String, Any?> {
-        val map = mutableMapOf<String, Any?>()
-
-        val oldField = inf.fields
-        inf.fields = "*"
-        val idName = inf.props[0]
-        map.put("$idName",id)
-        injectData(jdbc,map,inf)
-        inf.fields = oldField
-
-        val first = map.keys.filter { d -> d != idName }.first()
-
-//        println(map[first])
-        return map[first] as Map<String, Any?>
-    }
-
-    fun injectData(jdbc: JdbcTemplate, map: MutableMap<String, Any?>, vararg infs: DataQueryer) {
-        infs.forEach {
-            val inf = it
-
-            val nMap = mutableMapOf<String, Any?>()
-            nMap.putAll(map)
-
-            map.forEach { entry ->
-                val key = entry.key
-                if (inf.intercept(key)) {
-                    val rs = inf.query(jdbc, entry.value)
-//                    val keyProp = inf.javaClass.simpleName
-//                    val keyProp = key+"_Info_"+inf.javaClass.simpleName
-                    val keyProp = inf.name(key).replace("${'$'}{params}",entry.value?.toString()?:"null")
-
-                    var rsFinal:Any? = null
-
-                    if (rs.size == 0) {
-                        rsFinal = mutableMapOf<String, Any?>()
-                    } else if (rs.size == 1) {
-                        rsFinal = rs[0]
-                    } else {
-                        rsFinal = rs
-                    }
-
-                    nMap.put(keyProp,rsFinal)
-
-                    rsFinal?.let {
-                        if (rsFinal is Map<*, *>) {
-                            injectData(jdbc, rsFinal as MutableMap<String, Any?>, *infs)
-                        }
-                        else if (rsFinal is List<*>) {
-                            (rsFinal as List<*>).forEach {
-                                injectData(jdbc, it as MutableMap<String, Any?>, *infs)
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            map.putAll(nMap)
-        }
+        return BaseConfig.injectTest(jdbc, id, inf)
     }
 
     fun injectFromUserId(jdbc: JdbcTemplate, userId: Long): MutableMap<String, Any?> {
         val map = mutableMapOf<String, Any?>()
         map.put("userId", userId)
 
-        Ariesutil.injectData(jdbc, map
-                ,*allQueryer
+        BaseConfig.injectData(jdbc, map
+                , *allAriesQueryer
         )
         return map
     }
@@ -178,17 +123,20 @@ enum class Env(val rechargeCbUrl: String, val host: String, val username: String
 }
 
 fun main(args: Array<String>) {
-//    val env = Env.YUFA
-    val env = Env.WAIWANG
+    val env = Env.YUFA
+//    val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
 
-//    println(Ariesutil.convertUUID("dBaJpLjy"))
-//    println(Ariesutil.convertUUID(100002065))
+    println(Ariesutil.convertUUID("dBaJpLjy"))
+    println(Ariesutil.convertUUID(13300000000))
+
+    println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13300000000").toInt()))
+
 //    println(Ariesutil.confirmUserId(jdbc,100002215))
 //    println(Ariesutil.confirmUserId(jdbc,100002065))
 //    println(Ariesutil.confirmUUID(jdbc,"ykRXob2n"))
 
-    println(Ariesutil.confirmUserId(jdbc, 100008058))
+//    println(Ariesutil.confirmUserId(jdbc, 100008058))
 
 //    println(Ariesutil.getUserId(jdbc, "武凌寒"))
 //    println(Ariesutil.getUserId(jdbc, "陆"))

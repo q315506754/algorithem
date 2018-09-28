@@ -1,5 +1,6 @@
 package com.jiangli.thread.main.executors;
 
+import java.util.concurrent.*;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -9,7 +10,12 @@ import java.util.concurrent.locks.LockSupport;
 public class ThreadPoolExecutorMain {
 
     public static void main(String[] args) {
-    //     a pool
+        System.out.println(new ThreadPoolExecutor(5,10,500, TimeUnit.SECONDS, new SynchronousQueue<>()));
+        Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        //executorService.execute(null);
+        executorService.execute(()->{});
+        //     a pool
     //    core pool sizes ,  maximum pool sizes
     //    always new ,    when queue is full
 
@@ -19,8 +25,8 @@ public class ThreadPoolExecutorMain {
 
     //    queue
     //    3种策略
-    //    direct handoffs 直接转移（池无界） 适用内部有依赖的任务 避免reject，线程池增长风险
-    //    unbounded queues （队列无界） 适用内部无依赖的任务,web request，队列增长风险
+    //    direct handoffs 直接转移（池无界） 适用内部有依赖的任务 避免reject，有线程池增长风险
+    //    unbounded queues （队列无界） 适用内部无依赖的任务,web request，有队列增长风险
     //    bounded queues （队列有界）适用资源受限场景，要在队列大小和池大小中权衡以获得高吞吐量。
     //     队列太小，则cpu一直忙碌，调度开销大，吞吐下降
     //     队列太大，则cpu闲置，资源没有得到合理利用，吞吐下降

@@ -1,67 +1,16 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries
 
-import org.springframework.jdbc.core.ColumnMapRowMapper
-import org.springframework.jdbc.core.JdbcTemplate
+import com.jiangli.doc.sql.DataQueryer
+import com.jiangli.doc.sql.NamedSimpleCachedTableQueryer
 
-interface DataQueryer{
-    fun name(key: String): String
-
-    fun intercept(prop:String): Boolean
-
-    fun query(jdbc:JdbcTemplate,params:Any?):List<MutableMap<String,Any?>>
-}
-
-abstract class BaseDataQueryer : DataQueryer {
-    override fun name(key: String): String {
-        return key+"_"+this.javaClass.simpleName+"_info"
-    }
-}
-
-abstract class IdQueryer(val prop:String) : BaseDataQueryer() {
-    override fun intercept(prop:String): Boolean {
-        return this.prop.equals(prop,true)
-    }
-}
-abstract class MultiIdQueryer(val props: Array<String>) : BaseDataQueryer() {
-    override fun intercept(prop:String): Boolean {
-        return this.props.contains(prop)
-    }
-}
-
-abstract class SimpleCachedTableQueryer(props: Array<String>, val db:String, var fields:String?, val criteria:String?) : MultiIdQueryer(props) {
-    val cache = mutableMapOf<String,Any?>()
-
-    override fun query(jdbc: JdbcTemplate, params: Any?): List<MutableMap<String, Any?>> {
-        val  queryExistsId = """SELECT ${fields?:"*"} FROM $db WHERE  ${criteria?:"1=1"} ;""".replace("${'$'}{params}",params.toString())
-
-//        println("generate sql: "+queryExistsId)
-        var qIdList:List<MutableMap<String, Any?>>? = null
-        if (cache.containsKey(queryExistsId)) {
-            println("hit cache: "+queryExistsId)
-            qIdList = cache[queryExistsId] as List<MutableMap<String, Any?>>?
-        }else {
-            println("execute sql: "+queryExistsId)
-            qIdList = jdbc.query(queryExistsId, ColumnMapRowMapper())
-            cache[queryExistsId]=qIdList
-        }
-        return qIdList!!
-    }
-}
-
-abstract class NamedSimpleCachedTableQueryer(val name:String,props: Array<String>,  db:String,  fields:String?,  criteria:String?)
-    : SimpleCachedTableQueryer(props,db, fields, criteria) {
-    override fun name(key: String): String {
-        return name
-    }
-}
-
+//aries
 class UserIdQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})详情",arrayOf("userId","CREATOR_ID","CREATE_USER","CREATE_PERSON"),"db_aries_user.TBL_USER","ID,NAME,MOBILE,EMAIL","ID=${'$'}{params} AND IS_DELETED=0 ")
 
 class UsersRolesQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})拥有角色",arrayOf("userId"),"db_aries_user.TBL_USER_ROLE","ROLE,TITLE,INTRO","USER_ID=${'$'}{params} AND IS_DELETED=0 ")
 class UsersCompanyQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})所属企业",arrayOf("userId"),"db_aries_user.TBL_USER_COMPANY","COMPANY_ID as companyId","USER_ID=${'$'}{params} AND IS_DELETED=0 ")
 class Users2BCourseQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})加入学习的2b课程",arrayOf("userId"),"db_aries_study.TBL_USER_COURSE","COURSE_ID as courseId2B,COMPANY_ID,CLASS_ID,RECRUIT_ID,CREATOR_ID,CREATE_TIME,UPDATE_TIME","USER_ID=${'$'}{params} AND IS_DELETE=0 ")
-class Users2CCourseQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})购买的2c课程",arrayOf("userId"),"db_aries_2c_course.TM_USER_COURSE","COURSE_ID as courseId2C,CREATE_TIME,UPDATE_TIME","USER_ID=${'$'}{params} AND IS_DELETED=0 ")
-class Users2CCourseStudyQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})加入学习的2c课程",arrayOf("userId"),"db_aries_2c_course.TM_USER_STUDY_COURSE","COURSE_ID as courseId2C,STUDY_TYPE,USER_TYPE,CREATE_TIME,UPDATE_TIME","USER_ID=${'$'}{params} AND IS_DELETED=0 ")
+class Users2CCourseQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})购买的2c课程",arrayOf("userId"),"db_aries_2c_course.TM_USER_COURSE","COURSE_ID as courseId2C,CREATE_TIME,UPDATE_TIME,USER_TYPE,BUY_TYPE","USER_ID=${'$'}{params} AND IS_DELETED=0 ")
+class Users2CCourseStudyQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})加入学习的2c课程",arrayOf("userId"),"db_aries_2c_course.TM_USER_STUDY_COURSE","COURSE_ID as courseId2C,STUDY_TYPE,USER_TYPE,CREATE_TIME,UPDATE_TIME,USER_TYPE,STUDY_TYPE","USER_ID=${'$'}{params} AND IS_DELETED=0 ")
 
 class UsersCreatedGroupQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})创建的群组",arrayOf("userId"),"db_aries_class_tools.GROUP","GROUP_ID as groupId,GROUP_NAME,RULES,CREATE_TIME","GROUP_USER_ID=${'$'}{params} AND IS_DELETE=0 ")
 class UsersJoinedGroupQueryer : NamedSimpleCachedTableQueryer("用户(${'$'}{params})加入的群组",arrayOf("userId"),"db_aries_class_tools.USER_GROUP","GROUP_ID ,case ROLE when 1 then '成员' when 2 then '群主'when 3 then '管理员' ELSE ROLE END as ROLE ,CREATE_TIME","USER_ID=${'$'}{params} AND IS_DELETE=0 ")
@@ -84,7 +33,7 @@ class Class2BQueryer : NamedSimpleCachedTableQueryer("班级(${'$'}{params})详�
 class GroupQueryer : NamedSimpleCachedTableQueryer("群组(${'$'}{params})详情",arrayOf("GROUP_ID"),"db_aries_class_tools.GROUP","GROUP_ID as groupId,GROUP_NAME,RULES,CREATE_TIME","GROUP_ID=${'$'}{params} AND IS_DELETE=0 ")
 class GoodsQueryer : NamedSimpleCachedTableQueryer("商品(${'$'}{params})详情",arrayOf("GOODS_ID"),"db_aries_pay_goods.goods","type,platform,b_item_id,amount,`describe`,is_delete","id=${'$'}{params} ")
 
-val allQueryer = arrayOf<DataQueryer>(UserIdQueryer()
+val allAriesQueryer = arrayOf<DataQueryer>(UserIdQueryer()
 
         , UsersCompanyQueryer()
         , UsersRolesQueryer()
@@ -95,11 +44,11 @@ val allQueryer = arrayOf<DataQueryer>(UserIdQueryer()
         , UsersJoinedGroupQueryer()
         , UsersOrderQueryer()
 
-        ,CourseId2BQueryer()
-        ,CourseId2CQueryer()
-        ,CompanyIdQueryer()
-        ,Recruit2BQueryer()
-        ,Class2BQueryer()
-        ,GroupQueryer()
-        ,GoodsQueryer()
+        , CourseId2BQueryer()
+        , CourseId2CQueryer()
+        , CompanyIdQueryer()
+        , Recruit2BQueryer()
+        , Class2BQueryer()
+        , GroupQueryer()
+        , GoodsQueryer()
 )

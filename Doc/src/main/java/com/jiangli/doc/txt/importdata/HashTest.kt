@@ -1,6 +1,7 @@
 package com.jiangli.doc.txt.importdata
 
 import com.jiangli.common.utils.YufaCodis
+import com.jiangli.doc.sql.helper.zhihuishu.Zhsutil
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.jdbc.core.ColumnMapRowMapper
  */
 
 fun main(args: Array<String>) {
-    val userId = convertUUID("VvM1r7zX")
+    val userId = Zhsutil.convertUUID("VvM1r7zX")
     println(userId)
 
     val CURRENT_ENV = Env.YUFA

@@ -1,4 +1,7 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries.user
+
+import com.jiangli.doc.sql.helper.aries.Ariesutil
+import com.jiangli.doc.sql.helper.aries.Env
 
 /**
  *
@@ -29,10 +32,10 @@ fun main(args: Array<String>) {
 
     //guest
 //    val userId =100011568
-    val userId =100013280
+    val userId =100013735
 
-    Ariesutil.confirmUserId(jdbc,userId.toLong())
-    val map = Ariesutil.injectFromUserId(jdbc,userId.toLong())
+    Ariesutil.confirmUserId(jdbc, userId.toLong())
+    val map = Ariesutil.injectFromUserId(jdbc, userId.toLong())
 
 
     println("""

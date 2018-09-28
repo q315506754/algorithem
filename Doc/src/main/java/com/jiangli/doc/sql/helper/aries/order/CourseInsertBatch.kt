@@ -1,6 +1,9 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries.order
 
 import com.jiangli.doc.ExcelUtil
+import com.jiangli.doc.sql.helper.aries.Ariesutil
+import com.jiangli.doc.sql.helper.aries.CourseName2CQueryer
+import com.jiangli.doc.sql.helper.aries.Env
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
 /**
@@ -13,7 +16,7 @@ fun main(args: Array<String>) {
     val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
     //课程名字 姓名 手机
-    val excelName = """副本 开课名单9.21下午"""
+    val excelName = """副本 开课名单0927-上午"""
 //    val excelName = """副本 开课名单-0920-上午.xlsx"""
 
     val endIndex = excelName.lastIndexOf(".xlsx")
@@ -58,10 +61,10 @@ fun main(args: Array<String>) {
                 try {//接收者
                     Ariesutil.validateNum("确保接收者无2c购买记录", jdbc.query("""
     SELECT * from db_aries_2c_course.TM_USER_COURSE WHERE USER_ID=$toId AND COURSE_ID=$courseId AND IS_DELETED=0;
-        """.trimIndent(), ColumnMapRowMapper()),0)
+        """.trimIndent(), ColumnMapRowMapper()), 0)
                     Ariesutil.validateNum("确保接收者无2c学习记录", jdbc.query("""
     SELECT * from db_aries_2c_course.TM_USER_STUDY_COURSE WHERE USER_ID=$toId AND COURSE_ID=$courseId AND IS_DELETED=0;
-        """.trimIndent(), ColumnMapRowMapper()),0)
+        """.trimIndent(), ColumnMapRowMapper()), 0)
 
 //    插入 购买权限
                     insertCourse.add("""
@@ -75,7 +78,8 @@ fun main(args: Array<String>) {
                     suc_count++
                 } catch (e: Exception) {
                     fail_count++
-                    println("$toId 已经购买过课程 $courseId $courseName")
+                    System.err.println("$name  $mobile $toId 已经购买过课程 $courseId $courseName")
+//                    println("$name  $mobile $toId 已经购买过课程 $courseId $courseName")
                 }
             }
         }

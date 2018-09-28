@@ -1,4 +1,7 @@
-package com.jiangli.doc.sql
+package com.jiangli.doc.sql.helper.aries.user
+
+import com.jiangli.doc.sql.helper.aries.Ariesutil
+import com.jiangli.doc.sql.helper.aries.Env
 
 /**
  *

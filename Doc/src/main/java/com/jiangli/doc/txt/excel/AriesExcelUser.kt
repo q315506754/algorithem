@@ -1,8 +1,8 @@
 package com.jiangli.doc.txt.excel
 
 import com.jiangli.doc.ExcelUtil
-import com.jiangli.doc.sql.Ariesutil
-import com.jiangli.doc.sql.Env
+import com.jiangli.doc.sql.helper.aries.Ariesutil
+import com.jiangli.doc.sql.helper.aries.Env
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
 /**
