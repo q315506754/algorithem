@@ -12,9 +12,14 @@ public class ThreadPoolExecutorMain {
     public static void main(String[] args) {
         System.out.println(new ThreadPoolExecutor(5,10,500, TimeUnit.SECONDS, new SynchronousQueue<>()));
         Executors.newCachedThreadPool();
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ThreadPoolExecutor executorService = (ThreadPoolExecutor)Executors.newFixedThreadPool(10);
         //executorService.execute(null);
-        executorService.execute(()->{});
+        //executorService.execute(()->{});
+        executorService.execute(()->{
+            System.out.println("fire..");
+            executorService.setCorePoolSize(66);
+            System.out.println("fire over..");
+        });
         //     a pool
     //    core pool sizes ,  maximum pool sizes
     //    always new ,    when queue is full

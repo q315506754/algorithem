@@ -28,14 +28,27 @@ fun main(args: Array<String>) {
 //            ,169116471
 //            ,183276641
 //            ,183877873
-            ,187255287
-            ,187455927
-            ,182443379
-            ,183613593
+//            ,187255287
+//            ,187455927
+//            ,182443379
+//            ,183613593
+//            ,187239895
+//            ,168305113
+//            ,168361357
+//
+//            ,189277745
+            ,168298089
+            ,163282629
+            ,163492815
+            ,187566035
+            ,187767089
     )
     queryByGroup(jdbc, q,"固定组", fixedUsers)
 
+//    ⑧1⑤Æㄉ3⑨42⑦0
+
     val sqls = linkedSetOf<String>(
+//        "妈妈再也不用担心我的学习"
 //        "大家做完了没"
 //    ,"三年来专为学生网课服务 高效质量好"
 //    ,"如果缺少乙醇脱氢酶能体外补充么?"
@@ -74,12 +87,20 @@ private fun queryByGroup(jdbc: JdbcTemplate, q: UserIdQueryer, s:String, users: 
 FROM db_G2S_OnlineSchool.STUDENT WHERE  STUDENT_ID=$it
         """.trimIndent(), ColumnMapRowMapper())
 
-        val localMap = mutableMapOf<String, Map<Any?, Any?>>()
+        val classCourseIdMap = mutableMapOf<String, Map<Any?, Any?>>()
         rights.forEach {
-            localMap.put(it["recruitId"].toString(), it as Map<Any?, Any?>)
+//            classCourseIdMap.put(it["recruitId"].toString(), it as Map<Any?, Any?>)
+            classCourseIdMap.put(it["courseId"].toString(), it as Map<Any?, Any?>)
         }
 
-        val partici = jdbc.query("""
+        println("user:$curUid ${userMap["REAL_NAME"]} ${userMap["NICK_NAME"]} ${userMap["E_MAIL"]} ${Zhsutil.convertUUID(curUid)}")
+
+
+        val prefix = "    "
+
+        val quesList = queryParticipate(jdbc, { each ->
+            classCourseIdMap.containsKey(each["COURSE_ID"].toString())
+        }, prefix, "问", """
             SELECT
   QUESTION_ID as questionId
   ,COURSE_ID
@@ -88,35 +109,57 @@ FROM db_G2S_OnlineSchool.STUDENT WHERE  STUDENT_ID=$it
 ,CONTENT
 ,CREATE_TIME
 FROM ZHS_BBS.QA_QUESTION WHERE  CREATE_USER=$it ORDER BY QUESTION_ID DESC ;
-        """.trimIndent(), ColumnMapRowMapper())
+        """)
+//        val ancestorIdMap = mutableMapOf<String, Map<Any?, Any?>>()
+//        rights.forEach {
+//            classCourseIdMap.put(it["courseId"].toString(), it as Map<Any?, Any?>)
+//        }
 
-//        println(rights)
-//        println(partici)
+//        queryParticipate(jdbc,classCourseIdMap,prefix,"答","""
+//            SELECT
+//  ID
+//  ,COURSE_ID
+//  ,ANCESTOR_COURSE_ID
+//  ,A_CONTENT
+//  ,CREATE_TIME
+//FROM ZHS_BBS.QA_ANSWER WHERE  A_USER_ID=$it ORDER BY ID DESC ;
+//        """)
 
-        var sucQ = 0
-        var failQ = 0
-        partici.forEach {
-            val map = it as MutableMap<Any?, Any?>
-            if (!localMap.containsKey(map["RECRUIT_ID"].toString())) {
-//                System.err.println(map)
-                failQ++
-            } else {
-                sucQ++
-            }
-        }
 
-        val comparator = compareBy<MutableMap<String, Any>> {
-            it["CREATE_TIME"] as Timestamp?
-        }
-        val maxCreateTimeDt = partici.maxWith(
-                comparator
-        )
-        val minCreateTimeDt = partici.minWith(
-                comparator
-        )
-//        Comparator { o1: T, o2: T -> (o1["CREATE_TIME"] as Int).compar }
-
-        val pl: (Any?) -> Unit = if (failQ == 0) ::println else System.err::println
-        pl("user:$curUid ${userMap["REAL_NAME"]} ${userMap["NICK_NAME"]} ${userMap["E_MAIL"]} ${Zhsutil.convertUUID(curUid)} 问（s:$sucQ f:$failQ /t:${partici.size}）(${minCreateTimeDt?.get("CREATE_TIME")}~${maxCreateTimeDt?.get("CREATE_TIME")})")
+//        val pl: (Any?) -> Unit = if (failQ == 0) ::println else System.err::println
     }
 }
+
+fun queryParticipate(jdbc: JdbcTemplate, check:(MutableMap<Any?, Any?>)->Boolean, prefix: String, module: String, sql: String): MutableList<MutableMap<String, Any>>? {
+    val particiQues = jdbc.query(sql.trimIndent(), ColumnMapRowMapper())
+
+    var sucQ = 0
+    var failQ = 0
+    particiQues.forEach {
+        val map = it as MutableMap<Any?, Any?>
+//            if (!classMap.containsKey(map["RECRUIT_ID"].toString())) {
+        if (!check(map)) {
+//                System.err.println(map)
+            failQ++
+        } else {
+            sucQ++
+        }
+    }
+
+    val comparator = compareBy<MutableMap<String, Any>> {
+        it["CREATE_TIME"] as Timestamp?
+    }
+    val maxCreateTimeDt = particiQues.maxWith(
+            comparator
+    )
+    val minCreateTimeDt = particiQues.minWith(
+            comparator
+    )
+
+    val pl: (Any?) -> Unit = if (failQ == 0) ::println else System.err::println
+    pl("${prefix}${module}（s:$sucQ f:$failQ /t:${particiQues.size}）(${minCreateTimeDt?.get("CREATE_TIME")}~${maxCreateTimeDt?.get("CREATE_TIME")})")
+
+    return particiQues
+}
+
+
