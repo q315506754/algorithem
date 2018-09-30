@@ -96,7 +96,7 @@ object ContentAnalyser{
         var count = 1
         var rt = mutableListOf<FindPos>()
 
-        if (list.size > contiN) {
+        if (list.size >= contiN) {
             var prev:Int?=null
             var prevInitial:Int?=null
             list.forEachIndexed{ idx,it ->
@@ -128,25 +128,32 @@ object ContentAnalyser{
         return rt
     }
 
-    fun analyse(str:String):AnaRs {
-        if(str.contains(contiRegex)){
-            return AnaRs.CONTINUOUS_NUMBER
+    fun getDiffs(str:String):Set<Int> {
+        val ret = mutableSetOf<Int>()
+        str.toCharArray().forEach {
+            ret.add(it.toInt())
         }
+        return ret
+    }
 
+    fun analyse(str:String):AnaRs {
+//        if(str.contains(contiRegex)){
+//            return AnaRs.CONTINUOUS_NUMBER
+//        }
 
 //        有误杀可能
 //        if(isNumberPosInRange(getNumberPos(str),conNum,2)){
 
         val numberRange = getNumberRange(getNumberPos(str), conNum, 2).filter {
-            it.count in 8..9
+            it.count in 8..12
         }
 
-        val mustContainedChars = setOf("日月年号:-元.".toCharArray())
+        val mustContainedChars = "日月年号:-元.分秒班年级度，。#".toCharArray().toSet()
         if(numberRange.isNotEmpty()){
             //        有误杀可能  09-10 09:22  2018-09-29 18:59:17 9月10日
 
 //            长文不删
-            if (str.length> 100) {
+            if (str.length> 200) {
                 return AnaRs.OK
             }
 
@@ -156,13 +163,19 @@ object ContentAnalyser{
                 val strOne = str.substring(it.range.first,it.range.last+1)
 //                println(strOne)
 
-                if (mustContainedChars.intersect(setOf(strOne.toCharArray())).isEmpty()) {
-                    //            关键字判断
-                    return AnaRs.UNICODE_NUMBER
+                //危险模式
+                if (mustContainedChars.intersect(strOne.toCharArray().toSet()).isEmpty()) {
+
+                    //55555555
+                    //666666666
+                    if (getDiffs(strOne).size>3) {
+                        //            关键字判断
+                        return AnaRs.UNICODE_NUMBER
+                    }
+
                 }
             }
 //
-
             return AnaRs.OK
         }
 

@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
             ,163282629
             ,163492815
             ,187566035
-            ,187767089
+            ,165259725
     )
     queryByGroup(jdbc, q,"固定组", fixedUsers)
 
