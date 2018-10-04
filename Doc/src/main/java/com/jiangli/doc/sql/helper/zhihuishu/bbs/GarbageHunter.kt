@@ -25,12 +25,14 @@ var client = OkHttpClient.Builder()
 
 val DEBUG_MODE=false
 //val DEBUG_MODE=true
-val DEBUG_PREV_PAGE = 1000
+val DEBUG_PREV_PAGE = 300
 
 //!!!!!!!dangerous!!!!!!!!!!
 val DELETE_OPEN=true
 //val DELETE_OPEN=false //safe
 
+val CASCADE_DELETE=true
+//val CASCADE_DELETE=false
 
 //开启邮件发送
 //val SEND_MAIL=false
@@ -38,6 +40,9 @@ val SEND_MAIL=true
 val mailTo = arrayListOf("315506754@qq.com")
 
 //val log:(Any?)->Unit = ::println
+
+//val timeStr = "0930-1200/30,1330-2100/30"
+val timeStr = "0730-2300/30"
 
 //nothing
 val debug:(Any?)->Unit = { any ->
@@ -91,6 +96,54 @@ fun parseHtml():String? {
     return null
 }
 fun curTime() = DateUtil.getCurrentDate_YMDHms()
+
+fun requestQuestion(jdbc:JdbcTemplate,domain: String, qId: Long, vUserId: String): String {
+    val param = String.format("questionId=%s&deletePeron=%s", qId, vUserId)
+    var rs = requestWithsign("${domain}/delQuestion", param)
+    if (CASCADE_DELETE && !rs.contains("\"status\":\"200\"")) {
+        val aMap = jdbc.query("""
+SELECT ID,A_USER_ID as USERID from ZHS_BBS.QA_ANSWER WHERE Q_ID = $qId and IS_DELETED = 0;
+        """.trimIndent(), ColumnMapRowMapper())
+
+        if (aMap.isNotEmpty()) {
+            aMap.forEach {
+                val aId = it["ID"].toString().toLong()
+                val USERID = it["USERID"].toString()
+                requestAnswer(jdbc,domain,aId, USERID)
+            }
+
+            rs = requestWithsign("${domain}/delQuestion", param)
+        }
+    }
+    return rs
+}
+fun requestAnswer(jdbc:JdbcTemplate,domain: String, aId: Long, vUserId: String): String {
+    val param = String.format("answerId=%s&deletePeron=%s", aId, vUserId)
+    var rs = requestWithsign("${domain}/delAnswer", param)
+    if (CASCADE_DELETE && !rs.contains("\"status\":\"200\"")) {
+        val aMap = jdbc.query("""
+SELECT ID,COMMENT_USER_ID  as USERID from ZHS_BBS.QA_COMMENT WHERE A_ID = $aId and IS_DELETED = 0;
+        """.trimIndent(), ColumnMapRowMapper())
+
+        if (aMap.isNotEmpty()) {
+            aMap.forEach {
+                val cId = it["ID"].toString().toLong()
+                val USERID = it["USERID"].toString()
+                requestComment(jdbc,domain,cId, USERID)
+            }
+
+            rs = requestWithsign("${domain}/delAnswer", param)
+        }
+    }
+    return rs
+}
+fun requestComment(jdbc:JdbcTemplate,domain: String, cId: Long, vUserId: String): String {
+    val param = String.format("commentId=%s&deletePeron=%s", cId, vUserId)
+    val rs = requestWithsign("${domain}/delComment", param)
+    return rs
+}
+
+
 fun main(args: Array<String>) {
     val env = Env.WAIWANG_ALL
     val jdbc = Zhsutil.getJDBC(env)
@@ -104,16 +157,13 @@ fun main(args: Array<String>) {
 
     val pool = Executors.newScheduledThreadPool(3)
     pool.scheduleAtFixedRate(BaseGreenWork(jdbc,PAGE_SIZE,"ZHS_BBS.QA_QUESTION","QUESTION_ID","CONTENT","CREATE_USER",{ vId, vContent, vUserId ->
-        val param = String.format("questionId=%s&deletePeron=%s", vId, vUserId)
-        return@BaseGreenWork requestWithsign("${domain}/delQuestion", param)
+        return@BaseGreenWork requestQuestion(jdbc,domain,vId,vUserId)
     }), 0, INTERVAL, timeUnit)
     pool.scheduleAtFixedRate(BaseGreenWork(jdbc,PAGE_SIZE,"ZHS_BBS.QA_ANSWER","ID","A_CONTENT","A_USER_ID",{ vId, vContent, vUserId ->
-        val param = String.format("answerId=%s&deletePeron=%s", vId, vUserId)
-        return@BaseGreenWork requestWithsign("${domain}/delAnswer",param)
+        return@BaseGreenWork requestAnswer(jdbc,domain,vId,vUserId)
     }), 0, INTERVAL, timeUnit)
     pool.scheduleAtFixedRate(BaseGreenWork(jdbc,PAGE_SIZE,"ZHS_BBS.QA_COMMENT","ID","COMMENT_CONTENT","COMMENT_USER_ID",{ vId, vContent, vUserId ->
-        val param = String.format("commentId=%s&deletePeron=%s", vId, vUserId)
-        return@BaseGreenWork requestWithsign("${domain}/delComment", param)
+        return@BaseGreenWork requestComment(jdbc,domain,vId,vUserId)
     }), 0, INTERVAL, timeUnit)
 
 
@@ -206,6 +256,7 @@ abstract class DailyWork(val timeStr:String):Runnable{
              today = getToday()
          } else {
              if (getToday() != today) {
+                 today = getToday()
                  caculateNext()
              }
          }
@@ -263,7 +314,10 @@ abstract class DailyWork(val timeStr:String):Runnable{
         return false
     }
 }
-class SendMailWork:DailyWork("0930-1200/30,1330-2100/30"){
+
+
+
+class SendMailWork:DailyWork(timeStr){
     var prevTs = System.currentTimeMillis()
 
     override fun doWork() {

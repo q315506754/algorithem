@@ -40,8 +40,8 @@ fun main(args: Array<String>) {
             ,168298089
             ,163282629
             ,163492815
-            ,187566035
-            ,165259725
+            ,184984729
+            ,187415911
     )
     queryByGroup(jdbc, q,"固定组", fixedUsers)
 

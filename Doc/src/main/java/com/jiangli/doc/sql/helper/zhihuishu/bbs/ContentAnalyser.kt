@@ -16,6 +16,8 @@ val numberSet = mutableSetOf<Int>()
 data class FindPos(val range:IntProgression,val count:Int)
 
 object ContentAnalyser{
+    var unvisibleCode = intArrayOf(8419,9438)
+
     val conNum = 8
     val mobileRegex = """1\d{10}""".toRegex(RegexOption.MULTILINE)
     val contiRegex = """\d{$conNum}""".toRegex(RegexOption.MULTILINE)
@@ -25,9 +27,10 @@ object ContentAnalyser{
         numberSet.addAll(to2Int('0')..to2Int('9'))//
         numberSet.addAll(to2Int('o','O'))//
         numberSet.addAll(to2Int('零','一','二','三','四','五','六','七','八','九','十'))//
-        numberSet.addAll(to2Int("壹贰叁肆伍陆柒捌玖玖"))//
+        numberSet.addAll(to2Int("壹贰叁肆伍陆柒捌玖久拾"))//
 
-        numberSet.addAll(9451..9471) // ⓫⓴⓵⓾⓿
+//        numberSet.add(8419) //!⃣
+        numberSet.addAll(9450..9471) // ⓫⓴⓵⓾⓿
         numberSet.addAll(9352..9371) // ⒈ ⒛
         numberSet.addAll(9332..9351) // ⑴⒇
         numberSet.addAll(9322..9331) //  ⑪⑳
@@ -35,6 +38,9 @@ object ContentAnalyser{
         numberSet.addAll(10122..10131) // ➊ ➓
         numberSet.addAll(10112..10121) // ➀➉
         numberSet.addAll(10102..10111) // ❶ ❿
+        numberSet.addAll(65296..65305) // ０ ９
+        numberSet.addAll(12831..12841) // ㈟㈠㈩
+        numberSet.add(9438) // ⓞ
     }
     fun isNum(char:Char):Boolean {
         return numberSet.contains(char.toInt())
@@ -137,18 +143,17 @@ object ContentAnalyser{
     }
 
     fun analyse(str:String):AnaRs {
-//        if(str.contains(contiRegex)){
-//            return AnaRs.CONTINUOUS_NUMBER
-//        }
-
-//        有误杀可能
-//        if(isNumberPosInRange(getNumberPos(str),conNum,2)){
+        str.toCharArray().forEach {
+            if (unvisibleCode.contains(it.toInt())) {
+                return AnaRs.UNVISIBLE_CODE
+            }
+        }
 
         val numberRange = getNumberRange(getNumberPos(str), conNum, 2).filter {
             it.count in 8..12
         }
 
-        val mustContainedChars = "日月年号:-元.分秒班年级度，。#".toCharArray().toSet()
+        val mustContainedChars = "日月年号:-元.分秒班年级度，。#和与同并加减乘除+-*/".toCharArray().toSet()
         if(numberRange.isNotEmpty()){
             //        有误杀可能  09-10 09:22  2018-09-29 18:59:17 9月10日
 
@@ -265,6 +270,7 @@ enum class AnaRs(val s: String) {
     ,CONTINUOUS_NUMBER("包含连续数字")
     ,SENSITIVE_WORD("敏感词")
     ,UNICODE_NUMBER("unicode检测到连续数字")
+    ,UNVISIBLE_CODE("不可见字符")
 }
 
 

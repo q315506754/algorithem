@@ -42,7 +42,11 @@ class EmailTest {
 
     @Test
     fun DailyWorkTest() {
-        val sendMailWork = SendMailWork()
+        val sendMailWork = object : DailyWork("0930-1200/30,1330-2100/30") {
+            override fun doWork() {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
         println(sendMailWork.getNow())
         println(sendMailWork.findNext(sendMailWork.getNow()))
         println(sendMailWork.findNext(TimeDto(0,0)))
