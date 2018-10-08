@@ -18,7 +18,7 @@ class BBSDbTest {
     fun objTest() {
         val env = Env.WAIWANG_ALL
         val jdbc = Zhsutil.getJDBC(env)
-        val qId = 580572
+        val qId = 581853
         val query = jdbc.query("SELECT * from ZHS_BBS.QA_QUESTION WHERE QUESTION_ID = $qId;", ColumnMapRowMapper())
         val content = query[0]["CONTENT"].toString()
         println(content)

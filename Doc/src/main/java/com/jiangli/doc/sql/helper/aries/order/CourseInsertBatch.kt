@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
     //课程名字 姓名 手机
-    val excelName = """副本 开课名单-0930-上午"""
+    val excelName = """开课名单-1.xlsx"""
 //    val excelName = """副本 开课名单-0920-上午.xlsx"""
 
     val endIndex = excelName.lastIndexOf(".xlsx")
