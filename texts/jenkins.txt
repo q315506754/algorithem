@@ -1,0 +1,18 @@
+pwd
+mvn clean package -DskipTests
+pwd
+\cp -f ./target/ApiServer.jar /root/runner
+#rstart.sh
+rstartblock.sh
+
+cd /root/app-server/
+#java -jar ApiServer.jar
+BUILD_ID=dontKillMe nohup java -jar ApiServer.jar > nohup.out 2>&1 &
+#nohup java -jar ApiServer.jar > nohup.out 2>&1 &
+
+#java -jar /root/app-server/ApiServer.jar
+#source /etc/profile
+#nohup  java -jar /root/app-server/ApiServer.jar > /root/app-server/nohup.out 2>&1 &
+#setsid java -jar /root/app-server/ApiServer.jar >> /root/app-server/nohup.out 2>&1 &
+#nohup java -jar /root/app-server/ApiServer.jar > /root/app-server/nohup.out &
+#ps -ef|grep ApiServer |grep -v bash|grep -v grep

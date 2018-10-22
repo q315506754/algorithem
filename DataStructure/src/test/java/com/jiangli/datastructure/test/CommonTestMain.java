@@ -7,6 +7,6 @@ package com.jiangli.datastructure.test;
 public class CommonTestMain {
 
     public static void main(String[] args) {
-        System.out.println("Hello world");
+        System.out.println("Hello world撒大声地");
     }
 }

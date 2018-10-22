@@ -25,16 +25,19 @@ public class RadixSort extends Sorter<Integer> {
      * 缺点是需要知道数字最长有多少位，否则还得循环一趟来获取
      * 使用的空间为 n+r  r为基数，n为数组长度，这里是指有效空间，还有浪费掉的空间
      * @param unsorted
-     * @param numLength
+     * @param radix
      * @param dupListSize
      */
 
-    void radix_sort(Integer[] unsorted, int numLength, int dupListSize) {
+    void radix_sort(Integer[] unsorted, int radix, int dupListSize) {
         /* 最大数字不超过999999999...(array_x个9) */
         //循环越到后面,对应的位越起决定性的作用，符合数字规律，也就是位越高，越能决定顺序
         //假设从数字的左边开始取值，到最后导致个位主导顺序
-        for (int i = 0; i < numLength; i++) {
-            Integer[][] bucket = new Integer[10][dupListSize];
+
+        //radix代表基数  这里取10
+        int maxLength=10;//数字最长有多少位
+        for (int i = 0; i < maxLength; i++) {
+            Integer[][] bucket = new Integer[radix][dupListSize];
             for (int item : unsorted) {
                 int temp = (item / (int) Math.pow(10, i)) % 10;
                 for (int l = 0; l < dupListSize; l++) {
@@ -44,7 +47,9 @@ public class RadixSort extends Sorter<Integer> {
                     }
                 }
             }
-            for (int o = 0, x = 0; x < numLength; x++) {
+
+            //每一次循环
+            for (int o = 0, x = 0; x < radix; x++) {
                 for (int y = 0; y < dupListSize; y++) {
                     if (bucket[x][y] == null) {
                         break;

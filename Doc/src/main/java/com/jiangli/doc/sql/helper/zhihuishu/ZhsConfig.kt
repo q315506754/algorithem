@@ -67,7 +67,7 @@ object Zhsutil {
 
     fun getUserId(jdbc: JdbcTemplate, name: String? = "", mobile: String? = "", email: String? = ""): String {
         if (mobile?.isNotEmpty()!!) {
-            val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE MOBILE=$mobile and IS_DELETED = 0;"
+            val s = "SELECT ID,REAL_NAME,PHONE_NUMBER,E_MAIL FROM db_G2S_OnlineSchool.TBL_USER WHERE PHONE_NUMBER=$mobile and IS_DELETED = 0;"
             println("执行sql")
             println("   $s")
             val query = jdbc.query(s, ColumnMapRowMapper())
@@ -75,7 +75,7 @@ object Zhsutil {
             return query[0]["ID"].toString()
         }
         if (email?.isNotEmpty()!!) {
-            val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE EMAIL='$email' and IS_DELETED = 0;"
+            val s = "SELECT ID,REAL_NAME,PHONE_NUMBER,E_MAIL FROM db_G2S_OnlineSchool.TBL_USER WHERE E_MAIL='$email' and IS_DELETED = 0;"
             println("执行sql")
             println("   $s")
             val query = jdbc.query(s, ColumnMapRowMapper())
@@ -83,7 +83,7 @@ object Zhsutil {
             return query[0]["ID"].toString()
         }
         if (name?.isNotEmpty()!!) {
-            val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE NAME like '%$name%' and IS_DELETED = 0;"
+            val s = "SELECT ID,REAL_NAME,PHONE_NUMBER,E_MAIL FROM db_G2S_OnlineSchool.TBL_USER WHERE REAL_NAME like '%$name%' and IS_DELETED = 0;"
             val query = jdbc.query(s, ColumnMapRowMapper())
             println("执行sql")
             println("   $s")
@@ -94,12 +94,12 @@ object Zhsutil {
     }
 
     fun confirmUserId(jdbc: JdbcTemplate, uId: Number) {
-        val s = "SELECT ID,NAME,MOBILE,EMAIL,CREATE_TIME,PASSWORD FROM db_aries_user.TBL_USER WHERE ID = $uId and IS_DELETED = 0;"
+        val s = "SELECT ID,REAL_NAME,PHONE_NUMBER,E_MAIL,CREATE_TIME,PASSWORD FROM db_G2S_OnlineSchool.TBL_USER WHERE ID = $uId and IS_DELETED = 0;"
         val query = jdbc.queryForObject(s, ColumnMapRowMapper())
         println("确认用户($uId):$query")
     }
     fun confirm2CCourseId(jdbc: JdbcTemplate, courseId: Long) {
-        val s = "SELECT ID,NAME,MOBILE,EMAIL,CREATE_TIME,PASSWORD FROM db_aries_user.TBL_USER WHERE ID = $courseId and IS_DELETED = 0;"
+        val s = "SELECT ID,REAL_NAME,PHONE_NUMBER,E_MAIL,CREATE_TIME,PASSWORD FROM db_G2S_OnlineSchool.TBL_USER WHERE ID = $courseId and IS_DELETED = 0;"
         val query = jdbc.queryForObject(s, ColumnMapRowMapper())
         println("确认2c课程($courseId):$query")
     }
@@ -156,7 +156,8 @@ fun main(args: Array<String>) {
 //    println(Zhsutil.confirmUserId(jdbc,100002065))
 //    println(Zhsutil.confirmUUID(jdbc,"ykRXob2n"))
 
-    println(Zhsutil.confirmUserId(jdbc, 100008058))
+//    println(Zhsutil.confirmUserId(jdbc, 100008058))
+    println(Zhsutil.getUserId(jdbc, "","13761156786"))
 
 
 }

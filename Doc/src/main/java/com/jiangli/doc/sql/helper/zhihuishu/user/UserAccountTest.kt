@@ -19,7 +19,8 @@ fun main(args: Array<String>) {
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "", email = "pengjing@noahwm.com")
 
 //    val userId =187767649
-    val userId =163401949
+//    val userId =162347707
+    val userId =170125517
 
     val map = Zhsutil.injectFromUserId(jdbc, userId.toLong())
 

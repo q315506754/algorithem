@@ -1,6 +1,7 @@
 package com.jiangli.doc.sql.helper.zhihuishu.bbs
 
 import com.jiangli.common.utils.MD5
+import com.jiangli.common.utils.PinyinUtil
 import org.apache.commons.lang.StringUtils
 import java.net.URI
 import java.util.*
@@ -17,10 +18,50 @@ data class FindPos(val range:IntProgression,val count:Int)
 
 object ContentAnalyser{
     var unvisibleCode = intArrayOf(8419,9438)
+    val numberInvalidStrs = arrayListOf("zhswk.cn")
+    val weightMap = mapOf(
+            "代" to 150
+            ,"课" to 40
+            ,"高" to 30
+            ,"分" to 50
+            ,"学" to 30
+            ,"讲" to 20
+            ,"棒" to 30
+            ,"包" to 40
+            ,"习" to 100
+            ,"筘扣ⓠ" to 2000
+            ,"Qa" to 100
+            ,"群" to 1500
+            ,"网" to 100
+            ,"微" to 40
+    )
+    val pinYinMap = mapOf(
+            "daikan" to 2000
+            ,"daizuo" to 2000
+            ,"daike" to 2000
+            ,"wangke" to 2000
+            ,"weixin" to 2000
+            ,"xuejie" to 500
+            ,"gaofen" to 500
+            ,"kecheng" to 300
+            ,"manfen" to 300
+            ,"wangke" to 300
+            ,"zuoye" to 500
+            ,"jiaoliu" to 500
+            ,"jieda" to 300
+            ,"kouqun" to 500
+            ,"zhaodao" to 500
+            ,"qun" to 500
+            ,"answer" to 500
+            ,"yunqi" to 200
+            ,"fenxiang" to 200
+    )
+    val intWeightMap = mutableMapOf<Int,Int>()
 
-    val conNum = 8
+    val conNum_least = 8
+    val NUM_DIST = 2
     val mobileRegex = """1\d{10}""".toRegex(RegexOption.MULTILINE)
-    val contiRegex = """\d{$conNum}""".toRegex(RegexOption.MULTILINE)
+    val contiRegex = """\d{$conNum_least}""".toRegex(RegexOption.MULTILINE)
     val FIELD_SIGN = "secretStr"
 
     init {
@@ -30,6 +71,8 @@ object ContentAnalyser{
         numberSet.addAll(to2Int("壹贰叁肆伍陆柒捌玖久拾"))//
 
 //        numberSet.add(8419) //!⃣
+        numberSet.add(9412) //Ⓞ
+        numberSet.add(9386) //⒪
         numberSet.addAll(9450..9471) // ⓫⓴⓵⓾⓿
         numberSet.addAll(9352..9371) // ⒈ ⒛
         numberSet.addAll(9332..9351) // ⑴⒇
@@ -41,7 +84,14 @@ object ContentAnalyser{
         numberSet.addAll(65296..65305) // ０ ９
         numberSet.addAll(12831..12841) // ㈟㈠㈩
         numberSet.add(9438) // ⓞ
+
+        weightMap.forEach { t, u ->
+            t.toCharArray().forEach {
+                intWeightMap.put(it.toInt(),u)
+            }
+        }
     }
+
     fun isNum(char:Char):Boolean {
         return numberSet.contains(char.toInt())
     }
@@ -61,6 +111,41 @@ object ContentAnalyser{
 
     fun containsMobile(str:String):Boolean {
         return str.contains(mobileRegex)
+    }
+
+    fun getWeight(str:String):Double {
+        var ret = 0.0
+        val len = str.length
+        var count = 0
+
+        str.toCharArray().forEach {
+            val key = it.toInt()
+            if (intWeightMap.containsKey(key)) {
+                val w = intWeightMap.get(key)
+                if (w!=null) {
+                    count++
+                    ret+=(w*count/100.0)/len
+                }
+            }
+        }
+
+        return ret
+    }
+
+    fun getPinyinWeight(str:String):Double {
+        val str = PinyinUtil.getPinyinString(str)
+        var ret = 0.0
+        val len = str.length
+        var count = 0
+
+        pinYinMap.forEach { each, w ->
+            if (str.contains(each)) {
+                count++
+                ret+=(w*count/100.0)/len
+            }
+        }
+
+        return ret
     }
 
     fun getNumberPos(str:String):List<Int> {
@@ -143,33 +228,60 @@ object ContentAnalyser{
     }
 
     fun analyse(str:String):AnaRs {
+//         ##特殊串删除
+        numberInvalidStrs.forEach {
+            if (str.contains(it)) {
+                return AnaRs.INVALID_STR
+            }
+        }
+
+        // ##特殊扰乱字符删除
         str.toCharArray().forEach {
             if (unvisibleCode.contains(it.toInt())) {
                 return AnaRs.UNVISIBLE_CODE
             }
         }
 
-        val numberRange = getNumberRange(getNumberPos(str), conNum, 2).filter {
-            it.count in 8..12
+//       ##  长文不删
+        if (str.length> 200) {
+            return AnaRs.OK
         }
 
-        val mustContainedChars = "日月年号:-元.分秒班年级度，。#和与同并加减乘除+-*/".toCharArray().toSet()
+//        数字位置idx序列
+        val posList = getNumberPos(str)
+
+
+//        ##单个字符匹配度测试 超出且数字超过一定值
+        val weight = getWeight(str)
+        if (weight > 1.00 && posList.size >= conNum_least) {
+            return AnaRs.WEIGHT_EXCEED
+        }
+
+//        ##拼音词汇敏感度测试
+        val pinyinWeight = getPinyinWeight(str)
+        if (pinyinWeight > 1.00 && posList.size >= conNum_least) {
+            return AnaRs.PINYIN_WEIGHT_EXCEED
+        }
+
+//        ##连续度分段判断
+        val numberRange = getNumberRange(posList, conNum_least, NUM_DIST).filter {
+            it.count in conNum_least..12
+        }
+
+        val mustContainedChars = "日月年号元分秒班年级度和与同并加减乘除到".toCharArray().toSet()
+        val signChars = ":—-.,#+-*/_".toCharArray().toSet()
+
         if(numberRange.isNotEmpty()){
             //        有误杀可能  09-10 09:22  2018-09-29 18:59:17 9月10日
-
-//            长文不删
-            if (str.length> 200) {
-                return AnaRs.OK
-            }
-
-
 //            必须包含关键字 否则删除
             numberRange.forEach {
                 val strOne = str.substring(it.range.first,it.range.last+1)
 //                println(strOne)
 
                 //危险模式
-                if (mustContainedChars.intersect(strOne.toCharArray().toSet()).isEmpty()) {
+                val other = strOne.toCharArray().toSet()
+                if (mustContainedChars.intersect(other).isEmpty()
+                   && ( signChars.intersect(other).isEmpty() || (signChars.intersect(other).isNotEmpty() && pinyinWeight>0.01))) {
 
                     //55555555
                     //666666666
@@ -271,6 +383,9 @@ enum class AnaRs(val s: String) {
     ,SENSITIVE_WORD("敏感词")
     ,UNICODE_NUMBER("unicode检测到连续数字")
     ,UNVISIBLE_CODE("不可见字符")
+    ,INVALID_STR("非法字符")
+    ,WEIGHT_EXCEED("权值超出")
+    ,PINYIN_WEIGHT_EXCEED("拼音权值超出")
 }
 
 

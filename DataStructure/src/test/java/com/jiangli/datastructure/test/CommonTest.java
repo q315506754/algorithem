@@ -153,10 +153,34 @@ public class CommonTest extends BaseTest {
         System.out.println(null instanceof String);
     }
 
+    @Test
+    public void test_10() {
+        System.out.println(-1 << 1);//-2
+        System.out.println(-1 >> 1);//-1
+        System.out.println(-1 >>> 1);//2147483647
+        System.out.println(Integer.MAX_VALUE);//2147483647
+
+        System.out.println(-Integer.MAX_VALUE >>> 1);
+        System.out.println(Integer.toHexString(-Integer.MAX_VALUE));
+        System.out.println(Integer.toHexString(-Integer.MAX_VALUE>>>1));
+        System.out.println(Integer.MIN_VALUE << 1);//0
+        System.out.println(Integer.MIN_VALUE-1 << 1);//-2
+        //System.out.println(-1012345 >>> 1);//-2
+
+        System.out.println(-2 >> 1);//-1
+        System.out.println(-8 >> 1);//-4 1000
+        System.out.println(-8 >>> 1);//-4 2147483644
+
+        System.out.println(-1 << 32);//-1
+        System.out.println(-1 << 33);//-2
+    }
+
 
 
 
     static final int tableSizeFor(int cap) {
+        //是的
+
         int n = cap - 1;
         n |= n >>> 1;
         n |= n >>> 2;

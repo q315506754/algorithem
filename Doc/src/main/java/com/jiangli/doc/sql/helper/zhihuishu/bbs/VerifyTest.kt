@@ -16,13 +16,35 @@ import java.sql.Timestamp
  */
 
 fun main(args: Array<String>) {
-    val env = Env.WAIWANG_ALL
-    val jdbc = Zhsutil.getJDBC(env)
+    val onlineSchooljdbc = Zhsutil.getJDBC(Env.WAIWANG_ONLINESCHOOL)
+    val qajdbc = Zhsutil.getJDBC(Env.WAIWANG_BBS)
     val q  = UserIdQueryer()
     BaseConfig.printSql=false
 
+    val split = """
+        169514793
+183134959
+187543193
+186364671
+187451009
+184688071
+187554229
+187556857
+
+        169363035
+169165283
+168645123
+187465031
+184637617
+187475283
+182370769
+    """.split("\n")
+    println(split)
+
     val fixedUsers = linkedSetOf<Int>(
-            163401949
+            162347707
+            ,163401949
+            ,170125517
 //            ,183927377
 //            ,185628497
 //            ,169116471
@@ -37,13 +59,20 @@ fun main(args: Array<String>) {
 //            ,168361357
 //
 //            ,189277745
-            ,168298089
-            ,163282629
-            ,163492815
-            ,184984729
-            ,187415911
     )
-    queryByGroup(jdbc, q,"固定组", fixedUsers)
+
+
+//    if (split.isNotEmpty()) {
+//        split.forEach {
+//            val trim = it.trim()
+//            if (trim.isNotBlank()) {
+//                fixedUsers.add(trim.toInt())
+//            }
+//        }
+//    }
+
+
+    queryByGroup(onlineSchooljdbc,qajdbc, q,"固定组", fixedUsers,null,{ type, id, content, mutableMap -> System.err.println("$type $content") })
 
 //    ⑧1⑤Æㄉ3⑨42⑦0
 
@@ -61,24 +90,24 @@ fun main(args: Array<String>) {
         val sql  = """
 SELECT * from ZHS_BBS.QA_QUESTION WHERE (CONTENT LIKE '%$it%' ) ORDER BY QUESTION_ID DESC ;
         """.trimIndent()
-        val quesList = jdbc.query(sql, ColumnMapRowMapper())
+        val quesList = onlineSchooljdbc.query(sql, ColumnMapRowMapper())
         quesList.forEach {
             userIds.add(it["CREATE_USER"] as Int)
         }
 
-        queryByGroup(jdbc, q,"模糊匹配:$it", userIds)
+        queryByGroup(onlineSchooljdbc,qajdbc, q,"模糊匹配:$it", userIds)
     }
 
 }
 
-private fun queryByGroup(jdbc: JdbcTemplate, q: UserIdQueryer, s:String, users: LinkedHashSet<Int>) {
+fun queryByGroup(onlineSchooljdbc: JdbcTemplate,qajdbc: JdbcTemplate, q: UserIdQueryer, s:String, users: LinkedHashSet<Int>, isDeleted:Boolean?=null, werror: ((type:Int, id: String, content: String, MutableMap<Any?, Any?>) -> Unit)? = { type, id, content, mutableMap ->  }) {
     println("--------------group:$s-------------------")
 
     users.forEach {
         val curUid = it
-        val userMap = Zhsutil.injectTest(jdbc, curUid, q)
+        val userMap = Zhsutil.injectTest(onlineSchooljdbc, curUid, q)
 
-        val rights = jdbc.query("""
+        val rights = onlineSchooljdbc.query("""
             SELECT
   COURSE_ID as courseId,
   STUDENT_ID,
@@ -93,45 +122,80 @@ FROM db_G2S_OnlineSchool.STUDENT WHERE  STUDENT_ID=$it
             classCourseIdMap.put(it["courseId"].toString(), it as Map<Any?, Any?>)
         }
 
-        println("user:$curUid ${userMap["REAL_NAME"]} ${userMap["NICK_NAME"]} ${userMap["E_MAIL"]} ${Zhsutil.convertUUID(curUid)}")
+        val allCourseIds = mutableSetOf<String>()
+        allCourseIds.addAll(classCourseIdMap.keys)
 
+        var eachRootCourseIds = mutableSetOf<String>()
+        eachRootCourseIds.addAll(allCourseIds)
+
+        while (eachRootCourseIds.isNotEmpty()) {
+            val queryList = onlineSchooljdbc.query("""
+    select COURSE_ID,ROOT_COURSE_ID from db_G2S_OnlineSchool.TBL_COURSE WHERE ROOT_COURSE_ID is not null and COURSE_ID IN (${eachRootCourseIds.joinToString(",")});
+""".trimIndent(), ColumnMapRowMapper())
+
+            eachRootCourseIds.clear()
+            queryList.forEach {
+                eachRootCourseIds.add(it["ROOT_COURSE_ID"].toString())
+
+                allCourseIds.add(it["COURSE_ID"].toString())
+                allCourseIds.add(it["ROOT_COURSE_ID"].toString())
+            }
+        }
+
+        println("user:$curUid  ${userMap["REAL_NAME"]} ${userMap["NICK_NAME"]} ${userMap["E_MAIL"]} ${Zhsutil.convertUUID(curUid)} $allCourseIds")
+
+
+        val condition = if (isDeleted == null) "" else if(isDeleted) "AND IS_DELETED = 1" else "AND IS_DELETED = 0"
 
         val prefix = "    "
 
-        val quesList = queryParticipate(jdbc, { each ->
-            classCourseIdMap.containsKey(each["COURSE_ID"].toString())
+        val quesList = queryParticipate(qajdbc, { each ->
+            allCourseIds.contains(each["ANCESTOR_COURSE_ID"].toString())
         }, prefix, "问", """
             SELECT
-  QUESTION_ID as questionId
+  QUESTION_ID as ID
   ,COURSE_ID
   ,RECRUIT_ID
 ,ANCESTOR_COURSE_ID
-,CONTENT
+,CONTENT AS CONTENT
 ,CREATE_TIME
-FROM ZHS_BBS.QA_QUESTION WHERE  CREATE_USER=$it ORDER BY QUESTION_ID DESC ;
-        """)
-//        val ancestorIdMap = mutableMapOf<String, Map<Any?, Any?>>()
-//        rights.forEach {
-//            classCourseIdMap.put(it["courseId"].toString(), it as Map<Any?, Any?>)
-//        }
+ ,CREATE_USER AS CREATOR
+FROM ZHS_BBS.QA_QUESTION WHERE  CREATE_USER=$it $condition ORDER BY QUESTION_ID DESC ;
+        """,{ id, content, mutableMap -> werror?.invoke(1, id, content, mutableMap) })
 
-//        queryParticipate(jdbc,classCourseIdMap,prefix,"答","""
-//            SELECT
-//  ID
-//  ,COURSE_ID
-//  ,ANCESTOR_COURSE_ID
-//  ,A_CONTENT
-//  ,CREATE_TIME
-//FROM ZHS_BBS.QA_ANSWER WHERE  A_USER_ID=$it ORDER BY ID DESC ;
-//        """)
+        queryParticipate(qajdbc,{ each ->
+            allCourseIds.contains(each["ANCESTOR_COURSE_ID"].toString())
+        },prefix,"答","""
+            SELECT
+  ID
+  ,COURSE_ID
+  ,ANCESTOR_COURSE_ID
+  ,A_CONTENT  AS CONTENT
+  ,CREATE_TIME
+  ,A_USER_ID AS CREATOR
+FROM ZHS_BBS.QA_ANSWER WHERE  A_USER_ID=$it $condition ORDER BY ID DESC ;
+        """,{ id, content, mutableMap -> werror?.invoke(2, id, content, mutableMap) })
+
+        queryParticipate(qajdbc,{ each ->
+            allCourseIds.contains(each["ANCESTOR_COURSE_ID"].toString())
+        },prefix,"评","""
+            SELECT
+  ID
+  ,COURSE_ID
+  ,ANCESTOR_COURSE_ID
+  ,COMMENT_CONTENT  AS CONTENT
+  ,CREATE_TIME
+  ,COMMENT_USER_ID AS CREATOR
+FROM ZHS_BBS.QA_COMMENT WHERE  COMMENT_USER_ID=$it $condition ORDER BY ID DESC ;
+        """,{ id, content, mutableMap -> werror?.invoke(3, id, content, mutableMap) })
 
 
 //        val pl: (Any?) -> Unit = if (failQ == 0) ::println else System.err::println
     }
 }
 
-fun queryParticipate(jdbc: JdbcTemplate, check:(MutableMap<Any?, Any?>)->Boolean, prefix: String, module: String, sql: String): MutableList<MutableMap<String, Any>>? {
-    val particiQues = jdbc.query(sql.trimIndent(), ColumnMapRowMapper())
+fun queryParticipate(qajdbc: JdbcTemplate, check:(MutableMap<Any?, Any?>)->Boolean, prefix: String, module: String, sql: String, werror: ((id: String, content: String, MutableMap<Any?, Any?>) -> Unit)? = null): MutableList<MutableMap<String, Any>>? {
+    val particiQues = qajdbc.query(sql.trimIndent(), ColumnMapRowMapper())
 
     var sucQ = 0
     var failQ = 0
@@ -140,6 +204,9 @@ fun queryParticipate(jdbc: JdbcTemplate, check:(MutableMap<Any?, Any?>)->Boolean
 //            if (!classMap.containsKey(map["RECRUIT_ID"].toString())) {
         if (!check(map)) {
 //                System.err.println(map)
+            if (werror != null) {
+                werror(map["ID"].toString(),map["CONTENT"].toString(),map)
+            }
             failQ++
         } else {
             sucQ++

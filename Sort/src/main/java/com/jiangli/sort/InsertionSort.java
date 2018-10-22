@@ -3,9 +3,9 @@ package com.jiangli.sort;
 import com.jiangli.common.core.Sorter;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
-
 /**
+ *
+ * 插入排序
  * @author Jiangli
  *
  *         CreatedTime  2016/4/26 0026 17:21

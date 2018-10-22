@@ -3,6 +3,7 @@ package com.jiangli.doc.sql.helper.zhihuishu.bbs
 import com.jiangli.common.utils.DateUtil
 import com.jiangli.common.utils.EmailUtil
 import com.jiangli.doc.sql.helper.zhihuishu.Env
+import com.jiangli.doc.sql.helper.zhihuishu.UserIdQueryer
 import com.jiangli.doc.sql.helper.zhihuishu.Zhsutil
 import okhttp3.*
 import org.springframework.jdbc.core.ColumnMapRowMapper
@@ -23,9 +24,11 @@ var client = OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
         .build()
 
-val DEBUG_MODE=false
-//val DEBUG_MODE=true
-val DEBUG_PREV_PAGE = 300
+val domain= "http://114.55.26.161:9080/courseqa/student/qa"
+
+//val DEBUG_MODE=false
+val DEBUG_MODE=true
+val DEBUG_PREV_PAGE = 100
 
 //!!!!!!!dangerous!!!!!!!!!!
 val DELETE_OPEN=true
@@ -120,6 +123,7 @@ SELECT ID,A_USER_ID as USERID from ZHS_BBS.QA_ANSWER WHERE Q_ID = $qId and IS_DE
 fun requestAnswer(jdbc:JdbcTemplate,domain: String, aId: Long, vUserId: String): String {
     val param = String.format("answerId=%s&deletePeron=%s", aId, vUserId)
     var rs = requestWithsign("${domain}/delAnswer", param)
+
     if (CASCADE_DELETE && !rs.contains("\"status\":\"200\"")) {
         val aMap = jdbc.query("""
 SELECT ID,COMMENT_USER_ID  as USERID from ZHS_BBS.QA_COMMENT WHERE A_ID = $aId and IS_DELETED = 0;
@@ -145,25 +149,46 @@ fun requestComment(jdbc:JdbcTemplate,domain: String, cId: Long, vUserId: String)
 
 
 fun main(args: Array<String>) {
-    val env = Env.WAIWANG_ALL
-    val jdbc = Zhsutil.getJDBC(env)
-    val PAGE_SIZE = 100
-    val INTERVAL: Long = if(DEBUG_MODE) 1 else 3
-    val timeUnit = if(DEBUG_MODE) TimeUnit.SECONDS else TimeUnit.MINUTES
+//    val env = Env.WAIWANG_ALL
+    val qajdbc = Zhsutil.getJDBC(Env.WAIWANG_BBS)
+    val onlineshooljdbc = Zhsutil.getJDBC(Env.WAIWANG_ONLINESCHOOL)
 
-    val domain= "http://114.55.26.161:9080/courseqa/student/qa"
+    val PAGE_SIZE = 100
+    val INTERVAL: Long = if(DEBUG_MODE) 100 else 6
+    val timeUnit = if(DEBUG_MODE) TimeUnit.MILLISECONDS else TimeUnit.HOURS
+    val q  = UserIdQueryer()
+
 //    "userId=%d&page=%d&pageSize=%d"
     request("http://114.55.26.161:9080/courseqa/testDeploy.jsp", "?")
 
     val pool = Executors.newScheduledThreadPool(3)
-    pool.scheduleAtFixedRate(BaseGreenWork(jdbc,PAGE_SIZE,"ZHS_BBS.QA_QUESTION","QUESTION_ID","CONTENT","CREATE_USER",{ vId, vContent, vUserId ->
-        return@BaseGreenWork requestQuestion(jdbc,domain,vId,vUserId)
+    val werror: (Int, String, String, MutableMap<Any?, Any?>) -> Unit = {
+        type, id, content, mutableMap
+        ->
+        System.err.println("$type $id $content")
+        if (DELETE_OPEN) {
+            when (type) {
+                1->requestQuestion(qajdbc, domain, id.toLong(), mutableMap["CREATOR"].toString())
+                2->requestAnswer(qajdbc, domain, id.toLong(), mutableMap["CREATOR"].toString())
+                3->requestComment(qajdbc, domain, id.toLong(), mutableMap["CREATOR"].toString())
+            }
+        }
+    }
+
+    pool.scheduleAtFixedRate(BaseGreenWork(qajdbc,PAGE_SIZE,"ZHS_BBS.QA_QUESTION","QUESTION_ID","CONTENT","CREATE_USER",{ vId, vContent, vUserId ->
+        val rs = requestQuestion(qajdbc, domain, vId, vUserId)
+//        queryByGroup(onlineshooljdbc,qajdbc, q,"问题组", linkedSetOf(vUserId.toInt()),false, werror)
+        return@BaseGreenWork rs
     }), 0, INTERVAL, timeUnit)
-    pool.scheduleAtFixedRate(BaseGreenWork(jdbc,PAGE_SIZE,"ZHS_BBS.QA_ANSWER","ID","A_CONTENT","A_USER_ID",{ vId, vContent, vUserId ->
-        return@BaseGreenWork requestAnswer(jdbc,domain,vId,vUserId)
+    pool.scheduleAtFixedRate(BaseGreenWork(qajdbc,PAGE_SIZE,"ZHS_BBS.QA_ANSWER","ID","A_CONTENT","A_USER_ID",{ vId, vContent, vUserId ->
+        val rs = requestAnswer(qajdbc, domain, vId, vUserId)
+//        queryByGroup(onlineshooljdbc,qajdbc, q,"回答组", linkedSetOf(vUserId.toInt()),false, werror)
+        return@BaseGreenWork rs
     }), 0, INTERVAL, timeUnit)
-    pool.scheduleAtFixedRate(BaseGreenWork(jdbc,PAGE_SIZE,"ZHS_BBS.QA_COMMENT","ID","COMMENT_CONTENT","COMMENT_USER_ID",{ vId, vContent, vUserId ->
-        return@BaseGreenWork requestComment(jdbc,domain,vId,vUserId)
+    pool.scheduleAtFixedRate(BaseGreenWork(qajdbc,PAGE_SIZE,"ZHS_BBS.QA_COMMENT","ID","COMMENT_CONTENT","COMMENT_USER_ID",{ vId, vContent, vUserId ->
+        val rs = requestComment(qajdbc, domain, vId, vUserId)
+//        queryByGroup(onlineshooljdbc,qajdbc, q,"评论组", linkedSetOf(vUserId.toInt()),false, werror)
+        return@BaseGreenWork rs
     }), 0, INTERVAL, timeUnit)
 
 
@@ -192,7 +217,7 @@ private fun request(url: String, param: String): String {
         response = client.newCall(request).execute()
         val text = response.body()?.string()
         println(response)
-        println(text)
+        println("$text ${url}?${param}")
         return text!!
     } catch (e: Exception) {
         e.printStackTrace()
@@ -339,14 +364,18 @@ class SendMailWork:DailyWork(timeStr){
 
 class BaseGreenWork(val jdbc: JdbcTemplate, val pagE_SIZE: Int, val tbl: String, val mainIdField: String, val contentField: String,val creatorField: String,val actionDelete: (vId:Long,vContent:String,vUserId:String)->String) :Runnable{
     var lastId:Long?=null
-
+    var terminated = false
     override fun run() {
 //        val env = Env.WAIWANG_ALL
 //        val jdbc = Zhsutil.getJDBC(env)
+        if (terminated) {
+            return
+        }
 
             debug("$tbl  "+ curTime())
 
         if (lastId==null) {
+            info("$tbl  query lastId......")
 //            DEBUG时取最新的 100 页 否则最后一页
             val OFFSET = if(DEBUG_MODE) {
                 pagE_SIZE* DEBUG_PREV_PAGE
@@ -382,12 +411,12 @@ AND  $mainIdField > $lastId
 ORDER BY  $mainIdField ASC
 LIMIT $pagE_SIZE;
         """.trimIndent(), ColumnMapRowMapper())
-//            log(lists)
+//            debug(lists)
 
             if (lists.size>0) {
                 val oldLastId = lastId
                 lastId = lists[lists.lastIndex]["$mainIdField"].toString().toLong()
-                info("$tbl  $oldLastId -> $lastId ${curTime()}")
+                debug("$tbl  $oldLastId -> $lastId ${curTime()}")
 
                 lists.forEach {
                     val vId = it["$mainIdField"].toString().toLong()
@@ -404,7 +433,10 @@ LIMIT $pagE_SIZE;
                     }
                 }
             } else {
-                info("$tbl  $lastId ( newest...)")
+                println("$tbl  $lastId ( newest...)")
+
+                if (DEBUG_MODE)
+                    terminated = true
             }
         }
     }

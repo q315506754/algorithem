@@ -15,6 +15,22 @@ class GarbageHunterTest {
 
     @Test
     fun unitanaGarbage() {
+//        anaGarbage("""13733138701""")
+        anaGarbage("""这课太难了，不过还好，我在⒬|群【⒌４２６⒌Ⓞ❻５⒉】找到了人帮我ԚkǘԱ˞Ɉ̯""")
+        anaGarbage("""代  可+Q.12*90*00*11""")
+        anaGarbage("""我 ke yi 代 zuo 【课程】拿man fen ,全 bao 我de ..Q【8-7-0-4-9-0-3-5】""")
+        anaGarbage("""智慧树的题真的很难，不过运气不错，我在这个筘群【 ⑤ ④ ⒉ ６ ⒌ O ６ ❺ ❷】找到了answerɚӭʙ֋ҊΎ˻""")
+        anaGarbage("""每次网课都可以拿高分不想看课找学姐加微[⑥、零.②.⑦.⑧①⑦②⑨]""")
+//        todo
+//        anaGarbage("大【代】家【看】的【网】学【课】习【加】进【Q】度【8】做【7】的【0】怎【4】么【9】样【0】了【3】，【5】是【全】否【包】满分了？")
+//        anaGarbage("这（代）个（看）课（加）讲（Q）的(8)真（7）的(0)很（4）棒（9）很（0）不（3）错（5）学（全）到（包）了（高）很（分）多！！！")
+
+        anaGarbage("""老师讲的很好，增强了自己军事方面知识。这里有军事理论交流群⑦②①④②②o⑧⑥，里面学姐会分享作业answer哦⊙∀⊙！！""")
+        anaGarbage("""一三七三三一三八七零，三天解决，无烦恼""")
+        anaGarbage("""我 ke yi 代 zuo 【课程】拿man fen ,全 bao 我de ..Q【8-7-0-4-9-0-3-5】""")
+        anaGarbage("谁能拼出这段拼音 dai kan dai zuo wang ke jia Q{8.7.0.4.9.0.3.5}")
+        anaGarbage("不想看的，了解一下，1373313870 ")
+        anaGarbage("没时间看课浏览器输入zhswk.cn")
         anaGarbage("这课太难了，不过还好，我在ⓠ|群【５４２6⃣50⓺5２】找到了人帮我ųƯĻΡϢ֨Ӿ")
         anaGarbage("不会不会真的不会？怎么办，我来帮你呀！安排上了！筘群\n" +
                 "【8⃣９❹6⃣⓪❷9❹❼】 ˳ѠъֺǏű")
@@ -22,7 +38,6 @@ class GarbageHunterTest {
                 "【⓹4⃣２❻5⓪6５2】，我知道呀ζœ\u052Eԉ҄ԃŜ")
         anaGarbage("想高芬过了这门课吗，那么推荐【扣⑧⑦0④⑨0③⑤】专业的，老司机发车了！")
 //        anaGarbage("专业代课8元一科十五两科，作业期末测试基本满分，稳 +vx  c87506")
-        anaGarbage("不想看的，了解一下，1373313870 ")
         anaGarbage("我全都自己一题一题的查，终于写完了，我把这个题全放在了企鹅群里面【8⃣❾4⃣6⃣ⓞ２❾⓸7⃣】ļ˞ǉˌ̉ѾÎ")
         anaGarbage("给你们安利一个实用的筘群【89⃣⓸６029⃣⓸7】,我在里面找到了题，这课已经95分了Ŧ˽ǎͩĸπ֊")
         anaGarbage("㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩")
@@ -45,6 +60,8 @@ class GarbageHunterTest {
     @Test
     fun unitanaNoGarbage() {
         anaNoGarbage("55555555")
+        anaNoGarbage("GB/T19630—2011有机产品由几个部分组成。")
+        anaNoGarbage("根据《食品添加剂使用卫生标准》（GB2760-2007）的规定，属于食品添加剂的有：（）。")
         anaNoGarbage("233333，100度一下")
         anaNoGarbage("%\uD83D\uDE01\uD83D\uDC4D\uD83D\uDC4D\uD83D\uDE13(｡･∀･)ﾉﾞヾ让你知道在人任性(･ω･。)77-")
         anaNoGarbage("为什么我看完了心里健康教育视频不是100%而是98.8%。")
@@ -55,6 +72,10 @@ class GarbageHunterTest {
         anaNoGarbage("09-10 09:22")
         anaNoGarbage("2018年9月29日19:11:24")
         anaNoGarbage("666666666")
+        anaNoGarbage("如果第一次0分，第二次80分，申请第三次拿到60分的话那次成绩算，最高分还是最后一次分")
+        anaNoGarbage("分数组成是24分的学习进度，16分的章节测试，30分见面课，30分的期末考")
+        anaNoGarbage("那么一次直播8分，请问这个8分是加到哪的呀。")
+        anaNoGarbage("单元测试和视频一共60分，期末考试40分，满分100分对吗？")
 //        anaNoGarbage("20000000元")
     }
 
@@ -64,8 +85,9 @@ class GarbageHunterTest {
         return b
     }
     fun anaNoGarbage(str: String): Boolean {
-        val b = ContentAnalyser.analyse(str) != AnaRs.OK
-        assertTrue(!b,"预期不包含广告！: $str")
+        val analyse = ContentAnalyser.analyse(str)
+        val b = analyse != AnaRs.OK
+        assertTrue(!b,"预期不包含广告(actual:$analyse)！: $str")
         return b
     }
 }
