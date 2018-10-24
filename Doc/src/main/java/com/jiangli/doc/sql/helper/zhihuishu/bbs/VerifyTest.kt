@@ -17,7 +17,8 @@ import java.sql.Timestamp
 
 fun main(args: Array<String>) {
     val onlineSchooljdbc = Zhsutil.getJDBC(Env.WAIWANG_ONLINESCHOOL)
-    val qajdbc = Zhsutil.getJDBC(Env.WAIWANG_BBS)
+    val qajdbc = Zhsutil.getJDBC(Env.WAIWANG_BBS,"ZHS_BBS")
+    val qaDB = Zhsutil.getDB(Env.WAIWANG_BBS)
     val q  = UserIdQueryer()
     BaseConfig.printSql=false
 
@@ -43,8 +44,12 @@ fun main(args: Array<String>) {
 
     val fixedUsers = linkedSetOf<Int>(
             162347707
-            ,163401949
-            ,170125517
+//            ,163401949
+//            ,170125517
+//            ,187900739
+//            ,187691671
+//            ,187168025
+//            ,182529777
 //            ,183927377
 //            ,185628497
 //            ,169116471
@@ -72,7 +77,7 @@ fun main(args: Array<String>) {
 //    }
 
 
-    queryByGroup(onlineSchooljdbc,qajdbc, q,"固定组", fixedUsers,null,{ type, id, content, mutableMap -> System.err.println("$type $content") })
+    queryByGroup(onlineSchooljdbc,qajdbc, q,"固定组", fixedUsers,null,{ type, id, content, mutableMap -> System.err.println("$type $id $content") })
 
 //    ⑧1⑤Æㄉ3⑨42⑦0
 
@@ -82,20 +87,25 @@ fun main(args: Array<String>) {
 //    ,"三年来专为学生网课服务 高效质量好"
 //    ,"如果缺少乙醇脱氢酶能体外补充么?"
 //    ,"劳动法律关系主体"
+    "中国手语的造词类型只有象形和指事两类"
+    ,"社会心理学家会支持以下哪种想法？"
     )
 
     sqls.forEach {
         val userIds = linkedSetOf<Int>(
         )
+
         val sql  = """
-SELECT * from ZHS_BBS.QA_QUESTION WHERE (CONTENT LIKE '%$it%' ) ORDER BY QUESTION_ID DESC ;
+SELECT * from ZHS_BBS.QA_QUESTION WHERE CONTENT LIKE '%${it}%' ;
         """.trimIndent()
-        val quesList = onlineSchooljdbc.query(sql, ColumnMapRowMapper())
+//        println(sql)
+
+        val quesList = qajdbc.query(sql, ColumnMapRowMapper())
         quesList.forEach {
             userIds.add(it["CREATE_USER"] as Int)
         }
 
-        queryByGroup(onlineSchooljdbc,qajdbc, q,"模糊匹配:$it", userIds)
+        queryByGroup(onlineSchooljdbc,qajdbc, q,"模糊匹配:$it", userIds,null,{ type, id, content, mutableMap -> System.err.println("$type $id $content") })
     }
 
 }

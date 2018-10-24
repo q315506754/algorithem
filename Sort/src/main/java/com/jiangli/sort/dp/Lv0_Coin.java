@@ -3,11 +3,14 @@ package com.jiangli.sort.dp;
 import java.util.Arrays;
 
 /**
+ *
+ * http://www.hawstein.com/posts/dp-novice-to-advanced.html
+ *
  * @author Jiangli
  *
  *         CreatedTime  2016/7/7 0007 9:56
  */
-public class Coin {
+public class Lv0_Coin {
     static int loopTimes = 0;
 
     public static void main(String[] args) {

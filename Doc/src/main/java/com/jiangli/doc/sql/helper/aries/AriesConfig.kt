@@ -3,9 +3,12 @@ package com.jiangli.doc.sql.helper.aries
 import com.jiangli.doc.sql.BaseConfig
 import com.jiangli.doc.sql.NamedSimpleCachedTableQueryer
 import org.apache.commons.dbcp.BasicDataSource
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig
 import org.hashids.Hashids
 import org.springframework.jdbc.core.ColumnMapRowMapper
 import org.springframework.jdbc.core.JdbcTemplate
+import redis.clients.jedis.Jedis
+import redis.clients.jedis.JedisPool
 import java.lang.Exception
 
 
@@ -15,8 +18,25 @@ import java.lang.Exception
  * @author Jiangli
  * @date 2018/8/3 17:09
  */
+
+fun JedisPool.execute(action: (Jedis) -> Unit) {
+    val resource = resource
+
+    action(resource)
+
+    resource.close()
+}
+
 object Ariesutil {
     val hashids = Hashids("user#2018@g2s.cn", 8)
+
+    fun getYufaPool(): JedisPool {
+        return JedisPool(GenericObjectPoolConfig(), "114.55.4.242", 19000)
+    }
+    fun getYanfaPool(): JedisPool {
+        return JedisPool(GenericObjectPoolConfig(), "192.168.9.205", 6379)
+    }
+
     fun convertUUID(l: Long): String {
         return hashids.encode(l)
     }

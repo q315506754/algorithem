@@ -38,14 +38,28 @@ object Zhsutil {
         return JedisPool(GenericObjectPoolConfig(), "192.168.9.170", 19000)
     }
 
-    fun getJDBC(env: Env): JdbcTemplate {
+    fun getJDBC(env: Env,db:String?=null): JdbcTemplate {
+        val dataSource = BasicDataSource()
+        dataSource.driverClassName = "com.mysql.jdbc.Driver"
+        var str = ""
+        if (db!=null) {
+            str = "/$db?characterEncoding=UTF-8&allowMultiQueries=true"
+        }
+
+        dataSource.url = "jdbc:mysql://${env.host}$str"
+        dataSource.username = "${env.username}"
+        dataSource.password = "${env.pwd}"
+        val jdbcTemplate = JdbcTemplate(dataSource)
+        return jdbcTemplate
+    }
+
+    fun getDB(env: Env): BasicDataSource {
         val dataSource = BasicDataSource()
         dataSource.driverClassName = "com.mysql.jdbc.Driver"
         dataSource.url = "jdbc:mysql://${env.host}"
         dataSource.username = "${env.username}"
         dataSource.password = "${env.pwd}"
-        val jdbcTemplate = JdbcTemplate(dataSource)
-        return jdbcTemplate
+        return dataSource
     }
 
     fun validateNum(str: String, query: List<Any>, limit: Int = 1) {

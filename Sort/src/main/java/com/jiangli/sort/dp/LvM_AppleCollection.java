@@ -7,11 +7,14 @@ import java.util.Arrays;
  * 你从左上角的格子开始， 每一步只能向下走或是向右走，每次走到一个格子上就把格子里的苹果收集起来，
  * 这样下去，你最多能收集到多少个苹果。
  *
+ * 注意转移的顺序：这是由规则（每一步只能向下走或是向右走）决定的
+ * 第一排 1~最后
+ * 第二排 1~最后
  * @author Jiangli
  *
  *         CreatedTime  2016/7/7 0007 14:27
  */
-public class AppleCollection {
+public class LvM_AppleCollection {
     public static void main(String[] args) {
         int[][] appleBucket = new int[][] {{1,5,2},{4,3,3},{6,2,5},{4,5,2}};
         int[][] appleBucketSum = new int[appleBucket.length][appleBucket[0].length];
