@@ -54,6 +54,6 @@ public class QuickSort extends Sorter<Integer> {
         }
 
 
-    }
 
+}
 }

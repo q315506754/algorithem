@@ -1,0 +1,7 @@
+ tutorial
+ https://www.thepolyglotdeveloper.com/2018/09/creating-basic-chrome-extension/
+ https://developer.chrome.com/extensions/getstarted
+
+ api文档 https://developer.chrome.com/extensions/api_index
+
+ samples https://chromium.googlesource.com/chromium/src/+/master/chrome/common/extensions/docs/examples/api

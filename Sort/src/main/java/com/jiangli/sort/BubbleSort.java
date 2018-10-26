@@ -4,6 +4,8 @@ import com.jiangli.common.core.Sorter;
 import org.springframework.stereotype.Component;
 
 /**
+ *
+ * 冒泡
  * @author Jiangli
  *
  *         CreatedTime  2016/4/26 0026 17:21

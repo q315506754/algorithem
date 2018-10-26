@@ -1,6 +1,7 @@
 package com.jiangli.sort.test;
 
 import com.jiangli.common.core.Sorter;
+import com.jiangli.junit.spring.StatisticsSpringJunitRunner;
 import com.jiangli.sort.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -25,7 +25,7 @@ import java.util.List;
  *
  *         CreatedTime  2016/4/26 0026 17:21
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(StatisticsSpringJunitRunner.class)
 @ContextConfiguration(locations = {"classpath*:applicationContext.xml"})
 public class InsertionSortTest implements ApplicationContextAware {
 

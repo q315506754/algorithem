@@ -10,4 +10,36 @@ public class LogicUtil {
         }
         return false;
     }
+    public static boolean anyNull(Object... args){
+        if (args!=null) {
+            for (Object arg : args) {
+                if (arg == null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean anyTrue(boolean... args){
+        if (args!=null) {
+            for (boolean arg : args) {
+                if (arg) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static boolean anyFalse(boolean... args){
+        if (args!=null) {
+            for (boolean arg : args) {
+                if (!arg) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -1,7 +1,7 @@
 package com.jiangli.doc.txt.sql
 
+import com.jiangli.doc.sql.helper.zhihuishu.Zhsutil
 import com.jiangli.doc.txt.DB
-import com.jiangli.doc.txt.importdata.convertUUID
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.ColumnMapRowMapper
  * @date 2018/8/30 15:15
  */
 fun main(args: Array<String>) {
-    val userId = convertUUID("V4e1RbYN")
+    val userId = Zhsutil.convertUUID("V4e1RbYN")
     println(userId)
 
     val jdbc = DB.getJDBCForWaiWang()

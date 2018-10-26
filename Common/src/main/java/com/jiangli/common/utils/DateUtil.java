@@ -56,6 +56,9 @@ public class DateUtil {
     public static String getDate_yyyyMMddHHmmss(long timeStamp) {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(timeStamp);
     }
+    public static String getDate_yyyyMMddHHmmssEx(long timeStamp) {
+        return (new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")).format(timeStamp);
+    }
 
     public static String getDate_YYYYMMDD(long timeStamp) {
 

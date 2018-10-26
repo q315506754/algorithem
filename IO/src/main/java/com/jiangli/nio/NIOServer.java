@@ -27,7 +27,7 @@ public class NIOServer {
         // 获得一个ServerSocket通道  
         ServerSocketChannel serverChannel = ServerSocketChannel.open();  
         // 设置通道为非阻塞  
-        serverChannel.configureBlocking(false);  
+        //serverChannel.configureBlocking(false);
         // 将该通道对应的ServerSocket绑定到port端口  
         serverChannel.socket().bind(new InetSocketAddress(port));  
         // 获得一个通道管理器  
@@ -57,7 +57,7 @@ public class NIOServer {
             while (ite.hasNext()) {  
                 SelectionKey key = (SelectionKey) ite.next();  
                 // 删除已选的key,以防重复处理  
-                ite.remove();  
+                ite.remove();
                 // 客户端请求连接事件  
                 if (key.isAcceptable()) {  
                     ServerSocketChannel server = (ServerSocketChannel) key  

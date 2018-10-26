@@ -1,6 +1,7 @@
 package com.jiangli.doc.txt.importdata
 
 import com.jiangli.common.utils.PathUtil
+import com.jiangli.doc.sql.helper.zhihuishu.Zhsutil
 import com.jiangli.doc.txt.DB
 import com.jiangli.doc.txt.excel.parseExcel
 import org.springframework.jdbc.core.ColumnMapRowMapper
@@ -162,12 +163,12 @@ fun main(args: Array<String>) {
     println("##----------redis UserId转码--------------;")
     userName2UserId.entries.forEach {
         (userName, userId) ->
-        val uuid = convertUUID(userId)
+        val uuid = Zhsutil.convertUUID(userId.toLong())
         println("set user:uuid:$uuid $userId")
     }
     userName2UserId.entries.forEach {
         (userName, userId) ->
-        val uuid =  convertUUID(userId)
+        val uuid = Zhsutil.convertUUID(userId.toLong())
 //        println("$userName $userId http://$HOST/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
         println("$userName $userId http://teacherhome.zhihuishu.com/teacherhome/share/home?uuid=$uuid&sourceType=appteacher&sourceUUID=1791b30c0c5db69ed41f2db4c1ec5076&isShare=1")
     }
