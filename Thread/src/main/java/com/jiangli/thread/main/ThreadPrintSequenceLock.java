@@ -29,10 +29,15 @@ public class ThreadPrintSequenceLock {
         for (int i = 0; i < n; i++) {
             int finalI = i;
             new Thread(()->{
+                int loop = 15;
+                //while (loop-->0) {
                 while (true) {
                     lock.lock();
 
-                    System.out.println(str[finalI]);
+                    System.out.print(str[finalI]);
+                    if (finalI == n-1) {
+                        System.out.println(loop);
+                    }
 
                     Condition preLock = cons[(finalI - 1 + n) % n];
                     Condition thisLock = cons[finalI];
@@ -47,16 +52,16 @@ public class ThreadPrintSequenceLock {
             }).start();
         }
 
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        String previousLock = str[(start - 2 + n) % n];
-        synchronized (previousLock) {
-            previousLock.notifyAll();
-        }
+        //try {
+        //    Thread.sleep(1000L);
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
+        //
+        //String previousLock = str[(start - 2 + n) % n];
+        //synchronized (previousLock) {
+        //    previousLock.notifyAll();
+        //}
     }
 
 }
