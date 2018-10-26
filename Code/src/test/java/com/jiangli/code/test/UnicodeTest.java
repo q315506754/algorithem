@@ -35,6 +35,31 @@ public class UnicodeTest {
     }
 
     @Test
+    public void test_23() {
+        System.out.println(String.format("\\u%H",'量'));
+        System.out.println(String.format("\\u%H",'A'));
+        System.out.println(String.format("\\u%H",'~'));
+        System.out.println((int)'d');
+        System.out.println((int)'A');
+        System.out.println((int)'~');
+        
+    }
+    
+    public static String stringToUnicode(String s) {
+        String str = "";
+        for (int i = 0; i < s.length(); i++) {
+            int ch = (int) s.charAt(i);
+            if (ch > 255)
+                str += s.charAt(i) + ": " + "\\u" + Integer.toHexString(ch)
+                        + "\n";
+            else
+                str += s.charAt(i) + ": " + "\\u00" + Integer.toHexString(ch)
+                        + "\n";
+        }
+        return str;
+    }
+    
+    @Test
     public void test_uniconvert() {
         String str = "你好,wo是jiangl"+new Date().toString();
         System.out.println(str);

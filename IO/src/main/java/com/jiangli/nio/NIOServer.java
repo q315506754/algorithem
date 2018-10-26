@@ -48,7 +48,7 @@ public class NIOServer {
         System.out.println("服务端启动成功！");  
         // 轮询访问selector  
         while (true) {
-            System.out.println("new loop");
+            System.out.println("------new loop------");
             //当注册的事件到达时，方法返回；否则,该方法会一直阻塞
             int select = selector.select();
             System.out.println("select rs:"+select);
@@ -80,7 +80,22 @@ public class NIOServer {
             }  
   
         }  
-    }  
+    }
+    
+    public static String stringToUnicode(String s) {
+        String str = "";
+        for (int i = 0; i < s.length(); i++) {
+            int ch = (int) s.charAt(i);
+            if (ch > 255)
+                str += s.charAt(i) + ": " + "\\u" + Integer.toHexString(ch)
+                        + "\n";
+            else
+                str += s.charAt(i) + ": " + "\\u00" + Integer.toHexString(ch)
+                        + "\n";
+        }
+        return str;
+    }
+    
     /** 
      * 处理读取客户端发来的信息 的事件 
      * @param key 
@@ -94,9 +109,18 @@ public class NIOServer {
         channel.read(buffer);  
         byte[] data = buffer.array();  
         String msg = new String(data).trim();  
-        System.out.println("服务端收到信息："+msg);  
+        System.out.println("服务端收到信息："+msg);
+        System.out.println("服务端收到信息："+stringToUnicode(msg));
+        
+        if (msg.endsWith("q")) {
+            channel.close();
+            return;
+        }
+        
         ByteBuffer outBuffer = ByteBuffer.wrap(msg.getBytes());  
-        channel.write(outBuffer);// 将消息回送给客户端  
+        channel.write(outBuffer);// 将消息回送给客户端
+        
+        
     }  
       
     /** 

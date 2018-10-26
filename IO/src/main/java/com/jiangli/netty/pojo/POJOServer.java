@@ -20,6 +20,7 @@ public class POJOServer {
         this.port = port;
     }
     
+//    telnet localhost 8080
     public void run() throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
         EventLoopGroup workerGroup = new NioEventLoopGroup();
