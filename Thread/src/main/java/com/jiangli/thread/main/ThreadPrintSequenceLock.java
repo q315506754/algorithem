@@ -26,6 +26,8 @@ public class ThreadPrintSequenceLock {
             System.out.println(ObjectUtils.identityToString(str[i]));
         }
 
+        Condition startCondition = lock.newCondition();
+
         for (int i = 0; i < n; i++) {
             final int finalI = i;
 
@@ -35,16 +37,31 @@ public class ThreadPrintSequenceLock {
 //                while (true) {
                     lock.lock();
 
+//                    if (start-1==finalI) {
+//
+//                    } else {
+//                        try {
+//                            startCondition.await();
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+
+                    int prevIdx = (finalI - 1 + n) % n;
+//                    System.out.print(str[finalI]+"("+Thread.currentThread().getName()+"="+finalI+" on "+prevIdx+")-");
                     System.out.print(str[finalI]);
 //                    if (finalI == n-1) {
 //                        System.out.println(loop);
 //                    }
 
-                    Condition preLock = cons[(finalI - 1 + n) % n];
+                    Condition preLock = cons[prevIdx];
                     Condition thisLock = cons[finalI];
 
                     try {
                         thisLock.signal();
+
+
+
                         preLock.await();
                     } catch (Exception e) {
                         lock.unlock();
