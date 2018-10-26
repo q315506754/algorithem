@@ -1,0 +1,40 @@
+{
+  "manifest_version": 2,
+  "name": "cloneTab",
+  "version": "1.0.0",
+  "description": "This extension opens a new tab with the url in the current tab (via Alt + T)",
+  "icons": {
+    "128": "images/icon128.png",
+    "32": "images/icon32.png",
+    "48": "images/icon.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage"
+  ],
+  "options_page": "pages/option/options.html",
+  "background": {
+    "scripts": [
+      "pages/background.js"
+    ],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "images/icon16.png",
+      "32": "images/icon32.png"
+    },
+    "default_title": "Click to clone this tab"
+  },
+  "commands": {
+    "clone-fire": {
+      "suggested_key": {
+        "default": "Alt+T",
+        "windows": "Alt+T",
+        "mac": "Alt+T"
+      },
+      "description": "clone action"
+    }
+  }
+}
