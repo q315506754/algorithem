@@ -38,9 +38,8 @@ public class ThreadPrintSequenceLock {
                     Condition thisLock = cons[finalI];
 
                     try {
-
+                        thisLock.signal();
                         preLock.await();
-                        thisLock.signalAll();
                     } catch (Exception e) {
                         lock.unlock();
                     }

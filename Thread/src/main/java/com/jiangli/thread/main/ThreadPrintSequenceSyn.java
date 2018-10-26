@@ -26,6 +26,12 @@ public class ThreadPrintSequenceSyn {
                     String preLock = locks[(finalI - 1 + n) % n];
                     String thisLock = locks[finalI];
 
+                    synchronized (thisLock) {
+                        thisLock.notifyAll();
+                    }
+
+                    System.out.println(thisLock);
+
                     synchronized (preLock) {
                         try {
                             preLock.wait();
@@ -34,31 +40,20 @@ public class ThreadPrintSequenceSyn {
                         }
                     }
 
-                    System.out.println(thisLock);
-
-                    synchronized (thisLock) {
-                        thisLock.notifyAll();
-                    }
-                    try {
-                        Thread.sleep(200L);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                 }
             }).start();
         }
 
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        String previousLock = locks[(start - 2 + n) % n];
-        synchronized (previousLock) {
-            previousLock.notifyAll();
-        }
+        //try {
+        //    Thread.sleep(1000L);
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
+        //
+        //String previousLock = locks[(start - 2 + n) % n];
+        //synchronized (previousLock) {
+        //    previousLock.notifyAll();
+        //}
     }
 
 }
