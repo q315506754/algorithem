@@ -9,65 +9,62 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * n线程依次打印ABCD...
+ *
  * @author Jiangli
  * @date 2018/10/26 16:18
  */
 public class ThreadPrintSequenceLock {
     public static void main(String[] args) {
-        final int start=1;
+        final int start = 1;
         final int n = 3;
         Lock lock = new ReentrantLock();
         final String[] str = new String[n];
         final Condition[] cons = new Condition[n];
         for (int i = 0; i < n; i++) {
-            str[i] = (char)('A' + i)+"";
+            str[i] = (char) ('A' + i) + "";
             cons[i] = lock.newCondition();
 
             System.out.println(ObjectUtils.identityToString(str[i]));
         }
 
-        Condition startCondition = lock.newCondition();
 
-        for (int i = 0; i < n; i++) {
+//        for (int i = 0; i < n; i++) {
+        for (int i = n - 1; i >= 0; i--) {
             final int finalI = i;
 
-            new Thread(()->{
+            new Thread(() -> {
                 int loop = 15;
-                while (loop-->0) {
-//                while (true) {
-                    lock.lock();
+                lock.lock();
 
-//                    if (start-1==finalI) {
-//
-//                    } else {
-//                        try {
-//                            startCondition.await();
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
+                try {
+                    while (loop-- > 0) {
+//                    while (true) {
+                        int nextIdx = (finalI + 1 + n) % n;
+//                    System.out.print(str[finalI]+"("+Thread.currentThread().getName()+"="+finalI+" on "+nextIdx+")-");
+                        System.out.print(str[finalI]);
+                        if (finalI == n - 1) {
+                            System.out.println(loop);
+                        }
 
-                    int prevIdx = (finalI - 1 + n) % n;
-//                    System.out.print(str[finalI]+"("+Thread.currentThread().getName()+"="+finalI+" on "+prevIdx+")-");
-                    System.out.print(str[finalI]);
-//                    if (finalI == n-1) {
-//                        System.out.println(loop);
-//                    }
+                        Condition nextLock = cons[nextIdx];
+                        Condition thisLock = cons[finalI];
 
-                    Condition preLock = cons[prevIdx];
-                    Condition thisLock = cons[finalI];
+                        nextLock.signal();
 
-                    try {
-                        thisLock.signal();
-
-
-
-                        preLock.await();
-                    } catch (Exception e) {
-                        lock.unlock();
+                        thisLock.await();
                     }
+                } catch (Exception e) {
+                    lock.unlock();
                 }
             }).start();
+
+//            if (i == 0) {
+//                try {
+//                    Thread.sleep(10L);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
 
     }
