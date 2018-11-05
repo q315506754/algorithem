@@ -3,7 +3,7 @@ package com.jiangli.doc.sql.helper.aries.order
 import com.jiangli.common.utils.DateUtil
 import com.jiangli.doc.sql.helper.aries.Ariesutil
 import com.jiangli.doc.sql.helper.aries.Env
-import com.jiangli.doc.txt.sql.writeMapToExcel
+import com.jiangli.doc.writeMapToExcel
 import org.springframework.jdbc.core.ColumnMapRowMapper
 
 /**
