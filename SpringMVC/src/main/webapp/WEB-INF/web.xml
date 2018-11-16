@@ -10,6 +10,15 @@
         <!--<param-value>pro</param-value>-->
     </context-param>
 
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/beans.xml</param-value>
+    </context-param>
+
     <!--<error-page>-->
     <!--<error-code>500</error-code>-->
     <!--<location>/module/500.jsp</location>-->
@@ -39,7 +48,7 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath*:applicationContext*.xml</param-value>
+            <param-value>classpath*:spring/dispatcher.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
         <async-supported>true</async-supported>

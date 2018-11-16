@@ -49,7 +49,10 @@ public class EmailUtil {
 // 设置发送者
         try {
             message.setFrom(new InternetAddress(EmailConfig.FROM_ADDRESS));
-            //message.setFrom(new InternetAddress("***@qq.com"));
+
+            //com.sun.mail.smtp.SMTPSenderFailedException:
+            // 501 mail from address must be same as authorization user
+            //message.setFrom(new InternetAddress("1052096033@qq.com"));
 
             // 设置发送方式与接收者
             //message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(toAddress));

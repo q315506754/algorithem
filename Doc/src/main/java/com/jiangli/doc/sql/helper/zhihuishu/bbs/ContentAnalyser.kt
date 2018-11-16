@@ -40,6 +40,7 @@ object ContentAnalyser{
             ,"daizuo" to 2000
             ,"daike" to 2000
             ,"wangke" to 2000
+            ,"wangkezhushou" to 200000
             ,"weixin" to 2000
             ,"xuejie" to 500
             ,"gaofen" to 500
@@ -243,7 +244,7 @@ object ContentAnalyser{
         }
 
 //       ##  长文不删
-        if (str.length> 200) {
+        if (str.length> 60) {
             return AnaRs.OK
         }
 

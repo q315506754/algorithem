@@ -1,4 +1,4 @@
-package com.jiangli.springMVC.filter;
+package com.jiangli.springMVC.CORS;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

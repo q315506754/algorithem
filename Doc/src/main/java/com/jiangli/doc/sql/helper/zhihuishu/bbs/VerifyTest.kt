@@ -82,13 +82,13 @@ fun main(args: Array<String>) {
 //    ⑧1⑤Æㄉ3⑨42⑦0
 
     val sqls = linkedSetOf<String>(
-//        "妈妈再也不用担心我的学习"
+        "A网课助手"
 //        "大家做完了没"
 //    ,"三年来专为学生网课服务 高效质量好"
 //    ,"如果缺少乙醇脱氢酶能体外补充么?"
 //    ,"劳动法律关系主体"
-    "中国手语的造词类型只有象形和指事两类"
-    ,"社会心理学家会支持以下哪种想法？"
+//    "中国手语的造词类型只有象形和指事两类"
+//    ,"社会心理学家会支持以下哪种想法？"
     )
 
     sqls.forEach {
@@ -211,6 +211,8 @@ fun queryParticipate(qajdbc: JdbcTemplate, check:(MutableMap<Any?, Any?>)->Boole
     var failQ = 0
     particiQues.forEach {
         val map = it as MutableMap<Any?, Any?>
+        println("-----------"+map["CONTENT"].toString())
+
 //            if (!classMap.containsKey(map["RECRUIT_ID"].toString())) {
         if (!check(map)) {
 //                System.err.println(map)
@@ -222,6 +224,8 @@ fun queryParticipate(qajdbc: JdbcTemplate, check:(MutableMap<Any?, Any?>)->Boole
             sucQ++
         }
     }
+
+
 
     val comparator = compareBy<MutableMap<String, Any>> {
         it["CREATE_TIME"] as Timestamp?

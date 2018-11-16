@@ -1,4 +1,4 @@
-package com.jiangli.springMVC
+package com.jiangli.springMVC.controller.kotl
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,11 +1,14 @@
 package com.jiangli.doc
 
+import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.NumberToTextConverter
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.springframework.jdbc.core.ColumnMapRowMapper
+import org.springframework.jdbc.core.JdbcTemplate
 import java.io.*
 import java.text.SimpleDateFormat
 
@@ -377,15 +380,21 @@ fun extractMapListKeys( list:List<MutableMap<String, Any>>):Set<String> {
     return ret
 }
 
-fun writeMapToExcel(ouputFile: String, mergeMapList: List<MutableMap<String, Any>>) {
+fun writeMapToExcel(ouputFile: String, mergeMapList: List<MutableMap<String, Any>>,processer:(workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any>)->Unit ? ={ workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any> ->
+    cell.setCellValue(cellValue)
+}) {
     val ret = arrayListOf<Pair<String, String>>()
     mergeMapList[0].forEach {entry ->
         ret.add(entry.key to entry.key)
     }
-    writeMapToExcel(ouputFile,ret,mergeMapList)
+    writeMapToExcel(ouputFile,ret,mergeMapList,processer)
 }
 
-fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>, mergeMapList: List<MutableMap<String, Any>>) {
+
+
+fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>, mergeMapList: List<MutableMap<String, Any>>,processer:(workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any>)->Unit ? ={ workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any> ->
+    cell.setCellValue(cellValue)
+}) {
     val file = File(ouputFile)
     if (!file.exists()) {
         file.createNewFile()
@@ -450,17 +459,24 @@ fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>
     }
 
     mergeMapList.forEach { mp ->
-        val curRow = page1.createRow(rowIdx++)
+        val curRow = page1.createRow(rowIdx)
         mp.forEach { entry ->
-            if (nameToIdx[entry.key] != null) {
-                val c = curRow.createCell(nameToIdx[entry.key]!!)
-                c.setCellValue(entry.value?.toString())
+            val columnName = entry.key
+            if (nameToIdx[columnName] != null) {
+                val cellIdx = nameToIdx[columnName]!!
+                val cell = curRow.createCell(cellIdx)
+                val cellValue = entry.value?.toString()
+
+                processer(workbook,page1,rowIdx,curRow,cellIdx,cell,columnName,cellValue,mp)
+
             }
         }
+        rowIdx++
     }
 
     workbook.write(FileOutputStream(file))
 }
+
 fun calcColumnWidth(str:String?):Int {
     val charWidthOfCn = 600 //中文
     val charWidthOfOther = 300 //非中文
@@ -484,6 +500,7 @@ fun analyzeStringLen(str:String?):StrCount {
 
 data class StrCount(var cnNum:Int,var otherNum:Int){}
 
+//用pair对补齐（没有key时put） list-map，
 fun makeupMapList(mergeMapList: List<MutableMap<String, Any>>, vararg pair: Pair<String, Any>) {
     mergeMapList.forEach {
         mp->
@@ -495,6 +512,7 @@ fun makeupMapList(mergeMapList: List<MutableMap<String, Any>>, vararg pair: Pair
     }
 }
 
+//通过键s合并list-map  返回合并后的
 fun mergeMapList(s: String,vararg lists:  List<MutableMap<String, Any>>):List<MutableMap<String, Any>> {
     val ret = mutableListOf<MutableMap<String, Any>>()
     lists.forEach {
@@ -509,6 +527,7 @@ fun mergeMapList(s: String,vararg lists:  List<MutableMap<String, Any>>):List<Mu
     return ret
 }
 
+//list-map中寻找键为s 值为 any的的map，没有则新建一个放到list-map里
 fun findOrCreate(ret: MutableList<MutableMap<String, Any>>, s: String, any: Any): MutableMap<String, Any> {
     ret.forEach {
         mp->
@@ -521,4 +540,44 @@ fun findOrCreate(ret: MutableList<MutableMap<String, Any>>, s: String, any: Any)
     ret.add(mp)
     return mp
 
+}
+
+//设置cell超链接格式
+fun setHrefWhenNeed(cellValue: String?, workbook: XSSFWorkbook, cell: XSSFCell) {
+    if (cellValue!=null&& cellValue.startsWith("http") && cellValue.contains("://")) {
+        val helper = workbook.creationHelper
+
+        val cellStyle = workbook.createCellStyle()
+
+        val font = workbook.createFont()
+        font.underline = Font.U_SINGLE
+        font.color = IndexedColors.BLUE.getIndex()
+
+        cellStyle.setFont(font)
+
+        val hyperlink = helper.createHyperlink(HyperlinkType.URL)
+        hyperlink.address = cellValue
+        cell.hyperlink = hyperlink
+        cell.cellStyle = cellStyle
+
+
+    } else {
+
+    }
+}
+
+fun queryOneField(code_jdbc: JdbcTemplate, sql: String, field: String): String {
+    var ret = ""
+    val query = code_jdbc.query(sql.trimIndent(), ColumnMapRowMapper())
+    if (query.isNotEmpty()) {
+        val any = query[0][field]
+        if (any != null) {
+            ret = any.toString()
+        }
+    }
+    return ret
+}
+fun checkExists(code_jdbc: JdbcTemplate, sql: String): Boolean {
+    val query = code_jdbc.query(sql.trimIndent(), ColumnMapRowMapper())
+    return query.isNotEmpty()
 }

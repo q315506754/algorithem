@@ -28,11 +28,11 @@ val domain= "http://114.55.26.161:9080/courseqa/student/qa"
 
 //val DEBUG_MODE=false
 val DEBUG_MODE=true
-val DEBUG_PREV_PAGE = 200
+val DEBUG_PREV_PAGE = 8000
 
 //!!!!!!!dangerous!!!!!!!!!!
-//val DELETE_OPEN=true
-val DELETE_OPEN=false //safe
+val DELETE_OPEN=true
+//val DELETE_OPEN=false //safe
 
 val CASCADE_DELETE=true
 //val CASCADE_DELETE=false

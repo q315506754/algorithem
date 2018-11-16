@@ -1,4 +1,4 @@
-package com.jiangli.springMVC;
+package com.jiangli.springMVC.interceptor;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;

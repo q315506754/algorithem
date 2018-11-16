@@ -30,20 +30,36 @@ fun main(args: Array<String>) {
         println(it.get("sms:code:power"))
     }
 
-    """
+    val split = """
+18862280181
 17621168106
+17721385968
 17521306824
 13917543249
+15295996600
 18626269852
 13061758719
 16602152404
 18516503957
 +14075429267
-    """.trimIndent().split("\n").forEach {
+    """.trimIndent().split("\n")
+    split.forEach {
         val trim = it.trim()
         if (trim.isNotBlank()) {
             println("del base:sms:$trim:$dt:times")
         }
     }
+
+    print("del ")
+    split.forEach {
+        val trim = it.trim()
+        if (trim.isNotBlank()) {
+            print("base:sms:$trim:$dt:times ")
+        }
+    }
+    println()
+    println("set base:sms:code:provider DAHANTC")
+    println("set base:sms:text:provider DAHANTC")
+    println("hgetall base:sms:code:provider")
 
 }
