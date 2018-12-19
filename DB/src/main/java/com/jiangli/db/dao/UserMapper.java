@@ -1,10 +1,14 @@
 package com.jiangli.db.dao;
 
+import com.jiangli.db.dao.ext.MyProvider;
 import com.jiangli.db.model.PageBean;
 import com.jiangli.db.model.User;
 import com.jiangli.db.model.UserExtra;
 import com.jiangli.db.model.UserLog;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,11 +20,29 @@ import java.util.List;
 @Repository
 public interface UserMapper {
 
+    @SelectProvider(type = MyProvider.class, method = "dynamicSQL")
+    List<User> testProvider(User user);
+
+    @Select("<script>select * from TBL_USER</script>")
+    List<User> testCustomSql(User user);
+
     void save(User user);
 
     void update(User user);
 
     User getByUserId(@Param("userId") Long userId);
+
+    List<User> listAll(@Param("isDeleted") Integer isDeleted);
+    List<User> listAllRowBounds(@Param("isDeleted") Integer isDeleted,RowBounds rowBounds);
+
+    List<User> listMultiParameter(@Param("isDeleted") Integer isDeleted,@Param("p2") String p2,@Param("p3") String p3);
+
+
+    //自动被插件处理 不需要在 xml 处理后两个参数
+    //测试无效
+    List<User> listByPageHelper(@Param("isDeleted") Integer isDeleted,@Param("pageNumKey") int pageNum, @Param("pageSizeKey") int pageSize);
+    List<User> listByDto(QueryUserDto queryUserDto);
+    List<User> listByUserDto(User user);
 
     Long getByMobile(@Param("areaCode") String areaCode, @Param("mobile") String mobile);
 

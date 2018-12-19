@@ -11,8 +11,13 @@
         <!-- 分页助手 -->
         <plugin interceptor="com.github.pagehelper.PageHelper">
             <property name="dialect" value="mysql"/>
+
             <!-- 设置为true时，使用RowBounds分页会进行count查询 -->
             <property name="rowBoundsWithCount" value="true"/>
+
+            <!-- 使用下面的方式配置参数，后面会有所有的参数介绍 -->
+            <property name="supportMethodsArguments" value="true"/>
+            <property name="params" value="pageNum=pageNumKey;pageSize=pageSizeKey;"/>
         </plugin>
 
         <!-- 通用mapper插件 -->

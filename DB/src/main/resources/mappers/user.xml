@@ -34,6 +34,26 @@
     <select id="getByUserId" resultType="com.jiangli.db.model.User">
         SELECT * FROM TBL_USER WHERE IS_DELETED = 0 AND ID = #{userId}
     </select>
+    <select id="listAll" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = #{isDeleted}
+    </select>
+    <select id="listAllRowBounds" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = #{isDeleted}
+    </select>
+    <select id="listMultiParameter" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = #{isDeleted}
+        AND #{p2}
+        AND #{p3}
+    </select>
+    <select id="listByPageHelper" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = #{isDeleted}
+    </select>
+    <select id="listByDto" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = #{isDeleted}
+    </select>
+    <select id="listByUserDto" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = #{isDeleted}
+    </select>
 
     <select id="getByMobile" resultType="long">
         SELECT ID FROM TBL_USER WHERE IS_DELETED = 0 AND MOBILE = #{mobile} AND AREA_CODE = #{areaCode} LIMIT 1

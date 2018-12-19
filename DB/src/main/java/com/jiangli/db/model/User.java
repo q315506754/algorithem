@@ -25,6 +25,10 @@ public class User {
     private Integer isDeleted;  // 删除标识
     private Integer isDisabled; // 禁用标识
 
+
+    private int pageNumKey;
+    private int pageSizeKey;
+
     public Long getId() {
         return id;
     }
@@ -118,6 +122,24 @@ public class User {
                 ", createTime=" + createTime +
                 ", isDeleted=" + isDeleted +
                 ", isDisabled=" + isDisabled +
+                ", pageNumKey=" + pageNumKey +
+                ", pageSizeKey=" + pageSizeKey +
                 '}';
+    }
+
+    public int getPageNumKey() {
+        return pageNumKey;
+    }
+
+    public void setPageNumKey(int pageNumKey) {
+        this.pageNumKey = pageNumKey;
+    }
+
+    public int getPageSizeKey() {
+        return pageSizeKey;
+    }
+
+    public void setPageSizeKey(int pageSizeKey) {
+        this.pageSizeKey = pageSizeKey;
     }
 }
