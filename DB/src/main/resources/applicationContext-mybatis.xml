@@ -10,6 +10,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="basicDataSource"/>
         <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <property name="mapperLocations" value="classpath:mappers/*.xml" />
     </bean>
 
     <!-- mybatis.spring自动映射 -->

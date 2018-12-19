@@ -41,8 +41,15 @@ fun main(args: Array<String>) {
 13061758719
 16602152404
 18516503957
+13761156786
++8613761156786
 +14075429267
++16365179382
+18612988685
+15295996600
+1376115678
     """.trimIndent().split("\n")
+
     split.forEach {
         val trim = it.trim()
         if (trim.isNotBlank()) {
@@ -57,9 +64,30 @@ fun main(args: Array<String>) {
             print("base:sms:$trim:$dt:times ")
         }
     }
+
     println()
+    println()
+    print("\r\nsadd base:sms:whites")
+    split.forEach {
+        val trim = it.trim()
+        if (trim.isNotBlank()) {
+            print(" $trim")
+        }
+    }
+    println()
+    println()
+
     println("set base:sms:code:provider DAHANTC")
     println("set base:sms:text:provider DAHANTC")
+    println("get base:sms:code:provider")
+    println("get base:sms:text:provider")
+    println("sadd base:sms:whites")
+    println("smembers base:sms:whites")
     println("hgetall base:sms:code:provider")
+
+    println("PUBLISH  base:sms:whites:channel 11")
+
+    println("hgetall base:video:3130")
+    println("hgetall base:video:3168")
 
 }

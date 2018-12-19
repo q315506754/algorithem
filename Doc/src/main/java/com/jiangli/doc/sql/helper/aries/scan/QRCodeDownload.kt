@@ -22,9 +22,9 @@ import java.net.URL
 
 
 fun main(args: Array<String>) {
-    val env = Env.YANFA
+//    val env = Env.YANFA
 //    val env = Env.YUFA
-//    val env = Env.WAIWANG
+    val env = Env.WAIWANG
     val code_jdbc = Ariesutil.getJDBC(env)
 
 //    val  course_env = Env.YANFA
@@ -52,7 +52,11 @@ LEFT JOIN db_aries_2c_course.TM_COURSE_CHAPTER tcc on qm.CHAPTER_ID = tcc.ID
 
 WHERE
   qm.TYPE =1 AND
-  qm.ID > 100 AND qm.ID < 9999;
+  qm.ID > 100 AND qm.ID < 9999
+
+  AND  qm.CHAPTER_ID > 1
+
+  ;
 """.trimIndent()
 
     //create

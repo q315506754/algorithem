@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +19,20 @@ public class CommonTest extends BaseTest {
         System.out.println(Array.newInstance(Object.class, 3));
         System.out.println(Array.newInstance(String.class, 3));
     }
+
+    @Test
+    public void test_23() {
+        List<String> objects = new ArrayList<>();
+        //List<String> objects = new CopyOnWriteArrayList<>();
+        objects.add("aa");
+        objects.add("bb");
+
+        for (String object : objects) {
+            System.out.println(object);
+            objects.add("12");
+        }
+    }
+
 
     @Test
     public void test_34() {

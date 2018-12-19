@@ -137,7 +137,8 @@ object Ariesutil {
 enum class Env(val rechargeCbUrl: String, val host: String, val username: String, val pwd: String) {
     YANFA("http://127.0.0.1:89/aries-pay-account/recharge", "192.168.222.8:3306", "root", "ablejava")
     ,
-    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "122.112.239.142:8635", "test", "Test@9527")
+//    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "122.112.239.142:8635", "test", "Test@9527")
+    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "163.53.169.237:3306", "root", "ablejava")
     ,
     WAIWANG("http://account-pay.g2s.cn/aries-pay-account/recharge", "rm-bp1yjg70fe47ml9gueo.mysql.rds.aliyuncs.com:3306", "huyue", "huyue@2018")
 }
@@ -147,8 +148,14 @@ fun main(args: Array<String>) {
 //    val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
 
-    println(Ariesutil.convertUUID("dBaJpLjy"))
-    println(Ariesutil.convertUUID(13300000000))
+//    println(Ariesutil.convertUUID("dBaJpLjy"))
+    println(Ariesutil.convertUUID("yGAJXE0K"))
+    println(Ariesutil.convertUUID("KVo6v8ln"))
+    println(Ariesutil.convertUUID("y5xVm39n"))
+//    println(Ariesutil.convertUUID(100002323))
+    println(Ariesutil.convertUUID(100002036))
+    println(Ariesutil.convertUUID(100001936))
+    println(Ariesutil.convertUUID(100002190))
 
     println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13300000000").toInt()))
 

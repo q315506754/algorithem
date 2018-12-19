@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiangli.db.dao.UserMapper">
+
+    <insert id="save" parameterType="com.jiangli.db.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO TBL_USER (CREATE_TIME
+        <if test="areaCode != null and mobile != null">, AREA_CODE, MOBILE</if>
+        <if test="email != null">, EMAIL</if>
+        <if test="password != null">, PASSWORD</if>
+        <if test="name != null">, NAME</if>
+        <if test="avatar != null">, AVATAR</if>
+        ) VALUES (#{createTime}
+        <if test="areaCode != null and mobile != null">, #{areaCode}, #{mobile}</if>
+        <if test="email != null">, #{email}</if>
+        <if test="password != null">, #{password}</if>
+        <if test="name != null">, #{name}</if>
+        <if test="avatar != null">, #{avatar}</if>
+        )
+    </insert>
+
+    <update id="update" parameterType="com.jiangli.db.model.User">
+        UPDATE TBL_USER
+        <set>
+            <if test="areaCode != null and mobile != null">AREA_CODE = #{areaCode}, MOBILE = #{mobile},</if>
+            <if test="email != null">EMAIL = #{email},</if>
+            <if test="password != null">PASSWORD = #{password},</if>
+            <if test="name != null">NAME = #{name},</if>
+            <if test="avatar != null">AVATAR = #{avatar},</if>
+        </set>
+        WHERE IS_DELETED = 0 AND ID = #{id}
+    </update>
+
+    <select id="getByUserId" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = 0 AND ID = #{userId}
+    </select>
+
+    <select id="getByMobile" resultType="long">
+        SELECT ID FROM TBL_USER WHERE IS_DELETED = 0 AND MOBILE = #{mobile} AND AREA_CODE = #{areaCode} LIMIT 1
+    </select>
+
+    <select id="getByEmail" resultType="long">
+        SELECT ID FROM TBL_USER WHERE IS_DELETED = 0 AND EMAIL = #{email} LIMIT 1
+    </select>
+
+    <update id="remove" parameterType="_long">
+        UPDATE TBL_USER SET IS_DELETED = 1 WHERE IS_DELETED = 0 AND ID = #{userId}
+    </update>
+
+    <update id="disable" parameterType="_long">
+        UPDATE TBL_USER SET IS_DISABLED = 1 WHERE IS_DELETED = 0 AND ID = #{userId}
+    </update>
+
+    <update id="enable" parameterType="_long">
+        UPDATE TBL_USER SET IS_DISABLED = 0 WHERE IS_DELETED = 0 AND ID = #{userId}
+    </update>
+
+    <insert id="log">
+        INSERT INTO TBL_USER_LOG (USER_ID, TYPE, CTIME
+          <if test="remark != null">, REMARK</if>
+        ) VALUES (#{userId}, #{type.value}, #{ctime}
+          <if test="remark != null">, #{remark}</if>
+        )
+    </insert>
+
+    <select id="listByMobiles" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = 0 AND AREA_CODE = #{areaCode} AND MOBILE IN
+        <foreach collection="mobiles" item="mobile" open="(" separator="," close=")">
+            #{mobile}
+        </foreach>
+    </select>
+
+    <select id="listByEmails" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = 0 AND EMAIL IN
+        <foreach collection="emails" item="email" open="(" separator="," close=")">
+            #{email}
+        </foreach>
+    </select>
+
+    <select id="countTeacherByName" resultType="_int">
+        SELECT count(1) FROM TBL_USER t, TBL_USER_ROLE tr
+        WHERE
+        t.IS_DELETED = 0
+        AND tr.IS_DELETED = 0
+        AND t.ID = tr.USER_ID
+        AND tr.ROLE = 'TEACHER'
+        <if test="name != null">
+            AND t.NAME LIKE concat("%",#{name},"%")
+        </if>
+    </select>
+
+    <select id="listTeacherByName" resultType="com.jiangli.db.model.UserExtra">
+        SELECT
+            t.ID, t.NAME, tr.TITLE, t.MOBILE, t.EMAIL, t.AVATAR
+        FROM
+            TBL_USER t,
+            TBL_USER_ROLE tr
+        WHERE
+            t.IS_DELETED = 0
+            AND tr.IS_DELETED = 0
+            AND t.ID = tr.USER_ID
+            AND tr.ROLE = 'TEACHER'
+            <if test="name != null">
+                AND t.NAME LIKE concat("%",#{name},"%")
+            </if>
+            LIMIT #{page.start}, #{page.limit}
+    </select>
+
+    <select id="countTeacherByUserId" resultType="_int">
+        SELECT COUNT(1)  FROM TBL_USER t, TBL_USER_ROLE tr
+        WHERE
+        t.IS_DELETED = 0
+        AND tr.IS_DELETED = 0
+        AND t.ID = tr.USER_ID
+        AND tr.ROLE = 'TEACHER'
+        AND t.ID IN
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+    <select id="listTeacherByUserId" resultType="com.jiangli.db.model.UserExtra">
+        SELECT
+        t.ID, t.NAME, tr.TITLE, t.MOBILE, t.EMAIL, t.AVATAR
+        FROM
+        TBL_USER t, TBL_USER_ROLE tr
+        WHERE
+        t.IS_DELETED = 0
+        AND tr.IS_DELETED = 0
+        AND t.ID = tr.USER_ID
+        AND tr.ROLE = 'TEACHER'
+        AND t.ID IN
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+        LIMIT #{page.start}, #{page.limit}
+    </select>
+
+    <select id="list" resultType="com.jiangli.db.model.User">
+        SELECT * FROM TBL_USER WHERE IS_DELETED = 0
+        AND ID in
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+</mapper>
