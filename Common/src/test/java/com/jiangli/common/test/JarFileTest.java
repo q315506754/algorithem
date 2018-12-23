@@ -103,6 +103,7 @@ public class JarFileTest {
         System.out.println(Thread.class.getClassLoader());
         System.out.println(Ck.class.getClassLoader());
         System.out.println(Ck.class.getResource("Describer.class"));
+        System.out.println(Ck.class.getClassLoader().getResource("Describer.class"));
         //System.out.println(Ck.class.getResource("/Describer.class"));
         System.out.println(Ck.class.getResource("/com/jiangli/common/lib/Describer.class"));
     }

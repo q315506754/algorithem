@@ -3,7 +3,33 @@
         "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <mappers>
-        <mapper resource="mappers/stu.xml"/>
-    </mappers>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+    </settings>
+
+    <plugins>
+        <!-- 分页助手 -->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+
+            <!-- 设置为true时，使用RowBounds分页会进行count查询 -->
+            <property name="rowBoundsWithCount" value="true"/>
+
+            <!-- 使用下面的方式配置参数，后面会有所有的参数介绍 -->
+            <property name="supportMethodsArguments" value="true"/>
+            <property name="params" value="pageNum=pageNumKey;pageSize=pageSizeKey;"/>
+        </plugin>
+
+        <!-- 通用mapper插件 -->
+        <plugin interceptor="com.github.abel533.mapperhelper.MapperInterceptor">
+            <!-- 主键生成方式 -->
+            <property name="IDENTITY" value="MYSQL" />
+            <!-- 指定了Mapper接口 -->
+            <property name="mappers" value="com.github.abel533.mapper.Mapper" />
+        </plugin>
+    </plugins>
+
+    <!--<mappers>-->
+        <!--<mapper resource="mappers/stu.xml"/>-->
+    <!--</mappers>-->
 </configuration>

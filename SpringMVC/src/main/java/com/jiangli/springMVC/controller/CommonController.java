@@ -1,5 +1,6 @@
-package com.jiangli.springMVC;
+package com.jiangli.springMVC.controller;
 
+import com.jiangli.springMVC.B;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;

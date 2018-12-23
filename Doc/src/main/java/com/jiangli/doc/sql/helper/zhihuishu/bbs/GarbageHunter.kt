@@ -28,7 +28,7 @@ val domain= "http://114.55.26.161:9080/courseqa/student/qa"
 
 //val DEBUG_MODE=false
 val DEBUG_MODE=true
-val DEBUG_PREV_PAGE = 1000
+val DEBUG_PREV_PAGE = 8000
 
 //!!!!!!!dangerous!!!!!!!!!!
 val DELETE_OPEN=true
@@ -150,8 +150,10 @@ fun requestComment(jdbc:JdbcTemplate,domain: String, cId: Long, vUserId: String)
 
 fun main(args: Array<String>) {
 //    val env = Env.WAIWANG_ALL
-    val qajdbc = Zhsutil.getJDBC(Env.WAIWANG_BBS)
+    val qajdbc = Zhsutil.getJDBC(Env.WAIWANG_BBS,"ZHS_BBS")
     val onlineshooljdbc = Zhsutil.getJDBC(Env.WAIWANG_ONLINESCHOOL)
+
+    println("version 1")
 
     val PAGE_SIZE = 100
     val INTERVAL: Long = if(DEBUG_MODE) 100 else 6
@@ -372,7 +374,7 @@ class BaseGreenWork(val jdbc: JdbcTemplate, val pagE_SIZE: Int, val tbl: String,
             return
         }
 
-            debug("$tbl  "+ curTime())
+//            debug("$tbl  "+ curTime())
 
         if (lastId==null) {
             info("$tbl  query lastId......")
@@ -422,7 +424,7 @@ LIMIT $pagE_SIZE;
                     val vId = it["$mainIdField"].toString().toLong()
                     val vContent = it["$contentField"].toString()
                     val vUserId = it["$creatorField"].toString()
-//                    log("$vId $vContent")
+//                    info("$vId $vContent")
 
                     val analyse = ContentAnalyser.analyse(vContent)
                     if (analyse!=AnaRs.OK) {

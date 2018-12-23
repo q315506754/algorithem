@@ -1,5 +1,7 @@
 package com.jiangli.doc.txt.sql
 
+import com.jiangli.doc.iterToPair
+
 /**
  *
  *

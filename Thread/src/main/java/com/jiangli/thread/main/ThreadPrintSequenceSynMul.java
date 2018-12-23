@@ -8,7 +8,7 @@ import org.apache.commons.lang.ObjectUtils;
  * @author Jiangli
  * @date 2018/10/26 16:18
  */
-public class ThreadPrintSequenceSyn {
+public class ThreadPrintSequenceSynMul {
     public static void main(String[] args) {
         final int start=1;
         final int n = 3;
@@ -25,14 +25,13 @@ public class ThreadPrintSequenceSyn {
                 while (true) {
                     String preLock = locks[(finalI - 1 + n) % n];
                     String thisLock = locks[finalI];
-
-                    synchronized (thisLock) {
-                        thisLock.notifyAll();
-                    }
-
-                    System.out.println(thisLock);
-
                     synchronized (preLock) {
+                        synchronized (thisLock) {
+                            System.out.print(thisLock);
+
+                            thisLock.notify();
+                        }
+
                         try {
                             preLock.wait();
                         } catch (InterruptedException e) {
@@ -42,18 +41,15 @@ public class ThreadPrintSequenceSyn {
 
                 }
             }).start();
+
+//            需要手动控制他们三个的启动顺序，即Thread.Sleep(100)。
+//            try {
+//                Thread.sleep(100L);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
 
-        //try {
-        //    Thread.sleep(1000L);
-        //} catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //}
-        //
-        //String previousLock = locks[(start - 2 + n) % n];
-        //synchronized (previousLock) {
-        //    previousLock.notifyAll();
-        //}
     }
 
 }

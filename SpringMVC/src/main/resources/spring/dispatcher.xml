@@ -13,6 +13,12 @@
     <!-- mvc注解配置 -->
     <mvc:annotation-driven/>
 
+    <!-- 自动扫描且只扫描@Controller -->
+    <!--<context:component-scan base-package="com.jiangli.springMVC.controller" />-->
+    <context:component-scan base-package="com.jiangli.springMVC" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:include-filter>
+    </context:component-scan>
+
     <!-- 静态文件配置 -->
     <mvc:resources location="/assets/js/" mapping="/js/**" />
     <mvc:resources location="/assets/css/" mapping="/css/**" />
@@ -23,15 +29,15 @@
     <mvc:resources location="/assets/" mapping="/assets/**" />
     <mvc:resources location="/audio/" mapping="/audio/**" />
     <mvc:resources mapping="/oldResCenter/**" location="/oldResCenter/" />
-
     <mvc:resources location="/" mapping="/**/*.html"/>
 
     <!-- 视图解析配置 -->
-    <bean
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
+
+
     <!-- 整合jackson 返回一个json格式 -->
     <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
         <!--<property name="messageConverters">-->
@@ -60,11 +66,13 @@
         <!--</property>-->
     <!--</bean>-->
 
+    <!-- 拦截器配置 -->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/*"/>
-            <bean class="com.jiangli.springMVC.InterceptorBean"></bean>
+            <bean class="com.jiangli.springMVC.interceptor.InterceptorBean"></bean>
         </mvc:interceptor>
-        <bean class="com.jiangli.springMVC.GlobalInterceptorBean"></bean>
+        <bean class="com.jiangli.springMVC.interceptor.GlobalInterceptorBean"></bean>
     </mvc:interceptors>
+
 </beans>

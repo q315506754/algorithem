@@ -34,6 +34,12 @@
             <artifactId>junit</artifactId>
         </dependency>
 
+        <!--mongodb-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+        </dependency>
+
         <!--db-->
         <dependency>
             <groupId>org.springframework</groupId>

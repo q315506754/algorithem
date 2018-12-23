@@ -18,6 +18,13 @@
         <resources.dir>src\main\resources\props</resources.dir>
     </properties>
     <dependencies>
+        <!--BCEL-->
+        <dependency>
+            <groupId>org.apache.bcel</groupId>
+            <artifactId>bcel</artifactId>
+            <version>6.2</version>
+        </dependency>
+
         <dependency>
             <groupId>com.jiangli.AlgorithemProject</groupId>
             <artifactId>Common</artifactId>
