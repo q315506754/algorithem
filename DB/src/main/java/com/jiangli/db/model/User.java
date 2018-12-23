@@ -26,8 +26,8 @@ public class User {
     private Integer isDisabled; // 禁用标识
 
 
-    private int pageNumKey;
-    private int pageSizeKey;
+    private int pageNumKey=1;
+    private int pageSizeKey=10;
 
     public Long getId() {
         return id;

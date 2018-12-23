@@ -2,6 +2,9 @@ package com.jiangli.doc.sql.helper.aries
 
 import com.jiangli.doc.sql.BaseConfig
 import com.jiangli.doc.sql.NamedSimpleCachedTableQueryer
+import com.mongodb.DBCollection
+import com.mongodb.Mongo
+import com.mongodb.ServerAddress
 import org.apache.commons.dbcp.BasicDataSource
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig
 import org.hashids.Hashids
@@ -10,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
 import java.lang.Exception
+import java.util.*
 
 
 /**
@@ -57,6 +61,25 @@ object Ariesutil {
         dataSource.password = "${env.pwd}"
         val jdbcTemplate = JdbcTemplate(dataSource)
         return jdbcTemplate
+    }
+
+    enum class MongoDb{
+        aries_login_logs
+    }
+    enum class MongoDbCol(val db: MongoDb) {
+        ARIES_LOGIN(MongoDb.aries_login_logs);
+
+    }
+
+    fun getMongo(env: Env,col:MongoDbCol): DBCollection {
+        val mongo = Mongo(Arrays.asList(ServerAddress("120.27.218.215", 27017)))
+        val db = mongo.getDB(col.db.name)
+        val collection = db.getCollection(col.name)
+
+//        if (env == Env.WAIWANG) {
+//        }
+
+        return collection!!
     }
 
     fun validateNum(str: String, query: List<Any>, limit: Int = 1) {
@@ -144,8 +167,8 @@ enum class Env(val rechargeCbUrl: String, val host: String, val username: String
 }
 
 fun main(args: Array<String>) {
-    val env = Env.YUFA
-//    val env = Env.WAIWANG
+//    val env = Env.YUFA
+    val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
 
 //    println(Ariesutil.convertUUID("dBaJpLjy"))
@@ -157,7 +180,8 @@ fun main(args: Array<String>) {
     println(Ariesutil.convertUUID(100001936))
     println(Ariesutil.convertUUID(100002190))
 
-    println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13300000000").toInt()))
+//    println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13300000000").toInt()))
+    println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13661749570").toInt()))
 
 //    println(Ariesutil.confirmUserId(jdbc,100002215))
 //    println(Ariesutil.confirmUserId(jdbc,100002065))

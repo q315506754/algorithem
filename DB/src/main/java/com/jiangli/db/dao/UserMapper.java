@@ -20,10 +20,12 @@ import java.util.List;
 @Repository
 public interface UserMapper {
 
+    //需要自己解析传入的参数
     @SelectProvider(type = MyProvider.class, method = "dynamicSQL")
     List<User> testProvider(User user);
 
-    @Select("<script>select * from TBL_USER</script>")
+    //可以使用参数
+    @Select("<script>select * from TBL_USER WHERE 1&lt;&gt; 0 AND IS_DELETED=#{isDeleted}</script>")
     List<User> testCustomSql(User user);
 
     void save(User user);

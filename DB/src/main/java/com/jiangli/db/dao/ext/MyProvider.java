@@ -7,6 +7,7 @@ package com.jiangli.db.dao.ext;
 public class MyProvider {
     public String dynamicSQL(Object p) {
         System.out.println("p:"+p);
-        return "<script>select * from TBL_USER</script>";
+        //return "select * from TBL_USER where IS_DELETED=0";
+        return "select * from TBL_USER where IS_DELETED=#{isDeleted}";
     }
 }
