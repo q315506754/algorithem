@@ -55,6 +55,7 @@
         <module>SpringBoot</module>
         <module>SpringBoot-Batch</module>
         <module>SpringMVC</module>
+        <module>SpringMVC-webflow</module>
         <module>Struts2</module>
         <module>Test</module>
         <module>Thread</module>

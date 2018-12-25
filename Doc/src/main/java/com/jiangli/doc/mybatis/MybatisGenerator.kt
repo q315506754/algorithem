@@ -101,7 +101,7 @@ fun main(args: Array<String>) {
     val JAVA_NAME = "Recruit"
     val DESC = "招生(班次)表"
 
-    val OUTPUTPATH = "C:\\Users\\DELL-13\\Desktop\\outpath"
+    val OUTPUTPATH = PathUtil.desktop("outpath")
     val DB_URL = "jdbc:mysql://192.168.222.8:3306?user=root&password=ablejava"
 
     //fixed

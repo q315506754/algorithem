@@ -1,5 +1,6 @@
 package com.jiangli.doc.sql.helper.aries
 
+import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.sql.BaseConfig
 import com.jiangli.doc.sql.NamedSimpleCachedTableQueryer
 import com.mongodb.DBCollection
@@ -195,4 +196,5 @@ fun main(args: Array<String>) {
 //    println(Ariesutil.getUserId(jdbc, null,"13588708991"))
 //    println(Ariesutil.getUserId(jdbc, "","13588708991",""))
 
+    println(PathUtil.desktop("aa.txt"))
 }

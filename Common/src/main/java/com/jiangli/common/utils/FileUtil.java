@@ -3,6 +3,7 @@ package com.jiangli.common.utils;
 import com.jiangli.common.core.FileStringProcesser;
 import org.apache.commons.io.IOUtils;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,12 @@ public class FileUtil {
         }
 
         return null;
+    }
+
+    public static String desktop() {
+        FileSystemView view = FileSystemView.getFileSystemView();
+        File homeDirectory = view.getHomeDirectory();
+        return homeDirectory.getPath();
     }
 
     public static File processAndReplace(File src, FileStringProcesser processer) {

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+    <!-- mvc注解配置 -->
+    <mvc:annotation-driven/>
+
+    <!-- 自动扫描且只扫描@Controller -->
+    <!--<context:component-scan base-package="com.jiangli.springMVC.controller" />-->
+    <context:component-scan base-package="com.jiangli" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:include-filter>
+    </context:component-scan>
+
+    <!-- 静态文件配置 -->
+    <mvc:resources location="/assets/js/" mapping="/js/**" />
+    <mvc:resources location="/assets/css/" mapping="/css/**" />
+    <mvc:resources location="/assets/img/" mapping="/img/**" />
+    <mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
+    <mvc:resources location="/WEB-INF/sound/" mapping="/sound/**" />
+    <mvc:resources location="/sockjs/" mapping="/sockjs/**/**" />
+    <mvc:resources location="/assets/" mapping="/assets/**" />
+    <mvc:resources location="/audio/" mapping="/audio/**" />
+    <mvc:resources mapping="/oldResCenter/**" location="/oldResCenter/" />
+    <mvc:resources location="/" mapping="/**/*.html"/>
+
+    <!-- 视图解析配置 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+
+    <!-- 整合jackson 返回一个json格式 -->
+    <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
+        <!--<property name="messageConverters">-->
+            <!--<list>-->
+                <!--<ref bean="mappingJacksonHttpMessageConverter"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>-->
+
+    <!--解析返回JSON -->
+    <!--  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> -->
+    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
+        <!--<property name="messageConverters">-->
+            <!--<list >-->
+                <!--<ref bean="mappingJacksonHttpMessageConverter" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--<bean id="mappingJacksonHttpMessageConverter"-->
+          <!--class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+        <!--<property name="supportedMediaTypes">-->
+            <!--<list>-->
+                <!--<value>text/html;charset=UTF-8</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!-- 拦截器配置 -->
+    <mvc:interceptors>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/*"/>-->
+            <!--<bean class="com.jiangli.springMVC.interceptor.InterceptorBean"></bean>-->
+        <!--</mvc:interceptor>-->
+        <bean class="com.jiangli.springMVCflow.CORS.CrossDomainInterceptor"></bean>
+    </mvc:interceptors>
+
+</beans>

@@ -1,5 +1,6 @@
 package com.jiangli.doc.txt.excel
 
+import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.ExcelUtil
 import com.jiangli.doc.sql.helper.aries.Ariesutil
 import com.jiangli.doc.sql.helper.aries.Env
@@ -17,7 +18,7 @@ fun main(args: Array<String>) {
 
     var i = 0
 
-    ExcelUtil.processRow("C:\\Users\\Jiangli\\Desktop\\095f9b0f4c5760da.xlsx",0,1){
+    ExcelUtil.processRow(PathUtil.desktop("095f9b0f4c5760da.xlsx"),0,1){
         file, workbook, sheet, lastRowIdx, lastColIdx, rowIdx, row ->
         if (rowIdx>=2) {
             val name = ExcelUtil.getCellValue(row?.getCell(1))

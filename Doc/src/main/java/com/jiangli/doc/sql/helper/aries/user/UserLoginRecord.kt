@@ -1,6 +1,7 @@
 package com.jiangli.doc.sql.helper.aries.user
 
 import com.jiangli.common.utils.DateUtil
+import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.sql.helper.aries.Ariesutil
 import com.jiangli.doc.sql.helper.aries.Env
 import com.jiangli.doc.writeMapToExcel
@@ -19,7 +20,7 @@ fun main(args: Array<String>) {
 
 //    val MOBILE = "13661749570"
     val MOBILE = "18017058197"
-    val ouputFile = """C:\Users\Jiangli\Desktop\$MOBILE-登录日志.xlsx"""
+    val ouputFile = PathUtil.desktop("""$MOBILE-登录日志.xlsx""")
 
     val userId = Ariesutil.getUserId(jdbc, "", MOBILE).toInt()
     val uuid = Ariesutil.convertUUID(userId)

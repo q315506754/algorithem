@@ -144,6 +144,11 @@ public class PathUtil {
             e.printStackTrace();
         }
     }
+
+    public static String desktop(String relaPath) {
+        return buildPath(FileUtil.desktop(),false,relaPath);
+    }
+
     public static void ensureFilePath(String path){
         try {
             if (path.indexOf(".") > 0) {

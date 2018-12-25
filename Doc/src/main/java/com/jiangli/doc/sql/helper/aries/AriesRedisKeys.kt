@@ -95,4 +95,6 @@ fun main(args: Array<String>) {
 
     println("hgetall base:sms:17621168106:$dt:times")
     println("hset base:sms:17621168106:$dt:times CODE 25")
+
+    println("hgetall base:video:3387")
 }

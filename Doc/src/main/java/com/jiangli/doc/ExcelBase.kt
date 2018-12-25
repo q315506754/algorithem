@@ -1,5 +1,6 @@
 package com.jiangli.doc
 
+import com.jiangli.common.utils.PathUtil
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.NumberToTextConverter
@@ -340,7 +341,7 @@ fun main(args: Array<String>) {
         it, workbook, sheet ->  println(sheet)
     }
 
-    ExcelUtil.processRowCell("C:\\Users\\DELL-13\\Desktop\\课程购买.xlsx",0,1){
+    ExcelUtil.processRowCell(PathUtil.desktop("课程购买.xlsx"),0,1){
         file, workbook, sheet, lastRowIdx, lastColIdx, rowIdx, row, cellIdx, cell, cellValue ->
         println("$rowIdx x $cellIdx ,$cellValue")
     }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+
+    <!--https://docs.spring.io/spring-webflow/docs/2.5.0.RELEASE/reference/html/defining-flows.html-->
+
+
+    <!--This flow now creates a Booking object in flow scope when it starts. The id of the hotel to book is obtained from a flow input attribute.-->
+    <input name="hotelId" />
+    <!--If an input value does not match the declared type, a type conversion will be attempted.-->
+    <!--<input name="hotelId" type="long" />-->
+<!--<input name="hotelId" value="flowScope.myParameterObject.hotelId" />-->
+    <!--<input name="hotelId" type="long" value="flowScope.hotelId" required="true" />-->
+
+
+    <!--All states of the flow are defined within this element. The first state defined becomes the flow's starting point.-->
+    <on-start>
+        <evaluate expression="bookingService.createBooking(hotelId, currentUser.name)"
+                  result="flowScope.booking" />
+    </on-start>
+
+    <!--map to /WEB-INF/hotels/booking/enterBookingDetails.xhtml-->
+    <!-- if the flow itself was located in the /WEB-INF/hotels/booking directory. -->
+    <view-state id="enterBookingDetails" >
+        <transition on="submit" to="reviewBooking" />
+    </view-state>
+
+
+    <view-state id="reviewBooking">
+        <transition on="confirm" to="bookingConfirmed" />
+        <transition on="revise" to="enterBookingDetails" />
+        <transition on="cancel" to="bookingCancelled" />
+    </view-state>
+
+    <!--ou can invoke methods on Spring beans or any other flow variable-->
+    <evaluate expression="entityManager.persist(booking)" />
+    <!--If the expression returns a value, that value can be saved in the flow's data model called flowScope:-->
+    <evaluate expression="bookingService.findHotels(searchCriteria)" result="flowScope.hotels" />
+    <!--If the expression returns a value that may need to be converted, specify the desired type using the result-type attribute:-->
+    <evaluate expression="bookingService.findHotels(searchCriteria)" result="flowScope.hotels"
+              result-type="dataModel"/>
+
+
+    <!--
+On flow start
+On state entry
+On view render
+On transition execution
+On state exit
+On flow end
+    -->
+
+    <end-state id="bookingCancelled" />
+
+    <end-state id="bookingConfirmed">
+        <output name="bookingId" />
+        <output name="confirmationNumber" value="booking.confirmationNumber" />
+    </end-state>
+
+
+    <!--These variables are allocated when the flow starts. Any @Autowired transient references the variable holds are also rewired when the flow resumes.-->
+    <!--Make sure your variable's class implements java.io.Serializable, as the instance state is saved between flow requests.-->
+    <var name="searchCriteria" class="com.mycompany.myapp.hotels.search.SearchCriteria"/>
+
+    <!--
+     Variable Scopes
+
+Flow Scope when a flow starts and destroyed when the flow ends.
+View Scope gets allocated when a view-state enters and destroyed when the state exits.
+Request Scope  when a flow is called and destroyed when the flow returns.
+Flash Scope gets allocated when a flow starts, cleared after every view render, and destroyed when the flow ends.
+Conversation Scope  Conversation scope is shared by a top-level flow and all of its subflows.
+
+    -->
+
+
+    <subflow-state id="addGuest" subflow="createGuest">
+        <input name="booking" />
+
+        <transition on="guestCreated" to="reviewBooking">
+            <evaluate expression="booking.guests.add(currentEvent.attributes.guest)" />
+        </transition>
+        <transition on="creationCancelled" to="reviewBooking" />
+    </subflow-state>
+
+</flow>
