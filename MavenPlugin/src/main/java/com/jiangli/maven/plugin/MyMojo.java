@@ -28,8 +28,8 @@ import java.util.List;
 /**
  * Goal which touches a timestamp file.
  *
- * @goal count
  * @phase process-sources
+ * @goal count
  */
 public class MyMojo
         extends AbstractMojo {

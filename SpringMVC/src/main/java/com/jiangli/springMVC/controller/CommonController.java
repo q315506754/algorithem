@@ -3,18 +3,17 @@ package com.jiangli.springMVC.controller;
 import com.jiangli.springMVC.B;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Random;
 
 /**
  * @author Jiangli
@@ -23,9 +22,8 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 @RequestMapping(value = "/")
-public class CommonController {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+@SessionAttributes({"sesA","x"})
+public class CommonController extends BaseController{
 
     @Autowired
     private HttpSession session;
@@ -33,15 +31,6 @@ public class CommonController {
     @Autowired
     private ServletContext servletContext;
 
-//    @Autowired
-//    private ICCAuto iccAuto;
-//
-//    @Autowired
-//    private Configurator configurator;
-//
-//    @Autowired
-//    @Qualifier("cc_dubbo_ICCOrder")
-//    private ICCOrder ccorder;
 
     public CommonController() {
         logger.debug("CommonController construct...");
@@ -49,9 +38,81 @@ public class CommonController {
 
 
     class A{
+        String name;
+
         void print() {
             System.out.println("absdf");
         }
+    }
+
+
+    @ModelAttribute
+    A propA() {
+        A ret = new A();
+        ret.name = "阿打算as";
+        logger.debug("propA:{}",ret);
+        return ret;
+    }
+
+    @ModelAttribute("sesA")
+    A sesA() {
+        A ret = new A();
+        ret.name = "session值";
+        logger.debug("sesA:{}",ret);
+        return ret;
+    }
+
+    @ModelAttribute("propBB")
+    int propB() {
+        int ret = new Random().nextInt();
+        logger.debug("propB:{}",ret);
+        return ret;
+    }
+    @ModelAttribute
+    int propC() {
+        int ret = 444;
+        logger.debug("propC:{}",ret);
+        return ret;
+    }
+
+    //http://localhost:80/mv/ABC?a=123
+    @RequestMapping("/mv/{id}")
+    ModelAndView mv(HttpServletRequest request
+        ,@PathVariable("id") String id
+
+        ,@CookieValue("JSESSIONID") String JSESSIONID
+        ,@RequestHeader("User-Agent") String UserAgent
+        ,@RequestParam("a") String a
+
+        ,@ModelAttribute() A obj
+        ,@ModelAttribute("int") Integer c
+        ,@ModelAttribute("propBB") Integer b
+
+        ,Model model
+        ,HttpSession session
+
+    ) {
+        logger.debug("mv,{},{},{},{},{}",JSESSIONID,UserAgent,a,id);
+        logger.debug("obj:{}",obj);
+        logger.debug("b:{}",b);
+        logger.debug("c:{}",c);
+        Object x = session.getAttribute("x");
+        logger.debug("x:{}", x);
+
+        logger.debug("model:{}",model);
+
+        ModelAndView modelAndView = new ModelAndView("mv");
+        modelAndView.addObject("put", "AAA");
+        modelAndView.addObject("obj", obj);
+        modelAndView.addObject("b", b);
+
+        if (x == null) {
+            modelAndView.addObject("x", 0);
+        } else {
+            modelAndView.addObject("x", (int)x+1);
+        }
+
+        return modelAndView;
     }
 
     //http://localhost:8080/home1

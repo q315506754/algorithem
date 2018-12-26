@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jiangli.AlgorithemProject</groupId>
-    <artifactId>SpringMVC-webflow</artifactId>
+    <artifactId>SpringMVC-tiles</artifactId>
     <packaging>war</packaging>
     <version>${com.provider-version}</version>
 
@@ -112,6 +112,17 @@
         </dependency>
         <!--/ Servlet依赖 -->
 
+        <!-- Apache Tiles -->
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-jsp</artifactId>
+            <version>3.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-extras</artifactId>
+            <version>3.0.8</version>
+        </dependency>
     </dependencies>
 
     <build>

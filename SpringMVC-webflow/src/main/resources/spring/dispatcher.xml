@@ -22,13 +22,7 @@
     <!-- 静态文件配置 -->
     <mvc:resources location="/assets/js/" mapping="/js/**" />
     <mvc:resources location="/assets/css/" mapping="/css/**" />
-    <mvc:resources location="/assets/img/" mapping="/img/**" />
-    <mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
-    <mvc:resources location="/WEB-INF/sound/" mapping="/sound/**" />
-    <mvc:resources location="/sockjs/" mapping="/sockjs/**/**" />
     <mvc:resources location="/assets/" mapping="/assets/**" />
-    <mvc:resources location="/audio/" mapping="/audio/**" />
-    <mvc:resources mapping="/oldResCenter/**" location="/oldResCenter/" />
     <mvc:resources location="/" mapping="/**/*.html"/>
 
     <!-- 视图解析配置 -->
@@ -75,4 +69,16 @@
         <bean class="com.jiangli.springMVCflow.CORS.CrossDomainInterceptor"></bean>
     </mvc:interceptors>
 
+
+    <!-- Enables FlowHandler URL mapping -->
+    <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+        <property name="flowExecutor" ref="flowExecutor" />
+    </bean>
+
+    <!-- Maps request paths to flows in the flowRegistry;
+	e.g. a path of /hotels/booking looks for a flow with id "hotels/booking" -->
+    <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+        <property name="flowRegistry" ref="flowRegistry"/>
+        <property name="order" value="0"/>
+    </bean>
 </beans>
