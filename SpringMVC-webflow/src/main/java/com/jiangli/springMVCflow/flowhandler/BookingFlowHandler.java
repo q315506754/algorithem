@@ -7,6 +7,9 @@ import org.springframework.webflow.mvc.servlet.AbstractFlowHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * http://localhost/hotels/booking
+ */
 @Component("hotels/booking")
 public class BookingFlowHandler extends AbstractFlowHandler {
 	public String handleExecutionOutcome(FlowExecutionOutcome outcome,

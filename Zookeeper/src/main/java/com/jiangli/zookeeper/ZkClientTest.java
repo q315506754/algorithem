@@ -4,7 +4,6 @@ import com.jiangli.common.utils.RecurUtil;
 import com.jiangli.zookeeper.utils.DubboURL;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.ZkConnection;
-import org.apache.zookeeper.CreateMode;
 
 import java.net.InetAddress;
 import java.net.URLDecoder;
@@ -20,8 +19,8 @@ public class ZkClientTest {
 
 
     public static void main(String[] args) {
-        final boolean shouldDelete = false;
-        //final boolean shouldDelete = true;
+        //final boolean shouldDelete = false;
+        final boolean shouldDelete = true;
         String CONNECT_ADDR = "zk1.i.g2s.cn:2181,zk2.i.g2s.cn:2181,zk3.i.g2s.cn:2181";
         ZkClient zkc = new ZkClient(new ZkConnection(CONNECT_ADDR), 10000);
         System.out.println(zkc);
@@ -34,9 +33,9 @@ public class ZkClientTest {
         //System.out.println(children);
 
 
-        zkc.delete("/dubbo/com.zhihuishu.aries.interaction.openapi.InteractionOpenService/configurators/override%3A%2F%2F192.168.70.20%3A20880%2Fcom.zhihuishu.aries.interaction.openapi.InteractionOpenService%3Fcategory%3Dconfigurators%26disabled%3Dtrue%26dynamic%3Dfalse%26enabled%3Dtrue%26group%3Dpc%26version%3D1.1.6");
-        String s = zkc.create("/dubbo/com.zhihuishu.aries.interaction.openapi.InteractionOpenService/configurators/override%3A%2F%2F192.168.70.20%3A20880%2Fcom.zhihuishu.aries.interaction.openapi.InteractionOpenService%3Fcategory%3Dconfigurators%26disabled%3Dtrue%26dynamic%3Dfalse%26enabled%3Dtrue%26group%3Dpc%26version%3D1.1.6", null, CreateMode.PERSISTENT);
-        System.out.println(s);
+        //zkc.delete("/dubbo/com.zhihuishu.aries.interaction.openapi.InteractionOpenService/configurators/override%3A%2F%2F192.168.70.20%3A20880%2Fcom.zhihuishu.aries.interaction.openapi.InteractionOpenService%3Fcategory%3Dconfigurators%26disabled%3Dtrue%26dynamic%3Dfalse%26enabled%3Dtrue%26group%3Dpc%26version%3D1.1.6");
+        //String s = zkc.create("/dubbo/com.zhihuishu.aries.interaction.openapi.InteractionOpenService/configurators/override%3A%2F%2F192.168.70.20%3A20880%2Fcom.zhihuishu.aries.interaction.openapi.InteractionOpenService%3Fcategory%3Dconfigurators%26disabled%3Dtrue%26dynamic%3Dfalse%26enabled%3Dtrue%26group%3Dpc%26version%3D1.1.6", null, CreateMode.PERSISTENT);
+        //System.out.println(s);
         //System.exit(0);
 
         Set<String> infs = new LinkedHashSet<>();

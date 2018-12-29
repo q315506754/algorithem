@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+
+    <!-- http://localhost:80 -->
+    <!-- http://localhost/enterBookingDetails -->
+    <!--<view-state id="enterBookingDetails" />-->
+
+    <!-- http://localhost/bookHotel?hotelId=1234 -->
+    <!--用来输入参数-->
+    <input name="hotelId" />
+
+    <on-start>
+        <evaluate expression="bookingService.createBooking(hotelId)"
+                  result="flowScope.booking" />
+    </on-start>
+
+    <!--<var name="searchCriteria" class="com.mycompany.myapp.hotels.SearchCriteria" />-->
+    <!--bookHotel 对应hotelId-->
+    <!-- http://localhost/bookHotel -->
+    <!--Use the view attribute to specify the id of the view to render explicitly.-->
+
+    <!--The model may be an object in any accessible scope, such as flowScope or viewScope.-->
+    <!--如果model验证不通过 会重新回到该view让user重新填写-->
+    <view-state id="enterBookingDetails" view="book/start" model="DetailsObj">
+        <var name="aaa" class="com.jiangli.springMVCflow.model.ViewObject" />
+
+        <!--配置了这个 只有binding才被允许；不配的话public属性都被允许-->
+        <binder>
+            <binding property="hotelId" />
+            <binding property="hotelName" />
+        </binder>
+
+        <!--每一次都会执行 包括子请求-->
+        <on-render>
+            <evaluate expression="bookingService.findHotels(aaa)" result="viewScope.hotels" />
+        </on-render>
+
+        <transition on="next"  to="reviewBooking">
+            <evaluate expression="bookingService.record(aaa)" />
+            <evaluate expression="bookingService.nextPage(aaa)" />
+            <!--a view called "fragments" when handling an Ajax event-->
+            <render fragments="/ajax/frags" />
+        </transition>
+        <transition on="previous"  to="reviewBooking">
+            <evaluate expression="bookingService.record(aaa)" />
+            <evaluate expression="bookingService.previousPage(aaa)" />
+            <!--<render fragments="searchResultsFragment" />-->
+        </transition>
+
+        <!--history="invalidate" 禁止后退&之前显示过的view-->
+        <transition on="submit" to="reviewBooking">
+            <!--普通方法可以返回false阻止继续过渡-->
+            <evaluate expression="bookingService.record(aaa)" />
+        </transition>
+
+        <!--没有任何触发器的通常叫做事件处理器，不会改变当前view，仅仅停留在当前或者fragment-->
+        <transition on="event">
+            <!-- Handle event -->
+        </transition>
+
+        <!--history="discard" 阻止后退-->
+        <!--bind="false" 禁止model属性验证和转换  防止出错-->
+        <transition on="cancel" to="bookingCancelled" bind="false"  validate="false" />
+    </view-state>
+
+    <!--By convention, a view-state maps its id to a view template in the directory where the flow is located.-->
+    <view-state id="reviewBooking" view="book/reviewBooking">
+        <transition on="confirm" to="bookingConfirmed" />
+        <transition on="revise" to="enterBookingDetails" />
+        <transition on="cancel" to="bookingCancelled" />
+    </view-state>
+
+    <end-state id="bookingConfirmed" view="externalRedirect:https://www.baidu.com/s?wd=#{flowScope.booking}"/>
+
+    <end-state id="bookingCancelled"  view="externalRedirect:https://www.baidu.com/s?wd=failed"/>
+
+
+
+    <global-transitions>
+        <transition on="login" to="login" />
+        <transition on="logout" to="logout" />
+    </global-transitions>
+</flow>
