@@ -34,7 +34,7 @@ public class ZkClientTest {
 
 
         //zkc.delete("/dubbo/com.zhihuishu.aries.interaction.openapi.InteractionOpenService/configurators/override%3A%2F%2F192.168.70.20%3A20880%2Fcom.zhihuishu.aries.interaction.openapi.InteractionOpenService%3Fcategory%3Dconfigurators%26disabled%3Dtrue%26dynamic%3Dfalse%26enabled%3Dtrue%26group%3Dpc%26version%3D1.1.6");
-        //String s = zkc.create("/dubbo/com.zhihuishu.aries.interaction.openapi.InteractionOpenService/configurators/override%3A%2F%2F192.168.70.20%3A20880%2Fcom.zhihuishu.aries.interaction.openapi.InteractionOpenService%3Fcategory%3Dconfigurators%26disabled%3Dtrue%26dynamic%3Dfalse%26enabled%3Dtrue%26group%3Dpc%26version%3D1.1.6", null, CreateMode.PERSISTENT);
+        //String s = zkc.create("/dubbo/com.zhihuishu.aries.interaction.openapi.InteractionOpenService/configurators/override%3A%2F%2F192.168.70.20%3A20880%2Fcom.zhihuishu.aries.interaction.openapi.InteractionOpenService%3Fcategory%3Dconfigurators%26disabled%3Dtrue%26dynamic%3Dfalse%26enabled%3Dtrue%26group%3Dpc%26version%3D1.1.6", null, CreateMode.PERSISTENT_SEQUENTIAL);
         //System.out.println(s);
         //System.exit(0);
 

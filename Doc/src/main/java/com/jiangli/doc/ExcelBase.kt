@@ -1,6 +1,7 @@
 package com.jiangli.doc
 
 import com.jiangli.common.utils.PathUtil
+import org.apache.commons.lang.StringUtils
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.NumberToTextConverter
@@ -259,6 +260,20 @@ object ExcelUtil {
     }
 
 
+    fun getCellValue(row:  XSSFRow?,idx:IntRange): MutableList<String> {
+        val ret = mutableListOf<String>()
+        idx.forEach {
+            val cellValue = getCellValue(row, it)
+            if (StringUtils.isNotBlank(cellValue)) {
+                ret.add(cellValue!!)
+            }
+        }
+        return ret
+    }
+
+    fun getCellValue(row:  XSSFRow?,idx:Int): String? {
+      return ExcelUtil.getCellValue(row?.getCell(idx))
+    }
 
     fun getCellValue(cell: XSSFCell?): String? {
         if (cell == null) {

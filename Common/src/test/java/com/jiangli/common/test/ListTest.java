@@ -22,7 +22,9 @@ public class ListTest {
         list.add("123");
         list.add("3434");
         list.add("123");
-        list.add("3434");
+        list.add("aaa");
+
+        System.out.println(list);
 
         List<String> subList = list.subList(1, 3);
         List<String> subList2 = list.subList(1, 3);
