@@ -22,6 +22,13 @@ public class CommonTest extends BaseTest {
         System.out.println(Array.newInstance(Object.class, 3));
         System.out.println(Array.newInstance(String.class, 3));
     }
+
+    @Test
+    public void test_234() {
+        System.out.println("ip:+"+null);
+    }
+
+
     @Test
     public void test_local_destop() throws IOException {
         System.out.println(Arrays.toString(File.listRoots()));

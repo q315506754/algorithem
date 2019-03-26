@@ -20,15 +20,17 @@ fun main(args: Array<String>) {
     val jdbc = Ariesutil.getJDBC(env)
 
 //    val applyId = 12
-    val applyId = 17
+//    dim_user_apply -> tbl_answer_user_apply
+    val qapplyId = 171
 
     val userInfo  = jdbc.queryForObject("""
-SELECT ua.* from db_aries_questionnaire.tbl_answer_user_apply aua
+SELECT ua.*,aua.ID as mId from db_aries_questionnaire.tbl_answer_user_apply aua
   LEFT JOIN db_aries_questionnaire.dim_user_apply ua ON  aua.USER_ID = ua.ID AND ua.IS_DELETED = 0
-WHERE aua.ID=$applyId;
+WHERE ua.ID=$qapplyId AND aua.USER_TYPE = 2;
     """.trimIndent(),
             ColumnMapRowMapper())
     val NAME = userInfo["NAME"]!!
+    val applyId = userInfo["mId"]!!
 
     //    val inputpath = PathUtil.desktop("""关键词.xlsx""")
     val outputpath = PathUtil.desktop("""test_result_$NAME.xlsx""")

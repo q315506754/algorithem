@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
     val MOBILE = "18017058197"
     val ouputFile = PathUtil.desktop("""$MOBILE-登录日志.xlsx""")
 
-    val userId = Ariesutil.getUserId(jdbc, "", MOBILE).toInt()
+    val userId = Ariesutil.getUserId(jdbc, "", MOBILE).toLong()
     val uuid = Ariesutil.convertUUID(userId)
 
     println("userId:$userId uuid:$uuid")
@@ -30,12 +30,14 @@ fun main(args: Array<String>) {
     val list = mutableListOf<MutableMap<String,Any>>()
     val query = BasicDBObject()
     query.put("user_id",userId)
+//    query.put("user_id",100003685)
+//    query.put("user_id",100003685L)
     val sort = BasicDBObject()
     sort.put("loginTime",-1)
     val dbCursor = mongo.find(query).sort(sort)
     while (dbCursor.hasNext()) {
         val next = dbCursor.next()
-//        println(next)
+        println(next)
 
         val one = mutableMapOf<String,Any>()
         one.putAll(next.toMap() as Map<out String, Any>)

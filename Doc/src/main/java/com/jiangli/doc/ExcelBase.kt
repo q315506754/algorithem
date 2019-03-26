@@ -399,11 +399,13 @@ fun extractMapListKeys( list:List<MutableMap<String, Any>>):Set<String> {
 fun writeMapToExcel(ouputFile: String, mergeMapList: List<MutableMap<String, Any>>,processer:(workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any>)->Unit ? ={ workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any> ->
     cell.setCellValue(cellValue)
 }) {
-    val ret = arrayListOf<Pair<String, String>>()
-    mergeMapList[0].forEach {entry ->
-        ret.add(entry.key to entry.key)
+    val config = arrayListOf<Pair<String, String>>()
+    if (mergeMapList.size>0) {
+        mergeMapList[0].forEach {entry ->
+            config.add(entry.key to entry.key)
+        }
     }
-    writeMapToExcel(ouputFile,ret,mergeMapList,processer)
+    writeMapToExcel(ouputFile,config,mergeMapList,processer)
 }
 
 
@@ -596,4 +598,10 @@ fun queryOneField(code_jdbc: JdbcTemplate, sql: String, field: String): String {
 fun checkExists(code_jdbc: JdbcTemplate, sql: String): Boolean {
     val query = code_jdbc.query(sql.trimIndent(), ColumnMapRowMapper())
     return query.isNotEmpty()
+}
+
+fun replaceKey(map: MutableMap<String,Any>, org:String, dest:String):Unit {
+    val v = map[org]
+    map.remove(org)
+    map.put(dest, v ?: "")
 }

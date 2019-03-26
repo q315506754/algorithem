@@ -179,6 +179,8 @@ fun main(args: Array<String>) {
 
     println(Ariesutil.convertUUID("nwXx669y"))
 //    println(Ariesutil.convertUUID(100002323))
+    println(Ariesutil.convertUUID(100))
+    println(Ariesutil.convertUUID(10001234))
     println(Ariesutil.convertUUID(100002253))
     println(Ariesutil.convertUUID(100001936))
     println(Ariesutil.convertUUID(100002190))
