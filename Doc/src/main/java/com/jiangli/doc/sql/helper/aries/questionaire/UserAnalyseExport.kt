@@ -1,14 +1,13 @@
 package com.jiangli.doc.sql.helper.aries.questionaire
 
+import com.jiangli.common.utils.DateUtil
 import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.sql.helper.aries.Ariesutil
 import com.jiangli.doc.sql.helper.aries.Env
 import org.springframework.jdbc.core.ColumnMapRowMapper
 import java.text.SimpleDateFormat
 import java.util.*
-
-
-
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -22,14 +21,24 @@ fun main(args: Array<String>) {
     //    val env = Env.YUFA
         val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
+    val fromEndDate = "2019-03-28 17:10:00"
+    val toEndDate = "2019-04-01 17:10:00"
+//    val toEndDate = "2019-03-25 17:10:00"
 
-    (23..25).forEach {
+    var start = DateUtil.getDate(fromEndDate).time
+    val end = DateUtil.getDate(toEndDate).time
+
+    val pslist =  mutableListOf<String>()
+    var prev = 0
+    while (start<=end) {
         println("\n\n")
         val createTimeGt = "AND CREATE_TIME > '2019-02-19 06:30:00'"
         //    val createTimeGt = ""
 
-        val createTimeLess = "AND CREATE_TIME < '2019-03-$it 17:10:00'"
+        val IT = DateUtil.getDate_yyyyMMddHHmmss(start)
+        val createTimeLess = "AND CREATE_TIME < '$IT'"
         //    val createTimeLess = ""
+
 
         println("时间范围为 $createTimeGt ~ $createTimeLess")
 
@@ -78,6 +87,15 @@ SELECT * FROM db_aries_questionnaire.dim_user_apply WHERE  IS_DELETED = 0 $creat
         }
 
         println("总人数:"+userInfos.size)
+
+        var increment = ""
+        if (prev > 0) {
+            increment = "比昨日增加:${userInfos.size - prev}"
+        }
+        prev = userInfos.size
+
+        pslist.add("${IT}(${DateUtil.getWeekCn(start)}) 总人数:${userInfos.size} ${increment}")
+
         println("年龄分布:"+mp)
 
         println("职务等级分布"+joinMap(linkedMapOf(
@@ -162,9 +180,15 @@ SELECT * FROM db_aries_questionnaire.dim_user_apply WHERE  IS_DELETED = 0 $creat
         ), userInfos.groupBy {
             it["SECTORS_CATEGORY"]!!.toString()
         }))
+
+        start+=TimeUnit.DAYS.toMillis(1) //add 1 day
     }
 
-
+    println()
+    println("汇总数据:")
+    pslist.forEach {
+        println("$it")
+    }
 //    writeMapToExcel(outputpath,rsList)
 }
 

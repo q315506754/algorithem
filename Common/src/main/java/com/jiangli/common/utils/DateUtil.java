@@ -64,6 +64,14 @@ public class DateUtil {
 
         return (new SimpleDateFormat("yyyy-MM-dd")).format(timeStamp);
     }
+    public static String getWeekCn(long timeStamp) {
+        Calendar instance = Calendar.getInstance();
+        instance.setTimeInMillis(timeStamp);
+
+        int i = instance.get(Calendar.DAY_OF_WEEK);
+        String[] arr = new String[]{"日","一","二","三","四","五","六"};
+        return arr[i-1];
+    }
 
     public static String getDate_HHmmss(long timeStamp) {
         return (new SimpleDateFormat("HH:mm:ss")).format(timeStamp);

@@ -1,6 +1,6 @@
 package com.jiangli.sort.test;
 
-import com.jiangli.common.core.Sorter;
+import com.jiangli.common.core.Sort;
 import com.jiangli.junit.spring.StatisticsSpringJunitRunner;
 import com.jiangli.sort.*;
 import org.junit.Assert;
@@ -17,6 +17,7 @@ import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,11 +98,11 @@ public class InsertionSortTest implements ApplicationContextAware {
         expect(insertionSort);
     }
 
-    private void expect(Sorter<Integer> sorter) {
+    private void expect(Sort<Integer> sorter) {
         System.currentTimeMillis();
         for (ParamAndExpect aCase : cases) {
-            Integer[] output = sorter.sort(aCase.testParams);
-            Assert.assertArrayEquals(Arrays.toString(output) + "与预期不服:" + Arrays.toString(aCase.testParams) + "=>" + Arrays.toString(aCase.expectedArrays), aCase.expectedArrays, output);
+            Integer[] output = sorter.sort(Arrays.copyOf(aCase.testParams,aCase.testParams.length));
+            Assert.assertArrayEquals("算法"+sorter+" "+Arrays.toString(output) + "与预期不服:" + Arrays.toString(aCase.testParams) + "=>" + Arrays.toString(aCase.expectedArrays), aCase.expectedArrays, output);
         }
     }
 
@@ -148,4 +149,361 @@ public class InsertionSortTest implements ApplicationContextAware {
         expect(radixSort);
     }
 
+
+//    practice
+    @Test
+    @Repeat(REPEAT_TIMES)
+    public void test_practice() {
+        //冒泡
+        expect((arr)->{
+
+            for(int i=1;i<arr.length;i++){
+                for (int j = 0; j < arr.length - i; j++) {
+                    if(arr[j+1] < arr[j]){
+                        swap(arr,j,j+1);
+                    }
+                }
+            }
+
+            return arr;
+        });
+
+
+        //选择
+        expect((arr)->{
+            for(int i=0;i<arr.length-1;i++){
+                int min = i;
+                for (int j = i+1; j < arr.length; j++) {
+                    if(arr[j] < arr[min]){
+                        min = j;
+                    }
+                }
+
+                if (min != i) {
+                    swap(arr,min,i);
+                }
+            }
+            return arr;
+        });
+
+        //插入
+        expect((arr)->{
+            for(int i=0;i<arr.length;i++){
+                int tmp = arr[i];
+
+                int j = i-1;
+                while (j>=0 && tmp < arr[j] ) {
+                    arr[j+1] = arr[j];
+                    j--;
+                }
+
+                if (j+1 != i) {
+                    arr[j+1] = tmp;
+                }
+            }
+
+            return arr;
+        });
+
+        //希尔
+        expect((arr)->{
+            int gap = 1;
+            for (; gap < arr.length;) {
+                gap = gap * 3 + 1;
+                System.out.println("gap:"+gap);
+            }
+
+            for(int g=gap;g>=1;g=g/3){
+                System.out.println("gap c:"+g);
+                for(int i=g;i<arr.length;i+=g){
+                    int tmp = arr[i];
+
+                    int j = i-g;
+                    while (j>=0 && tmp < arr[j] ) {
+                        arr[j+g] = arr[j];
+                        j-=g;
+                    }
+
+                    if (j+g != i) {
+                        arr[j+g] = tmp;
+                    }
+                }
+            }
+
+            return arr;
+        });
+
+        //归并
+        expect((arr)->{
+            mergeSort(arr,0,arr.length-1);
+
+            return arr;
+        });
+
+        //快速
+        expect((arr)->{
+            quickSort(arr,0,arr.length-1);
+
+            return arr;
+        });
+
+        //快速 2
+        expect((arr)->{
+            quickSort2(arr,0,arr.length-1);
+
+            return arr;
+        });
+
+        //堆排序
+        expect((arr)->{
+            MaxHeap heap = new MaxHeap(arr);
+
+            int n = arr.length-1;
+            Integer pop = heap.pop();
+
+            while (pop !=null) {
+                arr[n--]=pop;
+                pop = heap.pop();
+            }
+
+            return arr;
+        });
+
+        //计数排序
+        //expect((arr)->{
+        //    return arr;
+        //});
+        //
+        ////桶排序
+        //expect((arr)->{
+        //    return arr;
+        //});
+        //
+        ////基数排序
+        //expect((arr)->{
+        //    return arr;
+        //});
+
+    }
+
+    @Test
+    public void test_heap() {
+        MaxHeap hp = new MaxHeap();
+
+        Integer[] ar = {4, 12,55,100,3, 1, 2,8,6,7,9, 5};
+        for (Integer one : ar) {
+            hp.push(one);
+
+            System.out.println("add:"+one + " result:"+ hp);
+        }
+
+        System.out.println("iter in one line:");
+        int n = 0;
+        for (Integer i : hp) {
+            n++;
+            System.out.print(i+" ");
+        }
+        System.out.println("times:"+n);
+
+        System.out.println("pop in one line:");
+        n = 0;
+        Integer pop = hp.pop();
+        while (pop !=null) {
+            n++;
+            System.out.print(pop+" ");
+            pop = hp.pop();
+        }
+        System.out.println("times:"+n);
+    }
+
+
+    class MaxHeap implements Iterable<Integer>{
+        private Integer[] arr;
+
+        public MaxHeap() {
+            this(null);
+        }
+
+        public MaxHeap(Integer[] arr) {
+            if (arr == null) {
+                this.arr = new Integer[0];
+            } else {
+                this.arr = Arrays.copyOf(arr,arr.length);
+
+                for (int i = this.arr.length-1; i > 0; i--) {
+                    shiftUp((i-1)/2);
+                }
+            }
+        }
+
+        public void push(int one) {
+            this.arr = Arrays.copyOf(this.arr, this.arr.length + 1);
+            this.arr[this.arr.length - 1] = one;
+
+            shiftUp((this.arr.length-1-1)/2);
+        }
+
+        private void shiftUp(int idx) {
+            if (idx >=0 ) {
+                int maxIdx = idx;
+                int leftIdx = 2*idx+1;
+                int rightIdx = 2*idx+2;
+                if (leftIdx < arr.length && arr[leftIdx] > arr[maxIdx] ) {
+                    maxIdx = leftIdx;
+                }
+                if (rightIdx < arr.length && arr[rightIdx] > arr[maxIdx] ) {
+                    maxIdx = rightIdx;
+                }
+                if (maxIdx!= idx) {
+                    swap(arr,maxIdx,idx);
+                    shiftUp((idx-1)/2);
+                }
+            }
+        }
+
+        private void shiftDown(int idx) {
+            if (idx < this.arr.length ) {
+                int maxIdx = idx;
+                int leftIdx = 2*idx+1;
+                int rightIdx = 2*idx+2;
+                if (leftIdx < arr.length && arr[leftIdx] > arr[maxIdx] ) {
+                    maxIdx = leftIdx;
+                }
+                if (rightIdx < arr.length && arr[rightIdx] > arr[maxIdx] ) {
+                    maxIdx = rightIdx;
+                }
+                if (maxIdx!= idx) {
+                    swap(arr,maxIdx,idx);
+                    shiftDown(maxIdx);
+                }
+            }
+        }
+
+        public Integer pop() {
+            if (this.arr.length > 0) {
+                int ret = this.arr[0];
+
+                swap(this.arr, 0, this.arr.length - 1);
+
+                this.arr = Arrays.copyOf(this.arr, this.arr.length-1);
+
+                shiftDown(0);
+
+                return ret;
+            }
+            return null;
+        }
+
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            int layerMax=2;
+            for (int i = 0; i < arr.length; i++) {
+                sb.append(arr[i]);
+
+                if(i < arr.length-1){
+                    if (i == layerMax - 2 ) {
+                        sb.append("\n");
+                        layerMax*=2;
+                    } else {
+                        sb.append(" ");
+                    }
+                }
+            }
+            return "total:"+arr.length+" each line:\n"+sb.toString();
+        }
+
+        @Override
+        public Iterator<Integer> iterator() {
+            return new HeapIt();
+        }
+
+        class HeapIt implements Iterator<Integer> {
+            private int i = 0;
+
+            @Override
+            public boolean hasNext() {
+                return i< arr.length;
+            }
+
+            @Override
+            public Integer next() {
+                return arr[i++];
+            }
+        }
+    }
+
+    //双指针版
+    private void quickSort2(Integer[] arr, int from, int to) {
+        if (from < to) {
+            int pivot = from;
+            int split = pivot+1;
+            for (int i = split; i <= to ; i++) {
+                if (arr[i] < arr[pivot]) {
+                    swap(arr,i,split);
+                    split++;
+                }
+            }
+            swap(arr,pivot,split-1);
+            pivot = split-1;
+
+            quickSort(arr,from,pivot-1);
+            quickSort(arr,pivot+1,to);
+        }
+    }
+
+    //单指针版
+    private void quickSort(Integer[] arr, int from, int to) {
+        if (from < to) {
+            int pivot = from;
+            for (int i = from+1; i <= to ; i++) {
+                if (arr[i] < arr[pivot]) {
+                    //三个格子间的交换
+                    int oldV = arr[pivot];
+                    arr[pivot] = arr[i];
+                    arr[i] = arr[pivot+1];
+                    arr[pivot+1] = oldV;
+                    pivot++;
+                }
+            }
+
+            quickSort(arr,from,pivot-1);
+            quickSort(arr,pivot+1,to);
+        }
+    }
+
+    private void mergeSort(Integer[] arr, int from, int to) {
+        if (from < to ) {
+            int mid = (from + to) / 2;
+            mergeSort(arr,from,mid);
+            mergeSort(arr,mid+1,to);
+
+            //combine
+            Integer[] sorted = new Integer[to-from+1];
+            int i=from,j=mid+1,n=0;
+            while (i<=mid && j<=to) {
+                if (arr[i] < arr[j]) {
+                    sorted[n++] = arr[i++];
+                } else {
+                    sorted[n++] = arr[j++];
+                }
+            }
+
+            while (i<=mid){
+                sorted[n++] = arr[i++];
+            }
+            while (j <= to) {
+                sorted[n++] = arr[j++];
+            }
+
+            System.arraycopy(sorted,0,arr,from,to-from+1);
+        }
+    }
+
+    private void swap(Integer[] arr, int j, int i) {
+        int tmp = arr[j];
+        arr[j]= arr[i];
+        arr[i] = tmp;
+    }
 }
