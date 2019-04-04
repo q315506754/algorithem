@@ -40,6 +40,12 @@
             <artifactId>spring-data-mongodb</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+        </dependency>
+
         <!--db-->
         <dependency>
             <groupId>org.springframework</groupId>

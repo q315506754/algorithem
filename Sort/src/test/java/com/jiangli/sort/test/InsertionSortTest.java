@@ -269,21 +269,156 @@ public class InsertionSortTest implements ApplicationContextAware {
             return arr;
         });
 
-        //计数排序
-        //expect((arr)->{
-        //    return arr;
-        //});
-        //
-        ////桶排序
-        //expect((arr)->{
-        //    return arr;
-        //});
-        //
-        ////基数排序
-        //expect((arr)->{
-        //    return arr;
-        //});
 
+        //计数排序
+        expect((arr)->{
+            int min = arr[0];
+            int max = arr[0];
+            for (Integer one : arr) {
+                if (one<min) {
+                    min = one;
+                }
+                if (one > max ) {
+                    max = one;
+                }
+            }
+
+            int length = max - min + 1;
+            System.out.println("bucket length:"+length);
+            Integer[] bucket = new Integer[length];
+            for (Integer one : arr) {
+                Integer integer = bucket[one-min];
+                if (integer == null) {
+                    integer = 1;
+                } else {
+                    integer ++;
+                }
+                bucket[one-min] = integer;
+            }
+
+
+            int n = 0;
+            for (int i =0 ; i < bucket.length; i++) {
+                Integer one = bucket[i];
+
+                if (one != null) {
+                    while (one-- > 0) {
+                        arr[n++] = i + min;
+                    }
+                }
+            }
+
+            return arr;
+        });
+
+        ////桶排序
+        expect((arr)->{
+            int min = arr[0];
+            int max = arr[0];
+            for (Integer one : arr) {
+                if (one<min) {
+                    min = one;
+                }
+                if (one > max ) {
+                    max = one;
+                }
+            }
+
+            final int bucketSize = 5 ;
+            final int bucketCount = ((max - min + 1 )/ bucketSize) + 1 ;
+            System.out.println("bucketCount:"+bucketCount);
+            final int[][] buckets = new int[bucketCount][];
+
+            for (Integer one : arr) {
+                int idx = (one - min) / bucketSize;
+
+                int[] bucket = buckets[idx];
+
+                if (bucket == null) {
+                    bucket = new int[bucketSize];
+                    buckets[idx] = bucket;
+                }
+
+                //append
+                buckets[idx] = arrAppend(bucket,one);
+
+            }
+
+            int n = 0;
+            for (int[] bucket : buckets) {
+                if (bucket != null) {
+                    Arrays.sort(bucket);
+
+                    for (int i : bucket) {
+                        if (i!=0) {
+                           arr[n++] = i;
+                        }
+                    }
+                }
+            }
+
+            return arr;
+        });
+
+
+        //基数排序
+        expect((arr)->{
+            int maxLoopTimes =0;
+            for (Integer one : arr) {
+                int length = 1;
+                while (one / 10 > 0) {
+                    one /= 10;
+                    length++;
+                }
+
+                if (length > maxLoopTimes) {
+                    maxLoopTimes = length;
+                }
+            }
+
+            int num1=1;
+            int num2=num1 * 10;
+            for (int i = 0; i < maxLoopTimes; i++,num1*=10,num2*=10) {
+                int[][] buckets = new int[10][arr.length];
+                for (Integer one : arr) {
+                    //int iNum = one/num1 - (one /num2) * 10;
+                    //int iNum = (one/num1)%10;
+                    int iNum = one/num1%10; // %的计算优先级小于等于/
+                    buckets[iNum] = arrAppend(buckets[iNum], one);
+                }
+
+                int n = 0;
+                for (int[] bucket : buckets) {
+                    for (int one : bucket) {
+                        if (one!=0) {
+                            arr[n++] = one;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return arr;
+        });
+
+    }
+
+    public int[] arrAppend(int[] arr,int one) {
+        boolean insert = false;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 0) {
+                arr[i] = one;
+                insert = true;
+                break;
+            }
+        }
+
+        if (!insert) {
+            arr = Arrays.copyOf(arr,arr.length+1);
+            arr[arr.length-1] = one;
+        }
+        return arr;
     }
 
     @Test
@@ -498,6 +633,39 @@ public class InsertionSortTest implements ApplicationContextAware {
             }
 
             System.arraycopy(sorted,0,arr,from,to-from+1);
+        }
+    }
+
+    @Test
+    public void test_() {
+        System.out.println(findMedianSortedArrays(new int[]{1,3},new int[]{2}));
+    }
+
+
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int[] ret = new int[nums1.length+nums2.length];
+        int i=0,j=0,n=0;
+        while(i<nums1.length&&j<nums2.length){
+            if(nums1[i] < nums2[j]){
+                ret[n++] = nums1[i++];
+            }else {
+                ret[n++] = nums2[j++];
+            }
+        }
+
+        while(i<nums1.length){
+            ret[n++] = nums1[i++];
+        }
+
+        while(j<nums2.length){
+            ret[n++] = nums2[j++];
+        }
+
+        int length = i+j;
+        if(length%2 == 0){
+            return (ret[(length-1)/2] +ret[length/2] )/2.0;
+        }else {
+            return ret[(length-1)/2] ;
         }
     }
 

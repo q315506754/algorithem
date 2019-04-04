@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.ColumnMapRowMapper
 import org.springframework.jdbc.core.JdbcTemplate
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
-import java.lang.Exception
 import java.util.*
 
 
@@ -101,13 +100,17 @@ object Ariesutil {
     }
 
     fun getUserId(jdbc: JdbcTemplate, name: String? = "", mobile: String? = "", email: String? = ""): String {
+        return getUser(jdbc, name, mobile, email)!![0]["ID"].toString()
+    }
+
+    fun getUser(jdbc: JdbcTemplate, name: String? = "", mobile: String? = "", email: String? = ""): MutableList<MutableMap<String, Any>>? {
         if (mobile?.isNotEmpty()!!) {
             val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE MOBILE=$mobile and IS_DELETED = 0;"
             println("执行sql")
             println("   $s")
             val query = jdbc.query(s, ColumnMapRowMapper())
             validateNum("根据手机号", query)
-            return query[0]["ID"].toString()
+            return query
         }
         if (email?.isNotEmpty()!!) {
             val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE EMAIL='$email' and IS_DELETED = 0;"
@@ -115,7 +118,7 @@ object Ariesutil {
             println("   $s")
             val query = jdbc.query(s, ColumnMapRowMapper())
             validateNum("根据邮箱", query)
-            return query[0]["ID"].toString()
+            return query
         }
         if (name?.isNotEmpty()!!) {
             val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE NAME like '%$name%' and IS_DELETED = 0;"
@@ -123,7 +126,7 @@ object Ariesutil {
             println("执行sql")
             println("   $s")
             validateNum("根据名字", query)
-            return query[0]["ID"].toString()
+            return query
         }
         throw Exception("没有足够的参数查询user")
     }
