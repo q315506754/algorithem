@@ -1,5 +1,6 @@
 package com.jiangli.doc.sql.helper.aries
 
+import com.jiangli.common.utils.PathUtil
 import com.jiangli.doc.sql.BaseConfig
 import com.jiangli.doc.sql.NamedSimpleCachedTableQueryer
 import com.mongodb.DBCollection
@@ -12,7 +13,6 @@ import org.springframework.jdbc.core.ColumnMapRowMapper
 import org.springframework.jdbc.core.JdbcTemplate
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
-import java.lang.Exception
 import java.util.*
 
 
@@ -100,13 +100,17 @@ object Ariesutil {
     }
 
     fun getUserId(jdbc: JdbcTemplate, name: String? = "", mobile: String? = "", email: String? = ""): String {
+        return getUser(jdbc, name, mobile, email)!![0]["ID"].toString()
+    }
+
+    fun getUser(jdbc: JdbcTemplate, name: String? = "", mobile: String? = "", email: String? = ""): MutableList<MutableMap<String, Any>>? {
         if (mobile?.isNotEmpty()!!) {
             val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE MOBILE=$mobile and IS_DELETED = 0;"
             println("执行sql")
             println("   $s")
             val query = jdbc.query(s, ColumnMapRowMapper())
             validateNum("根据手机号", query)
-            return query[0]["ID"].toString()
+            return query
         }
         if (email?.isNotEmpty()!!) {
             val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE EMAIL='$email' and IS_DELETED = 0;"
@@ -114,7 +118,7 @@ object Ariesutil {
             println("   $s")
             val query = jdbc.query(s, ColumnMapRowMapper())
             validateNum("根据邮箱", query)
-            return query[0]["ID"].toString()
+            return query
         }
         if (name?.isNotEmpty()!!) {
             val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE NAME like '%$name%' and IS_DELETED = 0;"
@@ -122,7 +126,7 @@ object Ariesutil {
             println("执行sql")
             println("   $s")
             validateNum("根据名字", query)
-            return query[0]["ID"].toString()
+            return query
         }
         throw Exception("没有足够的参数查询user")
     }
@@ -172,11 +176,15 @@ fun main(args: Array<String>) {
     val jdbc = Ariesutil.getJDBC(env)
 
 //    println(Ariesutil.convertUUID("dBaJpLjy"))
-    println(Ariesutil.convertUUID("yGAJXE0K"))
-    println(Ariesutil.convertUUID("KVo6v8ln"))
-    println(Ariesutil.convertUUID("y5xVm39n"))
+//    println(Ariesutil.convertUUID("yGAJXE0K"))
+//    println(Ariesutil.convertUUID("KVo6v8ln"))
+//    println(Ariesutil.convertUUID("y5xVm39n"))
+
+    println(Ariesutil.convertUUID("nwXx669y"))
 //    println(Ariesutil.convertUUID(100002323))
-    println(Ariesutil.convertUUID(100002036))
+    println(Ariesutil.convertUUID(100))
+    println(Ariesutil.convertUUID(10001234))
+    println(Ariesutil.convertUUID(100002253))
     println(Ariesutil.convertUUID(100001936))
     println(Ariesutil.convertUUID(100002190))
 
@@ -195,4 +203,5 @@ fun main(args: Array<String>) {
 //    println(Ariesutil.getUserId(jdbc, null,"13588708991"))
 //    println(Ariesutil.getUserId(jdbc, "","13588708991",""))
 
+    println(PathUtil.desktop("aa.txt"))
 }

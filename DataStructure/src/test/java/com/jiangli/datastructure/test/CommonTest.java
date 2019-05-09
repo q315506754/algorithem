@@ -3,6 +3,9 @@ package com.jiangli.datastructure.test;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.swing.filechooser.FileSystemView;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +29,26 @@ public class CommonTest extends BaseTest {
         System.out.println(Object[].class.getComponentType());
         System.out.println(Array.newInstance(Object.class, 3));
         System.out.println(Array.newInstance(String.class, 3));
+    }
+
+    @Test
+    public void test_234() {
+        System.out.println("ip:+"+null);
+    }
+
+
+    @Test
+    public void test_local_destop() throws IOException {
+        System.out.println(Arrays.toString(File.listRoots()));
+        System.out.println(File.createTempFile("aabb",""));
+        System.out.println(File.createTempFile("aabb",""));
+
+        FileSystemView fsv = FileSystemView.getFileSystemView();
+        File com=fsv.getHomeDirectory();    //这便是读取桌面路径的方法了
+        System.out.println(com.getPath());
+
+        System.out.println(fsv.getDefaultDirectory());
+
     }
 
     @Test

@@ -44,13 +44,9 @@ public class QuickSort extends Sorter<Integer> {
         int pivotIdx = pivoting(arr, lowIdx, highIdx);
 
         if (lowIdx < highIdx) {
-            if (lowIdx < pivotIdx - 1) {
-                quickSort(arr, lowIdx, pivotIdx - 1);
-            }
+            quickSort(arr, lowIdx, pivotIdx - 1);
 
-            if (pivotIdx + 1 < highIdx) {
-                quickSort(arr, pivotIdx + 1, highIdx);
-            }
+            quickSort(arr, pivotIdx + 1, highIdx);
         }
 
 

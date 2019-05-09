@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+            http://www.springframework.org/schema/webflow-config
+           http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- mvc注解配置 -->
+    <mvc:annotation-driven/>
+
+    <!-- 自动扫描且只扫描@Controller -->
+    <!--<context:component-scan base-package="com.jiangli.springMVC.controller" />-->
+    <context:component-scan base-package="com.jiangli" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:include-filter>
+    </context:component-scan>
+
+    <!-- 静态文件配置 -->
+    <mvc:resources location="/assets/js/" mapping="/js/**" />
+    <mvc:resources location="/assets/css/" mapping="/css/**" />
+    <mvc:resources location="/assets/" mapping="/assets/**" />
+    <mvc:resources location="/" mapping="/**/*.html"/>
+
+    <!-- 视图解析配置 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+
+    <!-- 整合jackson 返回一个json格式 -->
+    <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
+        <!--<property name="messageConverters">-->
+            <!--<list>-->
+                <!--<ref bean="mappingJacksonHttpMessageConverter"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>-->
+
+    <!--解析返回JSON -->
+    <!--  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> -->
+    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
+        <!--<property name="messageConverters">-->
+            <!--<list >-->
+                <!--<ref bean="mappingJacksonHttpMessageConverter" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--<bean id="mappingJacksonHttpMessageConverter"-->
+          <!--class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+        <!--<property name="supportedMediaTypes">-->
+            <!--<list>-->
+                <!--<value>text/html;charset=UTF-8</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!-- 拦截器配置 -->
+    <mvc:interceptors>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/*"/>-->
+            <!--<bean class="com.jiangli.springMVC.interceptor.InterceptorBean"></bean>-->
+        <!--</mvc:interceptor>-->
+        <bean class="com.jiangli.springMVCflow.CORS.CrossDomainInterceptor"></bean>
+    </mvc:interceptors>
+
+
+    <!-- Enables FlowHandler URL mapping -->
+    <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+        <property name="flowExecutor" ref="flowExecutor" />
+    </bean>
+
+    <!-- Maps request paths to flows in the flowRegistry;
+	e.g. a path of /hotels/booking looks for a flow with id "hotels/booking" -->
+    <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+        <property name="flowRegistry" ref="flowRegistryX"/>
+        <property name="order" value="0"/>
+    </bean>
+
+
+
+    <!-- shared-config.xml -->
+    <webflow:flow-registry id="sharedFlowRegistry" base-path="WEB-INF/flows">
+        <!-- Global flows shared by several applications -->
+        <webflow:flow-location path="shared-flow.xml" />
+    </webflow:flow-registry>
+
+
+    <!--base-path="classpath*:"-->
+    <!--流程注册表-->
+    <webflow:flow-registry
+            id="flowRegistryX"
+            parent="sharedFlowRegistry"
+            base-path="WEB-INF/flows"
+            flow-builder-services="flowBuilderServices"
+
+    >
+
+        <webflow:flow-location path="bookhotel-flow.xml" id="bookHotel">
+            <webflow:flow-definition-attributes>
+                <webflow:attribute name="caption" value="Books a hotel" />
+            </webflow:flow-definition-attributes>
+        </webflow:flow-location>
+
+        <webflow:flow-location-pattern value="o-*-flow.xml" />
+    </webflow:flow-registry>
+
+    <!--执行器-->
+    <webflow:flow-executor id="flowExecutor"  flow-registry="flowRegistryX" >
+        <!--The max-executions attribute is per user session, i.e. it works across instances of any flow definition.
+-->
+        <!--History snapshots enable browser back button support. When snapshotting is disabled pressing the browser back button will not work. It will result in using an execution key that points to a snapshot that has not be recorded.-->
+        <!--To disable snapshotting, set this value to 0. To enable an unlimited number of snapshots, set this value to -1.-->
+        <webflow:flow-execution-repository max-executions="5" max-execution-snapshots="30" />
+
+
+        <!--<webflow:flow-execution-listeners>-->
+        <!--<webflow:listener ref="securityListener" criteria="securedFlow1,securedFlow2"/>-->
+        <!--<webflow:listener ref="persistenceListener"/>-->
+        <!--</webflow:flow-execution-listeners>-->
+    </webflow:flow-executor>
+
+
+    <bean id="viewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+        <property name="viewResolvers">
+            <list>
+                <ref bean="viewResolver"></ref>
+            </list>
+        </property>
+    </bean>
+
+    <webflow:flow-builder-services id="flowBuilderServices"
+
+                                   view-factory-creator="viewFactoryCreator" />
+    <!--conversion-service="conversionService"-->
+    <!--expression-parser="expressionParser"-->
+
+    <!--<bean id="conversionService" class="..." />-->
+    <!--<bean id="expressionParser" class="..." />-->
+    <!--<bean id="viewFactoryCreator" class="..." />-->
+
+</beans>

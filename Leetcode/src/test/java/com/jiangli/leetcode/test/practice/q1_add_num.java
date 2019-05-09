@@ -35,15 +35,15 @@ public class q1_add_num extends PracticeBase {
         ats(violent(sample, 9));
         ats(violent(sample, 26));
 
-        for (int i = 0; i < sample.length; i++) {
-            map.put(sample[i], i);
-        }
+        //for (int i = 0; i < sample.length; i++) {
+        //    map.put(sample[i], i);
+        //}
     }
 
-    public int[] violent(int[] ar,int target) {
-        for (int i = 0; i < ar.length; i++) {
-            for (int j = i+1; j < ar.length; j++) {
-                if (ar[i]+ar[j] == target) {
+    public int[] violent(int[] nums,int target) {
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i+1; j < nums.length; j++) {
+                if (nums[i]+nums[j] == target) {
                     return new int[]{i,j};
                 }
             }
@@ -51,10 +51,14 @@ public class q1_add_num extends PracticeBase {
         return null;
     }
 
-    public int[] hashTwoTimes(int[] ar,int target) {
-        for (int i = 0; i < ar.length; i++) {
-            int key = target - ar[i];
-            if (map.containsKey(key)) {
+    public int[] hashTwoTimes(int[] nums,int target) {
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i], i);
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            int key = target - nums[i];
+            if ( map.containsKey(key) && map.get(key)!= i ) {
                 return new int[]{i,map.get(key)};
             }
         }
@@ -71,9 +75,12 @@ public class q1_add_num extends PracticeBase {
     @RepeatFixedDuration
     @Test
     public void test_hashTwoTimes() {
-        ae(hashTwoTimes(sample,9),a(0,1));
-        ae(hashTwoTimes(sample,26),a(9,11));
+        //ae(hashTwoTimes(sample,9),a(0,1));
+        //ae(hashTwoTimes(sample,26),a(9,11));
+        //ae(hashTwoTimes(a(3,2,4),6),a(1,2));
+        ae(hashTwoTimes(a(3,3),6),a(0,1));
     }
 
-
+    //public int lengthOfLongestSubstring(String s) {
+    //}
 }

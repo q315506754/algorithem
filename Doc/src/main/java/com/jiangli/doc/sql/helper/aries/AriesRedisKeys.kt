@@ -48,6 +48,7 @@ fun main(args: Array<String>) {
 18612988685
 15295996600
 1376115678
+17521768010
     """.trimIndent().split("\n")
 
     split.forEach {
@@ -95,4 +96,13 @@ fun main(args: Array<String>) {
 
     println("hgetall base:sms:17621168106:$dt:times")
     println("hset base:sms:17621168106:$dt:times CODE 25")
+
+    println("hgetall base:video:3387")
+    println("hgetall base:video:7017")
+    println("smembers aries:lotteryActivityApply:35")
+
+    println("get sms:17521768010:code")
+    println("get sms:17521768010:code:times")
+    println("get sms:+8617521768010:code:times")
+    println("get sms:13761156786:code:times")
 }

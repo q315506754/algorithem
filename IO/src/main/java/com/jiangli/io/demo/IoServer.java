@@ -30,6 +30,7 @@ public class IoServer {
                         outputStreamWriter.flush();
 
                         InputStream inputStream = accept.getInputStream();
+                        System.out.println(accept.getInetAddress());
                         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                         BufferedReader bf = new BufferedReader(inputStreamReader);
                         String str=null;

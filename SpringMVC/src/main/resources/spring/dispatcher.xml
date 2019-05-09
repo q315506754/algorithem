@@ -37,6 +37,8 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
 
+    <!-- http://localhost/mvcVc -->
+    <mvc:view-controller path="/mvcVc" />
 
     <!-- 整合jackson 返回一个json格式 -->
     <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
@@ -66,13 +68,14 @@
         <!--</property>-->
     <!--</bean>-->
 
+
     <!-- 拦截器配置 -->
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/*"/>
-            <bean class="com.jiangli.springMVC.interceptor.InterceptorBean"></bean>
-        </mvc:interceptor>
-        <bean class="com.jiangli.springMVC.interceptor.GlobalInterceptorBean"></bean>
-    </mvc:interceptors>
+    <!--<mvc:interceptors>-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/*"/>-->
+            <!--<bean class="com.jiangli.springMVC.interceptor.InterceptorBean"></bean>-->
+        <!--</mvc:interceptor>-->
+        <!--<bean class="com.jiangli.springMVC.interceptor.GlobalInterceptorBean"></bean>-->
+    <!--</mvc:interceptors>-->
 
 </beans>

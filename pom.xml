@@ -10,6 +10,7 @@
     <version>9.9.6</version>
 
 
+
     <name>AlgorithemProject-parent</name>
 
     <modules>
@@ -55,6 +56,8 @@
         <module>SpringBoot</module>
         <module>SpringBoot-Batch</module>
         <module>SpringMVC</module>
+        <module>SpringMVC-tiles</module>
+        <module>SpringMVC-webflow</module>
         <module>Struts2</module>
         <module>Test</module>
         <module>Thread</module>
@@ -124,7 +127,10 @@
 
         <org.springframework-version>3.2.4.RELEASE</org.springframework-version>
         <junit-version>4.8</junit-version>
+
         <log4j-version>1.2.17</log4j-version>
+        <slf4j.version>1.7.25</slf4j.version>
+
         <org.codehaus.jackson-version>1.9.12</org.codehaus.jackson-version>
         <net.sf.json-lib-version>2.4</net.sf.json-lib-version>
         <quartz-version>2.2.1</quartz-version>
@@ -403,17 +409,75 @@
             <!--<version>1.7.5</version>-->
             <!--</dependency>-->
 
+            <!--log4j-->
+            <!--<dependency>-->
+                <!--<groupId>org.slf4j</groupId>-->
+                <!--<artifactId>slf4j-log4j12</artifactId>-->
+                <!--<version>1.5.8</version>-->
+            <!--</dependency>-->
+
+            <!--<dependency>-->
+                <!--<groupId>org.slf4j</groupId>-->
+                <!--<artifactId>slf4j-api</artifactId>-->
+                <!--<version>1.5.11</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.5.8</version>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jul-to-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.5.11</version>
+                <version>${slf4j.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-ext</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jcl</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-nop</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.16</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -434,11 +498,7 @@
                 <version>1.1</version>
             </dependency>
 
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.16</version>
-            </dependency>
+
 
             <!-- httpclient -->
             <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->

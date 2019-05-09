@@ -18,7 +18,9 @@ import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -129,6 +131,22 @@ public class HttpPostUtil {
         return ret;
     }
 
+    public static String getUrlRequest(String url, JSONObject params) {
+        String realUrl = getUrl(url, params);
+        try {
+            //URL url1 = new URL(realUrl);
+            //URLConnection urlConnection = url1.openConnection();
+            //urlConnection.connect();
+
+            return IOUtils.toString(new URL(realUrl), Charset.defaultCharset() );
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getUrl(String url, JSONObject params) {
 //		log.debug("HttpPostUtil.getUrl:" + url + " params:" + params);
         if (params != null) {
@@ -199,6 +217,16 @@ public class HttpPostUtil {
         public int statusCode;
         public String result;
         public Exception e;
+
+        @Override
+        public String toString() {
+            return "PostResult{" +
+                    "statusLine='" + statusLine + '\'' +
+                    ", statusCode=" + statusCode +
+                    ", result='" + result + '\'' +
+                    ", e=" + e +
+                    '}';
+        }
     }
 
     private static class TrustAnyTrustManager implements X509TrustManager {

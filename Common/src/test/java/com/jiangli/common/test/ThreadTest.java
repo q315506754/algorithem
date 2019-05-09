@@ -15,11 +15,13 @@ public class ThreadTest {
     public static void main(String[] args) {
         System.out.println("saaa");
         logger.debug("hahah");
+        //throw new NullPointerException();
 
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
-
+                System.out.println();
+                throw new NullPointerException();
             }
         });
         thread1.start();

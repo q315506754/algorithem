@@ -1,0 +1,3 @@
+
+需求：按部门分组后显示工资为前三的员工信息
+select * from emp as a where 3> (select count(*) from emp where deptno = a.deptno and sal < a.sal  )  order by a.deptno ,a.sal

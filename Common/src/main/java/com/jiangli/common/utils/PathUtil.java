@@ -104,6 +104,12 @@ public class PathUtil {
         String packagePath = convertClsToFilePath(cls)+".java";
         return buildPath(s,packagePath);
     }
+    public static String getSRC_JAVA_Code_Path(Class cls,String relaPath) {
+        String s =getSRC_JAVA_Code_Path(cls);
+        File file = new File(s);
+        File dir = file.getParentFile();
+        return new File(dir,relaPath).toString();
+    }
 
     public static String convertClsToFilePath(Class cls) {
         String name = cls.getName();
@@ -144,6 +150,11 @@ public class PathUtil {
             e.printStackTrace();
         }
     }
+
+    public static String desktop(String relaPath) {
+        return buildPath(FileUtil.desktop(),false,relaPath);
+    }
+
     public static void ensureFilePath(String path){
         try {
             if (path.indexOf(".") > 0) {
