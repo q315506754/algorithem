@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 递归工具
@@ -16,12 +18,52 @@ import java.util.function.Function;
  */
 public class RecurUtil {
     private static ThreadLocal<PathInfo> obj = new ThreadLocal<>();
+
+    public static String buildQueryString(Map map) {
+        String ret = "";
+        String SPLIT = "&";
+
+        for (Object o : map.keySet()) {
+            String key = o.toString();
+            Object val = map.get(key);
+            ret += key + "=" + String.valueOf(val) + SPLIT;
+        }
+
+        if (ret.endsWith(SPLIT)) {
+            ret = ret.substring(0, ret.length() - SPLIT.length());
+        }
+        return ret;
+    }
+    public static String buildPath(String... child) {
+        String ret = "";
+
+        if (child != null) {
+            for (int i = 0; i < child.length; i++) {
+                ret += child[i];
+
+                if (i< child.length-1) {
+                    ret = addSlash(ret,"/");
+                }
+            }
+        }
+
+        return ret;
+    }
+
     public static class PathInfo{
         public int layer;
         public Object absPath;
         public Object parentPath;
         public Object nodeName;
         public List<Object> paths=new LinkedList<>();
+
+        public String path(int start,int end) {
+            if (end <= 0) {
+                end = paths.size()-(-end);
+            }
+            List<String> strings =paths.subList(start,end).stream().map(String::valueOf).collect(Collectors.toList());
+            return buildPath(strings.toArray(new String[strings.size()]));
+        }
 
         @Override
         public String toString() {

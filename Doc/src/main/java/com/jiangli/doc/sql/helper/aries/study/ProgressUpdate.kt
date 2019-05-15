@@ -80,11 +80,11 @@ WHERE
 
             val courseCount = queryCourseCount(jdbc, COURSE_ID)
             val legacyWatchPerSum = queryWatchPercentSum(jdbc, RECRUIT_ID,USER_ID)
-            val legacyPercent = calcPer(courseCount, legacyWatchPerSum)
+            val legacyPercent = calcPerStr(courseCount, legacyWatchPerSum)
 
             val chapterPercent = queryChapterPercent(jdbc, COURSE_ID, RECRUIT_ID, USER_ID)
             val watchPerSum = chapterPercent.sumBy { it["WATCH_PERCENT"]?.toString()?.toInt() ?: 0 }
-            val percent = calcPer(courseCount, watchPerSum)
+            val percent = calcPerStr(courseCount, watchPerSum)
             val indent = "----"
 
             p("[$COURSE_ID $COURSE_NAME] [$RECRUIT_ID] [c:$courseCount ws:$watchPerSum P:$percent% l-ws:$legacyWatchPerSum  l-P:${legacyPercent}% ] [$USER_ID $USER_NAME $MOBILE $USER_CREATE_TIME] [$COMPANY_ID $COMPANY_NAME] ")
@@ -198,12 +198,15 @@ ORDER BY cs.SORT_LAYER_STR ASC;
 }
 
 
-fun calcPer(courseCount: Int, watchPerSum: Int): String {
+fun calcPerStr(courseCount: Int, watchPerSum: Int): String {
+    return calcPer(courseCount, watchPerSum).toString()
+}
+fun calcPer(courseCount: Int, watchPerSum: Int): BigDecimal {
     var i = watchPerSum * 1.0/ courseCount
     if (i>100) {
         i = 100.0
     }
-    return BigDecimal(i).setScale(2,RoundingMode.HALF_UP).toString()
+    return BigDecimal(i).setScale(2,RoundingMode.HALF_UP)
 }
 
 fun queryWatchPercentSum(jdbc: JdbcTemplate, recruiT_ID: String, useR_ID: String): Int {

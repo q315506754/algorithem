@@ -14,4 +14,14 @@ public class MathTest {
     }
 
 
+    @Test
+    public void test_2() {
+        System.out.println(Math.round(99.0f));
+        System.out.println(Math.round(99.1f));
+        System.out.println(Math.round(99.4f));
+        System.out.println(Math.round(99.5f));
+        System.out.println(Math.round(99.9f));
+    }
+
+
 }
