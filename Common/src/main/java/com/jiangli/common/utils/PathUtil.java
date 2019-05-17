@@ -1,6 +1,7 @@
 package com.jiangli.common.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -155,6 +156,23 @@ public class PathUtil {
         return buildPath(FileUtil.desktop(),false,relaPath);
     }
 
+    public static File ensureFile(String filePath){
+        File file = new File(filePath);
+        File parentFile = file.getParentFile();
+        if (!parentFile.exists()) {
+            parentFile.mkdirs();
+        }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return file;
+    }
+
     public static void ensureFilePath(String path){
         try {
             if (path.indexOf(".") > 0) {
@@ -191,6 +209,10 @@ public class PathUtil {
             ensurePath(s);
             return s;
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(ensureFile("c:/a/b/c.txt"));
     }
 
 }

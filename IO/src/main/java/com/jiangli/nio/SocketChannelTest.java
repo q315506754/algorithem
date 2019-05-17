@@ -15,7 +15,8 @@ public class SocketChannelTest {
 
         //1.打开一个SocketChannel并连接到互联网上的某台服务器。
         SocketChannel socketChannel = SocketChannel.open();
-        InetSocketAddress address = new InetSocketAddress("www.mi.com", 80);
+        //InetSocketAddress address = new InetSocketAddress("www.mi.com", 80);
+        InetSocketAddress address = new InetSocketAddress("www.baidu.com", 80);
         System.out.println(address.isUnresolved());
         socketChannel.connect(address);
         System.out.println(address);

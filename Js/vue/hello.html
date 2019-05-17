@@ -1,7 +1,7 @@
 <html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>hello.html</title>
-
+    <meta charset="UTF-8"/>
     <link href="../common/assets/css/common.css" rel="stylesheet"/>
     <style>
         .red{color:red}
@@ -13,14 +13,14 @@
 <div id="app">
     <p>{{ message }}</p>
     <div v-html="message"></div>
-    <!--v-bind缩写 去掉 v-bind-->
+    <!--v-bind缩写 去掉 v-bind   :class-->
     <div v-bind:class="{'red': class1}">
         directiva v-bind:class
     </div>
     <div :class="{'red': class1}">
         directiva v-bind:class
     </div>
-    <!--v-on:缩写 v-on:->@ -->
+    <!--v-on:click 缩写 v-on:->@click -->
     <button v-on:click="reverseMessage">反转字符串</button><br>
     <button @click="reverseMessage">反转字符串</button><br>
     {{5+5}}<br>
