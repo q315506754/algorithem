@@ -21,8 +21,8 @@ fun main(args: Array<String>) {
     //    val env = Env.YUFA
         val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
-    val fromEndDate = "2019-05-12 17:10:00"
-    val toEndDate = "2019-05-16 17:10:00"
+    val fromEndDate = "2019-05-16 17:10:00"
+    val toEndDate = "2019-05-19 17:10:00"
 //    val toEndDate = "2019-03-25 17:10:00"
 
     var start = DateUtil.getDate(fromEndDate).time

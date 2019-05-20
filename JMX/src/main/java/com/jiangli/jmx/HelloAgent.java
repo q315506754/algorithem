@@ -13,6 +13,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Arrays;
+import java.util.concurrent.locks.LockSupport;
 
 public class HelloAgent  {
     private MBeanServer mbs;
@@ -30,6 +31,8 @@ public class HelloAgent  {
 
         // 将new Hello()这个对象注册到MBeanServer上去
         mbeanServer.registerMBean(new HelloWorld(),helloName);
+
+        LockSupport.park();
 
         /**
          * JMXConnectorServer service

@@ -1,6 +1,4 @@
-package com.jiangli.instrument;
-
-import com.jiangli.common.utils.PathUtil;
+package com.jiangli.instrument.transformer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,9 +8,9 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
-public class SrcCodeTransformer implements ClassFileTransformer {
+public class AbsTransformer implements ClassFileTransformer {
 
-    public static final String classNumberReturns2 = PathUtil.getSRC_JAVA_Code_Path(ClassFileTest.class,"TestBean_Replaced.class");
+    public static final String classNumberReturns2 = "/home/conquer/Desktop/aaaa/TransClass.class";
 
     public static byte[] getBytesFromFile(String fileName) {
         try {

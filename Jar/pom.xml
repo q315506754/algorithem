@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.jiangli.AlgorithemProject</groupId>
+        <artifactId>AlgorithemProject-parent</artifactId>
+        <version>9.9.6</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.jiangli.AlgorithemProject</groupId>
+    <artifactId>Jar</artifactId>
+    <packaging>jar</packaging>
+    <version>${com.provider-version}</version>
+
+    <properties>
+        <resources.dir>src\main\resources\props</resources.dir>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.jiangli.AlgorithemProject</groupId>
+            <artifactId>Common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <!--<includes>-->
+                    <!--<include>com/jiangli/hadoop/**/**</include>-->
+                    <!--</includes>-->
+                    <!--<excludes>-->
+                    <!--&lt;!&ndash;不打对外接口&ndash;&gt;-->
+                    <!--&lt;!&ndash;<exclude>com/bingdian/dubboservice/project/restful/**</exclude>&ndash;&gt;-->
+                    <!--</excludes>-->
+                    <archive>
+                        <manifest>
+
+<!--                    配合maven-dependency-plugin使用生成带classpath的可执行jar文件       -->
+<!--             会加入条目 Class-Path: lib/Common-1.0-SNAPSHOT.jar .....空格分隔每一个jar               -->
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+
+
+                            <mainClass>com.jiangli.jar.HelloJar</mainClass>
+                            <!--<-->
+                            <!--<Sealed>true</Sealed>-->
+                        </manifest>
+
+<!--                        <manifestEntries>-->
+<!--                            &lt;!&ndash;<compile-jdk>&ndash;&gt;-->
+<!--                            &lt;!&ndash;${jdkforthismodule}&ndash;&gt;-->
+<!--                            &lt;!&ndash;</compile-jdk>&ndash;&gt;-->
+<!--                            &lt;!&ndash;<s&ndash;&gt;-->
+<!--                            &lt;!&ndash;<&ndash;&gt;-->
+<!--                            &lt;!&ndash;<Name>com/jiangli/common/exception</Name>&ndash;&gt;-->
+<!--                            &lt;!&ndash;<Sealed>true</Sealed>&ndash;&gt;-->
+
+<!--                            <Name>com/jiangli/common/lib</Name>-->
+<!--                            <Sealed>true</Sealed>-->
+
+<!--                        </manifestEntries>-->
+                    </archive>
+                </configuration>
+            </plugin>
+
+
+<!--            拷贝当前项目的jar包依赖-->
+<!--            可以定义拷贝策略  当前策略是目的dir有相应的jar则不拷，有更新才覆盖-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+<!--                        注意这里的阶段 在打包之前-->
+<!--                        <phase>prepare-package</phase>-->
+
+<!--                        调整到process-sources也不会出现问题-->
+<!--                        注释掉效果也一样 因为默认就是这个phase-->
+<!--                        <phase>process-sources</phase>-->
+
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -34,6 +34,7 @@
         <module>Hadoop</module>
         <module>Http</module>
         <module>IO</module>
+        <module>Jar</module>
         <module>JDK</module>
         <module>JMX</module>
         <module>JNI</module>
