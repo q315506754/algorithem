@@ -7,7 +7,27 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
 public class PinyinUtil {
+
+    public  enum ResolveType {
+        /**
+         * 全部拼音 李四Tommy->LISITOMMY
+         */
+        ALL
+        ,/**
+         * 全部拼音 李四Tommy->L
+         */FIRST_LETTER
+        ,/**
+         * 全部拼音 李四Tommy->LSTOMMY
+         **/FIRST_LETTERS
+        ;
+    }
 
     /**
      * 将文字转为汉语拼音
@@ -127,7 +147,87 @@ public class PinyinUtil {
         return hanyupinyin;
     }
 
+    public static <T>  void injectPinyin(Iterable<T> list,ResolveType resolveType, Function<T,String> nameGetter, BiConsumer<T,String> pinyinSetter) {
+        if (list != null) {
+            Iterator<T> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                T next = iterator.next();
+                if (next != null) {
+                    String apply = nameGetter.apply(next);
+                    if (apply != null) {
+                        String value  = null;
+
+                        try {
+                            if (resolveType == ResolveType.ALL) {
+                                value  =toHanyuPinyin(apply).toUpperCase();
+                            }else if (resolveType == ResolveType.FIRST_LETTER) {
+                                value  =getFirstLetter(apply).toUpperCase();
+                            }else if (resolveType == ResolveType.FIRST_LETTERS) {
+                                value  = getFirstLettersUp(apply).toUpperCase();
+                            }
+                        } catch (Exception e) {
+                        }
+
+                        if (value != null && pinyinSetter!=null) {
+                            pinyinSetter.accept(next,value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println(toHanyuPinyin("中秋节"));
+        System.out.println(getFirstLetter("中秋节"));
+        System.out.println(getFirstLettersUp("中秋节"));
+        System.out.println(getFirstLettersUp("张三"));
+        System.out.println(getFirstLettersUp("李四"));
+        System.out.println(getFirstLettersUp("李四 Jim"));
+        System.out.println(getFirstLettersUp("李四 Tommy"));
+        System.out.println(getFirstLettersUp("李四Tommy"));
+
+        List<TestPinyin> ds = new ArrayList<>();
+        ds.add(new TestPinyin("李四Tommy"));
+        ds.add(new TestPinyin("吕布"));
+        ds.add(new TestPinyin("诸葛亮"));
+
+        injectPinyin(ds,ResolveType.FIRST_LETTERS,TestPinyin::getName,TestPinyin::setPinyin);
+
+        System.out.println(ds);
     }
+
+    static class TestPinyin {
+         String name;
+         String pinyin;
+
+        public TestPinyin(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "TestPinyin{" +
+                    "name='" + name + '\'' +
+                    ", pinyin='" + pinyin + '\'' +
+                    '}';
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPinyin() {
+            return pinyin;
+        }
+
+        public void setPinyin(String pinyin) {
+            this.pinyin = pinyin;
+        }
+    }
+
 }
