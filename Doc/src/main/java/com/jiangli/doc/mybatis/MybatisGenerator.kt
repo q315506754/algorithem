@@ -4,7 +4,6 @@ import com.jiangli.common.utils.FileUtil
 import com.jiangli.common.utils.PathUtil
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
-import java.lang.StringBuilder
 import java.sql.DriverManager
 
 /**
@@ -78,7 +77,21 @@ fun generateFile(body:String, vararg path:String) {
 
     PathUtil.ensureFilePath(sb.toString())
 
-    IOUtils.write(body,FileOutputStream(sb.toString()))
+    val fileOutputStream = FileOutputStream(sb.toString())
+    IOUtils.write(body, fileOutputStream)
+    fileOutputStream.close()
+}
+
+
+fun concatPath(vararg path:String): String {
+    val sb = StringBuilder()
+    path.forEach {
+        sb.append(it)
+        sb.append(System.getProperty("file.separator"))
+    }
+    sb.deleteCharAt(sb.lastIndex)
+    val absPath = sb.toString()
+    return absPath
 }
 
 fun main(args: Array<String>) {

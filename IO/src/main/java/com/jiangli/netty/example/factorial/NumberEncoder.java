@@ -20,6 +20,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * Encodes a {@link Number} into the binary representation prepended with
@@ -46,5 +47,17 @@ public class NumberEncoder extends MessageToByteEncoder<Number> {
         out.writeByte((byte) 'F'); // magic number
         out.writeInt(dataLength);  // data length
         out.writeBytes(data);      // data
+    }
+
+    public static void main(String[] args) {
+        System.out.println(barr("3"));
+        System.out.println(barr("127"));
+        System.out.println(barr("128"));
+        System.out.println(barr("1024"));
+        System.out.println(barr("1028884"));
+    }
+
+    private static String barr(String val) {
+        return Arrays.toString(new BigInteger(val).toByteArray());
     }
 }
