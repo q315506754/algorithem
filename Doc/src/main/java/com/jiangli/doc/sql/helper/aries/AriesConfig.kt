@@ -103,6 +103,77 @@ object Ariesutil {
         return getUser(jdbc, name, mobile, email)!![0]["ID"].toString()
     }
 
+    fun getCompany(jdbc: JdbcTemplate, name: String? = "", id: Int? = 0): MutableMap<String, Any> {
+        val companyDto = if (name?.isBlank() == false) {
+            jdbc.queryForObject("""
+SELECT * from db_aries_company.TBL_COMPANY c
+WHERE  c.IS_DELETED=0
+AND c.NAME like '%${name}%'
+;
+""".trimIndent(), ColumnMapRowMapper())
+        } else {
+            jdbc.queryForObject("""
+SELECT * from db_aries_company.TBL_COMPANY c
+WHERE  c.IS_DELETED=0
+AND c.ID =$id
+;
+""".trimIndent(), ColumnMapRowMapper())
+        }
+
+        return companyDto
+    }
+
+    fun processCompanyClass(jdbc: JdbcTemplate, companyDto: MutableMap<String, Any>,processor:(it: Map<String, Any>)->Unit ) {
+        val COMPANY_ID = companyDto["ID"]
+
+        //    查询企业下班级
+        val queryClassAndCompany = jdbc.query("""
+SELECT * from db_aries_run.TBL_CLASS cls
+ LEFT JOIN db_aries_company.TBL_COMPANY c on cls.COMPANY_ID=c.ID
+WHERE cls.IS_DELETE=0
+AND c.IS_DELETED=0
+AND c.ID = ${COMPANY_ID}
+;
+""".trimIndent(), ColumnMapRowMapper())
+
+        queryClassAndCompany.forEachIndexed { index, it ->
+            val CLASS_NAME = it["CLASS_NAME"]!!
+            val CLASS_ID = it["CLASS_ID"]
+            println("classes:${index + 1}/${queryClassAndCompany.size} $CLASS_ID $CLASS_NAME")
+
+            processor(it)
+        }
+
+    }
+
+
+    fun processCompanyClassStudents(jdbc: JdbcTemplate, companyDto: MutableMap<String, Any>,processor:(companyclass: Map<String, Any>,student: Map<String, Any>)->Unit) {
+        processCompanyClass(jdbc, companyDto){
+            val companyclass = it
+            val CLASS_NAME = it["CLASS_NAME"]!!
+            val CLASS_ID = it["CLASS_ID"]
+
+            //    查询班级下学生
+            val queryClassStudents = jdbc.query("""
+SELECT u.* from db_aries_study.TBL_USER_COURSE uc
+LEFT JOIN db_aries_user.TBL_USER u on uc.USER_ID = u.ID
+WHERE
+uc.IS_GUEST=0
+AND uc.CLASS_ID=${CLASS_ID}
+AND uc.IS_DELETE=0
+;
+""".trimIndent(), ColumnMapRowMapper())
+
+            queryClassStudents.forEachIndexed { index, it ->
+                val USER_NAME = it["NAME"] ?: ""
+                val USER_ID = it["ID"] ?: ""
+                println("   students:${index + 1}/${queryClassStudents.size} $USER_ID $USER_NAME")
+
+                processor(companyclass,it)
+            }
+        }
+    }
+
     fun getUser(jdbc: JdbcTemplate, name: String? = "", mobile: String? = "", email: String? = ""): MutableList<MutableMap<String, Any>>? {
         if (mobile?.isNotEmpty()!!) {
             val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE MOBILE=$mobile and IS_DELETED = 0;"
@@ -180,7 +251,7 @@ fun main(args: Array<String>) {
 //    println(Ariesutil.convertUUID("KVo6v8ln"))
 //    println(Ariesutil.convertUUID("y5xVm39n"))
 
-    println(Ariesutil.convertUUID("nwXx669y"))
+    println(Ariesutil.convertUUID("npo6a7kK"))
 //    println(Ariesutil.convertUUID(100002323))
     println(Ariesutil.convertUUID(100))
     println(Ariesutil.convertUUID(10001234))
@@ -188,7 +259,10 @@ fun main(args: Array<String>) {
     println(Ariesutil.convertUUID(100001936))
     println(Ariesutil.convertUUID(100002190))
 
-//    println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13300000000").toInt()))
+
+    println(Ariesutil.injectFromUserId(jdbc,Ariesutil.convertUUID("dgr62RQy")))
+
+    //    println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13300000000").toInt()))
     println(Ariesutil.convertUUID(Ariesutil.getUserId(jdbc, "", "13661749570").toInt()))
 
 //    println(Ariesutil.confirmUserId(jdbc,100002215))

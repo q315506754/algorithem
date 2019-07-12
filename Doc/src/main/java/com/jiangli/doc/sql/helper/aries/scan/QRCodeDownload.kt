@@ -22,15 +22,18 @@ import java.net.URL
 
 
 fun main(args: Array<String>) {
-//    val env = Env.YANFA
-//    val env = Env.YUFA
-    val env = Env.WAIWANG
-    val code_jdbc = Ariesutil.getJDBC(env)
+//    val code_env = Env.YANFA
+//    val code_env = Env.YUFA
+    val code_env = Env.WAIWANG
+    val code_jdbc = Ariesutil.getJDBC(code_env)
 
 //    val  course_env = Env.YANFA
 //    val  course_env = Env.YUFA
     val course_env = Env.WAIWANG
     val course_jdbc = Ariesutil.getJDBC( course_env)
+
+
+    val codeIds = 120..124
 
 
     val outputpath="""C:\Users\Jiangli\Desktop\code_map\code_map.xlsx"""
@@ -52,7 +55,7 @@ LEFT JOIN db_aries_2c_course.TM_COURSE_CHAPTER tcc on qm.CHAPTER_ID = tcc.ID
 
 WHERE
   qm.TYPE =1 AND
-  qm.ID > 100 AND qm.ID < 9999
+  qm.ID >= ${codeIds.first} AND qm.ID <= ${codeIds.last}
 
   AND  qm.CHAPTER_ID > 1
 
@@ -90,8 +93,9 @@ WHERE
 
         if (columnName == "图片地址") {
             val num = db["二维码编号"].toString().toInt()
+            val chapterName = db["章节名称"]
 
-            val file = File(dir, "$num.png")
+            val file = File(dir, "${num}-${chapterName}.png")
             val inputStream = URL(cellValue).openConnection().getInputStream()
             IOUtils.copyLarge(inputStream,FileOutputStream(file))
 

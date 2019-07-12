@@ -19,6 +19,7 @@ aries-app-server:
 aries-live-server：
 aries-classTools:
 aries-server:
+aries-web-h5:
 aries:
 aries-h5:245b0de0a939d73ebd054521dd9742117a603d87
 aries-erp-server:80cb07e6f29a8f0da30896fb02fa6e635006c9d6

@@ -5,7 +5,7 @@ import com.jiangli.doc.sql.helper.aries.Env
 
 /**
  *
- *
+ * 查用户信息
  * @author Jiangli
  * @date 2018/8/27 10:58
  */
@@ -14,8 +14,8 @@ fun main(args: Array<String>) {
     val jdbc = Ariesutil.getJDBC(env)
 
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "", email = "")
-//    val userId = Ariesutil.getUserId(jdbc, name="武凌寒", mobile = "", email = "")
-//    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "18801113303", email = "")
+    val userId = Ariesutil.getUserId(jdbc, name="武凌寒", mobile = "", email = "")
+//    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "13761156786", email = "")
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "", email = "pengjing@noahwm.com")
 
     //2b
@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
 
     //guest
 //    val userId =100011568
-    val userId =100013735
+//    val userId =100013735
 
     Ariesutil.confirmUserId(jdbc, userId.toLong())
     val map = Ariesutil.injectFromUserId(jdbc, userId.toLong())

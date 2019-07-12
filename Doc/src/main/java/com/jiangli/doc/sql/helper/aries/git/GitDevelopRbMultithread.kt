@@ -16,6 +16,7 @@ import java.util.concurrent.Executors
 fun main(args: Array<String>) {
     var projects = """
 aries-app-server:
+aries-web-h5:
 aries-live-server：
 aries-classTools:
 aries-server:

@@ -48,6 +48,7 @@
         <!--<module>MavenPlugin</module>-->
         <!--<module>MavenPluginClient</module>-->
         <module>Memory</module>
+        <module>ML</module>
         <module>OSGI</module>
         <module>Practice</module>
         <module>RPC</module>

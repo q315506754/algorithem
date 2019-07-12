@@ -25,6 +25,7 @@ aries-teachmanage:373f014278fd32c4d714d671ca5ec2a15de6fb9f
 org-server:bd96572147b4a0ab24d4b983a7a0d3481b2d3ade
 org-app-server:53b93e716a1e65ba00fbceaf2f391a630867fcb6
 org-manage:e66dbbff2fb58cdda52dd5501ff7c52c832a61f9
+aries-web-h5:
     """.trimIndent()
 
      val BAT_NAME = "_temp_merge_master.bat"

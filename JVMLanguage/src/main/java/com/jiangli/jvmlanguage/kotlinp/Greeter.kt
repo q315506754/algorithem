@@ -34,6 +34,9 @@ fun main(args: Array<String>) {
 //    val s:String? = "123"
     println(s?.length)
     println(s?.length?.equals(3))
+
+//    if (s?.length?.equals(3)) {
+//    }
 }
 
 fun test1(x: Any): Int {

@@ -36,6 +36,7 @@ fun main(args: Array<String>) {
             var COURSE_ID: String? = null
             var CHAPTER_ID: String? = null
 
+//            有章节名时查找其id
             if (chapterName != null) {
                 val sql = """
 SELECT c.COURSE_ID,c.COURSE_NAME,tcc.ID as CHAPTER_ID,tcc.TITLE,tcc.SORT,tcc.IS_OPEN,tcc.IS_FREE,tcc.IS_DELETED FROM db_aries_2c_course.TM_COURSE  c
@@ -55,6 +56,7 @@ ORDER BY tcc.SORT ASC,tcc.ID ASC
                 COURSE_ID = qIdList[0]["COURSE_ID"].toString()
                 CHAPTER_ID = qIdList[0]["CHAPTER_ID"].toString()
             } else {
+//                没有时取第一个小节
                 //查小节
                 var qIdList = jdbc.query("""
 SELECT c.COURSE_ID,c.COURSE_NAME,tcc.IS_PUBLISHED, tcc.ID as CHAPTER_ID,tcc.TITLE,tcc.LAYER,tcc.SORT,tcc.IS_OPEN,tcc.IS_FREE,tcc.IS_DELETED FROM db_aries_2c_course.TM_COURSE  c
