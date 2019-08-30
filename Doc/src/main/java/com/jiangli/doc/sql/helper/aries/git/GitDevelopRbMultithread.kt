@@ -15,19 +15,23 @@ import java.util.concurrent.Executors
  */
 fun main(args: Array<String>) {
     var projects = """
-aries-app-server:
-aries-web-h5:
-aries-live-server：
-aries-classTools:
-aries-server:
-aries:
-aries-h5:245b0de0a939d73ebd054521dd9742117a603d87
-aries-erp-server:80cb07e6f29a8f0da30896fb02fa6e635006c9d6
-aries-teachmanage:373f014278fd32c4d714d671ca5ec2a15de6fb9f
-org-server:bd96572147b4a0ab24d4b983a7a0d3481b2d3ade
-org-app-server:53b93e716a1e65ba00fbceaf2f391a630867fcb6
-org-manage:e66dbbff2fb58cdda52dd5501ff7c52c832a61f9
+org-app-server
     """.trimIndent()
+
+//    var projects = """
+//aries-app-server:
+//aries-web-h5:
+//aries-live-server：
+//aries-classTools:
+//aries-server:
+//aries:
+//aries-h5:245b0de0a939d73ebd054521dd9742117a603d87
+//aries-erp-server:80cb07e6f29a8f0da30896fb02fa6e635006c9d6
+//aries-teachmanage:373com.zhishi.org.remote.forum.L1TopicRemoteService#openQARandomQuestionf014278fd32c4d714d671ca5ec2a15de6fb9f
+//org-server:bd96572147b4a0ab24d4b983a7a0d3481b2d3ade
+//org-app-server:53b93e716a1e65ba00fbceaf2f391a630867fcb6
+//org-manage:e66dbbff2fb58cdda52dd5501ff7c52c832a61f9
+//    """.trimIndent()
 
      val BAT_UPDATE_NAME = "_temp_update_rb.bat"
      val BAT_PUSH_NAME = "_temp_update_push_rb.bat"
@@ -44,7 +48,12 @@ org-manage:e66dbbff2fb58cdda52dd5501ff7c52c832a61f9
     val latch = CountDownLatch(splitProject.size)
 
     splitProject.forEach {
-        val project = it
+        val project = it.trim()
+        if (it.isBlank()) {
+            latch.countDown()
+            return@forEach
+        }
+
         var path = PathUtil.buildPath(baseDirPath, false, project)
         var BAT_UPDATE_FILE = concatPath(path, BAT_UPDATE_NAME)
         var BAT_PUSH_FILE = concatPath(path, BAT_PUSH_NAME)

@@ -19,6 +19,7 @@ fun main(args: Array<String>) {
     val mongo = Ariesutil.getMongo(env, Ariesutil.MongoDbCol.ARIES_LOGIN)
 
 //    val MOBILE = "13661749570"
+//    val MOBILE = "18017058197"
     val MOBILE = "18017058197"
     val ouputFile = PathUtil.desktop("""$MOBILE-登录日志.xlsx""")
 

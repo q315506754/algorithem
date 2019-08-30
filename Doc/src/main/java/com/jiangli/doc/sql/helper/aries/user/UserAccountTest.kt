@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
     val jdbc = Ariesutil.getJDBC(env)
 
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "", email = "")
-    val userId = Ariesutil.getUserId(jdbc, name="武凌寒", mobile = "", email = "")
+//    val userId = Ariesutil.getUserId(jdbc, name="武凌寒", mobile = "", email = "")
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "13761156786", email = "")
 //    val userId = Ariesutil.getUserId(jdbc, name="", mobile = "", email = "pengjing@noahwm.com")
 
@@ -33,6 +33,8 @@ fun main(args: Array<String>) {
     //guest
 //    val userId =100011568
 //    val userId =100013735
+//    val userId =100023969
+    val userId =100023617
 
     Ariesutil.confirmUserId(jdbc, userId.toLong())
     val map = Ariesutil.injectFromUserId(jdbc, userId.toLong())

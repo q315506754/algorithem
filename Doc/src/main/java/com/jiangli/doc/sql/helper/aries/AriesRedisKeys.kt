@@ -23,12 +23,16 @@ fun main(args: Array<String>) {
     println("hset base:sms:$mobile:$dt:times GLOBAL 0")
     println("hset base:sms:$mobile:$dt:times CODE 0")
 
-    val jedisPool = Ariesutil.getYanfaPool()
-//    val jedisPool = Ariesutil.getYufaPool()
+//    val jedisPool = Ariesutil.getYanfaPool()
+    val jedisPool = Ariesutil.getYufaPool()
 
     jedisPool.execute {
         println(it.get("sms:code:power"))
+        println(it.smembers("base:sms:whites"))
+        println(it.get("base:sms:code:provider"))
     }
+
+    return
 
     val split = """
 18862280181

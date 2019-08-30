@@ -18,7 +18,7 @@ import java.util.Set;
  * @author Jiangli
  * @date 2018/12/26 15:42
  */
-public class ZkClientSetWeightTest {
+public class ZkClientSetYanfaWeightTest {
 
 
     public static void main(String[] args) {
@@ -28,8 +28,8 @@ public class ZkClientSetWeightTest {
         ZkClient zkc = new ZkClient(new ZkConnection(CONNECT_ADDR), 10000);
         System.out.println(zkc);
 
-        final String myip = getMyIp();
-        //final String myip = "192.168.222.3";
+        //final String myip = getMyIp();
+        final String myip = "192.168.222.3";
 
         System.out.println("我的ip:"+myip);
 
@@ -66,7 +66,7 @@ public class ZkClientSetWeightTest {
                             map.put("enabled", "true");
                             map.put("group", group);
                             map.put("version", version);
-                            map.put("weight", "999999");
+                            map.put("weight", "1");
                             String s = prefix + "?" +  RecurUtil.buildQueryString(map);
                             String overridUrl = RecurUtil.buildPath(servicePath, mode, URLEncoder.encode(s));
                             //System.out.println(overridUrl);

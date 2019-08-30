@@ -31,13 +31,14 @@ fun JedisPool.execute(action: (Jedis) -> Unit) {
     resource.close()
 }
 
-object Ariesutil {
+public object Ariesutil {
     val hashids = Hashids("user#2018@g2s.cn", 8)
 
-    fun getYufaPool(): JedisPool {
-        return JedisPool(GenericObjectPoolConfig(), "114.55.4.242", 19000)
+     fun getYufaPool(): JedisPool {
+//        return JedisPool(GenericObjectPoolConfig(), "114.55.4.242", 19000)
+        return JedisPool(GenericObjectPoolConfig(), "120.92.138.210", 6379,3000,"Ablejava!2018")
     }
-    fun getYanfaPool(): JedisPool {
+     fun getYanfaPool(): JedisPool {
         return JedisPool(GenericObjectPoolConfig(), "192.168.9.205", 6379)
     }
 
@@ -236,7 +237,8 @@ enum class Env(val rechargeCbUrl: String, val host: String, val username: String
     YANFA("http://127.0.0.1:89/aries-pay-account/recharge", "192.168.222.8:3306", "root", "ablejava")
     ,
 //    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "122.112.239.142:8635", "test", "Test@9527")
-    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "163.53.169.237:3306", "root", "ablejava")
+//    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "163.53.169.237:3306", "root", "ablejava")
+    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "120.92.138.210:3306", "root", "ablejava")
     ,
     WAIWANG("http://account-pay.g2s.cn/aries-pay-account/recharge", "rm-bp1yjg70fe47ml9gueo.mysql.rds.aliyuncs.com:3306", "huyue", "huyue@2018")
 }
@@ -253,7 +255,7 @@ fun main(args: Array<String>) {
 
     println(Ariesutil.convertUUID("npo6a7kK"))
 //    println(Ariesutil.convertUUID(100002323))
-    println(Ariesutil.convertUUID(100))
+    println(Ariesutil.convertUUID(100000062))
     println(Ariesutil.convertUUID(10001234))
     println(Ariesutil.convertUUID(100002253))
     println(Ariesutil.convertUUID(100001936))

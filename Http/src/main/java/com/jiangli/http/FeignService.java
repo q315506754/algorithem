@@ -2,6 +2,7 @@ package com.jiangli.http;
 
 import feign.*;
 import feign.gson.GsonDecoder;
+import feign.gson.GsonEncoder;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -79,6 +80,7 @@ public final class FeignService {
 
     public static void main(String... args) {
         GitHub github = Feign.builder()
+                .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
                 .target(GitHub.class, "https://api.github.com");
 
