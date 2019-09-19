@@ -20,15 +20,16 @@ fun main(args: Array<String>) {
     val jdbc = Ariesutil.getJDBC(env)
 
 
-    val fromId = 100010567
+    val fromId = 100003685
 //    val toId = Ariesutil.getUserId(jdbc,"张陆诗")
-    val toId  = 100011250
+    val toId  = 100030298
 
 //    100010567 爱尔丹珠 -> 100011250 null  2018年8月27日13:27:44
 
-    Ariesutil.confirmUserId(jdbc, 100010567)
-    Ariesutil.confirmUserId(jdbc, 100011250)
+    Ariesutil.confirmUserId(jdbc, fromId)
+    Ariesutil.confirmUserId(jdbc, toId)
 
+//    val courseId=61
     val courseId=7
 
     //赠送者

@@ -16,7 +16,11 @@ import java.util.concurrent.Executors
  */
 fun main(args: Array<String>) {
     var projects = """
+org-server
 org-app-server
+org-manage
+aries-forum-server
+aries-base-message
     """.trimIndent()
 
 //    aries-app-server

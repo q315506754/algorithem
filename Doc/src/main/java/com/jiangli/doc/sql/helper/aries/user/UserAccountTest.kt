@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
 //    val userId =100011568
 //    val userId =100013735
 //    val userId =100023969
-    val userId =100023617
+    val userId =100003685
 
     Ariesutil.confirmUserId(jdbc, userId.toLong())
     val map = Ariesutil.injectFromUserId(jdbc, userId.toLong())

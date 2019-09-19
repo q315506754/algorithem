@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -238,12 +240,12 @@ public class FileUtil {
 
     }
 
-    public static void acceptDragFile(boolean close, Function<List<File>,String> consumer) {
+    public static void acceptDragFile(boolean close, Function<List<File>, String> consumer) {
         new DragFileDemo(consumer, close);
     }
 
     public static void main(String[] args) {
-        acceptDragFile(true,files -> {
+        acceptDragFile(true, files -> {
             System.out.println(files);
             return null;
         });
@@ -251,12 +253,15 @@ public class FileUtil {
 
 
     public static class DragFileDemo extends JFrame {
-        public DragFileDemo(Function<List<File>,String> consumer, boolean closeOnReceive) {
+        public DragFileDemo(Function<List<File>, String> consumer, boolean closeOnReceive) {
             super("文件选择器");
 
             final JTextArea area = new JTextArea();
             area.setLineWrap(true);
             add(new JScrollPane(area));
+            area.setLineWrap(true);
+
+            ExecutorService executorService = Executors.newFixedThreadPool(1);
 
             //拖拽事件
             new DropTarget(area, DnDConstants.ACTION_COPY_OR_MOVE,
@@ -289,7 +294,7 @@ public class FileUtil {
 
                                     // 指示拖拽操作已完成
                                     dtde.dropComplete(true);
-                                }  else if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                                } else if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                                     // 接收拖拽来的数据
                                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                                     list = (List<File>) (dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
@@ -354,11 +359,19 @@ public class FileUtil {
                                             area.append(file.getAbsolutePath());
                                             area.append("\r\n");
                                         }
+                                        area.append("等待进一步结果...\r\n");
 
-                                        String apply = consumer.apply(list);
-                                        if (apply != null) {
-                                            area.setText(apply);
-                                        }
+                                        List<File> finalList = list;
+                                        executorService.submit(() -> {
+                                                String apply = consumer.apply(finalList);
+                                                if (apply != null) {
+                                                    area.setText(apply);
+                                                } else {
+                                                    area.append("执行结束...\r\n");
+                                                }
+                                            }
+                                        );
+
                                     }
                                 }
                             } catch (Exception e) {
@@ -367,7 +380,7 @@ public class FileUtil {
                         }
                     });
 
-            setSize(300, 300);
+            setSize(1200, 300);
             setLocationRelativeTo(null);
             setDefaultCloseOperation(EXIT_ON_CLOSE);
             setVisible(true);

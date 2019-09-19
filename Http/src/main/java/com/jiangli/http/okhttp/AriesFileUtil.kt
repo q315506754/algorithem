@@ -3,7 +3,8 @@ package com.jiangli.http.okhttp
 import com.google.gson.Gson
 import com.jiangli.common.utils.FileUtil
 import okhttp3.*
-import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -29,7 +30,9 @@ fun main(args: Array<String>) {
 
         it.forEach {
             // 设置文件以及文件上传类型封装
-            val requestBody:RequestBody = RequestBody.create(MediaType.parse("image/png"),it)
+            val mimeType = Files.probeContentType(Paths.get(it.absolutePath))
+
+            val requestBody:RequestBody = RequestBody.create(MediaType.parse(mimeType),it)
 
             // 文件上传的请求体封装
             val multipartBody:MultipartBody =  MultipartBody.Builder()
@@ -38,14 +41,14 @@ fun main(args: Array<String>) {
                     .addFormDataPart("appName", "ablecommons")
                     .addFormDataPart("qqpartindex", "0")
                     .addFormDataPart("qqtotalparts", "1")
-                    .addFormDataPart("qqtotalfilesize", it.length().toString())
                     .addFormDataPart("qquuid", UUID.randomUUID().toString())
                     .addFormDataPart("videoConvert", "true")
                     .addFormDataPart("autoConvert", "true")
+                    .addFormDataPart("qqtotalfilesize", it.length().toString())
                     .addFormDataPart("qqfile", it.getName())
                     .addFormDataPart("qqfilename", it.getName())
                     .addFormDataPart("file", it.getName(), requestBody)
-                    .build();
+                    .build()
 
             
             val request = Request.Builder().url("http://base1.g2s.cn/aries-commons/upload/receiver")
@@ -69,12 +72,15 @@ fun main(args: Array<String>) {
                 val fromJson = gson.fromJson(message, Map::class.java)
                 val dt = fromJson["data"] as Map<*, *>
                 val filePath = dt["filePath"]
+                val fileId = dt["fileId"]
 //                println(filePath)
-                println("${it.name} -> ${filePath}")
+                val s = "${it.name} -> id:${fileId} path: ${filePath}\r\n "
+                println(s)
 
-                sb.append("${it.name} -> ${filePath}")
-            } catch (e: IOException) {
+                sb.append(s)
+            } catch (e: Exception) {
                 e.printStackTrace()
+                sb.append( "[异常]${it.name} -> ${e.message}\r\n")
             }
 
         }
