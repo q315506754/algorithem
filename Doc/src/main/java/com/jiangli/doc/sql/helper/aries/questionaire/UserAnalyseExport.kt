@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 
 /**
- *
+ * 查询各个维度数据
  *
  * @author Jiangli
  * @date 2019/1/19 15:17
@@ -21,8 +21,8 @@ fun main(args: Array<String>) {
     //    val env = Env.YUFA
         val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
-    val fromEndDate = "2019-06-21 17:10:00"
-    val toEndDate = "2019-06-27 17:10:00"
+    val fromEndDate = "2019-10-10 17:10:00"
+    val toEndDate = "2019-10-10 17:10:00"
 //    val toEndDate = "2019-03-25 17:10:00"
 
     var start = DateUtil.getDate(fromEndDate).time

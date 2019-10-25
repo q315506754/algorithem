@@ -1,5 +1,13 @@
 package com.jiangli.download;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLDecoder;
+
 /**
  * @author Jiangli
  * @date 2019/4/24 13:39
@@ -52,4 +60,6 @@ public class MVCDownload {
     //        }
     //    }
     //}
+
+
 }

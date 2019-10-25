@@ -1,5 +1,6 @@
 package com.jiangli.datastructure.test;
 
+import com.jiangli.common.utils.NumberUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,6 +18,24 @@ import java.util.List;
  */
 public class CommonTest extends BaseTest {
     @Test
+    public void test_powder() {
+        long WANT = 150;
+        double[] powderatio = {1.0/3,2.0/3};
+        double[] powderToWater = {50,30};
+
+        for (int i = 0; i < powderatio.length; i++) {
+            double radio = powderatio[i];
+            double ml = WANT * radio;
+            double spoon = ml/powderToWater[i];
+
+            System.out.println(spoon);
+            System.out.println("第一种需要:"+ NumberUtil.getDoubleString(spoon)+"勺");
+        }
+
+        //NumberUtil.getDoubleString()
+    }
+
+    @Test
     public void test_() {
         System.out.println(Object[].class.getComponentType());
         System.out.println(Array.newInstance(Object.class, 3));
@@ -25,8 +44,23 @@ public class CommonTest extends BaseTest {
 
     @Test
     public void test_234() {
+        System.out.println(String.class.getName());
         System.out.println("ip:+"+null);
     }
+
+    @Test
+    public void test_ppp() {
+        String str = "/fileHandle/downLoadFile";
+        String str2 = "/fileHandle/downloadFile";
+        System.out.println(str);
+        System.out.println(str.length());
+        System.out.println(str2.length());
+        System.out.println(str.equals(str2));
+        for (char c : str.toCharArray()) {
+            System.out.println(c);
+        }
+    }
+
 
 
     @Test
