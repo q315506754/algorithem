@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * redis直连工具
+ *
  * @author Jiangli
  * @date 2019/10/22 13:16
  */

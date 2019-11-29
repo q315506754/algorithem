@@ -31,6 +31,7 @@ fun JedisPool.execute(action: (Jedis) -> Unit) {
     resource.close()
 }
 
+//redis
 public object Ariesutil {
     val hashids = Hashids("user#2018@g2s.cn", 8)
 
@@ -39,7 +40,8 @@ public object Ariesutil {
         return JedisPool(GenericObjectPoolConfig(), "120.92.138.210", 6379,3000,"Ablejava!2018")
     }
      fun getYanfaPool(): JedisPool {
-        return JedisPool(GenericObjectPoolConfig(), "192.168.9.205", 6379)
+//        return JedisPool(GenericObjectPoolConfig(), "192.168.9.205", 6379)
+        return JedisPool(GenericObjectPoolConfig(), "192.168.9.170", 19000)
     }
 
     fun convertUUID(l: Long): String {
@@ -55,9 +57,27 @@ public object Ariesutil {
     }
 
     fun getJDBC(env: Env): JdbcTemplate {
+//        val dataSource = BasicDataSource()
+//        dataSource.driverClassName = "com.mysql.jdbc.Driver"
+//        dataSource.url = "jdbc:mysql://${env.host}"
+//        dataSource.username = "${env.username}"
+//        dataSource.password = "${env.pwd}"
+//        val jdbcTemplate = JdbcTemplate(dataSource)
+//        return jdbcTemplate
+
+        return getJDBC(env,null)
+    }
+    fun getJDBC(env: Env, db:String?=null): JdbcTemplate {
         val dataSource = BasicDataSource()
         dataSource.driverClassName = "com.mysql.jdbc.Driver"
-        dataSource.url = "jdbc:mysql://${env.host}"
+        var str = ""
+        if (db!=null) {
+            str = "/$db?characterEncoding=UTF-8&allowMultiQueries=true"
+        }else {
+            str = "?characterEncoding=UTF-8&allowMultiQueries=true"
+        }
+
+        dataSource.url = "jdbc:mysql://${env.host}$str"
         dataSource.username = "${env.username}"
         dataSource.password = "${env.pwd}"
         val jdbcTemplate = JdbcTemplate(dataSource)

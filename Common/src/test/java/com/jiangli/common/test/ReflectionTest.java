@@ -4,7 +4,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * @author Jiangli
@@ -39,6 +41,31 @@ public class ReflectionTest {
         }
         private void childD() {
         }
+    }
+
+    @Test
+    public void test_45() throws Exception {
+        //  Object x[] = new String[3];
+        //x[0] = new Integer(0);
+
+        //System.out.println(1/0);
+
+        String s = "avb";
+        Class<? extends String> aClass = s.getClass();
+        System.out.println(s);
+
+        Field value = aClass.getDeclaredField("value");
+        value.setAccessible(true);
+        Object o = value.get(s);
+        System.out.println(o);
+        char[] o1 = (char[]) o;
+        System.out.println(Arrays.toString(o1));
+
+        o1[1] = 'x';
+        o1[2] = 'y';
+        System.out.println(Arrays.toString(o1));
+        System.out.println(s);
+
     }
 
     @Test

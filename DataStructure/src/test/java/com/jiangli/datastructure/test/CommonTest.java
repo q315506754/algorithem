@@ -18,6 +18,29 @@ import java.util.List;
  */
 public class CommonTest extends BaseTest {
     @Test
+    public void test_55() throws Exception {
+        List<Object> objects = new ArrayList<Object>();
+        System.out.println(objects.hashCode());
+        List<Object> objects2 = new ArrayList<Object>();
+        System.out.println(objects2.hashCode());
+        System.out.println(objects.equals(objects2));
+
+        objects2.add("");
+        objects2.add("");
+        System.out.println(objects2.hashCode());
+    }
+
+    @Test
+    public void test_45() throws Exception {
+      //  Object x[] = new String[3];
+      //x[0] = new Integer(0);
+
+      //System.out.println(1/0);
+
+    }
+
+
+    @Test
     public void test_powder() {
         long WANT = 150;
         double[] powderatio = {1.0/3,2.0/3};

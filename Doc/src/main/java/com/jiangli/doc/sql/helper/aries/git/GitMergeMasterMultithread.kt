@@ -15,14 +15,13 @@ import java.util.concurrent.Executors
  * @date 2019/5/29 13:12
  */
 fun main(args: Array<String>) {
+//    aries-app-server
+//    aries-server：
     var projects = """
-org-server
-org-app-server
-org-manage
-aries-forum-server
-aries-base-message
+aries-app-server
     """.trimIndent()
 
+//aries-base-message
 //    aries-app-server
 //    org-server
 //    org-app-server

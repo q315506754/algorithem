@@ -43,6 +43,15 @@ public class UnicodeTest {
         System.out.println(CodeUtil.unicodeToUtf8Str(uniStr));
     }
 
+    @Test
+    public void test_chartoint2() throws UnsupportedEncodingException {
+        byte[] utf8s = "啊".getBytes("utf8");
+        //byte[] utf8s = "γ".getBytes("utf8");
+        //byte[] utf8s = "a".getBytes("utf8");
+        for (byte utf8 : utf8s) {
+            System.out.println(Integer.toBinaryString(0xff&utf8));
+        }
+    }
 
     @Test
     public void test_chartoint() {

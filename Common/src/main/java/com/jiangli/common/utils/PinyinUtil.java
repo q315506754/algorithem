@@ -7,9 +7,7 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -27,6 +25,11 @@ public class PinyinUtil {
          * 全部拼音 李四Tommy->LSTOMMY
          **/FIRST_LETTERS
         ;
+    }
+
+    static Map<String, String> map = new HashMap<>();
+    static {
+        map.put("重庆", "CQ");
     }
 
     /**
@@ -63,6 +66,11 @@ public class PinyinUtil {
     }
 
     public static String getFirstLetters(String ChineseLanguage,HanyuPinyinCaseType caseType) {
+        String s = map.get(ChineseLanguage);
+        if (s!=null) {
+            return s;
+        }
+
         char[] cl_chars = ChineseLanguage.trim().toCharArray();
         String hanyupinyin = "";
         HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();

@@ -1,0 +1,55 @@
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS uppercase //
+
+CREATE PROCEDURE uppercase(IN dbname VARCHAR(200))
+
+BEGIN
+
+DECLARE done INT DEFAULT 0;
+
+DECLARE oldname VARCHAR(200);
+
+DECLARE cur CURSOR FOR SELECT table_name FROM information_schema.TABLES WHERE table_schema = dbname;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+OPEN cur;
+
+REPEAT
+
+FETCH cur INTO oldname;
+
+SET @newname = UPPER(oldname);
+
+#IF newname equals to oldname, do nothing;
+#select 'a' <> 'A'; -> 0
+#select 'a' <> BINARY 'A'; -> 1
+SET @isNotSame = @newname <> BINARY oldname;
+
+IF NOT done && @isNotSame THEN
+
+SET @SQL = CONCAT('rename table ',oldname,' to ',@newname);
+
+PREPARE tmpstmt FROM @SQL;
+
+EXECUTE tmpstmt;
+
+DEALLOCATE PREPARE tmpstmt;
+
+END IF;
+
+UNTIL done END REPEAT;
+
+CLOSE cur;
+
+END //
+
+DELIMITER ;
+
+call uppercase('jeecg-boot');
+
+# mysql批量 改数据库名为大写  改 表名大写 大写
+#调用存储过程
+#call uppercase('TEST');
+#TEST为你想要修改的数据库的名称
