@@ -17,13 +17,17 @@ fun main(args: Array<String>) {
 //aries-server
 //aries-app-server
 //aries
-
+//
 //org-server
+//org-app-server
+//aries-forum-server
 //org-manage
+//aries-classtools
 //    """.trimIndent()
 
     var projects = """
 aries
+aries-app-server
     """.trimIndent()
 
      val BAT_UPDATE_NAME = "_temp_update_rb.bat"

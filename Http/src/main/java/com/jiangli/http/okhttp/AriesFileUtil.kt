@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
 
 /**
- *
+ * 文件选择
  *
  * @author Jiangli
  * @date 2019/8/30 17:02
@@ -22,6 +22,8 @@ fun main(args: Array<String>) {
 
         it.forEach {
             val str = uploadFileAndGetPath(it)
+
+            sb.append(str)
 
             println(str)
 

@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
 
     val tables = """
 
-TBL_COMPANY
+PARTNER_USER
 
     """.trimIndent()
 
