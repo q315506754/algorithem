@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 
 /**
- *
+ * 查询各个维度数据
  *
  * @author Jiangli
  * @date 2019/1/19 15:17
@@ -21,8 +21,8 @@ fun main(args: Array<String>) {
     //    val env = Env.YUFA
         val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
-    val fromEndDate = "2019-04-01 17:10:00"
-    val toEndDate = "2019-04-03 17:10:00"
+    val fromEndDate = "2019-10-12 17:10:00"
+    val toEndDate = "2019-11-09 17:10:00"
 //    val toEndDate = "2019-03-25 17:10:00"
 
     var start = DateUtil.getDate(fromEndDate).time
@@ -195,6 +195,8 @@ SELECT * FROM db_aries_questionnaire.dim_user_apply WHERE  IS_DELETED = 0 $creat
 fun joinMap(disMap: Map<String, String>, mp: Map<String, List<MutableMap<String, Any>>>): MutableMap<String,Int> {
     val ret = linkedMapOf<String,Int>()
 
+//    ret { xx行业：123 }
+//    ret包含左disMap
     disMap.forEach { n, u ->
         var list = mp.get(n)
         if (list == null) {
@@ -204,8 +206,10 @@ fun joinMap(disMap: Map<String, String>, mp: Map<String, List<MutableMap<String,
         }
     }
 
+//  ret不包含左disMap的情况
     mp.forEach { t, u ->
         var dis = disMap.get(t)
+//        获取其行业名称
         if (dis == null) {
             dis = t
         }

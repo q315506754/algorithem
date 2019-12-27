@@ -1,5 +1,6 @@
 package com.jiangli.datastructure.test;
 
+import com.jiangli.common.utils.NumberUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,13 +18,46 @@ import java.util.List;
  */
 public class CommonTest extends BaseTest {
     @Test
-    public void test_11() {
-        System.out.println("Hello world!");
+    public void test_55() throws Exception {
+        List<Object> objects = new ArrayList<Object>();
+        System.out.println(objects.hashCode());
+        List<Object> objects2 = new ArrayList<Object>();
+        System.out.println(objects2.hashCode());
+        System.out.println(objects.equals(objects2));
+
+        objects2.add("");
+        objects2.add("");
+        System.out.println(objects2.hashCode());
     }
-    
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
+
+    @Test
+    public void test_45() throws Exception {
+      //  Object x[] = new String[3];
+      //x[0] = new Integer(0);
+
+      //System.out.println(1/0);
+
     }
+
+
+    @Test
+    public void test_powder() {
+        long WANT = 150;
+        double[] powderatio = {1.0/3,2.0/3};
+        double[] powderToWater = {50,30};
+
+        for (int i = 0; i < powderatio.length; i++) {
+            double radio = powderatio[i];
+            double ml = WANT * radio;
+            double spoon = ml/powderToWater[i];
+
+            System.out.println(spoon);
+            System.out.println("第一种需要:"+ NumberUtil.getDoubleString(spoon)+"勺");
+        }
+
+        //NumberUtil.getDoubleString()
+    }
+
     @Test
     public void test_() {
         System.out.println(Object[].class.getComponentType());
@@ -33,8 +67,23 @@ public class CommonTest extends BaseTest {
 
     @Test
     public void test_234() {
+        System.out.println(String.class.getName());
         System.out.println("ip:+"+null);
     }
+
+    @Test
+    public void test_ppp() {
+        String str = "/fileHandle/downLoadFile";
+        String str2 = "/fileHandle/downloadFile";
+        System.out.println(str);
+        System.out.println(str.length());
+        System.out.println(str2.length());
+        System.out.println(str.equals(str2));
+        for (char c : str.toCharArray()) {
+            System.out.println(c);
+        }
+    }
+
 
 
     @Test

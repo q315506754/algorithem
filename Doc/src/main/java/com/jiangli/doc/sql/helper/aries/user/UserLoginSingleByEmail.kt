@@ -18,11 +18,10 @@ fun main(args: Array<String>) {
     val jdbc = Ariesutil.getJDBC(env)
     val mongo = Ariesutil.getMongo(env, Ariesutil.MongoDbCol.ARIES_LOGIN)
 
-//    val MOBILE = "13661749570"
-    val MOBILE = "18017058197"
-    val ouputFile = PathUtil.desktop("""$MOBILE-登录日志.xlsx""")
+    val EMAIL = "jinpeng@zhishish.com"
+    val ouputFile = PathUtil.desktop("""$EMAIL-登录日志.xlsx""")
 
-    val userId = Ariesutil.getUserId(jdbc, "", MOBILE).toLong()
+    val userId = Ariesutil.getUserId(jdbc, "","", EMAIL).toLong()
     val uuid = Ariesutil.convertUUID(userId)
 
     println("userId:$userId uuid:$uuid")

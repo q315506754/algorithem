@@ -55,7 +55,9 @@ public class AttachTest extends Thread {
             System.out.println(vmd);
             if (vmd.displayName().contains("TestMainInJar")) {
                 VirtualMachine vm = VirtualMachine.attach(vmd);
-                vm.loadAgent("/home/conquer/Desktop/aaaa/agentmain.jar");
+                //vm.loadAgent("/home/conquer/Desktop/aaaa/agentmain.jar");
+                //vm.loadAgent("C:\\myprojects\\algorithem\\JMX\\target\\JMX-1.0-SNAPSHOT.jar");
+                vm.loadAgent("C:/myprojects/algorithem/JMX/target/JMX-1.0-SNAPSHOT.jar");
                 System.out.println("loaded");
                 vm.detach();
                 System.out.println("detached");

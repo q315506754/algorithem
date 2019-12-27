@@ -11,17 +11,20 @@ public class TimeClientHandlerFix1 extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
+        System.out.println("handlerAdded");
         buf = ctx.alloc().buffer(4); // (1)
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
+        System.out.println("handlerRemoved");
         buf.release(); // (1)
         buf = null;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        System.out.println("channelRead");
         ByteBuf m = (ByteBuf) msg;
         buf.writeBytes(m); // (2)
         m.release();

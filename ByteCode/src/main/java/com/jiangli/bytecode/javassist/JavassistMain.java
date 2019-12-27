@@ -52,6 +52,11 @@ public class JavassistMain {
             afuncA.invoke(aIns, new Object[]{222, "Ahahahahahfsds"});
 
 
+            System.out.println("--------------");
+            JavassisA javassisA = new JavassisA();
+            javassisA.funcA(123, "dfgdfgfd");
+            System.out.println("--------------");
+
             //如果需要定义一个新类，只需要
             CtClass newCC = pool.makeClass("Point");
 

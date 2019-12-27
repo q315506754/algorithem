@@ -20,7 +20,8 @@ public class LinkedBlockingQueueMain {
                 }
 
                 try {
-                    qu.take();
+                    Object take = qu.take();
+                    System.out.println("take:"+take);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -28,11 +29,11 @@ public class LinkedBlockingQueueMain {
         }).start();
         try {
             qu.put("111");
-            System.out.println("111");
+            System.out.println("put 111");
 
             //blocked
             qu.put("222");
-            System.out.println("222");
+            System.out.println("put 222");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

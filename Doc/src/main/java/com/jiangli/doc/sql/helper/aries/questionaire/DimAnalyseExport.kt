@@ -7,10 +7,21 @@ import java.math.BigDecimal
 
 
 /**
+ * 各个维度比较数据
+ * 需要先跑数据
  *
  *
- * @author Jiangli
- * @date 2019/1/19 15:17
+TRUNCATE TABLE db_aries_questionnaire.STATIS_USER_DIM;
+
+#用户维度得分 导入语句
+INSERT INTO db_aries_questionnaire.STATIS_USER_DIM(DIM_ID,DIM_USER_ID,USER_AGE,WEIGHT_SCORE,JOB_CATEGORY)
+SELECT tr.DIMENSION_ID,tr.QUESTIONNAIRE_APPLY_ID,TIMESTAMPDIFF(YEAR, ua.BIRTHDAY, CURDATE()) ,AVG(tr.WEIGHT_SCORE) as WEIGHT_SCORE,ua.JOB_CATEGORY FROM db_aries_questionnaire.DIM_TRAN_RESULT tr
+LEFT JOIN db_aries_questionnaire.TBL_ANSWER_USER_APPLY aua ON tr.QUESTIONNAIRE_APPLY_ID=aua.Id
+LEFT JOIN db_aries_questionnaire.DIM_USER_APPLY ua ON aua.USER_ID=ua.ID
+WHERE tr.CREATE_TIME > '2019-02-19 06:30:00' ANd tr.IS_DELETED = 0
+GROUP BY tr.DIMENSION_ID,tr.QUESTIONNAIRE_APPLY_ID;
+
+ *
  */
 fun main(args: Array<String>) {
 //    val env = Env.YANFA

@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>route-children.html</title>
+    <meta charset="UTF-8"/>
 </head>
 
 <body >
@@ -33,7 +34,8 @@
 
     const router = new VueRouter({
         routes: [
-            { path: '/user/:id', component: User,
+            {   path: '/user/:id',
+                component: User,
                 children: [
                     // UserHome will be rendered inside User's <router-view>
                     // when /user/:id is matched

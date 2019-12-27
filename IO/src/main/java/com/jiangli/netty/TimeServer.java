@@ -46,6 +46,7 @@ public class TimeServer {
             // shut down your server.
             f.channel().closeFuture().sync();
         } finally {
+            System.out.println("closed");
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }

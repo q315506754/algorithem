@@ -16,7 +16,7 @@ public class CamelMain {
         context.addRoutes(new RouteBuilder() {
             public void configure() {
 //                from("test-jms:queue:test.queue").to("file://test");
-                from("file:D://testSrc.txt").to("file:D://test.txt");
+                from("file:C://a//testSrc.txt").to("file:C://a//test.txt");
             }
         });
 
@@ -29,7 +29,7 @@ public class CamelMain {
         System.out.println("start");
         ProducerTemplate template = context.createProducerTemplate();
         for (int i = 0; i < 10; i++) {
-            template.sendBody("file:D://testSrc.txt", "Test Message: " + i);
+            template.sendBody("file:C://a//testSrc.txt", "Test Message: " + i);
         }
         Thread.sleep(99999);
     }

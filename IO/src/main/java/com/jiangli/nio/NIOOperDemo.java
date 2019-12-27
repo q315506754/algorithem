@@ -1,5 +1,7 @@
 package com.jiangli.nio;
 
+import com.jiangli.common.utils.PathUtil;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -155,7 +157,9 @@ public class NIOOperDemo {
 
     public static void main(String[] args) {
         NIOOperDemo nood = new NIOOperDemo();
-        String fileName = "c:\\hello.txt";
+        String fileName = "c:\\a\\hello.txt";
+        //String fileName = "d:\\hello.txt";
+        PathUtil.ensureFile(fileName);
         //nood.readFileByIO(fileName);
         nood.writeFileByNIO(fileName);
 

@@ -33,16 +33,20 @@ public class BigIntegerDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+        //in是一串连续写入的字节，肯能是这样的结构 [F,00,00,00,01,01,F,00,00,00,01,02,F,00,00,00,01,03.....]
         // Wait until the length prefix is available.
         if (in.readableBytes() < 5) {
             return;
         }
 
+        //标记本次解析的初始位置
         in.markReaderIndex();
 
         // Check the magic number.
         int magicNumber = in.readUnsignedByte();
         if (magicNumber != 'F') {
+            //当字节缓冲快读完时，可能后面几个字节无法满足本次解析的长度要求
+            //估重设置到'F'处重新读取
             in.resetReaderIndex();
             throw new CorruptedFrameException("Invalid magic number: " + magicNumber);
         }
@@ -58,6 +62,7 @@ public class BigIntegerDecoder extends ByteToMessageDecoder {
         byte[] decoded = new byte[dataLength];
         in.readBytes(decoded);
 
+        //分别为1,2,3,4,...1000
         out.add(new BigInteger(decoded));
     }
 }

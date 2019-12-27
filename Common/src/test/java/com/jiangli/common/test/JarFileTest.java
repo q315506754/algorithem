@@ -89,7 +89,8 @@ public class JarFileTest {
     }
     @Test
     public void test_2_1() throws IOException {
-        Enumeration<URL> e =  ClassLoader.getSystemResources("META-INF/spring.schemas");
+        //Enumeration<URL> e =  ClassLoader.getSystemResources("META-INF/spring.schemas");
+        Enumeration<URL> e =  Thread.currentThread().getContextClassLoader().getSystemResources("META-INF/spring.schemas");
         while (e.hasMoreElements()) {
             URL url = e.nextElement();
             System.out.println(url);

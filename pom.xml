@@ -34,9 +34,11 @@
         <module>Hadoop</module>
         <module>Http</module>
         <module>IO</module>
+        <module>Jar</module>
         <module>JDK</module>
         <module>JMX</module>
         <module>JNI</module>
+        <module>JVM</module>
         <!--<module>JVMLanguage</module>-->
         <module>KillGame</module>
         <module>Leetcode</module>
@@ -46,6 +48,7 @@
         <!--<module>MavenPlugin</module>-->
         <!--<module>MavenPluginClient</module>-->
         <module>Memory</module>
+        <module>ML</module>
         <module>OSGI</module>
         <module>Practice</module>
         <module>RPC</module>

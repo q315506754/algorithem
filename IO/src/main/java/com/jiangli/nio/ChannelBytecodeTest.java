@@ -38,6 +38,8 @@ public class ChannelBytecodeTest {
         System.out.println("----");
         print(minor_version);
         print(major_version);
+        System.out.println("----");
+
         int print = print(constant_pool_count);
         System.out.println(print);
 
@@ -74,6 +76,7 @@ public class ChannelBytecodeTest {
                     print(name_index);
                 }break;
                 case 1:{
+                    //常量池
                     ByteBuffer length = ByteBuffer.allocate(2);
                     read(channel, length);
                     int realL = print(length);
@@ -129,7 +132,10 @@ public class ChannelBytecodeTest {
         for (byte b : array) {
 //            System.out.println(b&0xff);
 //            System.out.println((int)b);
+
+//            高位在前
             total += b & (0xff << (array.length - count++));
+
             System.out.print(Integer.toHexString(b&0xff));
 //            System.out.print(Integer.toHexString((int)b));
         }

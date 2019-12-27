@@ -16,8 +16,10 @@
 
     <bean id="faxAdvice" class="com.jiangli.aop.spring.FaxAdvice"></bean>
 
-    <!--<aop:aspectj-autoproxy ></aop:aspectj-autoproxy>-->
-    <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
+<!--    对于自动注入的接口，使用jdk实现   自动注入的class仍用cglib-->
+    <aop:aspectj-autoproxy ></aop:aspectj-autoproxy>
+<!--    <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>-->
+<!--    <aop:aspectj-autoproxy proxy-target-class="false"></aop:aspectj-autoproxy>-->
 
     <aop:config>
         <aop:pointcut id="myPoint" expression="execution(* com.jiangli..*.*(..))" />

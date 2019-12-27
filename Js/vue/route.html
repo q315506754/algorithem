@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>route.html</title>
-
+    <meta charset="UTF-8"/>
     <link href="../common/assets/css/common.css" rel="stylesheet"/>
     <style>
         .red {
@@ -22,10 +22,14 @@
         <router-link to="/bar">Go to Bar</router-link>
     </p>
     <!-- 路由出口 -->
+
+
     <!-- 路由匹配到的组件将渲染在这里 -->
     <keep-alive>
         <router-view></router-view>
     </keep-alive>
+
+    <router-view></router-view>
 </div>
 </body>
 <script src="../common/assets/js/vue/vue.js" type="text/javascript"></script>

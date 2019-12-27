@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AopTestBean {
+
+    public AopTestBean() {
+        System.out.println("aa");
+    }
+
     public String func() {
         System.out.println("func");
         return "proxy func";

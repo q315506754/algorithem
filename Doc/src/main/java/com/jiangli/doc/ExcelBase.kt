@@ -3,6 +3,8 @@ package com.jiangli.doc
 import com.jiangli.common.utils.PathUtil
 import org.apache.commons.lang.StringUtils
 import org.apache.poi.common.usermodel.HyperlinkType
+import org.apache.poi.hssf.usermodel.HSSFSheet
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.NumberToTextConverter
 import org.apache.poi.xssf.usermodel.XSSFCell
@@ -179,6 +181,7 @@ object ExcelUtil {
 
     }
 
+
     fun processRow(inputSrc:String, sheetIdx:Int=0, startRow:Int=0, fc:(file: File, workbook: XSSFWorkbook, sheet:XSSFSheet, lastRowIdx:Int, lastColIdx:Int, rowIdx:Int, row:XSSFRow?)->Unit) {
         process(inputSrc, sheetIdx){
             file, workbook, sheet1 ->
@@ -344,6 +347,32 @@ object ExcelUtil {
     }
 
 }
+
+object ExcelOldUtil {
+    val MAX_COL = 255
+
+    fun process(inputSrc:String, sheetIdx:Int=0, fc:(file: File, workbook: HSSFWorkbook, sheet: HSSFSheet)->Unit) {
+        val files = FUtil.files(inputSrc)
+
+        files.filter { it.name.endsWith(".xls") }.forEach {
+            val fileInputStream = FileInputStream(it)
+            val workbook = HSSFWorkbook(fileInputStream)
+            val sheet1 = workbook.getSheetAt(sheetIdx)
+
+            fc(it,workbook,sheet1)
+
+            try {
+                fileInputStream.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    }
+
+
+}
+
 fun main(args: Array<String>) {
 //    println(lastRowNum)
 //    println(lastColNum)
@@ -352,13 +381,18 @@ fun main(args: Array<String>) {
 //    println(InterruptException(ExCode.NO_SUCH_FILE,"啊啊").getMsg())
 //    println(listOf(1, 2, 3, (arrayOf(4, 5, 6))))
 //    println(listOf(1, 2, 3, *(arrayOf(4, 5, 6))))
-    ExcelUtil.process("C:\\Users\\DELL-13\\Desktop\\课程购买.xlsx"){
-        it, workbook, sheet ->  println(sheet)
-    }
+//    ExcelUtil.process("C:\\Users\\DELL-13\\Desktop\\课程购买.xlsx"){
+//        it, workbook, sheet ->  println(sheet)
+//    }
+//
+//    ExcelUtil.processRowCell(PathUtil.desktop("课程购买.xlsx"),0,1){
+//        file, workbook, sheet, lastRowIdx, lastColIdx, rowIdx, row, cellIdx, cell, cellValue ->
+//        println("$rowIdx x $cellIdx ,$cellValue")
+//    }
 
-    ExcelUtil.processRowCell(PathUtil.desktop("课程购买.xlsx"),0,1){
-        file, workbook, sheet, lastRowIdx, lastColIdx, rowIdx, row, cellIdx, cell, cellValue ->
-        println("$rowIdx x $cellIdx ,$cellValue")
+    ExcelOldUtil.process(PathUtil.desktop("06原始表 - 副本.xls")){
+        file: File, workbook: HSSFWorkbook, sheet: HSSFSheet ->
+        println(sheet)
     }
 }
 
@@ -412,6 +446,15 @@ fun writeMapToExcel(ouputFile: String, mergeMapList: List<MutableMap<String, Any
 
 fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>, mergeMapList: List<MutableMap<String, Any>>,processer:(workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any>)->Unit ? ={ workbook: XSSFWorkbook, page1: XSSFSheet?, rowIdx: Int, curRow: XSSFRow?, cellIdx: Int, cell: XSSFCell, columnName:String,cellValue: String?,db: MutableMap<String, Any> ->
     cell.setCellValue(cellValue)
+
+//    try {
+////        尝试使用数字格式
+//        cell.setCellValue(java.lang.Double.parseDouble(cellValue))
+//        println(cellValue)
+//    } catch (e:java.lang.Exception) {
+//        cell.setCellValue(cellValue)
+//    }
+
 }) {
     val file = File(ouputFile)
     if (!file.exists()) {
@@ -447,7 +490,6 @@ fun writeMapToExcel(ouputFile: String, exconfig: ArrayList<Pair<String, String>>
 
         //冻结首行
         c.setCellStyle(newStyle)
-
 
         c.setCellValue(pair.second)
 

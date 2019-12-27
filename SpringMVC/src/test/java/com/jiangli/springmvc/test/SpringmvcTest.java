@@ -14,9 +14,12 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +48,15 @@ public class SpringmvcTest {
     }
 
 
+    @Test
+    public void test_2_1() throws IOException {
+        //Enumeration<URL> e =  ClassLoader.getSystemResources("META-INF/spring.schemas");
+        Enumeration<URL> e =  Thread.currentThread().getContextClassLoader().getSystemResources("META-INF/spring.schemas");
+        while (e.hasMoreElements()) {
+            URL url = e.nextElement();
+            System.out.println(url);
+        }
+    }
 
     @Test
     public void testCommit() {

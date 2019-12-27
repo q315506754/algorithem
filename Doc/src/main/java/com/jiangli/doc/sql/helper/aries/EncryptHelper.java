@@ -35,4 +35,7 @@ public class EncryptHelper {
         return sha256Hex(passwordText, "Aries#2018");
     }
 
+    public static void main(String[] args) {
+        System.out.println(encryptPassword("123456"));
+    }
 }

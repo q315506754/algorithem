@@ -36,7 +36,7 @@ public class CyclicBarrierTest {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                         System.out.println(Thread.currentThread().getName()+"-await2");
                         cyclicBarrier.await();
                         System.out.println(Thread.currentThread().getName()+"-wait over2");

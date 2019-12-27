@@ -44,6 +44,7 @@ public final class FileServer {
     // Use the same default port with the telnet example so that we can use the telnet client example to access it.
     static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8992" : "8023"));
 
+    //C:\Users\Jiangli\Desktop\manage-jiaofu.postman_collection.json
     //telnet localhost 8023
     public static void main(String[] args) throws Exception {
         // Configure SSL.

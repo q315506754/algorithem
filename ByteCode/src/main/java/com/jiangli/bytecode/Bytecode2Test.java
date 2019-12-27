@@ -16,6 +16,10 @@ public class Bytecode2Test {
             str = String.valueOf(integer);
         }
         System.out.println(str);
+
+
+        Integer a = 122222;
+        int x = a;
     }
 
 }

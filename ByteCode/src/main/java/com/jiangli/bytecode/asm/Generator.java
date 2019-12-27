@@ -22,7 +22,9 @@ public class Generator {
 
 
             byte[] data = cw.toByteArray();
-            File file = new File(System.getProperty("user.dir") + "\\WebRoot\\WEB-INF\\classes\\com\\asm5\\C.class");
+            //File file = new File(System.getProperty("user.dir") + "\\WebRoot\\WEB-INF\\classes\\com\\asm5\\C.class");
+            File file = new File("C://a//C.class");
+
             FileOutputStream fout = new FileOutputStream(file);
             fout.write(data);
             fout.close();

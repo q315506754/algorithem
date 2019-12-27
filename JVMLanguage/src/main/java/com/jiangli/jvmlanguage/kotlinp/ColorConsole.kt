@@ -43,18 +43,18 @@ fun main(args: Array<String>) {
 
     //ANSI ESCAPE CODE
     //背景色
-    // 8
+    // 8 \u001b[30m
     (0..7).forEach {
         println("8 color:\u001b[3${it}m 3${it}m ${ConsoleColorHelper.reset}")
     }
 
-    // 16
+    // 16  \u001b[30;1m
     (0..7).forEach {
         println("16 color:\u001b[3${it}m 3${it}m ${ConsoleColorHelper.reset} \u001b[3${it};1m 3${it};1m ${ConsoleColorHelper.reset}")
     }
 
     //256 = 16*16
-    //\u001b[38;5;${ID}m
+    //\u001b[38;5;1m
     (0..15).forEach { x ->
         print("256 color:")
         (0..15).forEach { y ->
@@ -67,18 +67,18 @@ fun main(args: Array<String>) {
 
     println("--------------font color--------------")
     //前景色
-    // 8
+    // 8 \u001b[40m
     (0..7).forEach {
         println("8 color:\u001b[4${it}m 4${it}m ${ConsoleColorHelper.reset}")
     }
 
-    // 16
+    // 16 \u001b[43;1m
     (0..7).forEach {
         println("16 color:\u001b[4${it}m 4${it}m ${ConsoleColorHelper.reset} \u001b[4${it};1m 4${it};1m ${ConsoleColorHelper.reset}")
     }
 
     //256 = 16*16
-    //\u001b[48;5;${ID}m
+    //\u001b[48;5;77m
     (0..15).forEach { x ->
         print("256 color:")
         (0..15).forEach { y ->
@@ -94,6 +94,7 @@ fun main(args: Array<String>) {
 
     println("--------------sf--------------")
 
+//    ide控制台测试无效
     println("上上\u001b[100A插1")
     println("下下\u001b[100B插2")
     println("右右\u001b[100C插3")

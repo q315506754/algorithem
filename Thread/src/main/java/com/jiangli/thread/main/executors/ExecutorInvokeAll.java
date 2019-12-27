@@ -1,6 +1,7 @@
 package com.jiangli.thread.main.executors;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -20,12 +21,14 @@ public class ExecutorInvokeAll extends ExecutorTestBase {
             while (true) {
                 System.out.println("------------");
                 for (Future<Integer> future : futures) {
-                    System.out.println(future.isDone());
+                    System.out.println(future.isDone()+""+future.get());
                 }
                 Thread.sleep(1000L);
             }
 
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }

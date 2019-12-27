@@ -89,10 +89,14 @@ public class FactorialClientHandler extends SimpleChannelInboundHandler<BigInteg
             future = ctx.write(Integer.valueOf(next));
             next++;
         }
+
+        //理论上到这里已经是1001了，进不了下面逻辑的
         if (next <= FactorialClient.COUNT) {
             assert future != null;
             future.addListener(numberSender);
         }
+
+        //冲走数据
         ctx.flush();
     }
 

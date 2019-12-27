@@ -20,7 +20,8 @@ public class SynchronousQueueMain extends ExecutorTestBase {
                 while (true) {
                     sleep(2000);
                     try {
-                        synchronousQueue.take();
+                        Object take = synchronousQueue.take();
+                        System.out.println("take:"+take);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -29,9 +30,10 @@ public class SynchronousQueueMain extends ExecutorTestBase {
 
             System.out.println(synchronousQueue.size());
             synchronousQueue.put("111");
-            System.out.println("111");
+            System.out.println("put 111");
+
             synchronousQueue.put("222");
-            System.out.println("222");
+            System.out.println("put 222");
 
 
         } catch (InterruptedException e) {

@@ -2,12 +2,12 @@ package com.jiangli.crawler.webmagic.gamesky.core
 
 import org.jsoup.Jsoup
 
-val URL = "http://wap.gamersky.com/news/"
-fun CONTENT_URL(id: String, page: Int = 1) = """http://wap.gamersky.com/news/Content-$id${if (page > 1) "_$page" else ""}.html"""
+private val URL = "http://wap.gamersky.com/news/"
+private fun CONTENT_URL(id: String, page: Int = 1) = """http://wap.gamersky.com/news/Content-$id${if (page > 1) "_$page" else ""}.html"""
 
-data class Content(val url:String,val content:String,val maxPage:Int)
+internal data class Content(val url:String,val content:String,val maxPage:Int)
 
-fun getContentOfURL(url: String): Content {
+private fun getContentOfURL(url: String): Content {
     val content = Jsoup.connect(url).get()
     val article1 = content.select("article").first()
 
@@ -18,7 +18,7 @@ fun getContentOfURL(url: String): Content {
     return Content(url,"""${article1.select("p").text()}""",maxPage)
 }
 
-fun getContent(id: String): String {
+private fun getContent(id: String): String {
     val content = getContentOfURL(CONTENT_URL(id))
 
 
