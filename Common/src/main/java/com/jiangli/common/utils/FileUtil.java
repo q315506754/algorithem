@@ -4,6 +4,7 @@ import com.jiangli.common.core.FileStringProcesser;
 import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
+import javax.net.ssl.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.datatransfer.DataFlavor;
@@ -13,7 +14,10 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -271,18 +275,47 @@ public class FileUtil {
     public static void acceptDragFile(boolean close, Function<List<File>, String> consumer) {
         new DragFileDemo(consumer, close);
     }
-
+    
+    public static File downloadImage(String url, String outdir) {
+        try {
+            String name = url.substring(url.lastIndexOf("/") + 1);
+            File file = new File(outdir, name);
+            if (file.exists()) {
+                return file;
+            }
+            
+            HttpURLConnection urlConnection = getUrlConnectionX(url);
+            urlConnection.setRequestProperty("Accept","image/*");
+            
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            IOUtils.copy(urlConnection.getInputStream(),fileOutputStream);
+            fileOutputStream.close();
+            
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public static void downloadM3U8(String url, String outdir) {
         String body = downloadBody(url);
+        
+//        test mode
         boolean skipDownload = false;
         //boolean skipDownload = true;
-
+    
+        //  清空模式
         boolean deleteTemp = false;
         //boolean deleteTemp = true;
-
+    
+//        强制转换MP4
+        boolean forceConvert = false;
+//        boolean forceConvert = true;
+        
         String prefix = url.substring(0, url.lastIndexOf("/"));
         String name = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
-        System.out.println(body);
+//        System.out.println(body);
 
         //初始化文件路径
         PathUtil.ensurePath(outdir);
@@ -298,17 +331,17 @@ public class FileUtil {
         File keyFile = new File(tempDir, "key.key");
         File batchFile = new File(tempDir, "run.bat");
 
-        tryDelete(outMp4File);
+//        tryDelete(outMp4File);
         tryDelete(m3u8File);
         tryDelete(keyFile);
         tryDelete(batchFile);
-
+    
         PathUtil.ensurePath(tempDir.getAbsolutePath());
         if (!skipDownload && deleteTemp) {
             deleteUnderDir(tempDir.getAbsolutePath());
         }
-
-
+    
+    
         //解析文件
         List<ParsedResult> downUrls = parseDownloadUrls(body, prefix);
         Map<String, String> encryptionUrl = parseEncryptionUrl(body, prefix);
@@ -325,7 +358,7 @@ public class FileUtil {
 
             //请求秘钥
             try {
-                InputStream inputStream = new URL(URI).openStream();
+                InputStream inputStream = getUrlConnection(URI);
                 encKey = IOUtils.toByteArray(inputStream);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -348,7 +381,8 @@ public class FileUtil {
 
         String command = "";
         command+="\ncd "+tempDir.getAbsolutePath();
-        command+="\nffmpeg -y -allowed_extensions ALL -protocol_whitelist \"file,http,https,rtp,udp,tcp,tls,crypto\" -i \"" + m3u8File.getName() + "\" -c copy -bsf:a aac_adtstoasc \"" + outMp4File.getName() +"\"";
+        command+="\n"+tempDir.getAbsolutePath().charAt(0)+":";
+        command+="\nffmpeg -y -allowed_extensions ALL -protocol_whitelist \"file,http,https,rtp,udp,tcp,tls,crypto\" -i " + m3u8File.getName() + " -c copy -bsf:a aac_adtstoasc " + outMp4File.getName() +"";
         FileUtil.writeStr(command,batchFile.getAbsolutePath());
 
         //计算输出路径
@@ -398,7 +432,7 @@ public class FileUtil {
                     //        e.printStackTrace();
                     //    }
                     //}
-                    System.out.println((count.incrementAndGet()) + "/" + downUrls.size() + (exists?" skipped ":"") +" " + downUrl + " ===> " + downDto.filePath);
+                    System.out.println((count.incrementAndGet()) + "/" + downUrls.size() + (exists?" skipped ":" down ") +" " + downUrl + " ===> " + downDto.filePath);
 
                     countDownLatch.countDown();
                 });
@@ -437,7 +471,12 @@ public class FileUtil {
             //String command = batchFile.getAbsolutePath();
             System.out.println("转码中...");
             //System.out.println(command);
-            Process exec = Runtime.getRuntime().exec("cmd.exe /c start "+batchFile.getAbsolutePath());
+            if (forceConvert || !outMp4File.exists()) {
+                Process exec = Runtime.getRuntime().exec("cmd.exe /c start "+batchFile.getAbsolutePath());
+                exec.waitFor();
+            } else {
+                System.out.println("跳过转码");
+            }
             //InputStream inputStream = exec.getInputStream();
             //Thread thread = new Thread(() -> {
             //    try {
@@ -448,7 +487,7 @@ public class FileUtil {
             //});
             ////thread.setDaemon(true);
             //thread.start();
-            exec.waitFor();
+           
             System.out.println("转码结束..."+outMp4File.getAbsolutePath());
             //fileOutputStream.close();
         } catch (Exception e) {
@@ -531,57 +570,169 @@ public class FileUtil {
         int i = methodKV.indexOf("=");
         ret.put(methodKV.substring(0, i), methodKV.substring(i + 1));
     }
-
-    public static String downloadBody(String url) {
+    
+    public static void trustSSL(HttpsURLConnection urlConnection) {
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, new TrustManager[]{new X509TrustManager(){
+                @Override
+                public void checkClientTrusted(X509Certificate[] x509Certificates,
+                                               String s) throws
+                                                         CertificateException {
+                
+                }
+            
+                @Override
+                public void checkServerTrusted(X509Certificate[] x509Certificates,
+                                               String s) throws
+                                                         CertificateException {
+                
+                }
+            
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[]{};
+                }
+            }}, new java.security.SecureRandom());
+    
+            urlConnection.setSSLSocketFactory(sc.getSocketFactory());
+            urlConnection.setHostnameVerifier(new HostnameVerifier(){
+                @Override
+                public boolean verify(String s,
+                                      SSLSession sslSession) {
+                    return true;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+    
+    }
+    
+    public static HttpURLConnection getUrlConnectionX(String url) {
         try {
             URL url1 = new URL(url);
-            InputStream inputStream = url1.openStream();
+            int timeout = 30000;
+            if (url1.getProtocol().equalsIgnoreCase("https")) {
+                HttpsURLConnection urlConnection = (HttpsURLConnection) url1.openConnection();
+                trustSSL(urlConnection);
+            
+                urlConnection.setReadTimeout(timeout);
+                urlConnection.setConnectTimeout(timeout);
+                return urlConnection;
+            } else {
+                HttpURLConnection urlConnection = (HttpURLConnection) url1.openConnection();
+            
+                urlConnection.setReadTimeout(timeout);
+                urlConnection.setConnectTimeout(timeout);
+                return urlConnection;
+            }
+        
+        
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public static InputStream getUrlConnection(String url) {
+        try {
+            HttpURLConnection urlConnectionX = getUrlConnectionX(url);
+        
+            return urlConnectionX.getInputStream();
+           
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public static String downloadBody(String url) {
+        return downloadBody(url,3);
+    }
+    public static String downloadBody(String url,int retryTimes) {
+        if (retryTimes<=0) {
+            System.err.println("retry failed.. "+url);
+            return null;
+        }
+        try {
+            InputStream inputStream = getUrlConnection(url);
             return IOUtils.toString(inputStream);
         } catch (Exception e) {
             e.printStackTrace();
+    
+            if (retryTimes>0) {
+                try {
+                    Thread.sleep(500);
+                    System.out.println("retry.. rest:"+(retryTimes-1) + " " +url);
+                    downloadBody(url,  retryTimes - 1);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
         return null;
     }
 
     public static byte[] downloadByte(String url) {
         try {
-            URL url1 = new URL(url);
-            return IOUtils.toByteArray(url1);
+            InputStream inputStream = getUrlConnection(url);
+            return IOUtils.toByteArray(inputStream);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
-    public static void download(String url, String out) {
+    
+    public static void download(String url, String out,int retryTimes) {
+        if (retryTimes<=0) {
+            System.err.println("retry failed.. "+url);
+            return;
+        }
         try {
-            URL url1 = new URL(url);
-            InputStream inputStream = url1.openStream();
-
+//            URL url1 = new URL(url);
+            InputStream inputStream = getUrlConnection(url);
+        
             File outFile = new File(out);
             if (!outFile.exists()) {
                 outFile.createNewFile();
             }
-
+        
             FileOutputStream output = new FileOutputStream(outFile);
             IOUtils.copy(inputStream, output);
             inputStream.close();
             output.close();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.err.println("error.. "+url);
+            
+            if (retryTimes>0) {
+                try {
+                    Thread.sleep(500);
+                    System.out.println("retry.. rest:"+(retryTimes-1) + " " +url);
+                    download(url, out, retryTimes - 1);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
+    }
+    public static void download(String url, String out) {
+        download(url, out,3);
     }
 
     public static void main(String[] args) {
-        System.out.println(String.format("%032x", 3));
-        System.out.println(String.format("%032x", 3).getBytes().length);
+//        System.out.println(String.format("%032x", 3));
+//        System.out.println(String.format("%032x", 3).getBytes().length);
 
         //downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8","C:\\Users\\Jiangli\\Videos");
-        String outdir = "C:\\Users\\Jiangli\\Videos";
+//        String outdir = "C:\\Users\\Jiangli\\Videos";
+        String outdir = "E:\\videos";
 
         //FileUtil.openDirectory(outdir);
         downloadM3U8("http://aries-video.g2s.cn/zhs_yanfa_150820/ablecommons/demo/201912/365eaf317efa4e72bf3c5735221aeafe.m3u8?MtsHlsUriToken=zxcvbn", outdir);
-        //downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8", outdir);
+//        downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8", outdir);
 
         //download("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/swPd4537702.ts","C:\\Users\\Jiangli\\Videos/swPd4537702.ts");
 

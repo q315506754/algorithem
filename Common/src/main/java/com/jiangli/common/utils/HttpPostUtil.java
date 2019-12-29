@@ -23,10 +23,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author JiangLi
@@ -48,6 +45,10 @@ public class HttpPostUtil {
      * @author JiangLi CreateTime 2013-12-2 下午1:36:19
      */
     public static String postUrl(String url, JSONObject params) {
+//
+        return postUrl(url, params,null);
+    }
+    public static String postUrl(String url, JSONObject params,Map<String,String> headers) {
 //		log.debug("HttpPostUtil.postUrl:" + url + " params:" + params);
         String result = "";
 
@@ -69,6 +70,12 @@ public class HttpPostUtil {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
             post = new HttpPost(url);
             post.setEntity(entity);
+            if (headers != null) {
+                for (Map.Entry<String, String> entry : headers.entrySet()) {
+                        post.addHeader(entry.getKey(),entry.getValue());
+                }
+            }
+            
             HttpResponse response = client.execute(post);
             response.setHeader("content-type", "text/html;charset=UTF-8");
             HttpEntity responseEntity = response.getEntity();
