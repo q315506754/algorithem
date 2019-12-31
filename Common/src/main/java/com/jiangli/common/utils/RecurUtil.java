@@ -1,5 +1,9 @@
 package com.jiangli.common.utils;
 
+import com.google.gson.Gson;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -156,5 +160,58 @@ public class RecurUtil {
             sb.append(s);
         }
         return sb.toString();
+    }
+
+    public static  String recursiveJSON(JSONObject json, String path) {
+
+        if (StringUtils.isNotBlank(path)) {
+            String[] pathes = path.split("\\.");
+
+            for (int i = 0; i < pathes.length; i++) {
+                String oen = pathes[i];
+                Object o = json.get(oen);
+                if (o instanceof JSONObject) {
+                    json = (JSONObject) o;
+
+                    //路径终点为json类型
+                    //if (i == pathes.length-1) {
+                    //    return json.toString();
+                    //}
+                } else {
+                    return String.valueOf(o);
+                }
+            }
+        }
+
+        return json.toString();
+    }
+    public static  String recursiveJSON(String str, String path) {
+        try {
+            return recursiveJSON(JSONObject.fromObject(str), path);
+        } catch (Exception e) {
+            System.err.println(str);
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static <T>  T recursiveJSON(String str, String path,Class<T> cls) {
+        try {
+            String json = recursiveJSON(str, path);
+            Gson gson = new Gson();
+            T t = gson.fromJson(json, cls);
+            return t;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String str = "{\"data\":{\"UserID\":10606107,\"UserName\":\"1052096033@qq.com\",\"NickName\":null,\"Token\":\"pzV2BAWpH16WBDesTWiLtrrDjSZDwt+92gOXgEYmhMeNWEBcQ9aTBIWC4qhkI/bbHKz2Vlr3rKwGPqx4jBMqeOv4CSkR00gOmZm5Gv9EQ4BEa3Dom4L32ihk2mhWLVogk0onH82OQAEM74FR5EF/Izv0QypXEbgEn209uuOrMKo=\",\"IsVip\":1,\"Point\":0.0,\"VipMinutes\":36820,\"IsNewAccount\":0,\"Remark\":null},\"recordsTotal\":0,\"recordsFiltered\":0,\"drow\":0,\"recordsSum\":0.0,\"recordsSum2\":0.0,\"code\":1,\"message\":null}";
+        System.out.println(recursiveJSON(str,""));
+        System.out.println(recursiveJSON(str,"data"));
+        System.out.println(recursiveJSON(str,"code"));
+        System.out.println(recursiveJSON(str,"message"));
+        System.out.println(recursiveJSON(str,"data.UserName"));
     }
 }

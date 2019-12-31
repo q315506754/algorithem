@@ -1,5 +1,7 @@
 package com.jiangli.doc
 
+import com.jiangli.common.utils.FileUtil.getClassPathFile
+import com.jiangli.common.utils.FileUtil.readKv
 import com.jiangli.common.utils.PathUtil
 import org.aspectj.util.FileUtil
 import java.io.BufferedReader
@@ -16,6 +18,12 @@ import java.nio.charset.Charset
  */
 
 fun main(args: Array<String>) {
+    //        System.out.println(String.format("%032x", 3));
+    //        System.out.println(String.format("%032x", 3).getBytes().length);
+
+    println(getClassPathFile(""))
+    println(getClassPathFile("conf.properties"))
+    println(readKv("han_pwd", null))
 
     val src = File(PathUtil.desktop("06原始表.XLS"))
 

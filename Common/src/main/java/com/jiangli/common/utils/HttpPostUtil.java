@@ -44,25 +44,130 @@ public class HttpPostUtil {
      *
      * @author JiangLi CreateTime 2013-12-2 下午1:36:19
      */
-    public static String postUrl(String url, JSONObject params) {
+    public static String postUrl(String url, Map params) {
 //
-        return postUrl(url, params,null);
+        return postUrl(url, params,new HashMap<>());
     }
-    public static String postUrl(String url, JSONObject params,Map<String,String> headers) {
-//		log.debug("HttpPostUtil.postUrl:" + url + " params:" + params);
+
+    public interface ReqInterceptor<T>{
+        void interceptBeforeReq(Map params,Map<String,String> headers,T token);
+
+        boolean judgeResultError(String data);
+
+        T getCachedToken(Map params,Map<String,String> headers);
+
+        T refreshToken(Map params,Map<String,String> headers);
+    }
+
+    public static class  ReqInterceptorAdaptor<T> implements ReqInterceptor<T> {
+        private boolean log=true;
+        private boolean isEmptyInter=false;
+        private ReqInterceptor<T> reqInterceptor;
+
+        public boolean isLog() {
+            return log && !isEmptyInter;
+        }
+
+        public void setLog(boolean log) {
+            this.log = log;
+        }
+
+        public ReqInterceptorAdaptor(boolean log, ReqInterceptor<T> reqInterceptor) {
+            setLog(log);
+            if (reqInterceptor != null) {
+                this.reqInterceptor = reqInterceptor;
+            } else {
+                this.isEmptyInter = true;
+                this.reqInterceptor = new ReqInterceptor<T>() {
+                    @Override
+                    public void interceptBeforeReq(Map params, Map<String, String> headers, T token) {
+
+                    }
+
+                    @Override
+                    public boolean judgeResultError(String data) {
+                        return false;
+                    }
+
+                    @Override
+                    public T getCachedToken(Map params, Map<String, String> headers) {
+                        return null;
+                    }
+
+                    @Override
+                    public T refreshToken(Map params, Map<String, String> headers) {
+                        return null;
+                    }
+                };
+            }
+        }
+
+        public ReqInterceptorAdaptor(ReqInterceptor<T> reqInterceptor) {
+            this(false,reqInterceptor);
+        }
+
+        public void interceptBeforeReq(Map params, Map<String, String> headers, T token) {
+            if (isLog()) {
+                //System.out.println("params 处理前:"+params);
+                //System.out.println("headers 处理前:"+headers);
+            }
+            reqInterceptor.interceptBeforeReq(params, headers, token);
+            if (isLog()) {
+                System.out.println("params 处理后:"+params);
+                System.out.println("headers 处理后:"+headers);
+            }
+        }
+
+        @Override
+        public boolean judgeResultError(String data) {
+            boolean b = reqInterceptor.judgeResultError(data);
+
+            if (b) {
+                if (isLog()) {
+                    System.err.println("请求出现异常:"+data);
+                }
+            }
+
+            return b;
+        }
+
+        public T getCachedToken(Map params, Map<String, String> headers) {
+            T cachedToken = reqInterceptor.getCachedToken(params, headers);
+            if (isLog()) {
+                System.out.println("cached token:"+cachedToken);
+            }
+            return cachedToken;
+        }
+
+        public T refreshToken(Map params, Map<String, String> headers) {
+            T refreshToken = reqInterceptor.refreshToken(params, headers);
+            if (isLog()) {
+                System.out.println("refreshToken:"+refreshToken);
+            }
+            return refreshToken;
+        }
+    }
+
+    public static <T> String postUrl(String url, Map params,Map<String,String> headers,ReqInterceptor<T> interceptor) {
+        log.debug("HttpPostUtil.postUrl:" + url + " params:" + params);
         String result = "";
 
+
+        if (headers == null) {
+            headers = new HashMap<>();
+        }
+
+        ReqInterceptorAdaptor<T> adaptor = new ReqInterceptorAdaptor(false,interceptor);
+
+        T token = adaptor.getCachedToken(params, headers);
+        adaptor.interceptBeforeReq(params, headers,token);
+
         org.apache.http.client.HttpClient client = new DefaultHttpClient();
-        // try {
-        // client = wrapClient(client);
-        // } catch (Exception e1) {
-        // e1.printStackTrace();
-        // }
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
         if (params != null) {
             Set keySet = params.keySet();
             for (Object k : keySet) {
-                formParams.add(new BasicNameValuePair(k.toString(), params.getString(k.toString())));
+                formParams.add(new BasicNameValuePair(k.toString(), params.get(k.toString()).toString()));
             }
         }
         HttpPost post = null;
@@ -72,10 +177,10 @@ public class HttpPostUtil {
             post.setEntity(entity);
             if (headers != null) {
                 for (Map.Entry<String, String> entry : headers.entrySet()) {
-                        post.addHeader(entry.getKey(),entry.getValue());
+                    post.addHeader(entry.getKey(),entry.getValue());
                 }
             }
-            
+
             HttpResponse response = client.execute(post);
             response.setHeader("content-type", "text/html;charset=UTF-8");
             HttpEntity responseEntity = response.getEntity();
@@ -83,16 +188,28 @@ public class HttpPostUtil {
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 // return "1";
             } else {
-//				System.out.println("getPostResponse error,statusCode=" + response.getStatusLine().getStatusCode() + "url=" + url + ";response=" + EntityUtils.toString(responseEntity));
+                //				System.out.println("getPostResponse error,statusCode=" + response.getStatusLine().getStatusCode() + "url=" + url + ";response=" + EntityUtils.toString(responseEntity));
             }
+
             result = EntityUtils.toString(responseEntity, "utf-8");
-//            log.debug("[RS]HttpPostUtil.postUrl url:" + url + " result:" + result);
-//            log.debug("[RS]HttpPostUtil.postUrl params:" + params );
-//            log.debug("[RS]HttpPostUtil.postUrl formParams:" + formParams );
-//            log.debug("[RS]HttpPostUtil.postUrl result:" + result );
+            //            log.debug("[RS]HttpPostUtil.postUrl url:" + url + " result:" + result);
+            //            log.debug("[RS]HttpPostUtil.postUrl params:" + params );
+            //            log.debug("[RS]HttpPostUtil.postUrl formParams:" + formParams );
+            //            log.debug("[RS]HttpPostUtil.postUrl result:" + result );
+
+            boolean hasTokenError = adaptor.judgeResultError(result);
+
+            if (hasTokenError) {
+                T refreshToken = adaptor.refreshToken(params, headers);
+
+                adaptor.interceptBeforeReq(params, headers,refreshToken);
+
+            //    retry one-time
+                return postUrl(url, params, headers,null);
+            }
         } catch (Exception e) {
-//			e.printStackTrace();
-//			System.err.println(e.getMessage() + " " +url + " " + params);
+            //			e.printStackTrace();
+            //			System.err.println(e.getMessage() + " " +url + " " + params);
             log.error(e.getMessage(), e);
         } finally {
             if (post != null) {
@@ -100,6 +217,11 @@ public class HttpPostUtil {
             }
         }
         return result;
+    }
+
+    public static String postUrl(String url, Map params,Map<String,String> headers) {
+//
+        return postUrl(url, params, headers,null);
     }
 
     public static PostResult postUrlGetObj(String url, JSONObject params) {

@@ -28,12 +28,98 @@ import java.util.function.Predicate;
 
 /**
  * @author Jiangli
- * <p>
- * CreatedTime  2016/6/2 0002 17:55
  */
 public class FileUtil {
     public static String SYSTEM_DELIMETER = "\r\n";
 
+    public static void writeKv(String key,String val) {
+        boolean log =true;
+        File classPathFile = getClassPathFile("conf.properties");
+        Map<String, String> map = readProps(classPathFile);
+        map.put(key, val);
+
+        Properties properties = new Properties();
+        properties.putAll(map);
+        try {
+            FileWriter fileOutputStream = new FileWriter(classPathFile);
+            properties.store(fileOutputStream,"");
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String readKv(String key,String defaultVal) {
+        boolean log =true;
+        File classPathFile = getClassPathFile("conf.properties");
+
+        Map<String, String> map = readProps(classPathFile);
+        String s = map.get(key);
+        if (s != null) {
+            if (log) {
+                System.out.println("read "+key + "="+s +" from "+classPathFile.getAbsolutePath());
+            }
+
+            return s;
+        }
+        if (defaultVal != null) {
+            return defaultVal;
+        }
+
+        try {
+            FileWriter fileWriter = new FileWriter(classPathFile, true);
+            String str = key + "=" + "__请输入值__";
+            fileWriter.write(str);
+            fileWriter.close();
+            openFile(classPathFile);
+            System.err.println("请完善配置:"+str);
+            throw new Error("请完善配置:"+str +" in " +classPathFile.getCanonicalPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return defaultVal;
+    }
+
+    public static Map<String,String> readProps( File classPathFile) {
+        Map<String,String> ret =new LinkedHashMap<>();
+        try {
+            Properties properties = new Properties();
+            //FileInputStream inStream = new FileInputStream(classPathFile);
+            FileReader inStream = new FileReader(classPathFile);
+            properties.load(inStream);
+
+            for (Map.Entry<Object, Object> objectObjectEntry : properties.entrySet()) {
+                ret.put(objectObjectEntry.getKey().toString(),objectObjectEntry.getValue().toString());
+            }
+            inStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+    public static File getClassPathFile(String name) {
+        try {
+            URL url = ClassLoader.getSystemResource(name);
+
+            File file;
+            if (url == null) {
+                File dir = getClassPathFile("");
+                file = new File(dir,name);
+            }else {
+                file = new File(url.toURI());
+
+            }
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static void writeStr(String str, String file) {
         try {
@@ -726,12 +812,17 @@ public class FileUtil {
 //        System.out.println(String.format("%032x", 3));
 //        System.out.println(String.format("%032x", 3).getBytes().length);
 
+        System.out.println(getClassPathFile("conf.properties"));
+        writeKv("aab","费的所发生的");
+        System.out.println(readKv("han_pwd",null));
+        writeKv("aac","费的所发生的xxx");
+
         //downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8","C:\\Users\\Jiangli\\Videos");
-//        String outdir = "C:\\Users\\Jiangli\\Videos";
-        String outdir = "E:\\videos";
+        //String outdir = "C:\\Users\\Jiangli\\Videos";
+        //String outdir = "E:\\videos";
 
         //FileUtil.openDirectory(outdir);
-        downloadM3U8("http://aries-video.g2s.cn/zhs_yanfa_150820/ablecommons/demo/201912/365eaf317efa4e72bf3c5735221aeafe.m3u8?MtsHlsUriToken=zxcvbn", outdir);
+        //downloadM3U8("http://aries-video.g2s.cn/zhs_yanfa_150820/ablecommons/demo/201912/365eaf317efa4e72bf3c5735221aeafe.m3u8?MtsHlsUriToken=zxcvbn", outdir);
 //        downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8", outdir);
 
         //download("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/swPd4537702.ts","C:\\Users\\Jiangli\\Videos/swPd4537702.ts");
