@@ -16,19 +16,19 @@ import net.sf.json.JSONObject
 data class HanDataRs(val data:JSONArray)
 
 fun main(args: Array<String>) {
-//    val dirPrefix = "E:\\videos\\list"
-    val dirPrefix = "C:\\Users\\Jiangli\\Videos\\list"
+    val dirPrefix = "E:\\videos\\list"
+//    val dirPrefix = "C:\\Users\\Jiangli\\Videos\\list"
 
-    val startPage = 1
-    val maxPage = 1
+    val startPage = 2
+    val maxPage = 7
     val size = 20
 
     val listUrl = "http://66api.pihoda.cn:8688//User/GetMyCollection"
     val detailUrl = "http://66api.pihoda.cn:8688//Video/GetClient"
-//    val downloadCover = true
-    val downloadCover = false
-//    val downloadM3U8 = true
-    val downloadM3U8 = false
+    val downloadCover = true
+//    val downloadCover = false
+    val downloadM3U8 = true
+//    val downloadM3U8 = false
 
     val interceptor = object: HttpPostUtil.ReqInterceptor<HanLoginRs> {
         var hanLoginCached:HanLoginRs? = null
@@ -42,7 +42,8 @@ fun main(args: Array<String>) {
 
         override fun judgeResultError(data: String?): Boolean {
             val recursiveJSON = RecurUtil.recursiveJSON(data, "data")
-            return recursiveJSON.isBlank() || recursiveJSON == "null"
+            val message = RecurUtil.recursiveJSON(data, "message")
+            return recursiveJSON.isBlank() || recursiveJSON == "null" || message=="登陆超时，请重新登陆！"
 //            return !(data?.contains("data")?:false)
         }
 
