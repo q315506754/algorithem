@@ -67,11 +67,12 @@ public class FileUtil {
         }
 
         try {
-            FileWriter fileWriter = new FileWriter(classPathFile, true);
+            //FileWriter fileWriter = new FileWriter(classPathFile, true);
             String str = key + "=" + "__请输入值__";
-            fileWriter.write(str);
-            fileWriter.close();
+            //fileWriter.write(str);
+            //fileWriter.close();
             openFile(classPathFile);
+            writeKv(key,"__请输入值__");
             System.err.println("请完善配置:"+str);
             throw new Error("请完善配置:"+str +" in " +classPathFile.getCanonicalPath());
         } catch (Exception e) {
