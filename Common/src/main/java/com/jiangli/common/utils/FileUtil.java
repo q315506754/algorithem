@@ -15,6 +15,7 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -22,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -384,51 +386,60 @@ public class FileUtil {
         }
         return null;
     }
-    
-    public static void downloadM3U8(String url, String outdir) {
+
+    public static void downloadM3U8(String url, String outdir,boolean renameIfExists) {
         String body = downloadBody(url);
-        
-//        test mode
+
+        //        test mode
         boolean skipDownload = false;
         //boolean skipDownload = true;
-    
+
         //  清空模式
         boolean deleteTemp = false;
         //boolean deleteTemp = true;
-    
-//        强制转换MP4
+
+        //        强制转换MP4
         boolean forceConvert = false;
-//        boolean forceConvert = true;
-        
+        //        boolean forceConvert = true;
+
         String prefix = url.substring(0, url.lastIndexOf("/"));
         String name = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
-//        System.out.println(body);
+        //        System.out.println(body);
 
         //初始化文件路径
-        PathUtil.ensurePath(outdir);
         File outDir = new File(outdir);
-        File outTsFile = new File(outDir, name + ".ts");
-        tryDelete(outTsFile);
+
+
+        PathUtil.ensurePath(outdir);
+
+        //File outTsFile = new File(outDir, name + ".ts");
+        //tryDelete(outTsFile);
 
         //File tempDir = new File(outDir,name+"-"+System.currentTimeMillis()+"");
         File tempDir = new File(outDir, name + "");
+
+        //目标文件夹已存在 需要重新生成一个
+        if (tempDir.exists() && renameIfExists) {
+            name= name + "-" + System.currentTimeMillis();
+            tempDir = new File(outDir, name + "");
+        }
 
         File outMp4File = new File(tempDir, name + ".mp4");
         File m3u8File = new File(tempDir, "index.m3u8");
         File keyFile = new File(tempDir, "key.key");
         File batchFile = new File(tempDir, "run.bat");
 
-//        tryDelete(outMp4File);
+        //        tryDelete(outMp4File);
         tryDelete(m3u8File);
         tryDelete(keyFile);
         tryDelete(batchFile);
-    
+
         PathUtil.ensurePath(tempDir.getAbsolutePath());
         if (!skipDownload && deleteTemp) {
             deleteUnderDir(tempDir.getAbsolutePath());
         }
-    
-    
+
+
         //解析文件
         List<ParsedResult> downUrls = parseDownloadUrls(body, prefix);
         Map<String, String> encryptionUrl = parseEncryptionUrl(body, prefix);
@@ -452,20 +463,33 @@ public class FileUtil {
             }
         }
 
-        //处理body
+        //处理body 此时下载路径已经解析完毕 随便改
+        AtomicBoolean prevIsEachBodyStart = new AtomicBoolean(false);
         body = processLine(body,s -> {
             if (s.startsWith("#EXT-X-KEY:")) {
                 return "#EXT-X-KEY:METHOD=AES-128,URI=\"key.key\"";
             }
+
+            if (prevIsEachBodyStart.get()) {
+                //    代表是xxx.ts
+
+                // /xx/bb/yy.ts 需要去掉路径
+                if (s.contains("/")) {
+                    s = s.substring(s.lastIndexOf("/")+1);
+                }
+            }
+
+            prevIsEachBodyStart.set(s.startsWith("#EXTINF:"));
             return s;
         });
 
-        //生成临时文件
+        //生成文件 m3u8
         FileUtil.writeStr(body,m3u8File.getAbsolutePath());
         if (encKey != null) {
             FileUtil.writeBytes(encKey,keyFile.getAbsolutePath());
         }
 
+        //生成转码脚本
         String command = "";
         command+="\ncd "+tempDir.getAbsolutePath();
         command+="\n"+tempDir.getAbsolutePath().charAt(0)+":";
@@ -550,9 +574,9 @@ public class FileUtil {
         //    e.printStackTrace();
         //}
 
-    //    转码 FFmpeg
-    //    ffmpeg -y -i 365eaf317efa4e72bf3c5735221aeafe.ts -c:v libx264 -c:a copy -bsf:a aac_adtstoasc output.mp4
-    //    ffmpeg -allowed_extensions ALL -i index.m3u8  -c copy -bsf:a aac_adtstoasc ALL.mp4
+        //    转码 FFmpeg
+        //    ffmpeg -y -i 365eaf317efa4e72bf3c5735221aeafe.ts -c:v libx264 -c:a copy -bsf:a aac_adtstoasc output.mp4
+        //    ffmpeg -allowed_extensions ALL -i index.m3u8  -c copy -bsf:a aac_adtstoasc ALL.mp4
         try {
             //String command = "ffmpeg -y -allowed_extensions ALL -i \"" + m3u8File.getAbsolutePath() + "\" -c copy -bsf:a aac_adtstoasc \"" + outMp4File.getAbsolutePath() +"\"";
             //String command = batchFile.getAbsolutePath();
@@ -574,12 +598,17 @@ public class FileUtil {
             //});
             ////thread.setDaemon(true);
             //thread.start();
-           
+
             System.out.println("转码结束..."+outMp4File.getAbsolutePath());
             //fileOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void downloadM3U8(String url, String outdir) {
+        //默认采取覆盖策略
+        downloadM3U8(url, outdir,false);
     }
 
     public static String processLine(String body,Function<String,String> fc) {
@@ -617,16 +646,33 @@ public class FileUtil {
         int count = 0;
         for (String s : split) {
             if (!s.startsWith("#") && !s.trim().equals("")) {
-                if (s.startsWith("http")) {
-                    downUrls.add(new ParsedResult(count++, s));
-                } else {
-                    downUrls.add(new ParsedResult(count++, prefix + "/" + s));
-                }
+                downUrls.add(new ParsedResult(count++, getAbsUrl(prefix,s)));
             }
         }
         return downUrls;
     }
 
+    private static String getAbsUrl(String url_prefix,String URI) {
+        if (!URI.startsWith("http")) {
+            //   /a/b/xx.key
+            if (URI.startsWith("/")) {
+                try {
+                    URL url = new URL(url_prefix);
+                    String newPrefix = url.getProtocol() + "://" + url.getHost();
+                    URI = newPrefix+URI;
+                    return URI;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                // xx.key
+                URI = url_prefix+"/"+URI;
+                return URI;
+            }
+        }
+          return URI;
+    }
     private static Map<String, String> parseEncryptionUrl(String body, String url_prefix) {
         Map<String, String> ret = new HashMap<>();
         String[] split = body.split("\n");
@@ -642,10 +688,8 @@ public class FileUtil {
                 parseKv(ret, uriKV);
 
                 String URI = ret.get("URI");
-                if (!URI.startsWith("http")) {
-                    URI = url_prefix+"/"+URI;
-                    ret.put("URI",URI);
-                }
+                URI = getAbsUrl(url_prefix,URI);
+                ret.put("URI",URI);
 
                 return ret;
             }
@@ -813,18 +857,21 @@ public class FileUtil {
 //        System.out.println(String.format("%032x", 3));
 //        System.out.println(String.format("%032x", 3).getBytes().length);
 
-        System.out.println(getClassPathFile("conf.properties"));
-        writeKv("aab","费的所发生的");
-        System.out.println(readKv("han_pwd",null));
-        writeKv("aac","费的所发生的xxx");
+        //System.out.println(getClassPathFile("conf.properties"));
+        //writeKv("aab","费的所发生的");
+        //System.out.println(readKv("han_pwd",null));
+        //writeKv("aac","费的所发生的xxx");
 
         //downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8","C:\\Users\\Jiangli\\Videos");
         //String outdir = "C:\\Users\\Jiangli\\Videos";
-        //String outdir = "E:\\videos";
+        String outdir = "E:\\videos\\list3";
 
         //FileUtil.openDirectory(outdir);
         //downloadM3U8("http://aries-video.g2s.cn/zhs_yanfa_150820/ablecommons/demo/201912/365eaf317efa4e72bf3c5735221aeafe.m3u8?MtsHlsUriToken=zxcvbn", outdir);
-//        downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8", outdir);
+        //        downloadM3U8("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/index.m3u8", outdir);
+
+        //download("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/swPd4537702.ts","C:\\Users\\Jiangli\\Videos/swPd4537702.ts");
+
 
         //download("https://cdn.kuyunbo.club/20170930/FHLkCRSr/hls/swPd4537702.ts","C:\\Users\\Jiangli\\Videos/swPd4537702.ts");
 

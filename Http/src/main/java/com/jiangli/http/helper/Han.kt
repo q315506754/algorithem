@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
 
     val startPage = 1
     val maxPage = 1
-    val size = 8
+    val size = 4
 
     val listUrl = "http://66api.pihoda.cn:8688//User/GetMyCollection"
     val detailUrl = "http://66api.pihoda.cn:8688//Video/GetClient"
