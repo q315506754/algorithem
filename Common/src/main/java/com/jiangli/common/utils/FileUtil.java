@@ -509,7 +509,7 @@ public class FileUtil {
         //    int count = 0;
         if (!skipDownload) {
             AtomicInteger count = new AtomicInteger(0);
-            ExecutorService pool = Executors.newFixedThreadPool(10);
+            ExecutorService pool = Executors.newFixedThreadPool(20);
             CountDownLatch countDownLatch = new CountDownLatch(downUrls.size());
             System.out.println("start download...");
             long currentTimeMillis = System.currentTimeMillis();
@@ -770,7 +770,8 @@ public class FileUtil {
     public static InputStream getUrlConnection(String url) {
         try {
             HttpURLConnection urlConnectionX = getUrlConnectionX(url);
-        
+            urlConnectionX.addRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36");
+            urlConnectionX.addRequestProperty("Referer","http://www.baidu.com");
             return urlConnectionX.getInputStream();
            
         } catch (Exception e) {
@@ -840,7 +841,7 @@ public class FileUtil {
             
             if (retryTimes>0) {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(2000);
                     System.out.println("retry.. rest:"+(retryTimes-1) + " " +url);
                     download(url, out, retryTimes - 1);
                 } catch (InterruptedException e1) {
@@ -850,7 +851,7 @@ public class FileUtil {
         }
     }
     public static void download(String url, String out) {
-        download(url, out,3);
+        download(url, out,5);
     }
 
     public static void main(String[] args) {
