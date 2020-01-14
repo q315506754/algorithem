@@ -32,7 +32,8 @@
     </update>
 
     <select id="getByUserId" resultType="com.jiangli.db.model.User">
-        SELECT * FROM TBL_USER WHERE IS_DELETED = 0 AND ID = #{userId}
+        SELECT * FROM TBL_USER WHERE IS_DELETED = 0
+        <if test="!@com.jiangli.mybatis.MyOgnlLogicUtil@isEmpty(userId)">AND ID = #{userId}</if>
     </select>
     <select id="listAll" resultType="com.jiangli.db.model.User">
         SELECT * FROM TBL_USER WHERE IS_DELETED = #{isDeleted}

@@ -29,6 +29,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
+ *
+
+ ffmpeg -y -i testcut.mp4 -ss 00:00:42 -to 00:00:45 -c copy testcut_result.mp4
+ ffmpeg -y -ss 00:00:41 -i testcut.mp4 -t 4 -c copy testcut_result.mp4
  * @author Jiangli
  */
 public class FileUtil {
@@ -244,6 +248,29 @@ public class FileUtil {
             }
         }
         return null;
+    }
+
+    public static File getNoDupfile(File dir,String fileName) {
+        File file = new File(dir, fileName);
+        if (!file.exists()) {
+            return file;
+        }
+        return getNoDupfile(dir, fileName, 1);
+    }
+    public static File getNoDupfile(File dir,String orgName,int looptimes) {
+        String path;
+        if (orgName.contains(".")) {
+            String prefix = getPrefix(orgName) + "_" + looptimes;
+            String suffix = getSuffix(orgName);
+            path = prefix + suffix;
+        } else {
+            path = orgName+ "_" + looptimes;
+        }
+        File ret = new File(dir, path);
+        if (!ret.exists()) {
+            return ret;
+        }
+        return getNoDupfile(dir, orgName, looptimes+1);
     }
 
     public static List<String> getFilePathFromDirPath(String dirPath) {

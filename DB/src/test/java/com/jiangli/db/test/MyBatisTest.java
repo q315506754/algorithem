@@ -136,7 +136,16 @@ public class MyBatisTest {
         System.out.println(sqlSessionFactoryBean);
         System.out.println(userMapper);
 
+        System.out.println(userMapper.getByUserId(-1L));
         System.out.println(userMapper.getByUserId(1L));
+    }
+
+    @Test
+    public void test_update() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("aaaaa");
+        userMapper.update(user);
     }
 
 
