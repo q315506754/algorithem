@@ -52,7 +52,7 @@ public class GlobalInterceptorBean extends HandlerInterceptorAdapter {
         Map<String, Object> javax = WebUtils.getParametersStartingWith(request, "javax");
         logger.debug("web getParametersStartingWith javax:{}", javax);
 
-        "sdsd";
+        //"sdsd";
 //      http://localhost:8080/rmi?_pageIndex5
         int pageIndex = WebUtils.getTargetPage(request, "_pageIndex", 1);
         logger.debug("web getTargetPage pageIndex:{}", pageIndex);

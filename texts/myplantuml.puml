@@ -1,0 +1,11 @@
+@startuml
+Alice -> Bob: Authentication Request地方
+Bob --> Alice: Authentication Response11电饭锅
+
+Bob --> Link: Authentication Response11电饭锅
+Link --> Link: Authentication Response11电饭锅
+Link --> Bob: Authentication Response11电饭锅
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+@enduml

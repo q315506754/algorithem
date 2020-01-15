@@ -36,7 +36,8 @@ public class CommonTest extends BaseTest {
       //x[0] = new Integer(0);
 
       //System.out.println(1/0);
-
+        System.out.println(2147483647&0x7fffffff);
+        System.out.println(-123%10);
     }
 
 
