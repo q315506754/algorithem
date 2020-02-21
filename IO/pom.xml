@@ -17,7 +17,7 @@
     <properties>
         <resources.dir>src\main\resources\props</resources.dir>
         <!--<netty>4.1.30.Final</netty>-->
-        <netty>4.1.29.Final</netty>
+        <netty>4.1.45.Final</netty>
         <!--<netty>4.1.6.Final</netty>-->
     </properties>
     <dependencies>
