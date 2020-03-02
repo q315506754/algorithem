@@ -339,6 +339,14 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
+    public static void execute(String cmd) {
+        try {
+            Process exec = Runtime.getRuntime().exec("cmd.exe " + cmd);
+            //exec.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static File generateTemp(String suffix) {
         try {

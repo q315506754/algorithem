@@ -1,5 +1,6 @@
 package com.jiangli.db.tool
 
+import com.jiangli.common.utils.FileUtil
 import com.jiangli.common.utils.PathUtil
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -20,7 +21,7 @@ fun main(args: Array<String>) {
 
     val tables = """
 
-TBL_USER_COURSE
+GOODS_TYPE
 
     """.trimIndent()
 
@@ -108,6 +109,8 @@ TBL_USER_COURSE
     generateFile(body, outputPath)
 
     println("已生成文件,字数:${body.length},行数:${body.split("\n").size}")
+
+    FileUtil.openFile(File(outputPath))
 }
 
 private fun generateFile(body:String, vararg path:String): File {
