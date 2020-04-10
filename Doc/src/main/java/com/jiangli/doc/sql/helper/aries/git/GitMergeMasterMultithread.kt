@@ -18,8 +18,9 @@ fun main(args: Array<String>) {
 //    aries-app-server
 //    aries-server：
     var projects = """
-aries
-aries-server
+aries-pay-goods
+aries-pay-app-server
+aries-pay-gateway
     """.trimIndent()
 
 //aries-base-message

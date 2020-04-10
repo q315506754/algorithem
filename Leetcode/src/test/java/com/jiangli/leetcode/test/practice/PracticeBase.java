@@ -54,6 +54,10 @@ public class PracticeBase {
     public static void ae(int[] a1,int[] a2) {
         Assert.assertTrue(String.format("a1%s!=a2%s",Arrays.toString(a1),Arrays.toString(a2)), Arrays.equals(a1,a2));
     }
+    public static  <T,RS> void ae(T input, Function<T, RS> function, RS expected) {
+        RS output = function.apply(input);
+        Assert.assertTrue(String.format("output:%s != expected:%s",output,expected),expected==output);
+    }
 
     public static <T> void ae(T input, Function<T, T> consumer, T... expected) {
         T output = consumer.apply(input);

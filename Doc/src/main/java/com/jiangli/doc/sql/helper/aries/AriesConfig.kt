@@ -68,6 +68,10 @@ public object Ariesutil {
         return getJDBC(env,null)
     }
     fun getJDBC(env: Env, db:String?=null): JdbcTemplate {
+        val jdbcTemplate = JdbcTemplate(getDS(env, db))
+        return jdbcTemplate
+    }
+    fun getDS(env: Env, db:String?=null): BasicDataSource {
         val dataSource = BasicDataSource()
         dataSource.driverClassName = "com.mysql.jdbc.Driver"
         var str = ""
@@ -80,8 +84,7 @@ public object Ariesutil {
         dataSource.url = "jdbc:mysql://${env.host}$str"
         dataSource.username = "${env.username}"
         dataSource.password = "${env.pwd}"
-        val jdbcTemplate = JdbcTemplate(dataSource)
-        return jdbcTemplate
+        return dataSource
     }
 
     enum class MongoDb{

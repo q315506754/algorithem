@@ -20,6 +20,11 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>com.jiangli.AlgorithemProject</groupId>
+            <artifactId>Doc</artifactId>
+            <version>${com.provider-version}</version>
+        </dependency>
+        <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
         </dependency>

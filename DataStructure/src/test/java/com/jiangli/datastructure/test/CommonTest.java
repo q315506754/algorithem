@@ -8,9 +8,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Jiangli
@@ -29,6 +27,18 @@ public class CommonTest extends BaseTest {
         objects2.add("");
         System.out.println(objects2.hashCode());
     }
+
+    @Test
+    public void test_556() {
+        Object a = 33;
+        System.out.println(a instanceof Number);
+        System.out.println(a instanceof Integer);
+
+        Map map = new HashMap();
+        map.put("a", 33);
+        System.out.println(map.get("a") instanceof Integer);
+    }
+
 
     @Test
     public void test_45() throws Exception {
