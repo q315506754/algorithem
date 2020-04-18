@@ -20,28 +20,17 @@ fun main(args: Array<String>) {
 //    db_org_course.AAA
 
     val tables = """
-    TRANSMIT_ITEM
-	TRANSMIT_MAIN
-	RELA_COURSE_MODULE
-	DATA_ATTACHES
-	FLOW_META_PROCESS
-	FLOW_NODE
-	FLOW_NODE_RULE
-	FLOW_PROCESS
-    FLOW_PROCESS_DATA
-	FLOW_PROCESS_TRANSIT_LOG
-	ZHISHI_COACH
-	ZHISHI_COACH_RELA
+        USER_SIGNATURE
     """.trimIndent()
 
     //aries 研发
     val SRC_DB_URL = "jdbc:mysql://192.168.222.8:3306?user=root&password=ablejava"
 
 //    外网
-//    val DEST_DB_URL = "jdbc:mysql://rm-bp1yjg70fe47ml9gueo.mysql.rds.aliyuncs.com:3306?user=yuyang&password=yuyang@180418"
+    val DEST_DB_URL = "jdbc:mysql://rm-bp1yjg70fe47ml9gueo.mysql.rds.aliyuncs.com:3306?user=yuyang&password=yuyang@180418"
 
 //    预发
-    val DEST_DB_URL = "jdbc:mysql://120.92.138.210:3306?user=root&password=ablejava"
+//    val DEST_DB_URL = "jdbc:mysql://120.92.138.210:3306?user=root&password=ablejava"
 
     val outputPath = PathUtil.desktop(""" 同步语句123.txt""")
 

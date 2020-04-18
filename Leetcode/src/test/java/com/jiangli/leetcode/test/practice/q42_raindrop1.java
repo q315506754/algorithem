@@ -5,8 +5,8 @@ import org.junit.Test;
 /**
  * 接雨水
 
- 找到最高的两个[A,B]，区间值加入sum
  算出区间端点[L,R]
+ 找到最高的两个[A,B]，区间值加入sum
  从右边第一个开始，直到B，找到最高的值B2，计算[B,B2]区间值加入sum,B=B2,重复直到B=R
  从左边第一个开始，直到A，找到最高的值A2，计算[A2,A]区间值加入sum,A=A2,重复直到A=L
 
@@ -17,7 +17,7 @@ import org.junit.Test;
 
  */
 //@RunWith(StatisticsJunitRunner.class)
-public class q42_raindrop extends PracticeBase {
+public class q42_raindrop1 extends PracticeBase {
 
     class Solution {
         public int calcSum(int[] height,int from,int to) {
@@ -36,6 +36,7 @@ public class q42_raindrop extends PracticeBase {
             if (height.length > 2) {
                 int L=0,R=height.length-1,i=L,j=R;
 
+                //找边界
                 while (i < j) {
                     if (height[i] > 0 && height[L] == 0) {
                         L = i;
@@ -48,18 +49,17 @@ public class q42_raindrop extends PracticeBase {
                 }
 
                 int A=L,B=R;
-                i=A+1;
-                j=B-1;
 
-                for (int x = L+1; x < R-1; x++) {
+                //算出两个最大值的索引
+                for (int x = L+1; x <= R-1; x++) {
                     int t = x;
-                    if (height[t] > A) {
+                    if (height[t] > height[A]) {
                         int temp = t;
                         t = A;
                         A = temp;
                     }
 
-                    if (height[t] > B) {
+                    if (height[t] > height[B]) {
                         B = t;
                     }
                 }
@@ -104,9 +104,13 @@ public class q42_raindrop extends PracticeBase {
     public void test_() {
         //shouldPrint(false);
         Solution solution = new Solution();
-        //ae(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}, solution::trap,6);
-        //ae(new int[]{5,4,1,2}, solution::trap,1);
-        ae(new int[]{0,1,0,0}, solution::trap,1);
+        ae(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}, solution::trap,6);
+        ae(new int[]{5,4,1,2}, solution::trap,1);
+        ae(new int[]{0,1,0,0}, solution::trap,0);
+        ae(new int[]{0}, solution::trap,0);
+        ae(new int[]{1}, solution::trap,0);
+        ae(new int[]{1,2}, solution::trap,0);
+        ae(new int[]{0,2,0}, solution::trap,0);
     }
 
 }
