@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
  *         CreatedTime  2016/4/26 0026 17:21
  */
 @Component
-public class QuickSort extends Sorter<Integer> {
+public class QuickSort_double_edge extends Sorter<Integer> {
 
-    public QuickSort() {
+    public QuickSort_double_edge() {
 
     }
 
@@ -44,9 +44,13 @@ public class QuickSort extends Sorter<Integer> {
         int pivotIdx = pivoting(arr, lowIdx, highIdx);
 
         if (lowIdx < highIdx) {
-            quickSort(arr, lowIdx, pivotIdx - 1);
+            if (pivotIdx - 1 > lowIdx) {
+                quickSort(arr, lowIdx, pivotIdx - 1);
+            }
 
-            quickSort(arr, pivotIdx + 1, highIdx);
+            if (pivotIdx + 1 < highIdx) {
+                quickSort(arr, pivotIdx + 1, highIdx);
+            }
         }
 
 

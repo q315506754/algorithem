@@ -19,6 +19,37 @@ public class TimeUtil {
         return new BigDecimal(ts/1000).setScale(4,BigDecimal.ROUND_UP).toString();
     }
 
+    public static String pad(int t,String pad,int length) {
+        String ret = ""+t;
+
+        if (pad == null ||pad.length() == 0) {
+            pad = "0";
+        }
+
+        while (ret.length() < length) {
+            ret = pad + ret;
+        }
+
+        return ret;
+    }
+
+    public static String getClockString(int t) {
+        int sec = t %60;
+        t/=60;
+
+        int min = t %60;
+        t/=60;
+
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(pad(t,"0",2));
+        sb.append(":");
+        sb.append(pad(min,"0",2));
+        sb.append(":");
+        sb.append(pad(sec,"0",2));
+        return sb.toString();
+    }
+
     public static String getCNString(double ts) {
         int t = (int)(ts/1000);
         int sec = t %60;
@@ -45,5 +76,15 @@ public class TimeUtil {
             sb.append("0秒");
         }
         return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getClockString(0));
+        System.out.println(getClockString(12));
+        System.out.println(getClockString(123));
+        System.out.println(getClockString(1234));
+        System.out.println(getClockString(12345));
+        System.out.println(getClockString(123456));
+
     }
 }

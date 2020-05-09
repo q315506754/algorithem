@@ -42,7 +42,10 @@ public class InsertionSortTest implements ApplicationContextAware {
     private SelectionSort selectionSort;
 
     @Autowired
-    private QuickSort quickSort;
+    private QuickSort_double_edge quickSortDoubleedge;
+
+    @Autowired
+    private QuickSort_single_edge quickSortSingleEdge;
 
     @Autowired
     private MergeSort mergeSort;
@@ -61,6 +64,7 @@ public class InsertionSortTest implements ApplicationContextAware {
     private static final List<ParamAndExpect> cases = new LinkedList<ParamAndExpect>();
 
     static {
+        cases.add(createPAEObject(new Integer[]{4, 5, 1, 3, 2}, new Integer[]{1, 2, 3, 4, 5}));
         cases.add(createPAEObject(new Integer[]{5, 2, 1, 3, 4}, new Integer[]{1, 2, 3, 4, 5}));
         cases.add(createPAEObject(new Integer[]{4, 3, 1, 2, 5}, new Integer[]{1, 2, 3, 4, 5}));
         cases.add(createPAEObject(new Integer[]{9999981, 44668, 1456455, 29, 5658}, new Integer[]{29, 5658, 44668, 1456455, 9999981}));
@@ -88,7 +92,7 @@ public class InsertionSortTest implements ApplicationContextAware {
     @Before
     public void before() {
         for (ParamAndExpect aCase : cases) {
-            logger.debug(Arrays.toString(aCase.testParams)+"=>"+Arrays.toString(aCase.expectedArrays));
+            logger.debug("测试用例加载:"+Arrays.toString(aCase.testParams)+"=>"+Arrays.toString(aCase.expectedArrays));
         }
     }
 
@@ -103,6 +107,7 @@ public class InsertionSortTest implements ApplicationContextAware {
         for (ParamAndExpect aCase : cases) {
             Integer[] output = sorter.sort(Arrays.copyOf(aCase.testParams,aCase.testParams.length));
             Assert.assertArrayEquals("算法"+sorter+" "+Arrays.toString(output) + "与预期不服:" + Arrays.toString(aCase.testParams) + "=>" + Arrays.toString(aCase.expectedArrays), aCase.expectedArrays, output);
+            logger.debug("测试用例通过:"+Arrays.toString(aCase.testParams)+"=>"+Arrays.toString(aCase.expectedArrays));
         }
     }
 
@@ -121,7 +126,13 @@ public class InsertionSortTest implements ApplicationContextAware {
     @Test
     @Repeat(REPEAT_TIMES)
     public void test_quickSort() {
-        expect(quickSort);
+        expect(quickSortDoubleedge);
+    }
+
+    @Test
+    @Repeat(REPEAT_TIMES)
+    public void test_quickSortSingleEdge() {
+        expect(quickSortSingleEdge);
     }
 
     @Test
