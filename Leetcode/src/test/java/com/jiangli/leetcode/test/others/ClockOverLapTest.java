@@ -33,8 +33,8 @@ public class ClockOverLapTest {
             double slowLoops = ws / wf * i;
 
             //if ( (int) slowLoops == slowLoops) {
-                int t = (int) ((i - ((int) slowLoops)) * 360 / (wf - ws));
-                ret.add(t);
+            double t =  (i - (slowLoops)) * 360 / (wf - ws);
+            //ret.add(t);
             //}
         }
 
@@ -44,6 +44,8 @@ public class ClockOverLapTest {
     @Test
     public void test_() {
         List<Integer> integers = calcOverLap(SEC_SPEED, MIN_SPEED);
+        //List<Integer> integers = calcOverLap(MIN_SPEED, HOUR_SPEED);
+        //List<Integer> integers = calcOverLap(SEC_SPEED, HOUR_SPEED);
 
         int maxLength = (integers.size() + "").length();
 
