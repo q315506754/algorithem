@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 /**
  *
+ * 有1,3,5几种分值的硬币，用他们组成n分，要求使用硬币尽可能少
+ *
  * http://www.hawstein.com/posts/dp-novice-to-advanced.html
  *
  * @author Jiangli
@@ -14,7 +16,7 @@ public class Lv0_Coin {
     static int loopTimes = 0;
 
     public static void main(String[] args) {
-        int N = 20;
+        int N = 50;
         int[] minArr = new int[N+1];
         //int[] coins = new int[]{1,3,5};
         int[] coins = new int[]{5,3,1};
@@ -28,6 +30,12 @@ public class Lv0_Coin {
             String detail = "";
             for (int j = 0; j < coins.length; j++) {
                 if (i-coins[j] >= 0) {
+                    //从大的硬币开始
+                    // c[] 为硬币面额
+                    //n为总金额
+                    //状态转移方程  最小硬币数 ： F(n) = min{ F(n-c[k]) + 1}
+                    //边界 F(0) = 0
+                    //     k>=0 & k<c.length
                     if (minArr[i-coins[j]]+1 < min) {
                         loopTimes++;
                         min = minArr[i-coins[j]]+1;

@@ -15,6 +15,14 @@ public class MathTest {
 
 
     @Test
+    public void test_22() {
+        System.out.println(Math.log(100));
+        System.out.println(Math.log10(100));
+        System.out.println(Math.log(8)/Math.log(2));
+    }
+
+
+    @Test
     public void test_2() {
         System.out.println(Math.round(99.0f));
         System.out.println(Math.round(99.1f));

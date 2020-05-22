@@ -50,6 +50,63 @@ public class CommonTest extends BaseTest {
         System.out.println(-123%10);
     }
 
+    interface  TestInf<T> {
+        T get();
+        void set(T t);
+    }
+    class  TestInfCls<T> implements TestInf<T> {
+        @Override
+        public T get() {
+            return null;
+        }
+
+
+        @Override
+        public void set(T t) {
+
+        }
+    }
+
+
+    /**
+     * 泛型测试
+     *   PECS原则 PECS（Producer Extends Consumer Super）原则
+     *
+     *  频繁往外读取内容的，适合用上界Extends。
+     *   经常往里插入的，适合用下界Super。
+     *
+     * 上界通配符 ? extends ,存入失效 set
+     * 下界通配符 ? super ,取出失效 get
+     *
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_5526() throws Exception {
+        //上界
+        TestInf<Integer> int_list = new TestInfCls<>();
+
+        TestInf<? extends Number> list;
+        //List<Number> list;//wrong
+        list = int_list;
+
+        Number number = list.get();
+        //list.set(123);
+
+
+        //下界
+        TestInf<? super Number> consumer;
+        //Consumer<? super Number> consumer;//wrong
+        //Consumer<Number> consumer;//wrong
+        TestInf<Object> obj_consumer = new TestInfCls<>();
+
+        consumer = obj_consumer;
+
+        consumer.set(1);//存入Number子类ok
+        //consumer.set("1");//存入非Number子类失败
+        Object object = consumer.get();
+    }
+
 
     @Test
     public void test_powder() {

@@ -39,6 +39,7 @@
         <module>JMX</module>
         <module>JNI</module>
         <module>JVM</module>
+        <module>JWT</module>
         <!--<module>JVMLanguage</module>-->
         <module>KillGame</module>
         <module>Leetcode</module>

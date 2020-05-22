@@ -32,6 +32,9 @@ public class StreamTest {
 
         Stream<String> stream = stringCollection.stream();
         System.out.println(stream);
+        System.out.println(stream.isParallel());
+        System.out.println(stream.parallel());
+        System.out.println(stream.sequential());
 
         stream.filter((s) -> s.startsWith("a"))
                 .forEach(System.out::println);

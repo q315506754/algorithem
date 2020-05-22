@@ -12,6 +12,35 @@ import java.util.*
  */
 object DbBaseTool{
     /**
+     * 迭代库
+     */
+    fun iterateRepo(DB_URL:String,fc:(metaData: DatabaseMetaData, databaseName: String)->Unit) {
+        //fixed
+        Class.forName("com.mysql.jdbc.Driver")
+
+        val props = Properties()
+        //    props.setProperty("user", username);
+        //    props.setProperty("password", password);
+        props.setProperty("remarks", "true"); //设置可以获取remarks信息
+        props.setProperty("useInformationSchema", "true");//设置可以获取tables remarks信息
+
+        val connection = DriverManager.getConnection(DB_URL,props)
+
+        //    println(connection.schema)
+        val metaData = connection.metaData
+        val schemas = metaData.schemas
+
+        val queryDbSt = connection.createStatement()
+        val queryDBRs = queryDbSt.executeQuery("show databases;")
+        while (queryDBRs.next()) {
+            val DATABASE = queryDBRs.getString("database")
+            //        println("DATABASE:"+DATABASE)
+
+            fc(metaData,DATABASE)
+        }
+    }
+
+    /**
      * 迭代库里的所有表
      */
     fun iterateRepoTable(DB_URL:String,fc:(metaData: DatabaseMetaData, databaseName: String, tableName: String, fullName: String)->Unit) {

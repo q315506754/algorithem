@@ -10,7 +10,7 @@ import java.sql.DriverManager
 import java.util.*
 
 /**
- *
+ * 12345
  * db结构同步器
  *
  * 可自动定位所在库，多个库有相同表时有红色错误提示

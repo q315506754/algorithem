@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
 
     val tables = """
 
-TBL_COMPANY
+TBL_COURSE_LABLE
 
     """.trimIndent()
 
