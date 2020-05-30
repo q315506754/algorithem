@@ -105,15 +105,16 @@ public class AFindPathTest {
 
         Ord endOrd = null;
 
-        while (!closeList.isEmpty()) {
-            int i =  findLeastScore(closeList);
+        w:
+        while (!openList.isEmpty()) {
+            int i =  findLeastScore(openList);
             //openList.addAll(closeList);
 
-            Ord ord = closeList.remove(i);
+            Ord ord = openList.remove(i);
             System.out.println("closest:"+ord);
 
-            //closeList.add(ord);
-            closeList.clear();
+            closeList.add(ord);
+            //closeList.clear();
 
             //达到终点
             if (ord.x == end[0] && ord.y == end[1]  ) {
@@ -134,8 +135,16 @@ public class AFindPathTest {
                     newOne.step = ord.step + 1;
                     newOne.distance = calcDistance(newOne,point(end));
                     newOne.score = newOne.step + newOne.distance;
-                    closeList.add(newOne);
+                    openList.add(newOne);
+
+                    //达到终点
+                    if (newOne.x == end[0] && newOne.y == end[1]  ) {
+                        endOrd = newOne;
+                        break w;
+                    }
                 }
+
+
             }
         }
 

@@ -17,6 +17,9 @@ import org.junit.Test;
    |     |     |
 |  |  |  |  |  |  |    |
 
+ O n2
+ O 1
+
  */
 //@RunWith(StatisticsJunitRunner.class)
 public class q42_raindrop1_opt extends PracticeBase {

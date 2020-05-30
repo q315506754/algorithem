@@ -13,6 +13,12 @@ import org.junit.Test;
    |     |     |
 |  |  |  |  |  |  |    |
 
+ O n
+ O n
+
+ 总结：看指针位置的值与左右max的关系
+ 左右max最小的那个决定了值
+
  */
 //@RunWith(StatisticsJunitRunner.class)
 public class q42_raindrop3_db_pointer extends PracticeBase {

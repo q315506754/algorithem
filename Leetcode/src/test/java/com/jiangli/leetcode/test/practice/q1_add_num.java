@@ -65,6 +65,21 @@ public class q1_add_num extends PracticeBase {
         return null;
     }
 
+    public int[] hashOneTime(int[] nums,int target) {
+        for (int i = 0; i < nums.length; i++) {
+            int key = target - nums[i];
+
+            Integer integer = map.get(key);
+            map.put(nums[i], i);
+
+            if (integer!= null) {
+                return new int[]{i, integer};
+            }
+
+        }
+        return null;
+    }
+
     @RepeatFixedDuration
     @Test
     public void test_violent() {
@@ -75,10 +90,20 @@ public class q1_add_num extends PracticeBase {
     @RepeatFixedDuration
     @Test
     public void test_hashTwoTimes() {
-        //ae(hashTwoTimes(sample,9),a(0,1));
-        //ae(hashTwoTimes(sample,26),a(9,11));
+        ae(hashTwoTimes(sample,9),a(0,1));
+        ae(hashTwoTimes(sample,26),a(9,11));
         //ae(hashTwoTimes(a(3,2,4),6),a(1,2));
-        ae(hashTwoTimes(a(3,3),6),a(0,1));
+        //ae(hashTwoTimes(a(3,3),6),a(0,1));
+    }
+
+
+    @RepeatFixedDuration
+    @Test
+    public void test_hashONeTimes() {
+        ae(hashOneTime(sample,9),a(0,1));
+        ae(hashOneTime(sample,26),a(11,9));
+        //ae(hashTwoTimes(a(3,2,4),6),a(1,2));
+        //ae(hashTwoTimes(a(3,3),6),a(0,1));
     }
 
     //public int lengthOfLongestSubstring(String s) {

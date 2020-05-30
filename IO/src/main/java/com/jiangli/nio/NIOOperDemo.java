@@ -60,7 +60,7 @@ public class NIOOperDemo {
             int countSize = 0;
 
             while (countSize < size) {
-                System.out.println("loop...");
+                System.out.println("----------loop----------------");
 //            ByteBuffer buffer = ByteBuffer.allocate(2560);
                 //第三步 将通道中的数据读取到缓冲区中
                 channel.read(buffer);
@@ -73,6 +73,7 @@ public class NIOOperDemo {
                 System.out.println("...buffer...");
                 print(buffer);
                 System.out.println("...buffer...");
+                System.out.println(bf==buffer);
 
                 System.out.println("limt:" + bf.limit());
                 countSize += bf.limit();

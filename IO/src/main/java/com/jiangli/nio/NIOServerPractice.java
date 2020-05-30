@@ -29,7 +29,7 @@ public class NIOServerPractice {
             while (true) {
                 int select = selector.select();
                 //int select = selector.select(5000);
-                //System.out.println("select:"+select);
+                System.out.println("select:"+select);
                 if (select == 0) {
                     //System.out.println("select 0");
                     continue;
@@ -40,6 +40,7 @@ public class NIOServerPractice {
                 while (iterator.hasNext()) {
                     SelectionKey selectionKey = iterator.next();
                     iterator.remove();
+                    System.out.println("selectionKey:"+selectionKey);
 
 
                     int i = selectionKey.readyOps();
@@ -51,7 +52,9 @@ public class NIOServerPractice {
 
                         SocketChannel accept = channel.accept();
                         accept.configureBlocking(false);
-                        accept.register(selector, SelectionKey.OP_READ|SelectionKey.OP_CONNECT|SelectionKey.OP_WRITE);
+                        //accept.register(selector, SelectionKey.OP_READ|SelectionKey.OP_CONNECT|SelectionKey.OP_WRITE);
+                        //accept.register(selector, SelectionKey.OP_READ|SelectionKey.OP_CONNECT);
+                        accept.register(selector, SelectionKey.OP_READ);
                     }
                     else if ( (i&SelectionKey.OP_CONNECT) == SelectionKey.OP_CONNECT) {
                         System.out.println("OP_CONNECT");
@@ -63,7 +66,8 @@ public class NIOServerPractice {
                         System.out.println("OP_READ");
                         SocketChannel channel = (SocketChannel)selectionKey.channel();
 
-                        ByteBuffer byteBuffer = ByteBuffer.allocate(1);
+                        ByteBuffer byteBuffer = ByteBuffer.allocate(100);
+                        //ByteBuffer byteBuffer = ByteBuffer.allocate(1);
                         //ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1);
 
                         System.out.println(byteBuffer.getClass());
@@ -111,9 +115,9 @@ public class NIOServerPractice {
                             }
 
                         }
-                        else if ( (i&SelectionKey.OP_WRITE) == SelectionKey.OP_WRITE) {
-                            System.out.println("OP_WRITE");
-                        }
+
+                    } else if ( (i&SelectionKey.OP_WRITE) == SelectionKey.OP_WRITE) {
+                        System.out.println("OP_WRITE");
                     }
                 }
 

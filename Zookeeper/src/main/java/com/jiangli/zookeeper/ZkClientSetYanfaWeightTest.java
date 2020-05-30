@@ -29,7 +29,9 @@ public class ZkClientSetYanfaWeightTest {
         System.out.println(zkc);
 
         //final String myip = getMyIp();
-        final String myip = "192.168.222.3";
+        final String myip = "192.168.100.85";
+        //final String myip = "192.168.100.88";
+        //final String myip = "192.168.222.3";
 
         System.out.println("我的ip:"+myip);
 

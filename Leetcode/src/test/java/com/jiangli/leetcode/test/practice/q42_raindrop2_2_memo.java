@@ -14,6 +14,9 @@ import org.junit.Test;
    |     |     |
 |  |  |  |  |  |  |    |
 
+ O n
+ O n
+
  */
 //@RunWith(StatisticsJunitRunner.class)
 public class q42_raindrop2_2_memo extends PracticeBase {

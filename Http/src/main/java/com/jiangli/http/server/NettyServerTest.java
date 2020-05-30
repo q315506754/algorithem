@@ -63,7 +63,7 @@ public class NettyServerTest {
         });
 
         //localhost:6655
-        // bind
+        // bind telnet localhost 6655
         org.jboss.netty.channel.Channel channel = bootstrap.bind(new InetSocketAddress("localhost", 6655));
         System.out.println("over...");
 

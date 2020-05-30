@@ -20,8 +20,7 @@ fun main(args: Array<String>) {
 //    db_org_course.AAA
 
     val tables = """
-GOODS_TYPE
-GOODS_DATA
+TBL_OPERATION_LIST
     """.trimIndent()
 
     //aries 研发
