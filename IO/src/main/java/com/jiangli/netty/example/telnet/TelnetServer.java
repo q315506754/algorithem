@@ -33,6 +33,7 @@ public final class TelnetServer {
     static final boolean SSL = System.getProperty("ssl") != null;
     static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8992" : "8023"));
 
+    //telnet localhost 8023
     public static void main(String[] args) throws Exception {
         // Configure SSL.
         final SslContext sslCtx;

@@ -36,6 +36,7 @@ public final class UptimeServer {
     private UptimeServer() {
     }
 
+    //telnet localhost 8080
     public static void main(String[] args) throws Exception {
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);

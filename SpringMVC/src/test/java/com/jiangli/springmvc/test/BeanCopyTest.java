@@ -13,6 +13,7 @@ import org.springframework.core.convert.support.DefaultConversionService;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * @author Jiangli
@@ -296,11 +297,11 @@ public class BeanCopyTest {
 //                }
 //            });
 
-            conversionService.addConverter(A.class, B.class, new ObjectConverter(conversionService, B.class));
-            conversionService.addConverter(B.class, A.class, new ObjectConverter(conversionService, A.class));
-
-            conversionService.addConverter(C.class, D.class, new ObjectConverter(conversionService, D.class));
-            conversionService.addConverter(D.class, C.class, new ObjectConverter(conversionService, C.class));
+            //conversionService.addConverter(A.class, B.class, new ObjectConverter(conversionService, B.class));
+            //conversionService.addConverter(B.class, A.class, new ObjectConverter(conversionService, A.class));
+            //
+            //conversionService.addConverter(C.class, D.class, new ObjectConverter(conversionService, D.class));
+            //conversionService.addConverter(D.class, C.class, new ObjectConverter(conversionService, C.class));
 
             B b = conversionService.convert(orgA, B.class);
             System.out.println(b);
@@ -313,6 +314,13 @@ public class BeanCopyTest {
         }
 
 
+    }
+
+    private static boolean isPrimitive(Class<?> cls) {
+        return cls.isPrimitive() || cls == Boolean.class || cls == Byte.class
+                || cls == Character.class || cls == Short.class || cls == Integer.class
+                || cls == Long.class || cls == Float.class || cls == Double.class
+                || cls == String.class || cls == Date.class || cls == Class.class;
     }
 
     class ObjectConverter implements  Converter<Object, Object> {

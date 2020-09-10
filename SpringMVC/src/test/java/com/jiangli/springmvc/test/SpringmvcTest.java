@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.*;
 import org.springframework.beans.propertyeditors.PropertiesEditor;
+import org.springframework.http.MediaType;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -45,6 +46,14 @@ public class SpringmvcTest {
     public void after() {
         long cost = System.currentTimeMillis() - startTs;
         log.debug("----------after-----------:cost:" + cost + " ms");
+    }
+
+
+    @Test
+    public void test_2() {
+        MediaType mp4 = MediaType.parseMediaType("video/mp4");
+        System.out.println(mp4);
+
     }
 
 

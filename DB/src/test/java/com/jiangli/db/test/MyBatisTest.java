@@ -179,6 +179,7 @@ public class MyBatisTest {
                 break;
             }
         }
+        System.out.println(users.getClass());
         PageInfo pageInfo = new PageInfo(users);
         System.out.println(pageInfo);
 

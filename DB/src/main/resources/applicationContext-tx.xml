@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd"
+>
+    <!-- 定义事务管理器 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+<!--        <property name="dataSource" ref="basicDataSource" />-->
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- 事务管理的模板 -->
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+    <!--使用注释事务 -->
+<!--      @Transactional -->
+    <tx:annotation-driven  transaction-manager="transactionManager" />
+
+    <!-- 下面使用aop切面的方式来实现 -->
+    <tx:advice id="TestAdvice" transaction-manager="transactionManager">
+        <!--配置事务传播性，隔离级别以及超时回滚等问题 -->
+        <tx:attributes>
+<!--            <tx:method name="save*" propagation="REQUIRED" />-->
+<!--            <tx:method name="del*" propagation="REQUIRED" />-->
+<!--            <tx:method name="update*" propagation="REQUIRED" />-->
+<!--            <tx:method name="add*" propagation="REQUIRED" />-->
+<!--            <tx:method name="*" rollback-for="Exception" />-->
+            <tx:method name="aopMethod*"  propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <!--配置事务切点 -->
+        <aop:pointcut id="services"
+                      expression="execution(* com.jiangli..*.aopMethod(..))" />
+        <aop:advisor pointcut-ref="services" advice-ref="TestAdvice" />
+    </aop:config>
+
+        <import resource="applicationContext-druid.xml"></import>
+
+</beans>

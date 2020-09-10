@@ -1,0 +1,105 @@
+@startuml
+'hide footbox
+title sdk-h5交互
+'control SDK
+'actor SDK
+'entity SDK
+'database  SDK
+participant App
+participant SDK
+actor H5
+participant Server
+
+activate H5
+H5 -> H5:onLoad
+
+H5 -> SDK:getSignatureInfo
+note left:校验sdk初始化情况
+activate SDK
+SDK -> H5:签名json（可能为空）
+deactivate SDK
+
+H5 -> SDK:[异步]refreshAccessToken
+activate SDK
+note left:签名json为空,说明sdk初始化失败
+SDK [#0FFF00]-> Server: 接口[拿Access_Token]
+activate Server
+Server --> SDK: Access_Token
+deactivate Server
+'SDK --> SDK: 更新本地缓存
+SDK -> H5:[异步回调] onAccessTokenRefreshed
+deactivate SDK
+
+H5 -> SDK:getUserInfo
+note left:获取用户信息
+activate SDK
+SDK -> H5:用户json(可能为空)
+deactivate SDK
+
+H5 -> SDK:[异步]refreshUserToken
+activate SDK
+note left: 当接口需要用户token且上一步返回为空时
+SDK -> SDK:判断是否登录
+SDK -> App:需要登录
+activate App
+App -> App:doLogin
+App -> SDK:登录完成，用户id
+deactivate App
+SDK [#0FFF00]-> Server: 接口[登录]
+activate Server
+Server --> SDK: 用户token
+deactivate Server
+SDK -> H5:[异步回调] onUserTokenRefreshed
+note left: 会返回用户信息(同getUserInfo)
+deactivate SDK
+
+'H5 -> SDK:getUserInfo
+'activate SDK
+'note left: 再次获取用户信息
+'SDK -> H5:用户json
+'note left: 本次不为空
+'deactivate SDK
+
+
+H5 -> SDK:getSignatureInfo
+activate SDK
+SDK -> SDK:根据ac重新生成
+SDK -> H5:签名json
+deactivate SDK
+
+H5 [#0FFF00]-> Server: 业务接口
+activate Server
+note left:上面拿到的签名+用户token
+Server -> H5: status(失败) + 业务结果
+deactivate Server
+
+H5 -> SDK:[异步]refreshAccessToken
+activate SDK
+note left:接口返回签名过期
+SDK [#0FFF00]-> Server: 接口[拿Access_Token]
+activate Server
+Server --> SDK: Access_Token
+deactivate Server
+'SDK --> SDK: 更新本地缓存
+SDK -> H5:[异步回调] onAccessTokenRefreshed
+note left: 会返回签名信息(同getSignatureInfo)
+deactivate SDK
+
+'H5 -> SDK:getSignatureInfo
+'note left: 再次获取签名
+'activate SDK
+'SDK -> SDK:根据ac重新生成
+'SDK -> H5:签名json
+'deactivate SDK
+
+H5 [#0FFF00]-> Server: 业务接口
+note left: 重试请求
+activate Server
+Server -> H5: status + 业务结果
+deactivate Server
+
+deactivate H5
+
+
+@enduml
+

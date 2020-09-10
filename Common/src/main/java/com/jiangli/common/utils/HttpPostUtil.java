@@ -269,9 +269,9 @@ public class HttpPostUtil {
 
             return IOUtils.toString(new URL(realUrl), Charset.defaultCharset() );
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }

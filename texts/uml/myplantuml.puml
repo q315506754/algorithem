@@ -1,4 +1,5 @@
 @startuml
+scale 600*800
 Alice -> Bob: Authentication Request地方
 Bob --> Alice: Authentication Response11电饭锅
 

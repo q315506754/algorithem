@@ -303,7 +303,7 @@ object ExcelUtil {
             XSSFCell.CELL_TYPE_STRING -> ret = cell.richStringCellValue.string
             else -> ret = null
         }
-        return ret?.trim()
+        return ret
     }
 
     fun getCellValueByTitle(sheet: XSSFSheet,row:XSSFRow?, title: String): String? {

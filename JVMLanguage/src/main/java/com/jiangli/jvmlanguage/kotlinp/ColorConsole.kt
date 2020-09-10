@@ -48,7 +48,12 @@ fun main(args: Array<String>) {
         println("8 color:\u001b[3${it}m 3${it}m ${ConsoleColorHelper.reset}")
     }
 
-    // 16  \u001b[30;1m
+    // 16  \u001b[30;1m<!-- https://mvnrepository.com/artifact/org.fusesource.jansi/jansi -->
+    //<dependency>
+    //    <groupId>org.fusesource.jansi</groupId>
+    //    <artifactId>jansi</artifactId>
+    //    <version>1.18</version>
+    //</dependency>
     (0..7).forEach {
         println("16 color:\u001b[3${it}m 3${it}m ${ConsoleColorHelper.reset} \u001b[3${it};1m 3${it};1m ${ConsoleColorHelper.reset}")
     }

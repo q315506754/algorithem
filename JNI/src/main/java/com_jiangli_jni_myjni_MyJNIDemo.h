@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT void JNICALL Java_com_jiangli_jni_myjni_MyJNIDemo_sayHello
   (JNIEnv *, jobject);
 
+/*
+ * Class:     com_jiangli_jni_myjni_MyJNIDemo
+ * Method:    echo
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_jiangli_jni_myjni_MyJNIDemo_echo
+  (JNIEnv *, jobject, jstring);
+
 #ifdef __cplusplus
 }
 #endif

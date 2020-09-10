@@ -23,6 +23,22 @@ import java.util.stream.Collectors;
 public class RecurUtil {
     private static ThreadLocal<PathInfo> obj = new ThreadLocal<>();
 
+    public static  <P>  void print(int layer,P param, Function<P,Iterable<P>> queryChilder) {
+        for (int i = 0; i < 2*layer; i++) {
+            System.out.print("-");
+        }
+        System.out.println(param);
+
+        if (param != null) {
+            Iterable<P> apply = queryChilder.apply(param);
+            if (apply != null) {
+                for (P child : apply) {
+                    print(layer + 1, child, queryChilder);
+                }
+            }
+        }
+    }
+
     public static String buildQueryString(Map map) {
         String ret = "";
         String SPLIT = "&";

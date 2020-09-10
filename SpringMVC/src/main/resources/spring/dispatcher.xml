@@ -70,12 +70,12 @@
 
 
     <!-- 拦截器配置 -->
-    <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/*"/>-->
-            <!--<bean class="com.jiangli.springMVC.interceptor.InterceptorBean"></bean>-->
-        <!--</mvc:interceptor>-->
-        <!--<bean class="com.jiangli.springMVC.interceptor.GlobalInterceptorBean"></bean>-->
-    <!--</mvc:interceptors>-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <bean class="com.jiangli.springMVC.interceptor.InterceptorBean"></bean>
+        </mvc:interceptor>
+        <bean class="com.jiangli.springMVC.interceptor.GlobalInterceptorBean"></bean>
+    </mvc:interceptors>
 
 </beans>

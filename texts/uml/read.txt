@@ -1,0 +1,22 @@
+@startuml
+testdot
+@enduml
+
+
+
+IDE:
+other settings -> Plantuml -> C:/software/Graphviz/bin/dot.exe
+refresh
+
+download:
+http://www.graphviz.org/
+https://www2.graphviz.org/Packages/stable/windows/10/msbuild/Release/Win32/
+
+ui:
+https://sourceforge.net/projects/plantuml/
+
+java -jar plantuml.jar
+
+env:
+GRAPHVIZ_DOT
+C:\software\Graphviz\bin\dot.exe

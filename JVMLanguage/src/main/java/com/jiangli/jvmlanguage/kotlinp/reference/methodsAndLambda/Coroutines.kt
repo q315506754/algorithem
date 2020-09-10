@@ -24,17 +24,17 @@ suspend fun doSomething(foo: Foo) {
 
 
 
-fun test(x: Any): Unit {
-     fun <T> async(block: suspend () -> T) {}
-
-    async {
-        doSomething(object: Foo {
-            override val count: Int
-                get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        })
-//        ……
-    }
-}
+//fun test(x: Any): Unit {
+//     fun <T> async(block: suspend () -> T) {}
+//
+//    async {
+//        doSomething(object: Foo {
+//            override val count: Int
+//                get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+//        })
+////        ……
+//    }
+//}
 
 
 //还要注意的是，挂起函数可以是虚拟的，当覆盖它们时，必须指定 suspend 修饰符：

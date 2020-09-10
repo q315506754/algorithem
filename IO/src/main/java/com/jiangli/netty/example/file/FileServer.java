@@ -45,6 +45,7 @@ public final class FileServer {
     static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8992" : "8023"));
 
     //C:\Users\Jiangli\Desktop\manage-jiaofu.postman_collection.json
+    //C:\Users\Jiangli\Desktop\link.txt
     //telnet localhost 8023
     public static void main(String[] args) throws Exception {
         // Configure SSL.

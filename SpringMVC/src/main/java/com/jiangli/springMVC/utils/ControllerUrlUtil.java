@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 获得所有rest 接口链接
+ *
  * @author Jiangli
  * @date 2018/8/31 15:10
  */

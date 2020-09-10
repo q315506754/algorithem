@@ -60,6 +60,9 @@ public class GlobalInterceptorBean extends HandlerInterceptorAdapter {
 
         boolean b = super.preHandle(request, response, handler);
         logger.debug("preHandle {}", "after");
+
+        request.setAttribute("ak","阿萨");
+        request.setAttribute("ak2","阿萨");
         return b;
     }
 

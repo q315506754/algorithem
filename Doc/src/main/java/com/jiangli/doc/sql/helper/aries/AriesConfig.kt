@@ -263,7 +263,7 @@ enum class Env(val rechargeCbUrl: String, val host: String, val username: String
 //    YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "163.53.169.237:3306", "root", "ablejava")
     YUFA("http://yf-account-pay.g2s.cn/aries-pay-account/recharge", "120.92.138.210:3306", "root", "ablejava")
     ,
-    WAIWANG("http://account-pay.g2s.cn/aries-pay-account/recharge", "rm-bp1yjg70fe47ml9gueo.mysql.rds.aliyuncs.com:3306", "huyue", "huyue@2018")
+    WAIWANG("http://account-pay.g2s.cn/aries-pay-account/recharge", "rm-bp1yjg70fe47ml9gueo.mysql.rds.aliyuncs.com:3306", "yuyang", "yuyang@200422")
 }
 
 fun main(args: Array<String>) {

@@ -18,7 +18,8 @@ fun main(args: Array<String>) {
 //    aries-app-server
 //    aries-server：
     var projects = """
-  aries-base-video
+aries-app-server:e49bbca75637aac149bad5d36f16f9c790ce0bcc
+aries-survey:df05b564d166c9d9000d44ba7d553c0e0a68aa12
     """.trimIndent()
 
 //aries-base-message

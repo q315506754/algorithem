@@ -1,0 +1,19 @@
+@startuml
+hide footbox
+title sdk-server交互
+App -> SDK: 注册
+SDK -[#0FFF00]-> Server: 接口[初始化]
+SDK -[#0FFF00]-> Server: 接口[拿Access_Token]
+Server --> SDK: Access_Token
+App -> SDK:打开模块
+SDK -[#0FFF00]-> Server: 接口[查模块h5地址]
+Server --> SDK: 模块h5地址
+SDK -> SDK: 是否要登录
+SDK -[#red]> App: [否] 加载h5
+SDK -[#0000FF]> App: [是] 通知app跳转
+App -> SDK: 登录后
+SDK -[#0FFF00]-> Server: 接口[登录]
+Server --> SDK: 用户token
+SDK -> App: 加载h5
+@enduml
+

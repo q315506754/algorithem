@@ -8,6 +8,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -26,10 +27,48 @@ public class CommonTest extends BaseTest {
         objects2.add("");
         objects2.add("");
         System.out.println(objects2.hashCode());
+
+        objects2.add("a");
+        objects2.add("c");
+        objects2.add("b");
+        System.out.println(objects2.containsAll(Arrays.asList("b","a")));
     }
 
     @Test
-    public void test_556() {
+    public void test_667() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //current 2018-03-13 11:04:34
+        System.out.println(sdf.parse("2048-12-30"));
+        System.out.println(sdf.parse("2098-12-30"));
+        System.out.println(sdf.parse("2198-12-30"));
+        System.out.println(sdf.parse("9998-12-30"));//
+        System.out.println(sdf.parse("29998-12-30"));//
+        System.out.println(sdf.parse("1229998-12-30"));//
+        System.out.println(sdf.parse("1229998-12-30"));//
+        long x = 38752852003200000L;
+        System.out.println(sdf.format(new Date(x)));
+        System.out.println(sdf.format(new Date(Long.MAX_VALUE)));//292278994-08-17
+        System.out.println(sdf.parse("292278994-08-17"));//Sun Aug 17 00:00:00 CST 292278994
+        System.out.println(sdf.parse("292278994-08-18"));//Mon Dec 03 09:34:08 CST 292269055
+        System.out.println(sdf.parse("292278994-08-18").getTime());//-9223372036823151616
+    }
+
+    static class StaCls {
+        static {
+            System.out.println("Stacls load..");
+        }
+    }
+    @Test
+    //@CallerSensitive
+    public void test_556() throws Exception {
+        //Class<?> callerClass = Reflection.getCallerClass();
+        //System.out.println(callerClass);
+        //Class<StaCls> staClsClass = StaCls.class;
+        //System.out.println(staClsClass.getName());
+        //Class.forName("com.jiangli.datastructure.test.CommonTest$StaCls");
+        Class<?> aClass = ClassLoader.getSystemClassLoader().loadClass("com.jiangli.datastructure.test.CommonTest$StaCls");
+        System.out.println(aClass.isMemberClass());
+
         Object a = 33;
         System.out.println(a instanceof Number);
         System.out.println(a instanceof Integer);

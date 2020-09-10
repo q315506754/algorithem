@@ -76,6 +76,23 @@ public final class HttpCorsServer {
     static final boolean SSL = System.getProperty("ssl") != null;
     static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8080"));
 
+    // http://localhost:8080/
+    //telnet localhost 8080
+    //GET / HTTP/1.1
+    //AAA:14242
+    //content-length:1
+
+    /**
+
+GET / HTTP/1.1
+AAA:14242
+content-length:56
+
+uid=dj053EWn&dateFormate=1591963576000&loginUid=dj053EWn
+
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         // Configure SSL.
         final SslContext sslCtx;

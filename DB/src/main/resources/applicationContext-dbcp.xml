@@ -7,14 +7,14 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.0.xsd"
         >
-    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource"
-          destroy-method="close">
-        <!--<property name="connectionInitSqls" value="set names utf8mb4;" />-->
+<!--    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource"-->
+<!--          destroy-method="close">-->
+<!--        &lt;!&ndash;<property name="connectionInitSqls" value="set names utf8mb4;" />&ndash;&gt;-->
 
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://192.168.222.8:3306/db_aries_user" />
-        <!--<property name="url" value="jdbc:mysql://localhost:3306/test" />-->
-        <property name="username" value="root" />
-        <property name="password" value="ablejava" />
-    </bean>
+<!--        <property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+<!--        <property name="url" value="jdbc:mysql://192.168.222.8:3306/db_aries_user" />-->
+<!--        &lt;!&ndash;<property name="url" value="jdbc:mysql://localhost:3306/test" />&ndash;&gt;-->
+<!--        <property name="username" value="root" />-->
+<!--        <property name="password" value="ablejava" />-->
+<!--    </bean>-->
 </beans>

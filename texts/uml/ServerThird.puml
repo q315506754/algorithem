@@ -1,0 +1,26 @@
+@startuml
+hide footbox
+'title sdk-h5交互
+'control SDK
+'actor SDK
+'entity SDK
+'database  SDK
+participant App
+participant AppServer
+participant 知室API服务器
+
+App -> AppServer: 调用业务接口
+activate AppServer
+AppServer --> App: 返回业务数据
+deactivate AppServer
+
+
+App -> AppServer: 使用知室业务
+activate AppServer
+AppServer -> 知室API服务器: 服务器之间通过appSecret签名验证请求有效性
+知室API服务器 --> AppServer: 返回知室业务数据
+AppServer --> App: 返回知室业务数据
+deactivate AppServer
+
+@enduml
+

@@ -1,5 +1,6 @@
 package com.jiangli.springMVC.controller;
 
+import com.jiangli.common.model.Person;
 import com.jiangli.springMVC.B;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -45,7 +46,23 @@ public class CommonController extends BaseController{
         }
     }
 
+    static class A2{
+        String name;
 
+        @Override
+        public String toString() {
+            return "A2{" +
+                    "name='" + name + '\'' +
+                    '}';
+        }
+    }
+
+    /**
+     * 有什么用？
+     相当于一个prePost请求
+
+
+     */
     @ModelAttribute
     A propA() {
         A ret = new A();
@@ -80,24 +97,39 @@ public class CommonController extends BaseController{
     ModelAndView mv(HttpServletRequest request
         ,@PathVariable("id") String id
 
-        ,@CookieValue("JSESSIONID") String JSESSIONID
+        ,@CookieValue(value = "JSESSIONID",required = false) String JSESSIONID
         ,@RequestHeader("User-Agent") String UserAgent
         ,@RequestParam("a") String a
+
+        ,@RequestParam("ak") String ak
 
         ,@ModelAttribute() A obj
         ,@ModelAttribute("int") Integer c
         ,@ModelAttribute("propBB") Integer b
+        ,@ModelAttribute("kk") A2 kk
+        ,@ModelAttribute("Person") Person Person
+        ,@ModelAttribute("person") Person person
+        ,@ModelAttribute("person2") Person person2
+        ,@ModelAttribute("globalUser2") Person globalUser2
 
         ,Model model
         ,HttpSession session
 
     ) {
         logger.debug("mv,{},{},{},{},{}",JSESSIONID,UserAgent,a,id);
+        logger.debug("ak:{}",ak);
         logger.debug("obj:{}",obj);
         logger.debug("b:{}",b);
         logger.debug("c:{}",c);
         Object x = session.getAttribute("x");
         logger.debug("x:{}", x);
+        logger.debug("kk:{}", kk);
+        logger.debug("Person:{}", Person);
+        logger.debug("person:{}", person);
+        logger.debug("person2:{}", person2);
+        logger.debug("globalUser2:{}", globalUser2);
+        kk = new A2();
+        kk.name = "阿斯顿撒多";
 
         logger.debug("model:{}",model);
 
@@ -214,7 +246,18 @@ public class CommonController extends BaseController{
 
         return param;
     }
+
+    //http://localhost:80/ex
+    @RequestMapping("/ex")
+    String ex(HttpServletRequest request) {
+        //AnnotationConfigEmbeddedWebApplicationContext
+//        or AnnotationConfigApplicationContext
+        int x = 1/0;
+        return "Hello World!Example~";
+    }
+
 //
+
 //    @RequestMapping(value = "/hotelPopInfo", method = {RequestMethod.POST, RequestMethod.GET})
 //    public ModelAndView popInfo(HttpServletRequest request, String pName) {
 //        logger.debug(pName);

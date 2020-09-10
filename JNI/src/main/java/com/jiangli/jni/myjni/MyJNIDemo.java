@@ -15,10 +15,15 @@ package com.jiangli.jni.myjni;
 public class MyJNIDemo {
     public native void sayHello();
 
+    public native String echo(String str);
+
     public static void main(String[] args) {
+        System.out.println(System.getProperty("java.library.path"));
         System.loadLibrary("libMyJNIDemo");
 
         MyJNIDemo demo = new MyJNIDemo();
+        System.out.println(demo);
+        System.out.println(demo.echo("abc"));
         demo.sayHello();
     }
 }

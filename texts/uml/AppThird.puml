@@ -1,0 +1,32 @@
+@startuml
+hide footbox
+'title sdk-h5交互
+'control SDK
+'actor SDK
+'entity SDK
+'database  SDK
+participant App
+participant SDK
+participant AppServer
+participant 知室API服务器
+participant 知室H5
+participant 知室业务服务器
+
+App -> SDK: 初始化
+activate SDK
+SDK -> AppServer: 获取授权token
+activate AppServer
+AppServer -> 知室API服务器: [接口]SDK调用授权token
+知室API服务器 --> AppServer: 返回token
+AppServer -> AppServer: 缓存
+AppServer --> SDK: 返回token
+deactivate AppServer
+deactivate SDK
+
+App -> SDK: 打开h5模块
+SDK -> 知室H5: 打开网页
+知室H5 -> 知室业务服务器: 使用token通信
+知室H5 -> App: 展现视图
+
+@enduml
+

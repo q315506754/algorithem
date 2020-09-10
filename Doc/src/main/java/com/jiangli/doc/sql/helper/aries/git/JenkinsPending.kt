@@ -13,8 +13,8 @@ http://192.168.9.138:8080/jenkins/view/zs-%E7%9F%A5%E5%AE%A4/job/{projectName}/b
     """.trimIndent()
 
     var projects = """
-aries-live-server:dd963e41553fab4a5791c5d1ce92bac5c3048973
-aries-server:4884ef18f55536a45ef829a66987f5ad2b32cb7b
+aries-app-server:e49bbca75637aac149bad5d36f16f9c790ce0bcc
+aries-survey:df05b564d166c9d9000d44ba7d553c0e0a68aa12
     """.trimIndent()
 
     val splitProject = splitProjectPair(projects)
@@ -26,8 +26,8 @@ aries-server:4884ef18f55536a45ef829a66987f5ad2b32cb7b
             return@forEach
         }
         var urlOfThis = url
-        urlOfThis = urlOfThis.replace("{projectName}",it.first)
-        urlOfThis = urlOfThis.replace("{v}",it.second)
+        urlOfThis = urlOfThis.replace("{projectName}",it.first.trim())
+        urlOfThis = urlOfThis.replace("{v}",it.second.trim())
         println(urlOfThis)
 
         FileUtil.execute("/c \"start $urlOfThis\"")

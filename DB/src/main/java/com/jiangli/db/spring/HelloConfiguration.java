@@ -1,6 +1,5 @@
 package com.jiangli.db.spring;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -13,9 +12,9 @@ public class HelloConfiguration {
         System.out.println("HelloConfiguration construct!!");
     }
 
-    @Bean
-    public TestBean getPerson() {
-        return new TestBean();
-    }
+    //@Bean
+    //public TestBean getPerson() {
+    //    return new TestBean();
+    //}
 
 }
