@@ -14,13 +14,14 @@ import com.mongodb.BasicDBObject
  * @date 2018/12/21 14:14
  */
 fun main(args: Array<String>) {
-    val env = Env.WAIWANG
+    val env = Env.YUFA
+//    val env = Env.WAIWANG
     val jdbc = Ariesutil.getJDBC(env)
     val mongo = Ariesutil.getMongo(env, Ariesutil.MongoDbCol.ARIES_LOGIN)
 
 //    val MOBILE = "13661749570"
 //    val MOBILE = "18017058197"
-    val MOBILE = "18017058197"
+    val MOBILE = "17521768010"
     val ouputFile = PathUtil.desktop("""$MOBILE-登录日志.xlsx""")
 
     val userId = Ariesutil.getUserId(jdbc, "", MOBILE).toLong()

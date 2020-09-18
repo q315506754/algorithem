@@ -96,8 +96,14 @@ public object Ariesutil {
     }
 
     fun getMongo(env: Env,col:MongoDbCol): DBCollection {
-        val mongo = Mongo(Arrays.asList(ServerAddress("120.27.218.215", 27017)))
-        val db = mongo.getDB(col.db.name)
+        var mongo:Mongo? = null
+        if (env == Env.YUFA) {
+            mongo = Mongo(Arrays.asList(ServerAddress("120.92.138.210", 27017)))
+        }  else  if (env == Env.WAIWANG) {
+            mongo = Mongo(Arrays.asList(ServerAddress("120.27.218.215", 27017)))
+        }
+
+        val db = mongo!!.getDB(col.db.name)
         val collection = db.getCollection(col.name)
 
 //        if (env == Env.WAIWANG) {
@@ -200,7 +206,7 @@ AND uc.IS_DELETE=0
 
     fun getUser(jdbc: JdbcTemplate, name: String? = "", mobile: String? = "", email: String? = ""): MutableList<MutableMap<String, Any>>? {
         if (mobile?.isNotEmpty()!!) {
-            val s = "SELECT ID,NAME,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE MOBILE=$mobile and IS_DELETED = 0;"
+            val s = "SELECT ID,NAME,AREA_CODE,MOBILE,EMAIL FROM db_aries_user.TBL_USER WHERE MOBILE=$mobile and IS_DELETED = 0 and AREA_CODE = '+86';"
             println("执行sql")
             println("   $s")
             val query = jdbc.query(s, ColumnMapRowMapper())

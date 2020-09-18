@@ -32,6 +32,12 @@ public class ZkClientSetMyServiceWeightTest {
         System.out.println("我的ip:"+myip);
         List<String> serviceKeyWords = Arrays.asList(
                 "CompanyCoachOpenService"
+                ,"ZhishiOpenDocConfigOpenService"
+                ,"ZhishiOpenDocOpenService"
+                ,"ZhishiOpenDocParaOpenService"
+                ,"TblOperationListOpenService"
+                ,"EventModuleOpenService"
+                ,"ModuleDetailsOpenService"
                 ,"UserOpenService"
                 ,"ZhishiOpenPlatformOpenService"
                 ,"GroupUserService"

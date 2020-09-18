@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
 
     var projects = """
 aries-server
-org-app-server
+aries-api-server
     """.trimIndent()
 
      val BAT_UPDATE_NAME = "_temp_update_rb.bat"
