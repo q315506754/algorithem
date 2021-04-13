@@ -1,0 +1,16 @@
+
+docker search mysql
+docker images
+docker pull
+docker rmi
+docker history wordpress --no-trunc
+docker history --format {{.CreatedBy}} --no-trunc=true wordpress |sed "s/\/bin\/sh\ -c\ \#(nop)\ //g"|sed "s/\/bin\/sh\ -c/RUN/g" | tac
+
+docker ps  -a
+docker run
+docker rm
+docker exec
+docker inspect
+
+
+docker run --help

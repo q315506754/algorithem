@@ -1,0 +1,29 @@
+#####wordpress
+docker exec -it wordpress /bin/bash
+vim wp-config.php
+docker restart wordpress
+docker stop wordpress
+cd ~/software/wordpress/
+docker run -it -d --name wordpress -p 9001:80 -v  ~/software/wordpress/:/var/www/html --link mysql:mysql -e WORDPRESS_DB_PASSWORD=jianglibaba@asmn.zxc wordpress
+/* 强制后台和登录使用 SSL */
+define('FORCE_SSL_LOGIN', true);
+define('FORCE_SSL_ADMIN', true);
+
+ftp问题：
+wp-config.php,添加以下代码:
+define("FS_METHOD","direct");
+define("FS_CHMOD_DIR", 0777);
+define("FS_CHMOD_FILE", 0777);
+chmod -R 777 wordpress的目录.
+
+https问题：
+update wp_posts set post_content = replace(post_content, 'https://jiangdaoli.icu:9001','https://jiangdaoli.icu:9001');
+
+#####mysql
+docker exec -it mysql mysql -uroot -p
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'jianglibaba@asmn.zxc';
+flush privileges;
+
+#####nginx
+vim /root/software/nginx/conf.d/default.conf
+docker restart nginx

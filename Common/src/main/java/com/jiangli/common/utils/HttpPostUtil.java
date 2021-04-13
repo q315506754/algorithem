@@ -49,6 +49,12 @@ public class HttpPostUtil {
         return postUrl(url, params,new HashMap<>());
     }
 
+    public static JSONObject build(String key, Object params) {
+        JSONObject ret = new JSONObject();
+        ret.put(key, params);
+        return ret;
+    }
+
     public interface ReqInterceptor<T>{
         void interceptBeforeReq(Map params,Map<String,String> headers,T token);
 

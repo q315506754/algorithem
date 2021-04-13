@@ -7,9 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +32,12 @@ public class UnicodeTest {
         System.out.println();
     }
 
+    @Test
+    public void test_2323() {
+        System.out.println("\\xF0\\x9F\\x8D\\x80\\xF0\\x9F");
+    }
+    
+    
     @Test
     public void test_23() {
         System.out.println(String.format("\\u%H",'量'));
@@ -179,4 +183,18 @@ public class UnicodeTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void test_code() throws Exception {
+        String from = "锘垮簳鍥_闄堟檵";
+
+        List<String> strings = Arrays.asList("utf8", "gbk", "gb2312", "iso-8859-1");
+        for (String l1 : strings) {
+            for (String l2 : strings) {
+                System.out.println(l1+"->"+l2+" "+new String(from.getBytes(l1),l2));
+            }
+        }
+    }
+
+
 }

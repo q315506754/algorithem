@@ -124,7 +124,7 @@ public class MemoryTest {
                 int dataOfThisTime = generate[counter++];
 
                 // info
-                System.out.print("imagine this:");
+                System.out.print((counter)+" imagine this:");
 //				System.err.println(dataOfThisTime);
                 System.out.println(dataOfThisTime);
 

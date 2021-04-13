@@ -61,6 +61,9 @@ AND BUSI_SRC=0
     $play_url
     """.trimIndent(),  JSONObject())
             if (rs != null ) {
+                if (vm.size % 50==0) {
+                    println("${vm.size} $u")
+                }
                 vmIter.remove()
             } else {
                 c++

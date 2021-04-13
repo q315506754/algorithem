@@ -1,0 +1,19 @@
+@startuml
+hide footbox
+title sdk-server交互
+App -> SDK: 注册
+SDK -[#0FFF00]-> Server: 接口[初始化]
+SDK -[#0FFF00]-> Server: 接口[拿Access_Token]
+Server --> SDK: Access_Token
+SDK --> SDK: 本地缓存Access_Token
+App -> SDK:打开模块
+SDK -[#0FFF00]-> Server: 接口[查模块h5地址](携带模块参数)
+Server -[#FF3439]-> SDK: 异常码——需要登录
+SDK -> App:若要登录
+SDK -[#0FFF00]-> Server: 接口[用户登录]
+SDK --> SDK: 本地缓存用户信息
+SDK -[#0FFF00]-> Server: 接口[查模块h5地址](携带用户信息、模块参数)
+Server --> SDK: 模块h5地址
+SDK -> App: 加载h5
+@enduml
+

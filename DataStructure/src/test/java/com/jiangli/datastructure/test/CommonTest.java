@@ -16,8 +16,36 @@ import java.util.*;
  * @date 2018/5/16 17:21
  */
 public class CommonTest extends BaseTest {
+
+    @Test
+    public void test_x5() {
+
+        //1018728800
+        //-Xmx10m -Xms10m -XX:+PrintGC
+
+        //禁用逃逸分析 9819268900
+        //-Xmx10m -Xms10m -XX:-DoEscapeAnalysis  -XX:+PrintGC
+        long l = System.nanoTime();
+        long i = 1_000_000_000L;
+        while (i-- > 0) {
+            new Object();
+        }
+        System.out.println(System.nanoTime() - l);
+    }
+
+
     @Test
     public void test_55() throws Exception {
+        //Class.forName("aa.bbb");
+        System.out.println("aaaa");
+
+        Thread thread = new Thread(() -> {
+
+        });
+        thread.start();
+        thread.start();
+        //new KKK();
+
         List<Object> objects = new ArrayList<Object>();
         System.out.println(objects.hashCode());
         List<Object> objects2 = new ArrayList<Object>();

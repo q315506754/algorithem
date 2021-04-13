@@ -23,11 +23,17 @@ fun main(args: Array<String>) {
 //aries-forum-server
 //org-manage
 //aries-classtools
+
+//    aries-pay-core
+//    aries-pay-gateway
+//    aries-pay-app-server
 //    """.trimIndent()
 
     var projects = """
-aries-server
-aries-api-server
+
+org-app-server：429bb8d97630247c3fa97b88160c025775611624
+aries-server：853e9d935c9fbd69a04df0f574205943d606e2df
+
     """.trimIndent()
 
      val BAT_UPDATE_NAME = "_temp_update_rb.bat"

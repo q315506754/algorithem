@@ -15,18 +15,14 @@ import java.util.concurrent.Executors
  */
 fun main(args: Array<String>) {
     var projects = """
-aries-app-server:
-aries-live-server：
-aries-classTools:
-aries-server:
-aries-web-h5:
-aries:
-aries-h5:245b0de0a939d73ebd054521dd9742117a603d87
-aries-erp-server:80cb07e6f29a8f0da30896fb02fa6e635006c9d6
-aries-teachmanage:373f014278fd32c4d714d671ca5ec2a15de6fb9f
-org-server:bd96572147b4a0ab24d4b983a7a0d3481b2d3ade
-org-app-server:53b93e716a1e65ba00fbceaf2f391a630867fcb6
-org-manage:e66dbbff2fb58cdda52dd5501ff7c52c832a61f9
+org-app-server:b1d33b2fe55801ec2b84bf05f531ac7d820a660c
+aries-app-server:ddc0dcaa43754dbc35e9cb49a5d4bec63c36e071
+aries-server:e1b3c25450177588aff671e2eb7c6b06c9fb56bf
+org-server:1ed60021511aacb2b2c957c47a604796f3a52db0
+aries-classtools：f5d849cc9989ae8f45c7a7046b4368860722e631
+aries:e64bef765ff6aefb9b96f5cb536b424629ccc07b
+aries-erp-server:812244e5637930e2d2573a633549fc77d1a7a3c5
+
     """.trimIndent()
 
      val BAT_UPDATE_NAME = "_temp_update_rb.bat"

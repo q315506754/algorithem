@@ -19,6 +19,7 @@ public class MyJNIDemo {
 
     public static void main(String[] args) {
         System.out.println(System.getProperty("java.library.path"));
+        System.out.println(System.getProperty("sun.boot.library.path"));
         System.loadLibrary("libMyJNIDemo");
 
         MyJNIDemo demo = new MyJNIDemo();
