@@ -82,31 +82,35 @@
 
 <!--            拷贝当前项目的jar包依赖-->
 <!--            可以定义拷贝策略  当前策略是目的dir有相应的jar则不拷，有更新才覆盖-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-<!--                        注意这里的阶段 在打包之前-->
-<!--                        <phase>prepare-package</phase>-->
 
-<!--                        调整到process-sources也不会出现问题-->
-<!--                        注释掉效果也一样 因为默认就是这个phase-->
-<!--                        <phase>process-sources</phase>-->
 
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>copy-dependencies</id>-->
+<!--&lt;!&ndash;                        注意这里的阶段 在打包之前&ndash;&gt;-->
+<!--&lt;!&ndash;                        <phase>prepare-package</phase>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        调整到process-sources也不会出现问题&ndash;&gt;-->
+<!--&lt;!&ndash;                        注释掉效果也一样 因为默认就是这个phase&ndash;&gt;-->
+<!--&lt;!&ndash;                        <phase>process-sources</phase>&ndash;&gt;-->
+
+<!--                        <goals>-->
+<!--                            <goal>copy-dependencies</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+<!--                            <overWriteReleases>false</overWriteReleases>-->
+<!--                            <overWriteSnapshots>false</overWriteSnapshots>-->
+<!--                            <overWriteIfNewer>true</overWriteIfNewer>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

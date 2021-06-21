@@ -75,6 +75,7 @@
 
     <build>
         <plugins>
+<!--            kotlin编译-->
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
